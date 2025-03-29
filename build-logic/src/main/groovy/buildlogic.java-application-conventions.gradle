@@ -18,15 +18,3 @@ application {
     mainClass = "${basePackage}.app.App"
 }
 
-// --- Artifact Publishing
-publishing {
-    publications {
-        maven( MavenPublication ) {
-            // groupId = 'com.example'
-            groupId = "${basePackage}"
-            artifactId = 'default-application'
-            // version = '0.0'
-            version = getVersion()
-        }
-    }
-}

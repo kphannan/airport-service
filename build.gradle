@@ -29,7 +29,7 @@ buildscript {
 
         // --- Mutation Testing
         pitPluginVersion            = '1.15.0'
-        pitVersion                  = '1.17.1'
+        pitVersion                  = '1.19.0'
 
         // ===== Configuration Management =====
 
