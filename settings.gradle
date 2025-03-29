@@ -19,9 +19,10 @@ dependencyResolutionManagement {
     repositories {
         mavenLocal()
         mavenCentral()
+        // gradlePluginPortal()
     }
 }
 
 
 rootProject.name = 'airport-service'
-include('app', 'list', 'utilities')
+include('app', 'api', 'list', 'utilities')

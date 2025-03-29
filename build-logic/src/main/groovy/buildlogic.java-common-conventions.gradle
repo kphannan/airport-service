@@ -7,6 +7,39 @@
 plugins {
     // Apply the java Plugin to add support for Java.
     id 'java'
+
+    // id 'io.freefair.lombok' //version "8.13.1"
+    // --- Source format
+    id 'com.diffplug.spotless'
+
+    // ===== Quality Assurance =====
+    // --- Static Analysis
+
+    // --- Style
+    id 'checkstyle'
+
+    // ----- Common Coding flaws
+    // --- PMD
+    id 'pmd'
+    // https://github.com/spotbugs/spotbugs-gradle-plugin
+    id 'com.github.spotbugs'
+    id 'org.checkerframework'
+
+    // --- Coverage
+    id 'jacoco'
+
+    // --- Mutation testing
+    id 'info.solidsoft.pitest'
+
+
+    // ===== Configuration Management =====
+    // --- Artifact Versioning
+    id 'net.nemerosa.versioning'
+
+    // --- Artifact Publishing
+    id 'maven-publish'
+    // SECTION_PLUGIN
+
 }
 
 
@@ -16,6 +49,19 @@ dependencies {
         implementation 'org.apache.commons:commons-text:1.12.0'
     }
 }
+
+
+clean {
+    delete 'build'
+    delete 'lib/bin'
+    delete 'lib/logs'
+    delete 'bin'
+}
+
+
+
+
+
 
 testing {
     suites {
@@ -31,5 +77,290 @@ testing {
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(23)
+    }
+}
+
+// --- Code coverage
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.1
+            }
+        }
+
+        rule {
+            limit {
+                counter = 'LINE'
+                value   = 'COVEREDRATIO'
+                minimum = 0.1
+            }
+        }
+
+        rule {
+            enabled = false
+            element = 'CLASS'
+            includes = ['org.gradle.*']
+
+            limit {
+                counter = 'LINE'
+                value = 'TOTALCOUNT'
+                maximum = 0.1
+            }
+        }
+    }
+}
+
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+
+    reports {
+        xml.required = true
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                      "**/*Application.class"  // Do not include the application class in coverage stats
+                    , "**/*App.class"          // Do not include the application class in coverage stats
+            ])
+        }))
+    }
+}
+
+// --- Mutation testing
+pitest {
+    pitestVersion = "${pitVersion}" //not needed when a default PIT version should be used
+    verbose = false
+    junit5PluginVersion = '1.2.1'
+    // testSourceSets = [sourceSets.test]
+    // mainSourceSets = [sourceSets.main]
+    targetClasses = ["${basePackage}.*"]
+    excludedTestClasses = [ "**/*App.*" ]
+    threads = 16
+    timestampedReports = false
+    withHistory = false
+    outputFormats = ['XML', 'HTML']
+    // reportDir = new File("${project.buildDir}/test-results/mutation")
+    reportDir = new File("${project.buildDir}/reports/pitest")
+    // mutators = ['DEFAULTS', 'STRONGER', 'ALL' ]
+    mutators = ['ALL' ]
+}
+
+
+
+// --- Spotless Code formatter
+spotless {
+
+    enforceCheck false
+
+    format 'misc', {
+        // defile the files to apply 'misc' to
+        target '*.gradle', '.gitattributes', '.gitignore'
+
+        // define the steps to apply to those files
+        trimTrailingWhitespace()
+        // leadingTabsToSpaces()  // or leadingSpacesToTabs()  Takes and integer argument if you don't like  4
+        endWithNewline()
+    }
+
+    java {
+        // no target required, it is implied in 'java'
+
+        // make sure every file has the following copyright header.
+        // optionally, Spotless can set copyright years by digging
+        // through git history (see "license" section below)
+        licenseHeader '/* (C)$YEAR */'
+
+        // Use the default importOrder  configuration
+        // importOrder()
+        // optional: you can specify import groups directly
+        // note: you can use an empty string for all the imports you didn't specify explicitly,
+        //       '|' to join group without blank line, and '\\#` prefix for static imports
+        // importOrder( '\\#', 'java|javax', 'org', 'com.example' )
+        importOrder( '\\#', 'java|javax', '' )
+        // optional: instead of specifying import groups directly you can specifi a config file
+        // export config file: https://github.com/diffplug/spotless/blob/main/ECLIPSE_SCREENSHOTS.md#creating-spotlessimportorder
+        // importOrderFile( 'eclipse-import-order.txt' )  // import order file as exported from eclipse
+
+        // removeUnusedImports()
+
+        // Cleanthat will refactor your code, but it may break your style: apply it before your formatter
+        cleanthat()          // has its own section below
+
+        // Choose one of these formatters.
+        // googleJavaFormat()   // has its own section below
+        // googleJavaFormat().aosp()
+        // eclipse()            // has its own section below
+        // eclipseFormatFile	'spotless.eclipseformat.xml'
+        // eclipseFormatFile rootProject.file('spotless.eclipseformat.xml')
+        eclipse().configFile('../spotless.eclipseformat.xml') // Use the Eclipse formatter with a config file
+        // eclipseFormatFile rootProject.file('etc/eclipse/eclipse-formatter-settings.xml')
+        // prettier()           // has its own section below
+        // clangFormat()        // has its own section below
+
+        // apply specific flavor of google-java-format
+        // googleJavaFormat( '1.17' ).aosp().reflowLongStrings().skipJavadocFormatting()
+        // googleJavaFormat( '1.11' )
+        // indentWithTabs(1)
+        // indentWithSpaces(2)
+
+        // fix formatting of type annotations
+        formatAnnotations()
+    }
+}
+
+
+
+// ---------- Static Analysis ----------
+// --- Checkstyle
+checkstyle {
+    ignoreFailures = false
+    showViolations = false
+    // toolVersion = "${checkstyleVersion}"
+    // checkstyle.xml copy from:
+    // https://raw.githubusercontent.com/checkstyle/checkstyle/checkstyle-8.6/src/main/resources/google_checks.xml
+    // the version should be as same as plugin version
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+}
+
+checkstyleMain {
+    source = 'src/main/java'
+}
+
+checkstyleTest {
+    source = 'src/test/java'
+}
+
+// --- PMD
+pmd {
+    // toolVersion = "${pmdVersion}"
+    ruleSetFiles = files("${rootDir}/config/pmd/pmd.xml")
+    // ruleSets = []
+    threads = 8
+
+    // consoleOutput  = true
+    ignoreFailures = true       // Don't interrupt the build
+}
+
+// --- spotbugs
+// https://github.com/spotbugs/spotbugs/blob/master/gradle/java.gradle
+def classLoader = plugins['com.github.spotbugs'].class.classLoader
+def SpotBugsTask = classLoader.findLoadedClass( 'com.github.spotbugs.snom.SpotBugsTask' )
+def SpotBugsEffort = classLoader.findLoadedClass( 'com.github.spotbugs.snom.Effort' )
+def SpotBugsConfidence = classLoader.findLoadedClass( 'com.github.spotbugs.snom.Confidence' )
+// import com.github.spotbugs.snom.Confidence
+// import com.github.spotbugs.snom.Effort
+spotbugs {
+    ignoreFailures = false
+    showStackTraces = true
+    showProgress = true
+
+    // https://discuss.kotlinlang.org/t/bug-cannot-use-kotlin-enum-from-groovy/1521
+    // https://touk.pl/blog/2018/05/28/testing-kotlin-with-spock-part-2-enum-with-instance-method/
+    // effort = Effort.valueOf('DEFAULT')
+    // reportLevel = Confidence.valueOf('DEFAULT')
+
+    effort = SpotBugsEffort.MAX
+    reportLevel  = SpotBugsConfidence.HIGH
+    // effort  = Effort.valueOf('DEFAULT')
+    // effort = 'com.github.spotbugs.snom.Effort.DEFAULT'  // MIN, LESS, DEFAULT, MORE, MAX
+    // reportLevel = 'default'  // LOW, MEDIUM, DEFAULT, HIGH
+
+    visitors = [ 'FindSqlInjection', 'SwitchFallthrough' ]
+    omitVisitors = [ 'FindNonShortCircuit' ]
+    // reportsDir = file("$buildDir/spotbugs")
+    reportsDir = file("$buildDir/reports/spotbugs")
+    // reportsDir = new File("${project.buildDir}/reports/spotbugs")
+
+
+    // includeFilter = file("include.xml")
+    // excludeFilter = file("exclude.xml")
+    // baselineFile = file("baseline.xml")
+    // onlyAnalyze = [ 'com.foobar.MyClass', 'com.foobar.mypkg.*' ]
+    // onlyAnalyze = ["${basePackage}.*"]
+    maxHeapSize = '1g'
+    extraArgs = [ '-nested:false' ]
+    jvmArgs = [ '-Duser.language=ja' ]
+}
+
+tasks.withType(SpotBugsTask).configureEach {
+    reports {
+        html {
+            required = true
+            stylesheet = 'fancy-hist.xsl'
+        }
+        xml.enabled = true
+    }
+}
+
+
+checkerFramework {
+    incrementalize = false
+    skipCheckerFramework = true
+    excludeTests = true
+    // skipVersionCheck = true
+
+
+
+    checkers = [
+        // 'nullness'
+        'org.checkerframework.checker.nullness.NullnessChecker',
+
+        'org.checkerframework.checker.optional.OptionalChecker',
+        'org.checkerframework.checker.interning.InterningChecker',
+        'org.checkerframework.checker.calledmethods.CalledMethodsChecker',
+        'org.checkerframework.checker.resourceleak.ResourceLeakChecker',
+        // 'org.checkerframework.checker.fenum.FenumChecker',
+        'org.checkerframework.checker.index.IndexChecker',
+        'org.checkerframework.checker.i18nformatter.I18nFormatterChecker',
+        'org.checkerframework.checker.propkey.PropertyKeyChecker',
+        'org.checkerframework.checker.compilermsgs.CompilerMessagesChecker',
+        'org.checkerframework.checker.guieffect.GuiEffectChecker',
+
+        'org.checkerframework.common.initializedfields.InitializedFieldsChecker',
+
+        // requires additional setup
+        // 'org.checkerframework.common.subtyping.SubtypingChecker',
+
+        'org.checkerframework.checker.units.UnitsChecker'
+    ]
+}
+
+
+
+// ===== Versioning =====
+// --- Create version from tags or branch names in git
+def getVersion() {
+    return versioning.info.full
+}
+
+// Configure how a version number is computed
+versioning {
+    releases = [ 'release','rc' ]
+    releaseMode = 'tag'	// [tag(default) or snapshot how to compute version on release-branches
+
+    displayMode = 'snapshot'	// [full(default), snapshot or base] how to compute version on non-release-branches
+}
+
+
+// println versioning
+// println versioning.info
+// println "Version Number:"
+// println versioning.info.versionNumber.major + "." + versioning.info.versionNumber.minor
+// version = versioning.info.display
+
+
+jar {
+    manifest {
+        attributes(
+            'Built-By'       : System.properties['user.name'],
+            'Build-Timestamp': new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
+            'Build-Revision' : versioning.info.commit,
+            'Created-By'     : "Gradle ${gradle.gradleVersion}",
+            'Build-Jdk'      : "Version: ${System.properties['java.version']} (Vendor: ${System.properties['java.vendor']} Version: ${System.properties['java.vm.version']})",
+            'Build-OS'       : "OS: ${System.properties['os.name']} Arch: ${System.properties['os.arch']} Version: ${System.properties['os.version']}",
+            'Implementation-Version' : getVersion()
+        )
     }
 }

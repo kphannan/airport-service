@@ -1,0 +1,9 @@
+/*
+ * Library for the public facing REST service API.
+ *
+ */
+
+plugins {
+    id 'buildlogic.java-library-conventions'
+    id 'buildlogic.java-spring-conventions'
+}

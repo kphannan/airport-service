@@ -1,0 +1,20 @@
+/*
+ * Configuration necessary for spring boot java.  This may be used
+ * for both library and applications.
+ * This configuration is intended to be utilized in conjuction with
+ * either an application or a library, not on its own.
+ */
+
+plugins {
+    // // Apply the java Plugin to add support for Java.
+    // id 'java'
+    // Apply the common convention plugin for shared build configuration between library and application projects.
+    // id 'buildlogic.java-common-conventions'
+
+    // id 'org.springframework.boot' //version '3.4.4'
+    // id 'io.spring.dependency-management' // version '1.1.7'
+}
+
+
+
+

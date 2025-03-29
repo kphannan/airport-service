@@ -1,0 +1,358 @@
+
+
+
+/* Cascading Style Sheet */
+
+/* === Control visibility of major report sections === */
+
+/* #app-results, */
+/* 01 - Application  */
+/* 02 - Application QA  */
+#app-results,
+/* #app-results .api-spec, */
+/* #app-qa-results, */
+/* #app-qa-results .test-unit .static, */
+.api-spec,
+.test-performance,
+.test-functional,
+/* .test-mutation, */
+.test-bdd,
+#app-qa-results,
+/* #app-qa-results .test-unit .dynamic, */
+/* #app-qa-results .test-unit .api-spec, */
+/* #app-qa-results .test-functional, */
+/* #app-qa-results .test-bdd, */
+/* #app-qa-results .test-performance, */
+/* 03 - Library  */
+/* 04 - Library QA  */
+#library-results,
+/* #library-results .test-unit, */
+#library-results .test-unit .database,
+#library-results .test-unit .functional,
+#library-results .test-unit .runtime,
+#library-results .test-functional,
+#library-results .test-bdd,
+#library-results .test-performance,
+#library-qa-results,
+/* #library-qa-results .test-unit, */
+#library-qa-results .test-unit .dynamic,
+#library-qa-results .test-functional,
+#library-qa-results .test-bdd,
+#library-qa-results .test-performance,
+/* 05 - API  */
+/* 06 - API QA  */
+/* #api-results, */
+/* #api-results .test-unit, */
+/* #api-results .test-unit .spotbugs, */
+/* #api-results .test-functional, */
+/* #api-results .test-coverage, */
+#api-results .test-bdd,
+/* #api-results .test-mutation, */
+/* #api-results .test-performance, */
+/* #api-qa-results, */
+/* #api-qa-results .test-unit, */
+/* #api-qa-results .test-unit .checkstyle, */
+/* #api-qa-results .test-unit .pmd, */
+/* #api-qa-results .test-unit .spotbugs, */
+/* #api-qa-results .test-unit .test-functional, */
+#api-qa-results .test-unit .test-coverage,
+/* #api-qa-results .test-unit .test-bdd, */
+#api-qa-results .test-unit .test-mutation,
+/* #api-qa-results .test-performance, */
+#template-results {
+    display: none;
+}
+
+/* ------------------- */
+/* Custom properties   */
+/* ------------------- */
+
+:root {
+    /* Colors */
+    --clr-dark: 230 35% 7%;
+    --clr-light: 231 77% 90%;
+    --clr-white: 0 0% 100%;
+
+    /* Font sizes */
+    --fs-900: 9.375rem;
+    --fs-800: 6.25rem;
+    --fs-700: 3.5rem;
+    --fs-600: 2rem;
+    --fs-500: 1.75rem;
+    --fs-400: 1.125rem;
+    --fs-300: 1rem;
+    --fs-200: 0.875rem;
+
+    /* Font families */
+    --ff-serif: "Bellefair", serif;
+    --ff-sans-cond: "Barlow Condensed", sans-serif;
+    --ff-sans-normal: "Barlow", sans-serif;
+}
+
+/* --------------------- */
+/*    Reset              */
+/* --------------------- */
+
+/* https://piccalil.li/blog/a-modern-css-reset/ */
+
+/* Box sizing */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Reset margins */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+figure,
+picture {
+    margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    font-weight: 400;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 400;
+    /* uppercase */
+}
+
+/* Set up the body */
+
+body {
+    font-family: var(--ff-sans-normal);
+    font-size: var(--fs-400);
+
+    background-color: hsl( var( --clr-dark ));
+    color: hsl( var( --clr-white ));
+
+    line-height: 1.5;
+    min-height: 100vh;
+}
+
+/* make images easier to work with */
+img,
+picture {
+    max-width: 100%;
+    display: block
+}
+
+
+/* Make form elements easier to work with */
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+/* remove animations for people who've turned them off */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+
+/* --------------------- */
+/*    Utility classes    */
+/* --------------------- */
+
+.flex {
+    display: flex;
+    gap: var( --gap, 1rem );
+}
+
+
+.grid {
+    display: grid;
+    gap: var( --gap, 1rem );
+}
+
+.flow > *:where(:not(:first-child)) {
+    margin-top: var(--flow-space, 1rem);
+}
+
+
+.container {
+    padding-inline: 2rem;
+    margin-inline: auto;
+    max-width: 80rem;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap; /* added line */
+    border: 0;
+}
+
+
+/* colors */
+.bg-dark { background-color: hsl( var(--clr-dark) )}
+.bg-accent { background-color: hsl( var(--clr-light) )}
+.bg-white { background-color: hsl( var(--clr-white) )}
+
+.text-dark { color: hsl( var(--clr-dark) )}
+.text-accent { color: hsl( var(--clr-light) )}
+.text-white { color: hsl( var(--clr-white) )}
+
+/* typography */
+
+.ff-serif { font-family: var(--ff-serif); }
+.ff-sans-cond { font-family: var(--ff-sans-cond); }
+.ff-sans-normal { font-family: var(--ff-sans-normal); }
+
+.letter-spacing-1 { letter-spacing: 4.75px; }
+.letter-spacing-2 { letter-spacing: 2.7px; }
+.letter-spacing-3 { letter-spacing: 2.35px; }
+.letter-spacing-4 { letter-spacing: 0.13px; }
+
+.uppercase { text-transform: uppercase; }
+
+.fs-900 { font-size: var(--fs-900); }
+.fs-800 { font-size: var(--fs-800); }
+.fs-700 { font-size: var(--fs-700); }
+.fs-600 { font-size: var(--fs-600); }
+.fs-500 { font-size: var(--fs-500); }
+.fs-400 { font-size: var(--fs-400); }
+.fs-300 { font-size: var(--fs-300); }
+.fs-200 { font-size: var(--fs-200); }
+
+
+.fs-900,
+.fs-800,
+.fs-700,
+.fs-600 {
+    line-height: 1.1;
+}
+
+.numbered-title {
+    font-family: var(--ff-sans-cond);
+    font-size: var(--fs-500);
+    text-transform: uppercase;
+    letter-spacing:  4.72px;
+
+    margin-top: 2em;
+}
+
+.numbered-title span {
+    margin-right: .5em;
+    font-weight: 700;
+    color: hsl( var( --clr-white ) / .25 );
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+/* ------------------- */
+/* Compontents         */
+/* ------------------- */
+
+.large-button {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    padding: 0 2em;
+    aspect-ratio: 1;
+    text-decoration: none;
+    border-radius: 50%;
+}
+
+.large-button::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+    border-radius: inherit;
+    background: hsl( var(--clr-white) / .15);
+    opacity: 0;
+    transition: opacity 500ms linear, transform 750ms ease-in-out;
+
+}
+
+.large-button:hover::after,
+.large-button:focus::after {
+    opacity: 1;
+    transform: scale(1.5);
+}
+
+.primary-navigation {
+    --gap: 8rem;
+    --underline-gap: 2rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+
+.primary-navigation a {
+    text-decoration: none;
+}
+
+.primary-navigation a > span {
+    font-weight: 700;
+    margin-right: .5em;
+}
+
+.underline-indicators > * {
+    padding: var(--underline-gap, 1rem) 0;
+    border-bottom: .2rem solid hsl( var(--clr-white) / .6 );
+}
+
+.underline-indicators > *:hover,
+.underline-indicators > *:focus {
+    border-bottom: .2rem solid red;
+    background-color: steelblue;
+}
+
+.underline-indicators > .active{
+    border-color: hsl( var(--clr-white) / .7);
+}
+
+
+
+.card {
+    padding: .6rem;
+    box-shadow: hsl( var(--clr-light) / 0.16) 0px 3px 6px, hsl( var(--clr-light) / 0.23) 0px 3px 6px;
+}
+
+.card a {
+    color:hsl( var( --clr-white )); /* .text-white */
+    text-decoration-color: hsl( var( --clr-light) / .8);
+}
+

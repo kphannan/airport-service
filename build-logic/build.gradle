@@ -4,12 +4,20 @@
  * This project uses @Incubating APIs which are subject to change.
  */
 
+// buildscript {
+//     ext {
+
+//         // ===== Configuration Management =====
+
+//         // --- Artifact Versioning
+//         nemerosaVersion             = '3.1.0'
+//     }
+// }
+
 plugins {
     // Support convention plugins written in Groovy. Convention plugins are build scripts in 'src/main' that automatically become available as plugins in the main build.
     id 'groovy-gradle-plugin'
+
+    id "com.dorongold.task-tree" version "2.1.1"
 }
 
-repositories {
-    // Use the plugin portal to apply community plugins in convention plugins.
-    gradlePluginPortal()
-}
