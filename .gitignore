@@ -72,3 +72,6 @@ gradle-app.setting
 
 # local db drivers
 mysql-connector-*
+
+# PMD
+.pmdCache
