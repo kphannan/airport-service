@@ -2,7 +2,7 @@
 
 buildscript {
     ext {
-        basePackage                 = 'org.example'
+        basePackage                 = 'com.example'
 
         // --- Compiler extensions
         checkerFrameworkVersion     = '0.6.52'

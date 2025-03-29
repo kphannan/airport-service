@@ -50,6 +50,7 @@ dependencies {
 
 
 clean {
+    // println "${rootDir}/build"
     delete 'build'
     delete 'lib/bin'
     delete 'lib/logs'

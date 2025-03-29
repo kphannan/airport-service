@@ -1,6 +1,6 @@
 /* (C)2025 */
 
-package org.example.list;
+package com.example.list;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

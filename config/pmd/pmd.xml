@@ -200,7 +200,7 @@
     <rule ref="category/java/design.xml/ImmutableField" />
     <!-- <rule ref="category/java/design.xml/InvalidJavaBean">-->
     <!--     <properties>-->
-    <!--         <property name="packages" value="org.example.beans" />-->
+    <!--         <property name="packages" value="com.example.beans" />-->
     <!--     </properties>-->
     <!-- </rule>-->
     <!-- As much as I theoretically like the Law of Demeter, the test for it hasn't kept up -->
