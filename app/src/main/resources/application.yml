@@ -1,0 +1,91 @@
+
+
+##### Application
+server:
+  port: ${port:8100}
+
+
+
+##### Spring
+spring:
+  config:
+    import: "optional:configserver:http://localhost:8888"
+
+  ## --- DataSource ---
+  datasource:
+    driver-class-name: ${datasource.driver.classname}
+    url: ${datasource.url}
+    username: ${datasource.username}
+    password: ${datasource.password}
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        trace: true
+        web-allow-others: false
+
+
+
+  output:
+    ansi:
+      enabled: ALWAYS
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+
+
+
+
+
+##### Logging configuration #####
+logging:
+  level:
+    root: INFO
+
+    com:
+      airline: INFO
+
+    org:
+      apache: ERROR
+
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            # Enable logging of SQL
+            sql:
+              BasicBinder: TRACE
+
+      springframework:  INFO
+        # boot: debug
+        # beans: debug
+
+    liquibase: INFO
+
+
+#################
+
+partner-services:
+  services:
+    - name: service1
+      hostname: host1.some.domain
+      health-endpoint: /health
+
+    - name: service2
+      hostname: host2.some.domain
+
+datasource:
+  username: sa
+  password: sa
+  # schema: something
+  url: jdbc:h2:mem:testdb;MODE=Mysql;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;
+  driver:
+    classname: org.h2.Driver

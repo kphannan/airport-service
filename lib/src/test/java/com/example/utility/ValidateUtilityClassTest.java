@@ -108,7 +108,7 @@ class ValidateUtilityClassTest
         // --- then
         assertAll( () -> assertTrue( isUtility ),
                    // log output
-                   () -> assertTrue( logCaptor.getDebugLogs().isEmpty() ),
+                   () -> assertTrue( logCaptor.getLogs().isEmpty() ),
                    // reason text
                    () -> assertEquals( 2, reason.length(), REASON_NOT_NEEDED ) );
     }
@@ -155,7 +155,7 @@ class ValidateUtilityClassTest
         // --- then
         assertAll( () -> assertTrue( isUtility ),
                    // log output
-                   () -> assertTrue( logCaptor.getDebugLogs().isEmpty() ),
+                   () -> assertTrue( logCaptor.getLogs().isEmpty() ),
                    // reason text
                    () -> assertEquals( 2, reason.length(), REASON_NOT_NEEDED ) );
 
@@ -212,13 +212,13 @@ class ValidateUtilityClassTest
                                                                               reason );
         // final boolean isUtility = ValidateUtilityClass
         // .isProperUtilityClass( ConstructorThrowsCorrectException.class, reason );
-        // final List<String> debugLogs = logCaptor.getDebugLogs();
+        // final List<String> debugLogs = logCaptor.getLogs();
 
         // --- then
         assertAll( () -> assertTrue( isUtility ), // method return value
 
                    // Verify log entries
-                   () -> assertTrue( logCaptor.getDebugLogs().isEmpty() ),
+                   () -> assertTrue( logCaptor.getLogs().isEmpty() ),
 
                    // Verify reason text
                    () -> assertTrue( isReasonBlank( reason ) ) );
@@ -290,7 +290,7 @@ class ValidateUtilityClassTest
         assertAll( () -> assertTrue( isUtility ), // method return value
 
                    // Verify log entries
-                   () -> assertTrue( logCaptor.getDebugLogs().isEmpty() ),
+                   () -> assertTrue( logCaptor.getLogs().isEmpty() ),
 
                    // Verify reason text
                    // exception without a message
@@ -312,7 +312,7 @@ class ValidateUtilityClassTest
         assertAll( () -> assertTrue( isUtility ), // method return value
 
                    // Verify log entries
-                   () -> assertTrue( logCaptor.getDebugLogs().isEmpty() ),
+                   () -> assertTrue( logCaptor.getLogs().isEmpty() ),
 
                    // Verify reason text
                    // exception with a message
@@ -335,7 +335,7 @@ class ValidateUtilityClassTest
         assertAll( () -> assertTrue( isUtility ), // method return value
 
                    // Verify log entries
-                   () -> assertTrue( logCaptor.getDebugLogs().isEmpty() ),
+                   () -> assertTrue( logCaptor.getLogs().isEmpty() ),
 
                    // Verify reason text
                    // exception without a message
@@ -357,7 +357,7 @@ class ValidateUtilityClassTest
         assertAll( () -> assertTrue( isUtility ), // method return value
 
                    // Verify log entries
-                   () -> assertTrue( logCaptor.getDebugLogs().isEmpty() ),
+                   () -> assertTrue( logCaptor.getLogs().isEmpty() ),
 
                    // Verify reason text
                    // exception with a message
@@ -438,7 +438,7 @@ class ValidateUtilityClassTest
         // --- then
         assertAll( () -> assertFalse( isUtility ),
                    // log output
-                   () -> assertTrue( logCaptor.getDebugLogs().isEmpty() ),
+                   () -> assertTrue( logCaptor.getLogs().isEmpty() ),
                    // reason text
                    // () -> assertTrue( isReasonBlank( reason ), REASON_NOT_NEEDED ) );
                    () -> assertTrue( 0 <= reason.toString()
@@ -598,7 +598,7 @@ class ValidateUtilityClassTest
         // --- then
         assertAll( () -> assertTrue( isUtility ),
                    // log output
-                   () -> assertTrue( logCaptor.getDebugLogs().isEmpty() ),
+                   () -> assertTrue( logCaptor.getLogs().isEmpty() ),
                    // reason text
                    () -> assertEquals( 2, reason.length(), REASON_NOT_NEEDED ) );
     }
@@ -616,7 +616,7 @@ class ValidateUtilityClassTest
         // --- then
         assertAll( () -> assertFalse( isUtility ),
                    // log output
-                   () -> assertTrue( logCaptor.getDebugLogs().isEmpty() ),
+                   () -> assertTrue( logCaptor.getLogs().isEmpty() ),
                    // reason text
                    () -> assertTrue( 0 <= reason.toString().indexOf( "A non-static method '" ),
                                      "non-static method was not identified'" ),
@@ -636,7 +636,7 @@ class ValidateUtilityClassTest
 
         assertAll( () -> assertTrue( isUtility ),
                    // log output
-                   () -> assertTrue( logCaptor.getDebugLogs().isEmpty() ),
+                   () -> assertTrue( logCaptor.getLogs().isEmpty() ),
                    // reason text
                    () -> assertEquals( 2, reason.length(), REASON_NOT_NEEDED ) );
     }
@@ -652,7 +652,7 @@ class ValidateUtilityClassTest
         // --- then
         assertAll( () -> assertFalse( isUtility ),
                    // log output
-                   () -> assertTrue( StringUtility.contains( logCaptor.getDebugLogs(), "class must be final" ) ),
+                   () -> assertTrue( StringUtility.contains( logCaptor.getLogs(), "class must be final" ) ),
                    // reason text
                    () -> assertTrue( 0 <= reason.toString().indexOf( "class must be final" ),
                                      "Missing reason 'class must be final'" ) );
@@ -672,7 +672,7 @@ class ValidateUtilityClassTest
         // --- then
         assertAll( () -> assertFalse( isUtility ),
                    // log output
-                   () -> assertTrue( StringUtility.contains( logCaptor.getDebugLogs(),
+                   () -> assertTrue( StringUtility.contains( logCaptor.getLogs(),
                                                              "There must only be one constructor" ) ),
                    // reason text
                    () -> assertTrue( 0 <= reason.toString().indexOf( "There must only be one constructor" ),
@@ -706,9 +706,9 @@ class ValidateUtilityClassTest
         // --- then
         assertAll( () -> assertFalse( isUtility ),
                    // log output
-                   () -> assertTrue( StringUtility.contains( logCaptor.getDebugLogs(),
+                   () -> assertTrue( StringUtility.contains( logCaptor.getLogs(),
                                                              "no-argument constructor is not present" ) ),
-                   () -> assertTrue( StringUtility.contains( logCaptor.getDebugLogs(),
+                   () -> assertTrue( StringUtility.contains( logCaptor.getLogs(),
                                                              "The no-argument constructor does not exist" ) ),
                    // reason text
                    () -> assertTrue( 0 <= reason.toString().indexOf( "no-argument constructor is not present" ),
@@ -723,7 +723,7 @@ class ValidateUtilityClassTest
     {
         // --- when
         final boolean      isUtility = ValidateUtilityClass.isProperUtilityClass( ConstructorThrows.class, reason );
-        final List<String> debugLogs = logCaptor.getDebugLogs();
+        final List<String> debugLogs = logCaptor.getLogs();
 
         // --- then
         assertAll( () -> assertTrue( isUtility ), // method return value
@@ -748,9 +748,9 @@ class ValidateUtilityClassTest
         // STR."Some text \{ variable } and more later"
         // --- then
         assertAll( () -> assertFalse( isUtility ), // basic return code
-                   () -> assertTrue( StringUtility.contains( logCaptor.getDebugLogs(),
+                   () -> assertTrue( StringUtility.contains( logCaptor.getLogs(),
                                                              "ValidateUtilityClassTest$AbstractForFailure" ) ),
-                   () -> assertTrue( StringUtility.contains( logCaptor.getDebugLogs(),
+                   () -> assertTrue( StringUtility.contains( logCaptor.getLogs(),
                                                              "InstantiationException from a utility constructor" ) ),
 
                    // reason text
@@ -768,7 +768,7 @@ class ValidateUtilityClassTest
     {
         assertAll( () -> assertTrue( ValidateUtilityClass.isProperUtilityClass( MethodsAllStatic.class, reason ) ),
                    // log output
-                   () -> assertTrue( logCaptor.getDebugLogs().isEmpty() ),
+                   () -> assertTrue( logCaptor.getLogs().isEmpty() ),
                    // reason text
                    () -> assertEquals( 2, reason.length(), REASON_NOT_NEEDED ) );
 
@@ -781,7 +781,7 @@ class ValidateUtilityClassTest
     {
         // --- when
         final boolean      isUtility = ValidateUtilityClass.isProperUtilityClass( MethodsNotAllStatic.class, reason );
-        final List<String> debugLogs = logCaptor.getDebugLogs();
+        final List<String> debugLogs = logCaptor.getLogs();
 
         // --- then
         assertAll( () -> assertFalse( isUtility ),

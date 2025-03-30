@@ -3,18 +3,16 @@
 package com.example.utility;
 
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 
 
 /**
  * A simple way to capture elapsed time.
  */
+@Log4j2
 public class Stopwatch implements AutoCloseable
 {
-    private static final Logger log = LogManager.getLogger( Stopwatch.class );
-
     private long startTime;
     private long stopTime;
 
@@ -130,8 +128,13 @@ public class Stopwatch implements AutoCloseable
     private void logX( final long endTime,
                        final String text )
     {
+        // log.error( "Kilroy was here" );
+        // System.out.println( String.format( "logg: %s, %s, %s: '%s' - elapsed time: %d ms", context, service, method,
+        // text == null ? "" : text, endTime - startTime ) );
         log.debug( () -> String.format( "%s, %s, %s: '%s' - elapsed time: %d ms", context, service, method,
                                         text == null ? "" : text, endTime - startTime ) );
+        log.error( () -> String.format( "%s, %s, %s: '%s' - elapsed time: %d ms", context, service, method,
+        text == null ? "" : text, endTime - startTime ) );
     }
 
 }

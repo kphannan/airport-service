@@ -9,13 +9,13 @@ buildscript {
         // --- YAML support
         jacksonDatabindVersion      = '2.18.2'
         // --- Logging (log4j)
-        log4jVersion                = '2.24.2'
+        log4jVersion                = '2.24.3'
 
         // ===== Quality checks =====
 
         // --- Coding practices (static analysis) ---
         // --- Coding style
-        checkstyleVersion           = '10.20.0'
+        checkstyleVersion           = '10.21.4'
 
         // --- Common Coding flaws
         pmdVersion                  = '7.8.0'
@@ -25,7 +25,7 @@ buildscript {
         // --- Testing ---
         // --- Unit Test
         junitVersion                = '5.9.2'
-        logcaptorVersion            = '2.10.0'
+        logcaptorVersion            = '2.10.1'
 
         // --- Mutation Testing
         pitPluginVersion            = '1.15.0'
@@ -48,6 +48,13 @@ buildscript {
 
 
 plugins {
+
+    // ===== Frameworks =====
+    // --- Spring boot
+    id 'org.springframework.boot' version '3.4.4' apply false
+    id 'io.spring.dependency-management' version '1.1.7' apply false
+
+    id 'io.freefair.lombok' version "8.13.1" apply false
 
     // --- Compile time
     id 'org.checkerframework' version "${checkerFrameworkVersion}" apply false

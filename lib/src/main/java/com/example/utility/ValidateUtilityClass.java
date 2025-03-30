@@ -117,7 +117,7 @@ public final class ValidateUtilityClass
 
         if ( !isUtility )
         {
-            log.debug( () -> String.format( "%s : %s code: %x", clazz.toString(), reason.toString(), reasonCode ) );
+            log.error( () -> String.format( "%s : %s code: %x", clazz.toString(), reason.toString(), reasonCode ) );
         }
 
         return isUtility;
