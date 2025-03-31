@@ -6,4 +6,11 @@
 plugins {
     id 'buildlogic.java-library-conventions'
     id 'buildlogic.java-spring-conventions'
+
+    // TODO move to java conventions...
+    id 'io.freefair.lombok'
+
+    // TODO move these to the spring conventions....
+    // id 'org.springframework.boot'
+    // id 'io.spring.dependency-management'
 }
