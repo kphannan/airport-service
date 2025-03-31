@@ -8,7 +8,7 @@
 /* #app-results, */
 /* 01 - Application  */
 /* 02 - Application QA  */
-#app-results,
+/* #app-results, */
 /* #app-results .api-spec, */
 /* #app-qa-results, */
 /* #app-qa-results .test-unit .static, */
@@ -17,7 +17,7 @@
 .test-functional,
 /* .test-mutation, */
 .test-bdd,
-#app-qa-results,
+/* #app-qa-results, */
 /* #app-qa-results .test-unit .dynamic, */
 /* #app-qa-results .test-unit .api-spec, */
 /* #app-qa-results .test-functional, */

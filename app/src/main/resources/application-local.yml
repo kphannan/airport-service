@@ -58,8 +58,11 @@ logging:
 
 
       hibernate:
-        internal:
-          SessionFactoryImpl: INFO
+        boot: INFO
+        integrator:
+          internal: INFO
+        internal: INFO
+          # SessionFactoryImpl: INFO
         HQL_FUNCTIONS: INFO
         orm:
           idgen:
@@ -79,9 +82,39 @@ logging:
             sql:
               BasicBinder: TRACE
 
-      springframework:  INFO
+      springframework:
+        aop: INFO
+        aot: INFO
+        beans: INFO
+        boot:
+          autoconfigure:
+            logging: INFO
+          availability: DEBUG
         # boot: debug
-        # beans: debug
+        cache: INFO
+        cglib: INFO
+        context: INFO
+        core: INFO
+        dao: INFO
+        expression: INFO
+        format: INFO
+        http: INFO
+        instrument: INFO
+        jca: INFO
+        jdbc: DEBUG
+        jms: INFO
+        jmx: INFO
+        messaging: INFO
+        mock: INFO
+        orm: INFO
+        r2dbc: INFO
+        scripting: INFO
+        test: INFO
+        transaction: INFO
+        ui: INFO
+        util: INFO
+        validation: DEBUG
+        web: INFO
 
     # liquibase: INFO
     liquibase:
@@ -99,3 +132,66 @@ logging:
       ui: WARN
       # checksum calculation / changeset
       util: INFO
+
+
+# Metrics related configurations
+management:
+
+  # Auto-configuation of liveness/readiness probes
+  health:
+    probes:
+      enabled: true
+
+  endpoints:
+    # access:
+    #   default: unrestricted
+    web:
+      base-path: /actuator
+      # cors:
+      #   allowed-origins: "http://example.com"
+      #   allowed-methods: "GET,POST"
+      exposure:
+        include: '*'
+
+  endpoint:
+    # SRE Health (liveness, readiness) for integration with kubernetes
+    health:
+      probes:
+        enabled: true
+      liveness:
+        enabled: true
+      readiness:
+        enabled: true
+      show-details: always
+      # status:
+      #   order: fatal,down,out-of-service,degraded,unknown,up
+      #   http-mapping:
+      #     degraded: 242
+      #     unknown: 242
+      #     fatal: 503
+      #     down: 503
+      #     out-of-service: 503
+
+    liquibase:
+      enabled: true
+
+    metrics:
+      enabled: true
+
+    prometheus:
+      enabled: true
+
+
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+  # {"git":{"commit":{"time":"2019-11-23T23:41:52Z","id":"5b27927"},"branch":"development"}}
+  info:
+    app:
+      name: ${spring.application.name}
+      version: ${project.version}
+      java:
+        version: ${java.version}
+
