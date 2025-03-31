@@ -1,0 +1,139 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00009"
+      author: kevin
+      changes:
+        - createTable:
+            tableName: navaids
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  remarks: Internal integer identifier for the navaid. This will stay persistent, even if the navaid identifier or frequency changes.
+
+              - column:
+                  name: filename
+                  type: char(64)
+                  constraints:
+                    nullable: false
+                  remarks: This is a unique string identifier constructed from the navaid name and country, and used in the OurAirports URL.
+              - column:
+                  name: ident
+                  type: char(8)
+                  constraints:
+                    nullable: false
+                  remarks: The 1-3 character identifer that the navaid transmits.
+
+              - column:
+                  name: name
+                  type: char(32)
+                  remarks: The name of the navaid, excluding its type.
+              - column:
+                  name: type
+                  type: char(7)
+                  constraints:
+                    nullable: false
+                  remarks: The type of the navaid. Options are "DME", "NDB", "NDB-DME", "TACAN", "VOR", "VOR-DME", or "VORTAC". See the map legend for more information about each type.
+              - column:
+                  name: frequency_khz
+                  type: integer
+                  constraints:
+                    nullable: false
+                  remarks: The frequency of the navaid in kilohertz. If the Navaid operates on the VHF band (VOR, VOR-DME) or operates on the UHF band with a paired VHF frequency (DME, TACAN, VORTAC), the you need to divide this number by 1,000 to get the frequency in megahertz (115.3 MHz in this example). For an NDB or NDB-DME, you can use this frequency directly.
+              - column:
+                  name: latitude_deg
+                  type: decimal(10,6)
+                  constraints:
+                    nullable: false
+                  remarks: The latitude of the navaid in decimal degrees (negative for south).
+              - column:
+                  name: longitude_deg
+                  type: decimal(10,6)
+                  constraints:
+                    nullable: false
+                  remarks: The longitude of the navaid in decimal degrees (negative for west).
+              - column:
+                  name: elevation_ft
+                  type: integer
+                  remarks: The navaid''s elevation MSL in feet (not metres).
+              - column:
+                  name: iso_country
+                  type: char(2)
+                  constraints:
+                    nullable: false
+                  remarks: The two-character ISO 3166:1-alpha2 code for the country that operates the navaid. A handful of unofficial, non-ISO codes are also in use, such as "XK" for Kosovo.
+              - column:
+                  name: dme_frequency_khz
+                  type: integer
+                  remarks: The paired VHF frequency for the DME (or TACAN) in kilohertz. Divide by 1,000 to get the paired VHF frequency in megahertz (e.g. 115.3 MHz).
+              - column:
+                  name: dme_channel
+                  type: char(4)
+
+                  remarks: The DME channel (an alternative way of tuning distance-measuring equipment).
+              - column:
+                  name: dme_latitude_deg
+                  type: decimal(10,6)
+                  remarks: The latitude of the associated DME in decimal degrees (negative for south). If missing, assume that the value is the same as latitude_deg.
+              - column:
+                  name: dme_longitude_deg
+                  type: decimal(10,6)
+                  remarks: The longitude of the associated DME in decimal degrees (negative for west). If missing, assume that the value is the same as longitude_deg.
+              - column:
+                  name: dme_elevation_ft
+                  type: integer
+                  remarks: The associated DME transmitters elevation MSL in feet. If missing, assume that it''s the same value as elevation_ft.
+              - column:
+                  name: slaved_variation_deg
+                  type: decimal(6,2)
+                  remarks: The magnetic variation adjustment built into a VOR''s, VOR-DME''s, or TACAN''s radials. Positive means east (added to the true direction), and negative means west (subtracted from the true direction). This will not usually be the same as magnetic-variation because the magnetic pole is constantly in motion.
+              - column:
+                  name: magnetic_variation_deg
+                  type: decimal(6,3)
+                  remarks: The actual magnetic variation at the navaid''s location. Positive means east (added to the true direction), and negative means west (subtracted from the true direction).
+              - column:
+                  name: usageType
+                  type: char(8)
+                  # Data file contains blanks, yet column is not nullable
+                  constraints:
+                    nullable: true
+                  remarks: The primary function of the navaid in the airspace system. Options include "HI" (high-altitude airways, at or above flight level 180), "LO" (low-altitude airways), "BOTH" (high- and low-altitude airways), "TERM" (terminal-area navigation only), and "RNAV" (non-GPS area navigation).
+              - column:
+                  name: power
+                  type: char(8)
+                  # Data file contains blanks, yet column is not nullable
+                  constraints:
+                    nullable: true
+                  remarks: The power-output level of the navaid. Options include "HIGH", "MEDIUM", "LOW", and "UNKNOWN".
+              - column:
+                  name: associated_airport
+                  type: char(7)
+                  # Data file contains blanks, yet column is not nullable
+                  constraints:
+                    nullable: true
+                  remarks: The OurAirports text identifier (usually the ICAO code) for an airport associated with the navaid. Links to the ident column in airports.csv.
+
+        - createTable:
+            tableName: navaid_kind
+            remarks: Each row represents a classifier for navaids. The kind column in navaids.csv refers to the code column here.
+
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  remarks: Internal integer identifier for the navaid_kind. This will stay persistent, even if the kind changes.
+
+              - column:
+                  name: kind
+                  type: char(7)
+                  constraints:
+                    nullable: false
+                  remarks: The navaid_kind code in english.
+

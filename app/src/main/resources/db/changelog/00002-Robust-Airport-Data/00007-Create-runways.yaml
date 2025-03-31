@@ -1,0 +1,139 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00011"
+      author: kevin
+      changes:
+        - createTable:
+            tableName: runways
+            remarks: Each row in this dataset represents a single airport landing surface (runway, helipad, or waterway). The initial fields apply to the entire surface, in both directions. Fields beginning with le_* apply only to the low-numbered end of the runway (e.g. 09), while fields beginning with he_* apply only to the high-numbered end of the runway (e.g. 27).
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  remarks: Internal OurAirports integer identifier for the runway. This will stay persistent, even if the runway numbering changes.
+
+              - column:
+                  name: airport_ref
+                  type: integer
+                  constraints:
+                    nullable: false
+                  remarks: Internal integer foreign key matching the id column for the associated airport in airports.csv. (airport_ident is a better alternative.)
+              - column:
+                  name: airport_ident
+                  type: char(7)
+                  constraints:
+                    nullable: false
+                  remarks: Externally-visible string foreign key matching the ident column for the associated airport in airports.csv.
+
+              - column:
+                  name: length_ft
+                  type: integer
+                  remarks: Length of the full runway surface (including displaced thresholds, overrun areas, etc) in feet.
+              - column:
+                  name: width_ft
+                  type: integer
+                  remarks: Width of the runway surface in feet.
+
+              - column:
+                  name: surface
+                  type: char(63)
+                  # Data file contains blanks, yet column is not nullable
+                  constraints:
+                    nullable: true
+                  remarks: Code for the runway surface type. This is not yet a controlled vocabulary, but probably will be soon. Some common values include "ASP" (asphalt), "TURF" (turf), "CON" (concrete), "GRS" (grass), "GRE" (gravel), "WATER" (water), and "UNK" (unknown).
+
+              - column:
+                  name: lighted
+                  type: char(1)
+                  constraints:
+                    nullable: false
+                  remarks: 1 if the surface is lighted at night, 0 otherwise. (Note that this is inconsistent with airports.csv, which uses "yes" and "no" instead of 1 and 0.)
+
+              - column:
+                  name: closed
+                  type: char(1)
+                  constraints:
+                    nullable: false
+                  remarks: 1 if the runway surface is currently closed, 0 otherwise.
+
+              - column:
+                  name: le_ident
+                  type: char(7)
+                  # Data file contains blanks, yet column is not nullable
+                  constraints:
+                    nullable: true
+                  remarks: Identifier for the low-numbered end of the runway.
+              - column:
+                  name: le_latitude_deg
+                  # type: decimal(10,6)
+                  type: decimal(14,6)
+                  remarks: Latitude of the centre of the low-numbered end of the runway, in decimal degrees (positive is north), if available.
+              - column:
+                  name: le_longitude_deg
+                  # type: decimal(10,6)
+                  type: decimal(14,6)
+                  remarks: Longitude of the centre of the low-numbered end of the runway, in decimal degrees (positive is east), if available.
+              - column:
+                  name: le_elevation_ft
+                  type: integer
+                  remarks: Elevation above MSL of the low-numbered end of the runway in feet.
+              - column:
+                  name: le_heading_degT
+                  type: integer
+                  remarks: Heading of the low-numbered end of the runway in degrees true (not magnetic).
+              - column:
+                  name: le_displaced_threshold_ft
+                  type: integer
+                  remarks: Length of the displaced threshold (if any) for the low-numbered end of the runway, in feet.
+
+              - column:
+                  name: he_ident
+                  type: char(8)
+                  # Data file contains blanks, yet column is not nullable
+                  constraints:
+                    nullable: true
+                  remarks: Identifier for the high-numbered end of the runway.
+              - column:
+                  name: he_latitude_deg
+                  type: decimal(10,6)
+                  remarks: Latitude of the centre of the high-numbered end of the runway, in decimal degrees (positive is north), if available.
+              - column:
+                  name: he_longitude_deg
+                  type: decimal(10,6)
+                  remarks: Longitude of the centre of the high-numbered end of the runway, in decimal degrees (positive is east), if available.
+              - column:
+                  name: he_elevation_ft
+                  type: integer
+                  remarks: Elevation above MSL of the high-numbered end of the runway in feet.
+              - column:
+                  name: he_heading_degT
+                  type: integer
+                  remarks: Heading of the high-numbered end of the runway in degrees true (not magnetic).
+              - column:
+                  name: he_displaced_threshold_ft
+                  type: integer
+                  remarks: Length of the displaced threshold (if any) for the high-numbered end of the runway, in feet.
+
+        - createTable:
+            tableName: runway_surface_kind
+            remarks: Each row represents a classifier for runway_surface_kind. The surface column in runways.csv refers to the kind column here.
+
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  remarks: Internal integer identifier for the runway_surface_kind. This will stay persistent, even if the kind changes.
+
+              - column:
+                  name: kind
+                  type: char(63)
+                  constraints:
+                    nullable: false
+                  remarks: The runway_surface_kind code in english.

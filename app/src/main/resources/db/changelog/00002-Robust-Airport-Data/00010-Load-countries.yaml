@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00014"
+      author: kevin
+      changes:
+        - loadData:
+            tableName: countries
+            quotchar: '"'
+            separator: ','
+            encoding: UTF-8
+            columns:
+              - column:
+                  name: id
+                  type: numeric
+              - column:
+                  name: code
+                  type: string
+              - column:
+                  name: name
+                  type: string
+              - column:
+                  name: continent
+                  type: string
+              - column:
+                  name: wikipedia_link
+                  type: string
+              - column:
+                  name: keywords
+                  type: string
+
+            relativeToChangelogFile: true
+            file: data/countries.csv
+
+        # Convert imported blanks to NULL
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE countries
+                 SET    keywords = NULL
+                 WHERE  keywords = '';
+
+        - sql:
+            sql: UPDATE countries
+                 SET    wikipedia_link = NULL
+                 WHERE  wikipedia_link = '';

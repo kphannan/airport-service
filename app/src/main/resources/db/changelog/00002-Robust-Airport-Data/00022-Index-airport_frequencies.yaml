@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00026"
+      author: kevin
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: airport_ref
+            tableName: airport_frequencies
+            indexName: ix_airport_frequencies-airport_ref
+
+        - createIndex:
+            columns:
+              - column:
+                  name: description
+            tableName: airport_frequencies
+            indexName: ix_airport_frequencies-description
+
+
+        # - addUniqueConstraint:
+        #     constraintName: unq_county-code
+        #     tableName: countries
+        #     columnNames: code
+

@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00012"
+      author: kevin
+      changes:
+        - createTable:
+            tableName: faa_abbreviations
+            remarks: Each row represents a classifier for an faa_abbreviation.
+
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  remarks: Internal integer identifier for the faa_abbreviation. This will stay persistent, even if the kind changes.
+
+              - column:
+                  name: abbreviation
+                  type: char(8)
+                  constraints:
+                    nullable: false
+                  remarks: The abbreviation.
+
+              - column:
+                  name: definition
+                  type: varchar(80)
+                  constraints:
+                    nullable: true
+                  remarks: A description of the abbreviation.

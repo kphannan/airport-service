@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00029"
+      author: kevin
+      dbms: mysql, h2, mssql, oracle, db2, mariadb, sybase, informix, firebird, hsqldb, postgresql, snowflake
+
+      changes:
+        - addUniqueConstraint:
+            # catalogName:
+            # schemaName:
+            tableName: continents
+            columnNames: code
+            constraintName: uq_continents_code
+            # tablespace:
+            # disabled: false
+            # deferrable: false
+            # initiallyDeferred: false
+            # forIndexCatalogName:
+            # forIndexSchemaName:
+            # forIndexName:
+            # clustered: false
+            # validate: false
+        # - addForeignKeyConstraint:
+        #     constraintName: fk_countries-continent
+
+        #     baseTableName: countries
+        #     baseColumnNames: continent
+
+        #     referencedTableName: continents
+        #     referencedColumnNames: code
+
+        # - addForeignKeyConstraint:
+        #     constraintName: fk_countries-continent_id
+
+        #     baseTableName: countries
+        #     baseColumnNames: continent_id
+
+        #     referencedTableName: regions
+        #     referencedColumnNames: code
+

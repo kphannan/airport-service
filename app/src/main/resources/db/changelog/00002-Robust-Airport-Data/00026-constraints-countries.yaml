@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00030"
+      author: kevin
+      dbms: mysql, h2, mssql, oracle, db2, mariadb, sybase, informix, firebird, hsqldb, postgresql, snowflake
+      # preConditions:
+      #   - dbms:
+      #       type: postgresql
+        # - onFail: WARN
+        # - not:
+        #     - dbms:
+        #         type: sqlite
+      changes:
+        - addUniqueConstraint:
+            tableName: countries
+            columnNames: code
+            constraintName: uq_countries_code
+
+        - addForeignKeyConstraint:
+            constraintName: fk_countries-continent
+
+            baseTableName: countries
+            baseColumnNames: continent
+
+            referencedTableName: continents
+            referencedColumnNames: code
+
+        # - addForeignKeyConstraint:
+        #     constraintName: fk_countries-continent_id
+
+        #     baseTableName: countries
+        #     baseColumnNames: continent_id
+
+        #     referencedTableName: regions
+        #     referencedColumnNames: code
+

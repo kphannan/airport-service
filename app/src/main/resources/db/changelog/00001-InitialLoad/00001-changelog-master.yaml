@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - include:
+      relativeToChangelogFile: true
+      file: 00001-Create-IATA-airport-code.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00002-Create-ICAO-airport-code.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00003-Load-IATA-airport-codes.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00004-Load-ICAO-airport-codes.yaml
+
+  # - includeAll:
+  #     path: changes
+  #     relativeToChangelogFile: true

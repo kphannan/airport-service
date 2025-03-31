@@ -1,0 +1,81 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00010"
+      author: kevin
+      changes:
+        - createTable:
+            tableName: airport_frequencies
+            remarks: Each row in this dataset represents a single airport radio frequency for voice communication (radio navigation aids appear in navaids.csv). The column airport_ident is a foreign key referencing the ident column in airports.csv for the associated airport.
+
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  remarks: Internal OurAirports integer identifier for the frequency. This will stay persistent, even if the radio frequency or description changes.
+
+              - column:
+                  name: airport_ref
+                  type: integer
+                  constraints:
+                    nullable: false
+                  remarks: Internal integer foreign key matching the id column for the associated airport in airports.csv. (airport_ident is a better alternative.)
+
+              - column:
+                  name: airport_ident
+                  type: char(7)
+                  constraints:
+                    nullable: false
+                  remarks: Externally-visible string foreign key matching the ident column for the associated airport in airports.csv.
+
+              - column:
+                  name: type
+                  type: char(16)
+                  constraints:
+                    nullable: false
+                  remarks: A code for the frequency type. This isn''t (currently) a controlled vocabulary, but probably will be soon. Some common values are "TWR" (tower), "ATF" or "CTAF" (common traffic frequency), "GND" (ground control), "RMP" (ramp control), "ATIS" (automated weather), "RCO" (remote radio outlet), "ARR" (arrivals), "DEP" (departures), "UNICOM" (monitored ground station), and "RDO" (a flight-service station).
+
+              - column:
+                  name: description
+                  type: char(64)
+                  # Data file contains blanks, yet column is not nullable
+                  constraints:
+                    nullable: true
+                  remarks: A description of the frequency, typically the way a pilot would open a call on it.
+
+              - column:
+                  name: frequency_mhz
+                  type: decimal(6,2)
+                  constraints:
+                    nullable: false
+                  remarks: Radio voice frequency in megahertz. Note that the same frequency may appear multiple times for an airport, serving different functions.
+
+        - createTable:
+            tableName: airport_frequency_kind
+            remarks: Each row represents a classifier for an aiport radio frequency.
+
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  remarks: Internal integer identifier for the airport_frequency_kind. This will stay persistent, even if the kind changes.
+
+              - column:
+                  name: kind
+                  type: char(16)
+                  constraints:
+                    nullable: false
+                  remarks: The airport_frequency_kind code in english.
+
+              - column:
+                  name: description
+                  type: varchar(255)
+                  constraints:
+                    nullable: true
+                  remarks: A description of the frequency kind.

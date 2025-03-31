@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00006"
+      author: kevin
+      changes:
+        - createTable:
+            tableName: countries
+            remarks: Each row represents a country or country-like entity (e.g. Hong Kong). The iso_country column in airports.csv, navaids.csv, and regions.csv refer to the code column here.
+
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  remarks: Internal OurAirports integer identifier for the country. This will stay persistent, even if the country name or code changes.
+              - column:
+                  name: code
+                  type: char(2)
+                  constraints:
+                    nullable: false
+                  remarks: The two-character ISO 3166:1-alpha2 code for the country. A handful of unofficial, non-ISO codes are also in use, such as "XK" for Kosovo. The iso_country field in airports.csv points into this column.
+              - column:
+                  name: name
+                  type: char(52)
+                  constraints:
+                    nullable: false
+                  remarks: The common English-language name for the country. Other variations of the name may appear in the keywords field to assist with search.
+              - column:
+                  name: continent
+                  type: char(2)
+                  constraints:
+                    nullable: false
+                  remarks: The code for the continent where the country is (primarily) located. See the continent code in airports.csv for allowed values.
+              - column:
+                  name: wikipedia_link
+                  type: varchar(255)
+                  remarks: Link to the Wikipedia article about the country.
+              - column:
+                  name: keywords
+                  type: varchar(255)
+                  remarks: A comma-separated list of search keywords/phrases related to the country.

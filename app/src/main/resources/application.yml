@@ -1,5 +1,4 @@
 
-
 ##### Application
 server:
   port: ${port:8100}
@@ -8,16 +7,29 @@ server:
 
 ##### Spring
 spring:
+  application:
+    name: airport-service
+
+  profiles:
+    active:  ${active_profiles:local}
+
+  main:
+    lazy-initialization: true
+
   config:
     import: "optional:configserver:http://localhost:8888"
 
   ## --- DataSource ---
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
   datasource:
     driver-class-name: ${datasource.driver.classname}
     url: ${datasource.url}
     username: ${datasource.username}
     password: ${datasource.password}
 
+  # This should be in the local profile
   h2:
     console:
       enabled: true
@@ -25,8 +37,6 @@ spring:
       settings:
         trace: true
         web-allow-others: false
-
-
 
   output:
     ansi:
@@ -39,7 +49,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
-
+  # End of what should be in local profile (this is not prod compliant)
 
 
 
@@ -82,6 +92,7 @@ partner-services:
     - name: service2
       hostname: host2.some.domain
 
+# TODO this should be in a local profile
 datasource:
   username: sa
   password: sa

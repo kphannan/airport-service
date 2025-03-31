@@ -1,0 +1,67 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00024"
+      author: kevin
+      changes:
+
+        - createIndex:
+            columns:
+              - column:
+                  name: name
+            tableName: airports
+            indexName: ix_airports-name
+
+        - createIndex:
+            columns:
+              - column:
+                  name: municipality
+            tableName: airports
+            indexName: ix_airports-municipality
+
+        - createIndex:
+            columns:
+              - column:
+                  name: iso_country
+            tableName: airports
+            indexName: ix_airports-iso_country
+
+        - createIndex:
+            columns:
+              - column:
+                  name: iso_region
+            tableName: airports
+            indexName: ix_airports-iso_region
+
+        - createIndex:
+            columns:
+              - column:
+                  name: ident
+            tableName: airports
+            indexName: ix_airports-ident
+
+        - createIndex:
+            columns:
+              - column:
+                  name: iata_code
+            tableName: airports
+            indexName: ix_airports-iata_code
+
+        - createIndex:
+            columns:
+              - column:
+                  name: local_code
+            tableName: airports
+            indexName: ix_airports-local_code
+
+
+            # catalogName:
+            # schemaName:
+            # associatedWith:
+            # unique: true
+            # clustered: false
+            # tablespace:
+        # - addUniqueConstraint:
+        #     constraintName: idx_continent-name
+        #     tableName: continents
+        #     columnNames: name
+

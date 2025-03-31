@@ -1,0 +1,132 @@
+# Data sourced from: https://ourairports.com/data/
+#   - data dictionary: https://ourairports.com/help/data-dictionary.html
+databaseChangeLog:
+  - include:
+      relativeToChangelogFile: true
+      file: 00001-Create-continents.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00002-Create-countries.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00003-Create-regions.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00004-Create-airports.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00005-Create-navaids.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00006-Create-airport_frequencies.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00007-Create-runways.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00008-Create-faa_abbreviations.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00009-Load-continents.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00010-Load-countries.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00011-Load-regions.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00012-Load-airports.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00013-Load-navaids.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00014-Load-airport_frequencies.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00015-Load-runways.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00016-Load-faa_abbreviations.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00017-index-continents.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00018-index-countries.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00019-index-regions.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00020-index-airports.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00021-index-navaids.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00022-index-airport_frequencies.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00023-index-runways.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00024-index-faa_abbreviations.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00025-constraints-continents.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00026-constraints-countries.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00027-constraints-regions.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00028-constraints-airports.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00029-constraints-navaids.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00030-constraints-airport-frequencies.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00031-constraints-runways.yaml
+
+#   - include:
+#       relativeToChangelogFile: true
+#       file: 00032-constraints-faa_abbreviations.yaml
+
+

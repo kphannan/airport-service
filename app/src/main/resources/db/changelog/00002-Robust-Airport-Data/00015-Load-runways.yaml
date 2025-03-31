@@ -1,0 +1,112 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00019"
+      author: kevin
+      changes:
+        - loadData:
+            tableName: runways
+            quotchar: '"'
+            separator: ','
+            encoding: UTF-8
+            columns:
+              - column:
+                  name: id
+                  type: numeric
+
+              - column:
+                  name: airport_ref
+                  type: numeric
+              - column:
+                  name: airport_ident
+                  type: string
+
+              - column:
+                  name: length_ft
+                  type: numeric
+              - column:
+                  name: width_ft
+                  type: numeric
+
+              - column:
+                  name: surface
+                  type: string
+
+              - column:
+                  name: lighted
+                  type: string
+
+              - column:
+                  name: closed
+                  type: string
+
+              - column:
+                  name: le_ident
+                  type: string
+              - column:
+                  name: le_latitude_deg
+                  type: numeric
+              - column:
+                  name: le_longitude_deg
+                  type: numeric
+              - column:
+                  name: le_elevation_ft
+                  type: numeric
+              - column:
+                  name: le_heading_degT
+                  type: numeric
+              - column:
+                  name: le_displaced_threshold_ft
+                  type: numeric
+
+              - column:
+                  name: he_ident
+                  type: string
+              - column:
+                  name: he_latitude_deg
+                  type: numeric
+              - column:
+                  name: he_longitude_deg
+                  type: numeric
+              - column:
+                  name: he_elevation_ft
+                  type: numeric
+              - column:
+                  name: he_heading_degT
+                  type: numeric
+              - column:
+                  name: he_displaced_threshold_ft
+                  type: numeric
+
+            relativeToChangelogFile: true
+            file: data/runways.csv
+
+        # Copy the type column from the original navaids
+        # table to the new navaid_kind table.
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: INSERT INTO runway_surface_kind (kind)
+                 SELECT DISTINCT(surface) FROM runways;
+
+        # Convert imported blanks to NULL
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE runways
+                 SET    le_ident = NULL
+                 WHERE  le_ident = '';
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE runways
+                 SET    he_ident = NULL
+                 WHERE  he_ident = '';
+
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE runways
+                 SET    surface = NULL
+                 WHERE  surface = '';
+
+

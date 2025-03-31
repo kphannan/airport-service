@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00031"
+      author: kevin
+      dbms: mysql, h2, mssql, oracle, db2, mariadb, sybase, informix, firebird, hsqldb, postgresql, snowflake
+      changes:
+        - addUniqueConstraint:
+            tableName: regions
+            columnNames: code
+            constraintName: uq_regions_code
+
+        # - addUniqueConstraint:
+        #     tableName: regions
+        #     columnNames: local_code
+        #     constraintName: uq_regions_local_code
+
+        - addForeignKeyConstraint:
+            constraintName: fk_regions-continent
+
+            baseTableName: regions
+            baseColumnNames: continent
+
+            referencedTableName: continents
+            referencedColumnNames: code
+
+        - addForeignKeyConstraint:
+            constraintName: fk_regions-countries
+
+            baseTableName: regions
+            baseColumnNames: iso_country
+
+            referencedTableName: countries
+            referencedColumnNames: code
+
+

@@ -1,0 +1,130 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00008"
+      author: kevin
+      changes:
+        - createTable:
+            tableName: airports
+            remarks: Each row in this dataset represents the record for a single airport. The primary key for interoperability purposes with other datasets is ident, but the actual internal OurAirports primary key is id. iso_region is a foreign key into the regions.csv download file.
+
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  remarks: Internal OurAirports integer identifier for the airport. This will stay persistent, even if the airport code changes.
+              - column:
+                  name: ident
+                  type: char(7)
+                  constraints:
+                    nullable: false
+                  remarks: The text identifier used in the OurAirports URL. This will be the ICAO code if available. Otherwise, it will be a local airport code (if no conflict), or if nothing else is available, an internally-generated code starting with the ISO2 country code, followed by a dash and a four-digit number.
+              - column:
+                  name: type
+                  type: char(14)
+                  constraints:
+                    nullable: false
+                  remarks: The type of the airport. Allowed values are "closed_airport", "heliport", "large_airport", "medium_airport", "seaplane_base", and "small_airport". See the map legend for a definition of each type.
+              - column:
+                  name: name
+                  type: char(80)
+                  constraints:
+                    nullable: false
+                  remarks: The official airport name, including "Airport", "Airstrip", etc.
+              - column:
+                  name: latitude_deg
+                  type: decimal(20,14)
+                  constraints:
+                    nullable: false
+                  remarks: The airport latitude in decimal degrees (positive for north).
+              - column:
+                  name: longitude_deg
+                  type: decimal(20,14)
+                  constraints:
+                    nullable: false
+                  remarks: The airport longitude in decimal degrees (positive for east).
+              - column:
+                  name: elevation_ft
+                  type: integer
+                  remarks: The airport elevation MSL in feet (not metres).
+              - column:
+                  name: continent
+                  type: char(2)
+                  constraints:
+                    nullable: false
+                  remarks: The code for the continent where the airport is (primarily) located. Allowed values are "AF" (Africa), "AN" (Antarctica), "AS" (Asia), "EU" (Europe), "NA" (North America), "OC" (Oceania), or "SA" (South America).'
+              - column:
+                  name: iso_country
+                  type: char(2)
+                  constraints:
+                    nullable: false
+                  remarks: The two-character ISO 3166:1-alpha2 code for the country where the airport is (primarily) located. A handful of unofficial, non-ISO codes are also in use, such as "XK" for Kosovo. Points to the code column in countries.csv.'
+              - column:
+                  name: iso_region
+                  type: char(7)
+                  constraints:
+                    nullable: false
+                  remarks: 'An alphanumeric code for the high-level administrative subdivision of a country where the airport is primarily located (e.g. province, governorate), prefixed by the ISO2 country code and a hyphen. OurAirports uses ISO 3166:2 codes whenever possible, preferring higher administrative levels, but also includes some custom codes. See the documentation for regions.csv.'
+              - column:
+                  name: municipality
+                  type: char(60)
+                  constraints:
+                    # There really should be municipality for every airport....
+                    nullable: true
+                  remarks: 'The primary municipality that the airport serves (when available). Note that this is not necessarily the municipality where the airport is physically located.'
+              # Actually a boolean
+              - column:
+                  name: scheduled_service
+                  type: char(3)
+                  constraints:
+                    nullable: false
+                  remarks: \"yes\" if the airport currently has scheduled airline service; \"no\" otherwise.
+              - column:
+                  name: gps_code
+                  type: char(4)
+                  constraints:
+                    nullable: true
+                  remarks: The code that an aviation GPS database (such as Jeppesen or Garmin) would normally use for the airport. This will always be the ICAO code if one exists. Note that, unlike the ident column, this is not guaranteed to be globally unique.
+              - column:
+                  name: iata_code
+                  type: char(3)
+                  remarks: The three-letter IATA code for the airport (if it has one).
+              - column:
+                  name: local_code
+                  type: char(7)
+                  remarks: The local country code for the airport, if different from the gps_code and iata_code fields (used mainly for US airports).
+              - column:
+                  name: home_link
+                  type: varchar(255)
+                  remarks: URL of the official home page of the airport on the web, if one exists.
+              - column:
+                  name: wikipedia_link
+                  type: varchar(255)
+                  remarks: URL of the page on Wikipedia for thhe airport, if one exists.
+              - column:
+                  name: keywords
+                  type: varchar(256)
+                  remarks: Extra keywords/phrases to assist with search, comma-separated. May include former names for the airport, alternate codes, names in other languages, nearby tourist destinations, etc.
+
+        - createTable:
+            tableName: airport_kind
+            remarks: Each row represents a country or country-like entity (e.g. Hong Kong). The iso_country column in airports.csv, navaids.csv, and regions.csv refer to the code column here.
+
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  remarks: Internal integer identifier for the airport_kind. This will stay persistent, even if the kind changes.
+
+              - column:
+                  name: kind
+                  type: char(14)
+                  constraints:
+                    nullable: false
+                  remarks: The airport_kind code in english.

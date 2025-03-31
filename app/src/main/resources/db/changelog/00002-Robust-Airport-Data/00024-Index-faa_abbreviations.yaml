@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00028"
+      author: kevin
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: abbreviation
+            tableName: faa_abbreviations
+            indexName: ix_faa_abbreviations-abbreviation
+
+        - createIndex:
+            columns:
+              - column:
+                  name: definition
+            tableName: faa_abbreviations
+            indexName: ix_faa_abbreviations-definition
+
+        # - addUniqueConstraint:
+        #     constraintName: uq_faa_abbreviations-abbreviation
+        #     tableName: faa_abbreviations
+        #     columnNames: abbreviation
+

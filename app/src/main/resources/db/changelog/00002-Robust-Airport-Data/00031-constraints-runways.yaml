@@ -1,0 +1,46 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00035"
+      author: kevin
+      dbms: mysql, h2, mssql, oracle, db2, mariadb, sybase, informix, firebird, hsqldb, postgresql, snowflake
+      changes:
+
+        # ----- Runway surface kind -----
+        - addUniqueConstraint:
+            tableName: runway_surface_kind
+            columnNames: kind
+            constraintName: uq_runway_surface_kind
+
+        # - addUniqueConstraint:
+        #     tableName: runways
+        #     columnNames: airport_ident
+        #     constraintName: uq_runway_airport_ident
+
+        # Runways -> Airports
+        - addForeignKeyConstraint:
+            constraintName: fk_runways-airport_id
+
+            baseTableName: runways
+            baseColumnNames: airport_ref
+
+            referencedTableName: airports
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            constraintName: fk_runways-airport_ident
+
+            baseTableName: runways
+            baseColumnNames: airport_ident
+
+            referencedTableName: airports
+            referencedColumnNames: ident
+
+        - addForeignKeyConstraint:
+            constraintName: fk_runways-surface_kind
+
+            baseTableName: runways
+            baseColumnNames: surface
+
+            referencedTableName: runway_surface_kind
+            referencedColumnNames: kind
+

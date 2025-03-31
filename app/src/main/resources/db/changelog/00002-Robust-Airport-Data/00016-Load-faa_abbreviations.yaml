@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00020"
+      author: kevin
+      changes:
+        - loadData:
+            tableName: faa_abbreviations
+            quotchar: '"'
+            separator: ','
+            encoding: UTF-8
+            columns:
+              - column:
+                  name: abbreviation
+                  type: string
+              - column:
+                  name: definition
+                  type: string
+
+            relativeToChangelogFile: true
+            file: data/faa_abbreviations.csv

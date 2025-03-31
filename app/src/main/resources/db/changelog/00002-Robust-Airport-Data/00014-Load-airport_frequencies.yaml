@@ -1,0 +1,52 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00018"
+      author: kevin
+      changes:
+        - loadData:
+            tableName: airport_frequencies
+            quotchar: '"'
+            separator: ','
+            encoding: UTF-8
+            columns:
+              - column:
+                  name: id
+                  type: numeric
+
+              - column:
+                  name: airport_ref
+                  type: numeric
+
+              - column:
+                  name: airport_ident
+                  type: string
+
+              - column:
+                  name: type
+                  type: string
+
+              - column:
+                  name: description
+                  type: string
+
+              - column:
+                  name: frequency_mhz
+                  type: numeric
+
+            relativeToChangelogFile: true
+            file: data/airport-frequencies.csv
+
+        # Copy the type column from the original airport_frequencies
+        # table to the new airport_frequency_kind table.
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: INSERT INTO airport_frequency_kind (kind)
+                 SELECT DISTINCT(type) FROM airport_frequencies;
+        # Convert imported blanks to NULL
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE airport_frequencies
+                 SET    description = NULL
+                 WHERE  description = '';

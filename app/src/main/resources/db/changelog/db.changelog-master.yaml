@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - include:
+      relativeToChangelogFile: true
+      file: 00001-InitialLoad/00001-changelog-master.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00002-Robust-Airport-Data/00000-changelog-master.yaml
+
+
+  # - includeAll:
+  #     path: changes
+  #     relativeToChangelogFile: true

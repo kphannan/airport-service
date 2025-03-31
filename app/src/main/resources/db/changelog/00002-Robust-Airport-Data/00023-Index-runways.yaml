@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00027"
+      author: kevin
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: airport_ref
+            tableName: runways
+            indexName: ix_runways-airport_ref
+
+        - createIndex:
+            columns:
+              - column:
+                  name: airport_ident
+            tableName: runways
+            indexName: ix_runways-airport_ident
+
+
+        # - addUniqueConstraint:
+        #     constraintName: uq_runways-
+        #     tableName: runways
+        #     columnNames: airport_ref
+

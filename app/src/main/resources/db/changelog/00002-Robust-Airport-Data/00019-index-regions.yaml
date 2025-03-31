@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00023"
+      author: kevin
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: name
+            tableName: regions
+            indexName: ix_regions-name
+
+        - createIndex:
+            columns:
+              - column:
+                  name: code
+            tableName: regions
+            indexName: ix_regions-code
+
+        # - addUniqueConstraint:
+        #     constraintName: unq_region-code
+        #     tableName: regions
+        #     columnNames: code
+

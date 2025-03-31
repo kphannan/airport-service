@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00035"
+      author: kevin
+      dbms: mysql, h2, mssql, oracle, db2, mariadb, sybase, informix, firebird, hsqldb, postgresql, snowflake
+      changes:
+
+        - addUniqueConstraint:
+            tableName: faa_abbreviations
+            columnNames: abbreviation
+            constraintName: uq_faa_abbreviations_abbreviation
+
+

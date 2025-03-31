@@ -1,0 +1,60 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00032"
+      author: kevin
+      dbms: mysql, h2, mssql, oracle, db2, mariadb, sybase, informix, firebird, hsqldb, postgresql, snowflake
+      changes:
+
+        # ----- Airport Kind -----
+        - addUniqueConstraint:
+            tableName: airport_kind
+            columnNames: kind
+            constraintName: uq_airport_kind
+
+
+
+        # ----- Airports -----
+        # --- unique
+        - addUniqueConstraint:
+            tableName: airports
+            columnNames: ident
+            constraintName: uq_airports_ident
+
+        # --- foreign keys
+        - addForeignKeyConstraint:
+            constraintName: fk_airport-country
+
+            baseTableName: airports
+            baseColumnNames: iso_country
+
+            referencedTableName: countries
+            referencedColumnNames: code
+
+        - addForeignKeyConstraint:
+            constraintName: fk_airport-region
+
+            baseTableName: airports
+            baseColumnNames: iso_region
+
+            referencedTableName: regions
+            referencedColumnNames: code
+
+        - addForeignKeyConstraint:
+            constraintName: fk_airport-continent
+
+            baseTableName: airports
+            baseColumnNames: continent
+
+            referencedTableName: continents
+            referencedColumnNames: code
+
+        - addForeignKeyConstraint:
+            constraintName: fk_airport-kind
+
+            baseTableName: airports
+            baseColumnNames: type
+
+            referencedTableName: airport_kind
+            referencedColumnNames: kind
+
+

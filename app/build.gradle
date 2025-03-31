@@ -64,7 +64,7 @@ dependencies {
     // ===== Persistence =====
     // implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    // implementation 'org.liquibase:liquibase-core'
+    implementation 'org.liquibase:liquibase-core'
     // --- Database
     runtimeOnly 'com.h2database:h2'
 

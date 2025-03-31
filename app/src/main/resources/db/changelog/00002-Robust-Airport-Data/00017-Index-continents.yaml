@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00021"
+      author: kevin
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: name
+            tableName: continents
+            indexName: ix_continent-name
+            # catalogName:
+            # schemaName:
+            # associatedWith:
+            # unique: true
+            # clustered: false
+            # tablespace:
+        # - addUniqueConstraint:
+        #     constraintName: idx_continent-name
+        #     tableName: continents
+        #     columnNames: name
+

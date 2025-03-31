@@ -1,0 +1,122 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00017"
+      author: kevin
+      changes:
+        - loadData:
+            tableName: navaids
+            quotchar: '"'
+            separator: ','
+            encoding: UTF-8
+            columns:
+              - column:
+                  name: id
+                  type: numeric
+
+              - column:
+                  name: filename
+                  type: string
+              - column:
+                  name: ident
+                  type: string
+
+              - column:
+                  name: name
+                  type: string
+              - column:
+                  name: type
+                  type: string
+              - column:
+                  name: frequency_khz
+                  type: numeric
+              - column:
+                  name: latitude_deg
+                  type: numeric
+              - column:
+                  name: longitude_deg
+                  type: numeric
+              - column:
+                  name: elevation_ft
+                  type: numeric
+              - column:
+                  name: iso_country
+                  type: string
+              - column:
+                  name: dme_frequency_khz
+                  type: numeric
+              - column:
+                  name: dme_channel
+                  type: string
+              - column:
+                  name: dme_latitude_deg
+                  type: numeric
+              - column:
+                  name: dme_longitude_deg
+                  type: numeric
+              - column:
+                  name: dme_elevation_ft
+                  type: numeric
+              - column:
+                  name: slaved_variation_deg
+                  type: numeric
+              - column:
+                  name: magnetic_variation_deg
+                  type: numeric
+              - column:
+                  name: usageType
+                  type: string
+              - column:
+                  name: power
+                  type: string
+              - column:
+                  name: associated_airport
+                  type: string
+
+            relativeToChangelogFile: true
+            file: data/navaids.csv
+
+        # Copy the type column from the original navaids
+        # table to the new navaid_kind table.
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: INSERT INTO navaid_kind (kind)
+                 SELECT DISTINCT(type) FROM navaids;
+
+        # Convert imported blanks to NULL
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE navaids
+                 SET    associated_airport = NULL
+                 WHERE  associated_airport = '';
+
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE navaids
+                 SET    power = NULL
+                 WHERE  power = '';
+
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE navaids
+                 SET    usageType = NULL
+                 WHERE  usageType = '';
+
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE navaids
+                 SET    dme_channel = NULL
+                 WHERE  dme_channel = '';
+
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE navaids
+                 SET    iso_country = NULL
+                 WHERE  iso_country = '';
+
+

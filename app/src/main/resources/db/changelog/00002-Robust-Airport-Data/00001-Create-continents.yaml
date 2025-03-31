@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00005"
+      author: kevin
+      changes:
+        - createTable:
+            tableName: continents
+            remarks: Each row represents a country or country-like entity (e.g. Hong Kong). The iso_country column in airports.csv, navaids.csv, and regions.csv refer to the code column here.
+
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  remarks: Internal integer identifier for the continent. This will stay persistent, even if the country name or code changes.
+
+              - column:
+                  name: code
+                  type: char(2)
+                  constraints:
+                    nullable: false
+                  remarks: The two-character continent code.
+
+              - column:
+                  name: name
+                  type: varchar(52)
+                  constraints:
+                    nullable: false
+                  remarks: The name of the continent.
+
+              - column:
+                  name: wikipedia_link
+                  type: varchar(255)
+                  constraints:
+                    nullable: true
+                  remarks: The URL of the Wikipedia page for the continent.
+
+              - column:
+                  name: keywords
+                  type: varchar(255)
+                  constraints:
+                    nullable: true
+                  remarks: Keywords for the continent, separated by commas.
+

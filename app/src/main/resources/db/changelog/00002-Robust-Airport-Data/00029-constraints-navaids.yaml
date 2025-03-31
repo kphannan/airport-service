@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00033"
+      author: kevin
+      dbms: mysql, h2, mssql, oracle, db2, mariadb, sybase, informix, firebird, hsqldb, postgresql, snowflake
+      changes:
+
+        - addUniqueConstraint:
+            tableName: navaid_kind
+            columnNames: kind
+            constraintName: uq_navaid_kind-kind
+
+        # Refrence type
+        - addForeignKeyConstraint:
+            constraintName: fk_navaids-type_navaids_kind
+            baseTableName: navaids
+            baseColumnNames: type
+            referencedTableName: navaid_kind
+            referencedColumnNames: kind
+
+        # Reference airport
+        - addForeignKeyConstraint:
+            constraintName: fk_navaids-airport_id
+
+            baseTableName: navaids
+            baseColumnNames: associated_airport
+
+            referencedTableName: airports
+            referencedColumnNames: ident
+
+        # Reference country
+        - addForeignKeyConstraint:
+            constraintName: fk_navaids-countries
+
+            baseTableName: navaids
+            baseColumnNames: iso_country
+
+            referencedTableName: countries
+            referencedColumnNames: code
+
+

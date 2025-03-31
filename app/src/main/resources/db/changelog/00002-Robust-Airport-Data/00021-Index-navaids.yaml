@@ -1,0 +1,38 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00025"
+      author: kevin
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: kind
+            tableName: navaid_kind
+            indexName: ix_navaid_kind-kind
+
+        - createIndex:
+            columns:
+              - column:
+                  name: name
+            tableName: navaids
+            indexName: ix_navaids-name
+
+        - createIndex:
+            columns:
+              - column:
+                  name: iso_country
+            tableName: navaids
+            indexName: ix_navaids-iso_country
+
+        - createIndex:
+            columns:
+              - column:
+                  name: associated_airport
+            tableName: navaids
+            indexName: ix_navaids-associated_airport
+
+        # - addUniqueConstraint:
+        #     constraintName: unq_county-code
+        #     tableName: countries
+        #     columnNames: code
+

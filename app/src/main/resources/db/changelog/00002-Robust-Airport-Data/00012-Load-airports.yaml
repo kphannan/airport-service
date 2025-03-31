@@ -1,0 +1,115 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00016"
+      author: kevin
+      changes:
+        - loadData:
+            tableName: airports
+            quotchar: '"'
+            separator: ','
+            encoding: UTF-8
+            columns:
+              - column:
+                  name: id
+                  type: numeric
+              - column:
+                  name: ident
+                  type: string
+              - column:
+                  name: type
+                  type: string
+              - column:
+                  name: name
+                  type: string
+              - column:
+                  name: latitude_deg
+                  type: numeric
+              - column:
+                  name: longitude_deg
+                  type: numeric
+              - column:
+                  name: elevation_ft
+                  type: numeric
+              - column:
+                  name: continent
+                  type: string
+              - column:
+                  name: iso_country
+                  type: string
+              - column:
+                  name: iso_region
+                  type: string
+              - column:
+                  name: municipality
+                  type: string
+              - column:
+                  name: scheduled_service
+                  type: string
+              - column:
+                  name: gps_code
+                  type: string
+              - column:
+                  name: iata_code
+                  type: string
+              - column:
+                  name: local_code
+                  type: string
+              - column:
+                  name: home_link
+                  type: string
+              - column:
+                  name: wikipedia_link
+                  type: string
+              - column:
+                  name: keywords
+                  type: string
+
+            relativeToChangelogFile: true
+            file: data/airports.csv
+
+        # Copy the type column from the original airports
+        # table to the new airport_kind table.
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: INSERT INTO airport_kind (kind)
+                 SELECT DISTINCT(type) FROM airports;
+
+        # Convert imported blanks to NULL
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE airports
+                 SET    keywords = NULL
+                 WHERE  keywords = '';
+
+        - sql:
+            sql: UPDATE airports
+                 SET    wikipedia_link = NULL
+                 WHERE  wikipedia_link = '';
+
+        - sql:
+            sql: UPDATE airports
+                 SET    home_link = NULL
+                 WHERE  home_link = '';
+
+        - sql:
+            sql: UPDATE airports
+                 SET    iata_code = NULL
+                 WHERE  iata_code = '';
+
+        - sql:
+            sql: UPDATE airports
+                 SET    local_code = NULL
+                 WHERE  local_code = '';
+
+        - sql:
+            sql: UPDATE airports
+                 SET    gps_code = NULL
+                 WHERE  gps_code = '';
+
+        # Data file contains blanks, yet column is not nullable
+        - sql:
+            sql: UPDATE airports
+                 SET    municipality = NULL
+                 WHERE  municipality = '';
