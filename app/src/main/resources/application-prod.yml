@@ -1,0 +1,20 @@
+# Production level configuration, production level server
+# credentials are in vault
+# certificates ....
+# security ....
+
+datasource:
+
+  # TODO credentials in vault
+  username: root
+  password: crimson
+  # schema: something
+  url: jdbc:mysql://localhost:3306/airports
+  driver:
+    classname: com.mysql.cj.jdbc.Driver
+
+
+# ##### Logging configuration #####
+logging:
+  level:
+    root: WARN

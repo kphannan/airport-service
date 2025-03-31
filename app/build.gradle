@@ -67,6 +67,11 @@ dependencies {
     implementation 'org.liquibase:liquibase-core'
     // --- Database
     runtimeOnly 'com.h2database:h2'
+    // runtimeOnly 'com.ibm.db2:jcc'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    // runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    runtimeOnly 'org.postgresql:postgresql'
 
     // ----- Quality Assurance -----
     // --- Unit Testing
@@ -86,7 +91,8 @@ application {
 }
 
 run {
-    args = ['--trace']
+    // args = ['--trace']
+    args = ['--spring.profiles.active=local']
 }
 
 // bootJar {

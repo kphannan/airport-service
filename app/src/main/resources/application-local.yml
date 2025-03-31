@@ -1,0 +1,101 @@
+
+# TODO this should be in a local profile
+datasource:
+  username: sa
+  password: sa
+  # schema: something
+  url: jdbc:h2:mem:testdb;MODE=Mysql;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;
+  driver:
+    classname: org.h2.Driver
+
+
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        trace: true
+        web-allow-others: false
+
+  output:
+    ansi:
+      enabled: ALWAYS
+
+
+# ##### Logging configuration #####
+logging:
+  level:
+    root: DEBUG
+
+    com:
+      example:
+        # At INFO, log startup of the service
+        airline: INFO
+      zaxxer:
+        hikari:
+          pool:
+            HikariPool: DEBUG
+
+    # org.apache.catalina.authenticator.jaspic.AuthConfigFactoryImpl
+    org:
+      # apache: ERROR
+      apache:
+        catalina:
+          authenticator:
+            jaspic:
+              # some functionality for h2-console
+              AuthConfigFactoryImpl: WARN
+          session: ERROR
+        coyote:
+          http11:
+            # DEBUG shows close of HttpConnection
+            Http11Processor: INFO
+        tomcat:
+          util:
+            net:
+              NioEndpoint: ERROR
+
+
+      hibernate:
+        internal:
+          SessionFactoryImpl: INFO
+        HQL_FUNCTIONS: INFO
+        orm:
+          idgen:
+            factory: WARN
+        query:
+          sqm:
+            function:
+              SqmFunctionRegistry: INFO
+        SQL: DEBUG
+        type:
+          BasicTypeRegistry: WARN
+          descriptor:
+            jdbc:
+              spi:
+                JdbcTypeRegistry: INFO
+            # Enable logging of SQL
+            sql:
+              BasicBinder: TRACE
+
+      springframework:  INFO
+        # boot: debug
+        # beans: debug
+
+    # liquibase: INFO
+    liquibase:
+      # Steps in each changelog (INFO has much detail)
+      changelog: WARN
+      command: INFO
+      configuration: INFO
+      # kind of a log of executed statements
+      executor: INFO
+      parser: INFO
+      servicelocator: INFO
+      # Notes execution of 1 or more changesets / SQL statements
+      statement: WARN
+      # logs each changeset #, filename, author (INFO)
+      ui: WARN
+      # checksum calculation / changeset
+      util: INFO
