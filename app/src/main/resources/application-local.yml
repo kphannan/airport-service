@@ -194,4 +194,12 @@ management:
       version: ${project.version}
       java:
         version: ${java.version}
+        source: ${java.version}
+        target: ${java.version}
+    env:
+      enabled: true
+    java:
+      enabled: true
+    git:
+      mode: full
 

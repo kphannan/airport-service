@@ -14,6 +14,9 @@ plugins {
 
     // TODO move to java conventions...
     id 'io.freefair.lombok'
+
+    id 'com.gorylenko.gradle-git-properties'
+
 }
 
 
@@ -98,4 +101,15 @@ run {
 //     // Not sure yet why this is relevant for a library
 //     mainClass = 'com.example.app.App'
 //     // archiveFileName = 'custom-app-name.jar'
+// }
+
+
+gitProperties {
+    dotGitDirectory = project.rootProject.layout.projectDirectory.dir(".git")
+    // dotGitDirectory = "${project.rootDir}/.git"
+}
+
+
+// springBoot {
+//     builidInfo()
 // }

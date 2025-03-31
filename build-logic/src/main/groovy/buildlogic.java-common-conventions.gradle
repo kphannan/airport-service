@@ -334,6 +334,7 @@ checkerFramework {
 
 
 
+
 // ===== Versioning =====
 // --- Create version from tags or branch names in git
 def getVersion() {

@@ -35,6 +35,7 @@ buildscript {
 
         // --- Artifact Versioning
         nemerosaVersion             = '3.1.0'
+        gorylenkoVersion            = '2.5.0'
 
         // --- Artifact Publishing
         //publishingVersion           = '3.1.0'
@@ -62,12 +63,18 @@ plugins {
     // --- Mutation testing
     id 'info.solidsoft.pitest' version "${pitPluginVersion}" apply false
 
+    // ===== Configuration Management =====
     // --- Artifact Versioning
     id 'net.nemerosa.versioning' version "${nemerosaVersion}" apply false
+    id "com.gorylenko.gradle-git-properties" version "${gorylenkoVersion}" apply false
 
     id 'com.diffplug.spotless' version "${spotlessVersion}" apply false
 
     id 'com.github.spotbugs' version "${spotbugsVersion}" apply false
 }
+
+    // ===== Configuration Management =====
+    // id "net.nemerosa.versioning" version "2.9.0"
+    // id "com.gorylenko.gradle-git-properties" version "2.3.2"
 
 
