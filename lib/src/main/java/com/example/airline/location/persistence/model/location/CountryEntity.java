@@ -22,7 +22,7 @@ import lombok.Data;
 @Entity
 @Table( name = "countries" )
 @Data
-public class Country
+public class CountryEntity
 {
     // @Id
     // @GeneratedValue( strategy = GenerationType.AUTO )

@@ -34,7 +34,7 @@ public class ContinentService
 
     public List<Continent> findAll()
     {
-        return mapper.continentDTOtoDomain( repository.findAll() );
+        return mapper.continentEntityToDomain( repository.findAll() );
     }
 
 
@@ -45,7 +45,7 @@ public class ContinentService
 
         if ( continentEntity.isPresent() )
         {
-            Continent continent = mapper.continentDTOtoDomain( continentEntity.get() );
+            Continent continent = mapper.continentEntityToDomain( continentEntity.get() );
 
             return Optional.of( continent );
         }
@@ -63,7 +63,7 @@ public class ContinentService
 
         if ( continentEntity.isPresent() )
         {
-            Continent continent = mapper.continentDTOtoDomain( continentEntity.get() );
+            Continent continent = mapper.continentEntityToDomain( continentEntity.get() );
 
             return Optional.of( continent );
         }

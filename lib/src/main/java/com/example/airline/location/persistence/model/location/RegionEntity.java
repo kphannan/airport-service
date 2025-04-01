@@ -23,7 +23,7 @@ import lombok.Data;
 @Entity
 @Table( name = "regions" )
 @Data
-public class Region
+public class RegionEntity
 {
     /**
      * Internal OurAirports integer identifier for the region. This will stay

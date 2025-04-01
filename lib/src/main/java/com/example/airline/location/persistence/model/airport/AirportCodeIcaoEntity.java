@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Table( name = "icao_airportcode" )
 @Data
 @NoArgsConstructor
-public class AirportCodeIcao
+public class AirportCodeIcaoEntity
 {
     @Id
     @Column( name = "icao_code" )
@@ -30,7 +30,7 @@ public class AirportCodeIcao
      *
      * @param icaoCode the ICAO code string.
      */
-    public AirportCodeIcao( final String icaoCode )
+    public AirportCodeIcaoEntity( final String icaoCode )
     {
         this.icaoCode = icaoCode;
     }

@@ -5,7 +5,7 @@ package com.example.airline.location.persistence.repository.airport;
 
 import java.util.Optional;
 
-import com.example.airline.location.persistence.model.airport.Airport;
+import com.example.airline.location.persistence.model.airport.AirportEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -19,28 +19,28 @@ import org.springframework.stereotype.Repository;
  * Paged repository of {@code Airport}s.
  */
 @Repository
-public interface AirportRepository extends PagingAndSortingRepository<Airport, Long>
+public interface AirportRepository extends PagingAndSortingRepository<AirportEntity, Long>
 {
     /**
      * Lookup a {@code Airport} by its unique identifier.
      *
      * @param id the unique identifier.
-     * 
+     *
      * @return the record if found.
      */
     @Query( "from #{#entityName} airport where airport.id = :id" )
     @SuppressWarnings( "PMD.ShortVariable" )
-    Optional<Airport> findById( @Param( "id" ) final Long id );
+    Optional<AirportEntity> findById( @Param( "id" ) final Long id );
 
     /**
      * Retrieve all {@code Airport} records by {@code Page}.
      *
      * @param paging the {@code Page} criteria.
-     * 
+     *
      * @return the located page, whose body contains the found records.
      */
     @Override
-    Page<Airport> findAll( Pageable paging );
+    Page<AirportEntity> findAll( Pageable paging );
 
     /**
      * Search for {@code Airport} records that contain any of the query parameters.
@@ -50,7 +50,7 @@ public interface AirportRepository extends PagingAndSortingRepository<Airport, L
      * @param ident    optional identifier which may be the ICAO code to search on.
      * @param name     optional airport name string.
      * @param paging   current {@code Page} specification.
-     * 
+     *
      * @return the target page with {@code Airport} records if any match the
      *         criteria.
      */
@@ -58,7 +58,7 @@ public interface AirportRepository extends PagingAndSortingRepository<Airport, L
             + "   and (:icaoCode='' or airport.gpsCode like %:icaoCode%)"
             + "   and (:ident='' or airport.ident like %:ident%)"
             + "   and (:name='' or upper(airport.name) like %:name%)" )
-    Page<Airport> advancedQuery( @Param( "iataCode" ) final String iataCode,
+    Page<AirportEntity> advancedQuery( @Param( "iataCode" ) final String iataCode,
                                  @Param( "icaoCode" ) final String icaoCode // gpsCode
                                  ,
                                  @Param( "ident" ) final String ident,

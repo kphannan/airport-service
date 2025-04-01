@@ -22,14 +22,7 @@ public class UriConverter implements AttributeConverter<URI, String>
     @Override
     public String convertToDatabaseColumn( final URI uri )
     {
-        // StringBuilder sb = new StringBuilder();
-        // sb.append(color.getRed()).append(SEPARATOR)
-        // .append(color.getGreen())
-        // .append(SEPARATOR)
-        // .append(color.getBlue())
-        // .append(SEPARATOR)
-        // .append(color.getAlpha());
-        return uri.toString();
+        return null == uri ? null : uri.toString();
     }
 
 
@@ -39,7 +32,7 @@ public class UriConverter implements AttributeConverter<URI, String>
     {
         try
         {
-            return new URI( dbData );
+            return null == dbData ? null : new URI( dbData );
         }
         catch ( URISyntaxException e )
         {

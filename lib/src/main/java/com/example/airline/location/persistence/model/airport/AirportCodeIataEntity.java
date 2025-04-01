@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Table( name = "iata_airportcode" )
 @Data
 @NoArgsConstructor
-public class AirportCodeIata
+public class AirportCodeIataEntity
 {
     @Id
     @Column( name = "IATA_CODE" )
@@ -31,7 +31,7 @@ public class AirportCodeIata
      *
      * @param iataCode the IATA code string.
      */
-    public AirportCodeIata( final String iataCode )
+    public AirportCodeIataEntity( final String iataCode )
     {
         this.iataCode = hasText( iataCode ) ? iataCode : "ZZZ";
     }

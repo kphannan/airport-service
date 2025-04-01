@@ -34,7 +34,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Builder
 @EntityListeners( AuditingEntityListener.class )
 @SuppressWarnings( "PMD.TooManyFields" )
-public class Airport // extends Auditable<String>
+public class AirportEntity // extends Auditable<String>
 {
     /**
      * T Internal OurAirports integer identifier for the airport. This will stay
