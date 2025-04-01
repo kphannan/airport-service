@@ -10,16 +10,12 @@ import lombok.Data;
 
 // TODO change wikiLink to a URI
 // TODO change code to a 2 character code...
-// record ContinentDTO( Long id, String code, String name, String wikiLink,
-// String keywords )
-// {}
 
 
 
-// TODO convert to a Java record
 @Data
 @AllArgsConstructor
-public class ContinentDTO
+public class Continent
 {
     private Integer id;
     private String  code;

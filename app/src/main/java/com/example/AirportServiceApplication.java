@@ -1,10 +1,14 @@
+/* (C)2025 */
 
 package com.example;
+
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
+
 
 /**
  * REST service application.
@@ -31,6 +35,7 @@ public final class AirportServiceApplication
         log.info( "Starting the app" );
         SpringApplication.run( AirportServiceApplication.class, args );
     }
+
 
 
     private AirportServiceApplication()

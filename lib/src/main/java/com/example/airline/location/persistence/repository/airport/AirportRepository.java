@@ -1,4 +1,7 @@
+/* (C)2025 */
+
 package com.example.airline.location.persistence.repository.airport;
+
 
 import java.util.Optional;
 
@@ -10,6 +13,8 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+
+
 /**
  * Paged repository of {@code Airport}s.
  */
@@ -20,6 +25,7 @@ public interface AirportRepository extends PagingAndSortingRepository<Airport, L
      * Lookup a {@code Airport} by its unique identifier.
      *
      * @param id the unique identifier.
+     * 
      * @return the record if found.
      */
     @Query( "from #{#entityName} airport where airport.id = :id" )
@@ -30,6 +36,7 @@ public interface AirportRepository extends PagingAndSortingRepository<Airport, L
      * Retrieve all {@code Airport} records by {@code Page}.
      *
      * @param paging the {@code Page} criteria.
+     * 
      * @return the located page, whose body contains the found records.
      */
     @Override
@@ -40,21 +47,21 @@ public interface AirportRepository extends PagingAndSortingRepository<Airport, L
      *
      * @param iataCode optional IATA code to search on.
      * @param icaoCode optional ICAO code to search on.
-     * @param ident optional identifier which may be the ICAO code to search on.
-     * @param name optional airport name string.
-     * @param paging current {@code Page} specification.
-     * @return the target page with {@code Airport} records if any match the criteria.
+     * @param ident    optional identifier which may be the ICAO code to search on.
+     * @param name     optional airport name string.
+     * @param paging   current {@code Page} specification.
+     * 
+     * @return the target page with {@code Airport} records if any match the
+     *         criteria.
      */
-    @Query( "from #{#entityName} airport"
-            + " where (:iataCode='' or airport.iataCode like %:iataCode%)"
+    @Query( "from #{#entityName} airport" + " where (:iataCode='' or airport.iataCode like %:iataCode%)"
             + "   and (:icaoCode='' or airport.gpsCode like %:icaoCode%)"
             + "   and (:ident='' or airport.ident like %:ident%)"
-            + "   and (:name='' or upper(airport.name) like %:name%)"
-    )
-    Page<Airport> advancedQuery(  @Param( "iataCode" ) final String iataCode
-                                , @Param( "icaoCode" ) final String icaoCode   // gpsCode
-                                , @Param( "ident" ) final String ident
-                                , @Param( "name" ) final String name
-                                , final Pageable paging );
+            + "   and (:name='' or upper(airport.name) like %:name%)" )
+    Page<Airport> advancedQuery( @Param( "iataCode" ) final String iataCode,
+                                 @Param( "icaoCode" ) final String icaoCode // gpsCode
+                                 ,
+                                 @Param( "ident" ) final String ident,
+                                 @Param( "name" ) final String name,
+                                 final Pageable paging );
 }
-

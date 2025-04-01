@@ -1,10 +1,15 @@
+/* (C)2025 */
+
 package com.example.airline.location.persistence.audit;
 
+
 import java.util.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
-
 import lombok.Data;
+
+
 
 /**
  * It represents the audit log.
@@ -21,7 +26,6 @@ public abstract class Audit
 
     @Column( name = "ACTION_ON" )
     private Date actionOn;
-
 
     /**
      * prevent intantiation unless by a derived class.

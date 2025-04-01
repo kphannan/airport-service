@@ -1,12 +1,16 @@
+/* (C)2025 */
+
 package com.example.airline.location.persistence.model;
 
 
 import java.net.URI;
 import java.net.URISyntaxException;
+
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-
 import lombok.extern.log4j.Log4j2;
+
+
 
 /**
  * Map a URI to a form suitable for storing in a database or in JSON.
@@ -27,6 +31,8 @@ public class UriConverter implements AttributeConverter<URI, String>
         // .append(color.getAlpha());
         return uri.toString();
     }
+
+
 
     @Override
     public URI convertToEntityAttribute( final String dbData )

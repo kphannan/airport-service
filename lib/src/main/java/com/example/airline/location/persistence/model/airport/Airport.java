@@ -1,6 +1,10 @@
+/* (C)2025 */
+
 package com.example.airline.location.persistence.model.airport;
 
+
 import java.math.BigDecimal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -9,7 +13,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,11 +34,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Builder
 @EntityListeners( AuditingEntityListener.class )
 @SuppressWarnings( "PMD.TooManyFields" )
-public class Airport //extends Auditable<String>
+public class Airport // extends Auditable<String>
 {
     /**
-     * T Internal OurAirports integer identifier for the airport. This will
-     * stay persistent, even if the airport code changes.
+     * T Internal OurAirports integer identifier for the airport. This will stay
+     * persistent, even if the airport code changes.
      */
     @Id
     @GeneratedValue( strategy = GenerationType.AUTO )
@@ -43,102 +46,87 @@ public class Airport //extends Auditable<String>
     private Long id;
 
     /**
-     * The text identifier used in the OurAirports URL.
-     * This will be the ICAO code if available. Otherwise, it will be a
-     * local airport code (if no conflict), or if nothing else is available,
-     * an internally-generated code starting with the ISO2 country code,
-     * followed by a dash and a four-digit number.
+     * The text identifier used in the OurAirports URL. This will be the ICAO code
+     * if available. Otherwise, it will be a local airport code (if no conflict), or
+     * if nothing else is available, an internally-generated code starting with the
+     * ISO2 country code, followed by a dash and a four-digit number.
      */
-    @NotNull
-    private String ident;
+    @NotNull private String ident;
 
     /**
-     * The type of the airport. Allowed values are "closed_airport",
-     * "heliport", "large_airport", "medium_airport", "seaplane_base",
-     * and "small_airport". See the map legend for a definition of each type.
+     * The type of the airport. Allowed values are "closed_airport", "heliport",
+     * "large_airport", "medium_airport", "seaplane_base", and "small_airport". See
+     * the map legend for a definition of each type.
      */
-    @NotNull
-     private String type;
+    @NotNull private String type;
 
     /**
      * The official airport name, including "Airport", "Airstrip", etc.
      */
-    @NotNull
-    private String name;
+    @NotNull private String name;
 
     /**
      * The airport latitude in decimal degrees (positive for north).
      */
     @Column( name = "LATITUDE_DEG" )
-    @NotNull
-    private BigDecimal lattitude;
+    @NotNull private BigDecimal lattitude;
     /**
      * The airport longitude in decimal degrees (positive for east).
      */
     @Column( name = "LONGITUDE_DEG" )
-    @NotNull
-    private BigDecimal longitude;
+    @NotNull private BigDecimal longitude;
 
     /**
      * The airport elevation MSL in feet (not metres).
      */
     @Column( name = "ELEVATION_FT" )
     private Integer elevation;
-    // TODO the DB has many rows where this field is null, which doesn't work for a primative type
+    // TODO the DB has many rows where this field is null, which doesn't work for a
+    // primative type
     // TODO do we leverage auto boxing and change it to an Integer object?
 
     /**
-     * The code for the continent where the airport is (primarily) located.
-     * Allowed values are "AF" (Africa), "AN" (Antarctica), "AS" (Asia),
-     * "EU" (Europe), "NA" (North America), "OC" (Oceania),
-     * or "SA" (South America).
+     * The code for the continent where the airport is (primarily) located. Allowed
+     * values are "AF" (Africa), "AN" (Antarctica), "AS" (Asia), "EU" (Europe), "NA"
+     * (North America), "OC" (Oceania), or "SA" (South America).
      */
-    @NotNull
-    private String continent;
+    @NotNull private String continent;
 
     /**
-     * The two-character ISO 3166:1-alpha2 code for the country where the
-     * airport is (primarily) located. A handful of unofficial, non-ISO codes
-     * are also in use, such as "XK" for Kosovo. Points to the code column
-     * in countries.csv.
+     * The two-character ISO 3166:1-alpha2 code for the country where the airport is
+     * (primarily) located. A handful of unofficial, non-ISO codes are also in use,
+     * such as "XK" for Kosovo. Points to the code column in countries.csv.
      */
-    @NotNull
-    private String isoCountry;
+    @NotNull private String isoCountry;
 
     /**
-     * 'An alphanumeric code for the high-level administrative subdivision
-     * of a country where the airport is primarily located (e.g. province,
-     * governorate), prefixed by the ISO2 country code and a hyphen.
-     * OurAirports uses ISO 3166:2 codes whenever possible, preferring higher
-     * administrative levels, but also includes some custom codes. See the
-     * documentation for regions.csv.'
+     * 'An alphanumeric code for the high-level administrative subdivision of a
+     * country where the airport is primarily located (e.g. province, governorate),
+     * prefixed by the ISO2 country code and a hyphen. OurAirports uses ISO 3166:2
+     * codes whenever possible, preferring higher administrative levels, but also
+     * includes some custom codes. See the documentation for regions.csv.'
      */
-    @NotNull
-    private String isoRegion;
+    @NotNull private String isoRegion;
 
     /**
-     * The primary municipality that the airport serves (when available).
-     * Note that this is not necessarily the municipality where the airport
-     * is physically located.
+     * The primary municipality that the airport serves (when available). Note that
+     * this is not necessarily the municipality where the airport is physically
+     * located.
      */
-    @NotNull
-    private String municipality;
+    @NotNull private String municipality;
 
     /**
-     * "yes" if the airport currently has scheduled airline service;
-     * "no" otherwise.
+     * "yes" if the airport currently has scheduled airline service; "no" otherwise.
      */
-    @NotNull
-    private String scheduledService;   // boolean...
+    @NotNull private String scheduledService; // boolean...
 
     /**
-     * The code that an aviation GPS database (such as Jeppesen's or Garmin's)
-     * would normally use for the airport. This will always be the ICAO code
-     * if one exists. Note that, unlike the ident column, this is not
-     * guaranteed to be globally unique.
+     * The code that an aviation GPS database (such as Jeppesen's or Garmin's) would
+     * normally use for the airport. This will always be the ICAO code if one
+     * exists. Note that, unlike the ident column, this is not guaranteed to be
+     * globally unique.
      */
-    @NotNull
-    private String gpsCode;
+    @NotNull private String gpsCode;
 
     /**
      * The three-letter IATA code for the airport (if it has one).
@@ -147,31 +135,27 @@ public class Airport //extends Auditable<String>
     private String iataCode;
 
     /**
-     * The local country code for the airport, if different from the gps_code
-     * and iata_code fields (used mainly for US airports).
+     * The local country code for the airport, if different from the gps_code and
+     * iata_code fields (used mainly for US airports).
      */
     private String localCode;
 
     /**
      * URL of the airport''s official home page on the web, if one exists.
      */
-    private String homeLink;            // URI
+    private String homeLink; // URI
 
     /**
      * URL of the airport''s page on Wikipedia, if one exists.
      */
-    private String wikipediaLink;       // URI
+    private String wikipediaLink; // URI
 
     /**
-     * Extra keywords/phrases to assist with search, comma-separated.
-     * May include former names for the airport, alternate codes, names in
-     * other languages, nearby tourist destinations, etc.
+     * Extra keywords/phrases to assist with search, comma-separated. May include
+     * former names for the airport, alternate codes, names in other languages,
+     * nearby tourist destinations, etc.
      */
     private String keywords;
-
-
-
-
 
     // ----- Auditable -----
     // @CreatedBy
@@ -186,4 +170,3 @@ public class Airport //extends Auditable<String>
     // @LastModifiedBy
     // User modifier;
 }
-

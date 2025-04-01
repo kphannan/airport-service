@@ -1,12 +1,15 @@
+/* (C)2025 */
+
 package com.example.airline.location.persistence.model.airport;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 
 
 /**
@@ -32,4 +35,3 @@ public class AirportCodeIcao
         this.icaoCode = icaoCode;
     }
 }
-

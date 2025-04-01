@@ -40,6 +40,8 @@ class StopwatchTest
         logCaptor.clearLogs();
     }
 
+
+
     @AfterAll
     public static void tearDown()
     {
@@ -166,8 +168,7 @@ class StopwatchTest
             assertTrue( timer.isRunning() );
         }
 
-        assertTrue( StringUtility.contains( logCaptor.getLogs(),
-                                            "autoclose, svc, method: '' - elapsed time: 0 ms" ) );
+        assertTrue( StringUtility.contains( logCaptor.getLogs(), "autoclose, svc, method: '' - elapsed time: 0 ms" ) );
     }
 
 

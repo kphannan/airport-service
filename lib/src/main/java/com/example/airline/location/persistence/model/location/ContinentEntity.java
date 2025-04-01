@@ -12,22 +12,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 
-/**
- * Definition of the Country reference table.
- */
 @Entity
-@Table( name = "countries" )
+@Table( name = "continents" )
 @Data
-public class Country
+@NoArgsConstructor // required by JPA
+@AllArgsConstructor
+public class ContinentEntity
 {
-    // @Id
-    // @GeneratedValue( strategy = GenerationType.AUTO )
-    // private final Long id;
-
     @Id
     @Column( name = "id" )
     @NotNull @SuppressWarnings( "PMD.ShortVariable" )
@@ -39,14 +36,10 @@ public class Country
     @Column( name = "name" )
     @NotNull private String name;
 
-    @Column( name = "continent" )
-    @NotNull private String continent;
-
     @Column( name = "wikipedia_link" )
     @Convert( converter = UriConverter.class )
-    private URI wikipediaLink;
+    private URI wikiLink;
 
     @Column( name = "keywords" )
-    private String keywords;
-
+    private String keywords; // May not need to exchange this
 }

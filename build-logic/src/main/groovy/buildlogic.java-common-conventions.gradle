@@ -157,7 +157,7 @@ pitest {
 // --- Spotless Code formatter
 spotless {
 
-    enforceCheck false
+    enforceCheck = false
 
     format 'misc', {
         // defile the files to apply 'misc' to
