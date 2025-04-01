@@ -57,6 +57,8 @@ dependencies {
     // --- Annotation Processor
     implementation( "jakarta.annotation:jakarta.annotation-api:3.0.0" )
 
+    implementation("org.mapstruct:mapstruct:${mapstructVersion}")
+    annotationProcessor("org.mapstruct:mapstruct-processor:${mapstructVersion}")
     // ----- Frameworks -----
     // --- Logging
     // implementation( "org.apache.logging.log4j:log4j-core:${log4jVersion}" )
@@ -79,6 +81,7 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
 
     // ----- Quality Assurance -----
+    testAnnotationProcessor("org.mapstruct:mapstruct-processor:${mapstructVersion}")
     // --- Unit Testing
     testImplementation( "io.github.hakky54:logcaptor:${logcaptorVersion}" )
 

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.airline.location.Continent;
+import com.example.airline.location.mapper.ContinentMapper;
 import com.example.airline.location.persistence.model.location.ContinentEntity;
 import com.example.airline.location.persistence.repository.location.ContinentRepository;
 import org.springframework.stereotype.Component;
@@ -20,9 +21,13 @@ public class ContinentService
 {
     private ContinentRepository repository;
 
-    public ContinentService( ContinentRepository repository )
+    // @Autowired
+    private ContinentMapper     mapper;
+
+    public ContinentService( ContinentRepository repository, ContinentMapper mapper )
     {
         this.repository = repository;
+        this.mapper = mapper;
     }
 
 
@@ -48,8 +53,9 @@ public class ContinentService
             ContinentEntity entity = continentEntity.get();
             // TODO map persistence to Domain model
             // TODO use a mapping framework
-            Continent continent = new Continent( entity.getId(), entity.getCode(), entity.getName(),
-                    entity.getWikiLink(), entity.getKeywords() );
+            // Continent continent = new Continent( entity.getId(), entity.getCode(), entity.getName(),
+            //         entity.getWikiLink(), entity.getKeywords() );
+            Continent continent = mapper.continentDTOtoDomain( entity );
 
             return Optional.of( continent );
         }

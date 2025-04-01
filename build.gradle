@@ -11,6 +11,11 @@ buildscript {
         // --- Logging (log4j)
         log4jVersion                = '2.24.3'
 
+
+        // ===== Frameworks =====
+        // --- model mapping
+        mapstructVersion            = '1.6.3'
+
         // ===== Quality checks =====
 
         // --- Coding practices (static analysis) ---
