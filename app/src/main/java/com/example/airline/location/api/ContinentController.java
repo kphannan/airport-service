@@ -3,12 +3,12 @@
 package com.example.airline.location.api;
 
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import com.example.airline.location.Continent;
 import com.example.airline.location.ContinentDTO;
+import com.example.airline.location.mapper.ContinentMapper;
 import com.example.airline.location.service.ContinentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,10 +24,13 @@ public class ContinentController
 {
     // Autowired via constructor
     private ContinentService service;
+    private ContinentMapper     mapper;
 
-    public ContinentController( ContinentService service )
+
+    public ContinentController( ContinentService service, ContinentMapper mapper  )
     {
         this.service = service;
+        this.mapper  = mapper;
     }
 
 
@@ -37,9 +40,9 @@ public class ContinentController
     {
         List<Continent> continents = service.findAll();
 
-        // TODO map domain to API model
+        List<ContinentDTO> dtos = mapper.continentDomainToApi( continents );
 
-        return ResponseEntity.ok( Collections.emptyList() );
+        return ResponseEntity.ok( dtos );
     }
 
 
@@ -51,9 +54,7 @@ public class ContinentController
 
         if ( optionalContinent.isPresent() )
         {
-            Continent    continent = optionalContinent.get();
-            ContinentDTO dto       = new ContinentDTO( continent.getId(), continent.getCode(), continent.getName(),
-                    continent.getWikiLink(), continent.getKeywords() );
+            ContinentDTO dto = mapper.continentDomainToApi( optionalContinent.get() );
 
             return ResponseEntity.ok( dto );
         }
@@ -70,11 +71,8 @@ public class ContinentController
 
         if ( optionalEntity.isPresent() )
         {
-            Continent    continent = optionalEntity.get();
-            ContinentDTO dto       = new ContinentDTO( continent.getId(), continent.getCode(), continent.getName(),
-                    continent.getWikiLink(), continent.getKeywords() );
-            // TODO add repository ... service layer
-            // TODO return an OK response with empty body
+            ContinentDTO dto = mapper.continentDomainToApi( optionalEntity.get() );
+
             return ResponseEntity.ok( dto );
         }
 

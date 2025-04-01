@@ -3,7 +3,6 @@
 package com.example.airline.location.service;
 
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,8 +20,9 @@ public class ContinentService
 {
     private ContinentRepository repository;
 
-    // @Autowired
     private ContinentMapper     mapper;
+
+
 
     public ContinentService( ContinentRepository repository, ContinentMapper mapper )
     {
@@ -34,12 +34,7 @@ public class ContinentService
 
     public List<Continent> findAll()
     {
-        List<ContinentEntity> entities = repository.findAll();
-
-        // TODO map from Entity to Domain model
-        List<Continent> continents = Collections.emptyList();
-
-        return continents;
+        return mapper.continentDTOtoDomain( repository.findAll() );
     }
 
 
@@ -50,12 +45,7 @@ public class ContinentService
 
         if ( continentEntity.isPresent() )
         {
-            ContinentEntity entity = continentEntity.get();
-            // TODO map persistence to Domain model
-            // TODO use a mapping framework
-            // Continent continent = new Continent( entity.getId(), entity.getCode(), entity.getName(),
-            //         entity.getWikiLink(), entity.getKeywords() );
-            Continent continent = mapper.continentDTOtoDomain( entity );
+            Continent continent = mapper.continentDTOtoDomain( continentEntity.get() );
 
             return Optional.of( continent );
         }
@@ -63,7 +53,6 @@ public class ContinentService
         {
             return Optional.ofNullable( null );
         }
-
     }
 
 
@@ -74,11 +63,7 @@ public class ContinentService
 
         if ( continentEntity.isPresent() )
         {
-            ContinentEntity entity = continentEntity.get();
-            // TODO map persistence to Domain model
-            // TODO use a mapping framework
-            Continent continent = new Continent( entity.getId(), entity.getCode(), entity.getName(),
-                    entity.getWikiLink(), entity.getKeywords() );
+            Continent continent = mapper.continentDTOtoDomain( continentEntity.get() );
 
             return Optional.of( continent );
         }
