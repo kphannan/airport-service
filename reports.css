@@ -12,13 +12,13 @@
 /* #app-qa-results .test-unit .static, */
 .api-spec,
 .test-performance,
-.test-functional,
+/* .test-functional, */
 /* .test-mutation, */
-.test-bdd,
+/* .test-bdd, */
 /* #app-qa-results, */
 /* #app-qa-results .test-unit .dynamic, */
 /* #app-qa-results .test-unit .api-spec, */
-/* #app-qa-results .test-functional, */
+#app-qa-results .test-functional,
 /* #app-qa-results .test-bdd, */
 /* #app-qa-results .test-performance, */
 /* 03 - Library  */
@@ -34,7 +34,7 @@
 #library-qa-results,
 /* #library-qa-results .test-unit, */
 #library-qa-results .test-unit .dynamic,
-#library-qa-results .test-functional,
+/* #library-qa-results .test-functional, */
 #library-qa-results .test-bdd,
 #library-qa-results .test-performance,
 /* 05 - API  */
@@ -45,6 +45,7 @@
 /* #api-results .test-functional, */
 /* #api-results .test-coverage, */
 #api-results .test-bdd,
+#api-results .test-functional,
 /* #api-results .test-mutation, */
 /* #api-results .test-performance, */
 /* #api-qa-results, */
@@ -54,8 +55,10 @@
 /* #api-qa-results .test-unit .spotbugs, */
 /* #api-qa-results .test-unit .test-functional, */
 #api-qa-results .test-unit .test-coverage,
-/* #api-qa-results .test-unit .test-bdd, */
+#api-qa-results .test-unit .test-bdd,
 #api-qa-results .test-unit .test-mutation,
+#api-qa-results .test-functional,
+#api-qa-results .test-bdd,
 /* #api-qa-results .test-performance, */
 #template-results {
     display: none;

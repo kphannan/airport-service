@@ -164,7 +164,7 @@
                     <div class="card test-bdd" style="flex-grow: 1;"> <!-- BDD -->
                         <h3 class="text-accent letter-spacing-3">BDD</h3>
                         <ul>
-                            <li>Static Analysis
+                            <li style="display: none;">Static Analysis
                                 <ul>
                                     <li><a class="letter-spacing-4" href="app/build/reports/checkstyle/bdd.html">Code Style (Checkstyle)</a></li>
                                     <li><a class="letter-spacing-4" href="app/build/reports/pmd/bdd.html">Common Flaws (PMD)</a></li>
@@ -177,16 +177,18 @@
                                         <ul>
                                         </ul>
                                     </li>
-                                    <li style="display: none;">Functional Tests
+                                    <li style="test-functional">Functional Tests
                                         <ul>
+                                            <li><a class="letter-spacing-4" href="app/build/reports/tests/integrationTest/index.html">JUnit summary</a></li>
+                                            <li><a class="letter-spacing-4" href="app/build/karate-reports/karate-summary.html">Detail</a></li>
                                         </ul>
                                     </li>
-                                    <li>Database
+                                    <li style="display: none;">Database
                                         <ul>
                                             <li><a class="letter-spacing-4" href="http://localhost:9005/h2-console">H2 console</a></li>
                                         </ul>
                                     </li>
-                                    <li>Runtime
+                                    <li style="display: none;">Runtime
                                         <ul>
                                             <li><a class="letter-spacing-4" href="app/build/reports/tests/bdd/index.html">Suite execution</a></li>
                                             <li><a class="letter-spacing-4" href="throttle/build/reports/tests/bdd2/index.html">Suite execution (BDD 2)</a></li>
