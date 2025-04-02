@@ -36,6 +36,9 @@ buildscript {
         pitPluginVersion            = '1.15.0'
         pitVersion                  = '1.19.0'
 
+        // --- BDD / REST Testing
+        karateVersion               = '1.5.1'
+
         // ===== Configuration Management =====
 
         // --- Artifact Versioning

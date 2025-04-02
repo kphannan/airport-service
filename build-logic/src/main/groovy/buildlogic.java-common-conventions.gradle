@@ -60,7 +60,9 @@ clean {
 
 
 
-
+compileJava {
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+}
 
 test {
     testLogging {

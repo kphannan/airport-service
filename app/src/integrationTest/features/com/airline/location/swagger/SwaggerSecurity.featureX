@@ -1,0 +1,42 @@
+
+
+
+Feature: Swagger security
+
+  Background:
+    * url host
+
+
+    # ----- Verify acceptable methods -----
+  @SmokeTest
+  @PostDeployment
+  @SecurityCheck
+  @Service
+  Scenario Outline: Authenticated: Method "<method>" on endpoint "<target>" should return "<response>"
+    Given The service "foo-service" is running
+    When the endpoint "<target>" is called with method "<method>"
+    Then status is <response>
+
+      # 404 response is temporary the URL should be http(s)://host:port/v2/api-docs
+      # but the internals of the step definitions only have ....root/.... as the base..
+    Examples:
+      | target             | method | response |
+      | //v3/api-docs      | GET    | 200      |
+      | //v3/api-docs      | PUT    | 405      |
+      | //v3/api-docs      | POST   | 405      |
+      | //v3/api-docs      | DELETE | 405      |
+      | //v3/api-docs      | DELETE | 405      |
+
+
+
+    # ----- (GET)  -----
+
+    # ----- (GET)  -----
+
+    # ----- (POST)  -----
+
+    # ----- (PUT) (Update) -----
+
+    # ----- (PUT) (Create) -----
+
+    # ----- (DELETE) -----
