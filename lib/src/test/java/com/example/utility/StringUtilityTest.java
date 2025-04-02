@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringJoiner;
@@ -201,4 +202,34 @@ class StringUtilityTest
         assertEquals( expected, StringUtility.hasMatchingSubstring( target, source ) );
     }
 
+
+    @Test
+    void string_targetCollection_nullTarget_returnsFalse()
+    {
+        Collection<String> desired = Arrays.asList( "One", "Two", "Three" );
+
+        assertFalse( StringUtility.hasAllMatchingSubstring( null, desired ) );
+    }
+
+    @Test
+    void string_targetCollection_nullSubstring_returnsFalse()
+    {
+        assertFalse( StringUtility.hasAllMatchingSubstring( "Kilroy", null ) );
+    }
+
+    @Test
+    void string_targetCollection_blankTarget_returnsFalse()
+    {
+        Collection<String> desired = Arrays.asList( "One", "Two", "Three" );
+
+        assertFalse( StringUtility.hasAllMatchingSubstring( "", desired ) );
+    }
+
+    @Test
+    void string_targetCollection_fullMatch_returnsTrue()
+    {
+        Collection<String> desired = Arrays.asList( "One", "Two", "Three" );
+
+        assertTrue( StringUtility.hasAllMatchingSubstring( "ThreeTwoOne", desired ) );
+    }
 }
