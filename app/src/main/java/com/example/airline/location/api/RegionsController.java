@@ -7,8 +7,11 @@ import java.util.Optional;
 
 import com.example.airline.location.Region;
 import com.example.airline.location.RegionDTO;
+import com.example.airline.location.config.GlobalApiResponses;
+import com.example.airline.location.config.GlobalApiSecurityResponses;
 import com.example.airline.location.mapper.RegionMapper;
 import com.example.airline.location.service.RegionsService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping( "/v1/location/region" )
+@GlobalApiResponses
+@GlobalApiSecurityResponses
+@Tag( name = "Regions" )
 public class RegionsController
 {
     // Autowired via constructor

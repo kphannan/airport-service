@@ -73,6 +73,7 @@ public class GlobalExceptionHandler
 
 
     @ExceptionHandler( MethodArgumentNotValidException.class )
+    @ResponseStatus( code = HttpStatus.BAD_REQUEST )
     public ResponseEntity<ProblemDetail> handleRestValidationException( WebRequest request,
                                                                         final MethodArgumentNotValidException exception )
     {
@@ -117,6 +118,7 @@ public class GlobalExceptionHandler
 
 
     @ExceptionHandler( ConstraintViolationException.class )
+    @ResponseStatus( code = HttpStatus.BAD_REQUEST )
     public ResponseEntity<ProblemDetail> handleConstraintViolations( final ConstraintViolationException exception )
     {
 
@@ -145,6 +147,7 @@ public class GlobalExceptionHandler
 
 
     @ExceptionHandler( HttpMessageNotReadableException.class )
+    @ResponseStatus( code = HttpStatus.BAD_REQUEST )
     public ResponseEntity<ProblemDetail> handleMessageNotReadableException( final HttpMessageNotReadableException exception )
     {
         // Throwable mostSpecificCause = ex.getMostSpecificCause();
@@ -188,7 +191,7 @@ public class GlobalExceptionHandler
 
 
     @ExceptionHandler( NoResourceFoundException.class )
-    @ResponseStatus( HttpStatus.INTERNAL_SERVER_ERROR )
+    @ResponseStatus( HttpStatus.NOT_FOUND )
     public ResponseEntity<ProblemDetail> handleResourceNotFoundException( final NoResourceFoundException exception )
     {
         // TODO the MDC should include the traceId (UUID) and log pattern should
