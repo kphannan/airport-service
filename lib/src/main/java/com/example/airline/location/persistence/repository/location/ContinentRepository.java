@@ -26,7 +26,15 @@ public interface ContinentRepository extends JpaRepository<ContinentEntity, Inte
     @Override
     List<ContinentEntity> findAll();
 
+    /**
+     * Find the Continent entry given its primary key;
+     *
+     * @param id the continent primary key.
+     *
+     * @return the DB entry for the target continent.
+     */
     @SuppressWarnings( "PMD.ShortVariable" )
+    @Override
     Optional<ContinentEntity> findById( Integer id );
 
     /**

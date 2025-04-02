@@ -45,9 +45,9 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
      * Find an airport from its commonly used identifier, often this is the iata
      * airport code.
      *
-     * @param ident
+     * @param ident the airport identifier.
      *
-     * @return
+     * @return the DB entry for the target airport.
      */
     Optional<AirportEntity> findAirportByIdent( String ident );
 
