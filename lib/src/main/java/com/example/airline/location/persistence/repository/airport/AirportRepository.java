@@ -22,17 +22,6 @@ import org.springframework.stereotype.Repository;
 public interface AirportRepository extends PagingAndSortingRepository<AirportEntity, Long>
 {
     /**
-     * Lookup a {@code Airport} by its unique identifier.
-     *
-     * @param id the unique identifier.
-     *
-     * @return the record if found.
-     */
-    @Query( "from #{#entityName} airport where airport.id = :id" )
-    @SuppressWarnings( "PMD.ShortVariable" )
-    Optional<AirportEntity> findById( @Param( "id" ) final Long id );
-
-    /**
      * Retrieve all {@code Airport} records by {@code Page}.
      *
      * @param paging the {@code Page} criteria.
@@ -41,6 +30,20 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
      */
     @Override
     Page<AirportEntity> findAll( Pageable paging );
+
+    /**
+     * Lookup a {@code Airport} by its unique identifier.
+     *
+     * @param id the unique identifier.
+     *
+     * @return the record if found.
+     */
+//     @Query( "from #{#entityName} airport where airport.id = :id" )
+    @SuppressWarnings( "PMD.ShortVariable" )
+    Optional<AirportEntity> findAirportById( final Long id );
+//     Optional<AirportEntity> findAirportById( @Param( "id" ) final Long id );
+
+    Optional<AirportEntity> findAirportByIdent( final String ident );
 
     /**
      * Search for {@code Airport} records that contain any of the query parameters.
