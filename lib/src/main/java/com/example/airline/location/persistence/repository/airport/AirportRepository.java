@@ -1,4 +1,4 @@
-/* (C)2025 */
+/* (C) 2025 */
 
 package com.example.airline.location.persistence.repository.airport;
 
@@ -38,12 +38,18 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
      *
      * @return the record if found.
      */
-//     @Query( "from #{#entityName} airport where airport.id = :id" )
     @SuppressWarnings( "PMD.ShortVariable" )
-    Optional<AirportEntity> findAirportById( final Long id );
-//     Optional<AirportEntity> findAirportById( @Param( "id" ) final Long id );
+    Optional<AirportEntity> findAirportById( Long id );
 
-    Optional<AirportEntity> findAirportByIdent( final String ident );
+    /**
+     * Find an airport from its commonly used identifier, often this is the iata
+     * airport code.
+     *
+     * @param ident
+     *
+     * @return
+     */
+    Optional<AirportEntity> findAirportByIdent( String ident );
 
     /**
      * Search for {@code Airport} records that contain any of the query parameters.
@@ -61,10 +67,9 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
             + "   and (:icaoCode='' or airport.gpsCode like %:icaoCode%)"
             + "   and (:ident='' or airport.ident like %:ident%)"
             + "   and (:name='' or upper(airport.name) like %:name%)" )
-    Page<AirportEntity> advancedQuery( @Param( "iataCode" ) final String iataCode,
-                                 @Param( "icaoCode" ) final String icaoCode // gpsCode
-                                 ,
-                                 @Param( "ident" ) final String ident,
-                                 @Param( "name" ) final String name,
-                                 final Pageable paging );
+    Page<AirportEntity> advancedQuery( @Param( "iataCode" ) String iataCode,
+                                       @Param( "icaoCode" ) String icaoCode,
+                                       @Param( "ident" ) String ident,
+                                       @Param( "name" ) String name,
+                                       Pageable paging );
 }

@@ -1,4 +1,4 @@
-/* (C)2025 */
+/* (C) 2025 */
 
 package com.example.airline.location.api;
 
@@ -32,11 +32,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class AirportController
 {
     // Autowired via constructor
-    private AirportService service;
-    private AirportMapper     mapper;
+    private final AirportService service;
+    private final AirportMapper  mapper;
 
-
-    public AirportController( AirportService service, AirportMapper mapper  )
+    public AirportController( final AirportService service, final AirportMapper mapper )
     {
         this.service = service;
         this.mapper  = mapper;
@@ -47,21 +46,22 @@ public class AirportController
     @GetMapping( "" )
     public Page<AirportDTO> restGetFindAll( final Pageable pageable )
     {
-        Page<Airport> regions = service.findAll( pageable );
+        final Page<Airport> regions = service.findAll( pageable );
 
-        return regions.map( entity -> mapper.airportDomainToApi(entity));
+        return regions.map( mapper::airportDomainToApi );
     }
 
 
 
     @GetMapping( "/{id}" )
+    @SuppressWarnings( "PMD.ShortVariable" )
     public ResponseEntity<AirportDTO> restGetFindAirportById( @PathVariable final Long id )
     {
         final Optional<Airport> optionalAirport = service.findAirportById( id );
 
         if ( optionalAirport.isPresent() )
         {
-            AirportDTO dto = mapper.airportDomainToApi( optionalAirport.get() );
+            final AirportDTO dto = mapper.airportDomainToApi( optionalAirport.get() );
 
             return ResponseEntity.ok( dto );
         }
@@ -74,11 +74,11 @@ public class AirportController
     @GetMapping( "/code/{code}" )
     public ResponseEntity<AirportDTO> restGetFindAirportByCode( @PathVariable final String code )
     {
-        Optional<Airport> optionalEntity = service.findAirportByIdent( code );
+        final Optional<Airport> optionalEntity = service.findAirportByIdent( code );
 
         if ( optionalEntity.isPresent() )
         {
-            AirportDTO dto = mapper.airportDomainToApi( optionalEntity.get() );
+            final AirportDTO dto = mapper.airportDomainToApi( optionalEntity.get() );
 
             return ResponseEntity.ok( dto );
         }
@@ -89,38 +89,32 @@ public class AirportController
     }
 
 
-        /**
+
+    /**
      * Search for {@code Airport} records that contain any of the query parameters.
      *
      * @param iataCode optional IATA code to search on.
      * @param icaoCode optional ICAO code to search on.
-     * @param ident optional identifier which may be the ICAO code to search on.
-     * @param name optional airport name string.
-     * @param paging current {@code Page} specification.
-     * @return the target page with {@code Airport} records if any match the criteria.
+     * @param ident    optional identifier which may be the ICAO code to search on.
+     * @param name     optional airport name string.
+     * @param paging   current {@code Page} specification.
+     *
+     * @return the target page with {@code Airport} records if any match the
+     *         criteria.
      */
     @GetMapping( path = "/search" )
-    public Page<AirportDTO> advancedQuery(  @RequestParam( name = "iataCode", required = false )
-                                                         final String iataCode
-                                                       , @RequestParam( name = "icaoCode", required = false )
-                                                         final String icaoCode
-                                                       , @RequestParam( name = "ident", required = false )
-                                                         final String ident
-                                                       , @RequestParam( name = "name", required = false )
-                                                         final String name
-                                                       , final Pageable paging )
+    public Page<AirportDTO> advancedQuery( @RequestParam( name = "iataCode", required = false ) final String iataCode,
+                                           @RequestParam( name = "icaoCode", required = false ) final String icaoCode,
+                                           @RequestParam( name = "ident", required = false ) final String ident,
+                                           @RequestParam( name = "name", required = false ) final String name,
+                                           final Pageable paging )
     {
-        final Page<Airport> result = service.advancedQuery(  null == iataCode
-                                                                    ? "" : iataCode.toUpperCase( Locale.US )
-                                                              , null == icaoCode
-                                                                    ? "" : icaoCode.toUpperCase( Locale.US )
-                                                              , null == ident
-                                                                    ? "" : ident.toUpperCase( Locale.US )
-                                                              , null == name
-                                                                    ? "" : name.toUpperCase( Locale.US )
-                                                              , paging );
+        final Page<Airport> result = service.advancedQuery( null == iataCode ? "" : iataCode.toUpperCase( Locale.US ),
+                                                            null == icaoCode ? "" : icaoCode.toUpperCase( Locale.US ),
+                                                            null == ident ? "" : ident.toUpperCase( Locale.US ),
+                                                            null == name ? "" : name.toUpperCase( Locale.US ), paging );
 
-        return result.map( entity -> mapper.airportDomainToApi(entity));
+        return result.map( mapper::airportDomainToApi );
     }
 
 }

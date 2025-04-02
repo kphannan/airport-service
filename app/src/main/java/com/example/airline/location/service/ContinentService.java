@@ -1,4 +1,4 @@
-/* (C)2025 */
+/* (C) 2025 */
 
 package com.example.airline.location.service;
 
@@ -18,16 +18,14 @@ import org.springframework.stereotype.Component;
 // @RefreshScope
 public class ContinentService
 {
-    private ContinentRepository repository;
+    private final ContinentRepository repository;
 
-    private ContinentMapper     mapper;
+    private final ContinentMapper mapper;
 
-
-
-    public ContinentService( ContinentRepository repository, ContinentMapper mapper )
+    public ContinentService( final ContinentRepository repository, final ContinentMapper mapper )
     {
         this.repository = repository;
-        this.mapper = mapper;
+        this.mapper     = mapper;
     }
 
 
@@ -39,39 +37,35 @@ public class ContinentService
 
 
 
+    @SuppressWarnings( "PMD.ShortVariable" )
     public Optional<Continent> findContinentById( final Integer id )
     {
-        Optional<ContinentEntity> continentEntity = repository.findById( id );
+        final Optional<ContinentEntity> continentEntity = repository.findById( id );
 
-        if ( continentEntity.isPresent() )
-        {
-            Continent continent = mapper.continentEntityToDomain( continentEntity.get() );
-
-            return Optional.of( continent );
-        }
-        else
-        {
-            return Optional.ofNullable( null );
-        }
+        return mapOptionalEntityToDomain( continentEntity );
     }
 
 
 
     public Optional<Continent> findContinentByCode( final String code )
     {
-        Optional<ContinentEntity> continentEntity = repository.findByCode( code );
+        final Optional<ContinentEntity> continentEntity = repository.findByCode( code );
 
-        if ( continentEntity.isPresent() )
+        return mapOptionalEntityToDomain( continentEntity );
+    }
+
+
+
+    private Optional<Continent> mapOptionalEntityToDomain( final Optional<ContinentEntity> from )
+    {
+        if ( from.isPresent() )
         {
-            Continent continent = mapper.continentEntityToDomain( continentEntity.get() );
+            final Continent continent = mapper.continentEntityToDomain( from.get() );
 
             return Optional.of( continent );
         }
-        else
-        {
-            return Optional.ofNullable( null );
-        }
 
+        return Optional.ofNullable( null );
     }
 
 }

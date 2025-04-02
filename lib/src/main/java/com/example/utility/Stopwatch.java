@@ -1,4 +1,4 @@
-/* (C)2025 */
+/* (C) 2025 */
 
 package com.example.utility;
 
@@ -132,8 +132,9 @@ public class Stopwatch implements AutoCloseable
         // System.out.println( String.format( "logg: %s, %s, %s: '%s' - elapsed time: %d
         // ms", context, service, method,
         // text == null ? "" : text, endTime - startTime ) );
-        // log.debug( () -> String.format( "%s, %s, %s: '%s' - elapsed time: %d ms", context, service, method,
-        //                                 text == null ? "" : text, endTime - startTime ) );
+        // log.debug( () -> String.format( "%s, %s, %s: '%s' - elapsed time: %d ms",
+        // context, service, method,
+        // text == null ? "" : text, endTime - startTime ) );
         log.error( () -> String.format( "%s, %s, %s: '%s' - elapsed time: %d ms", context, service, method,
                                         text == null ? "" : text, endTime - startTime ) );
     }

@@ -1,4 +1,4 @@
-/* (C)2025 */
+/* (C) 2025 */
 
 package com.example.airline.location.persistence.repository.location;
 
@@ -37,7 +37,7 @@ public interface CountryRepository extends JpaRepository<CountryEntity, Integer>
      *
      * @return the {@code Country} if found.
      */
-    Optional<CountryEntity> findByCode( final String countryCode );
+    Optional<CountryEntity> findByCode( String countryCode );
 
     /**
      * Retrive all the countries on a given contintent.
@@ -46,5 +46,5 @@ public interface CountryRepository extends JpaRepository<CountryEntity, Integer>
      *
      * @return the paged result of {@code Country}s.
      */
-    List<CountryEntity> findByContinent( final String continent );
+    List<CountryEntity> findByContinent( String continent );
 }

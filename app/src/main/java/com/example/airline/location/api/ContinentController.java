@@ -1,4 +1,4 @@
-/* (C)2025 */
+/* (C) 2025 */
 
 package com.example.airline.location.api;
 
@@ -35,11 +35,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class ContinentController
 {
     // Autowired via constructor
-    private ContinentService service;
-    private ContinentMapper     mapper;
+    private final ContinentService service;
+    private final ContinentMapper  mapper;
 
-
-    public ContinentController( ContinentService service, ContinentMapper mapper  )
+    public ContinentController( final ContinentService service, final ContinentMapper mapper )
     {
         this.service = service;
         this.mapper  = mapper;
@@ -47,55 +46,36 @@ public class ContinentController
 
 
 
-    @Operation( method = "GET",
-                summary = "Retrieve all Continents in paged form for performance",
-                description = "Retrive a paged list of Continents",
-                responses = {
-                    @ApiResponse( description = "Success", responseCode = "200" )
-                    // @ApiResponse( description = "Unauthorized", responseCode = "403" )
-                }
-    )
+    @Operation( method = "GET", summary = "Retrieve all Continents in paged form for performance", description = "Retrive a paged list of Continents", responses = {
+            @ApiResponse( description = "Success", responseCode = "200" )
+            // @ApiResponse( description = "Unauthorized", responseCode = "403" )
+    } )
     @GetMapping( "" )
     public ResponseEntity<List<ContinentDTO>> restGetFindAll()
     {
-        List<Continent> continents = service.findAll();
+        final List<Continent> continents = service.findAll();
 
-        List<ContinentDTO> dtos = mapper.continentDomainToApi( continents );
+        final List<ContinentDTO> dtos = mapper.continentDomainToApi( continents );
 
         return ResponseEntity.ok( dtos );
     }
 
 
 
-    @Operation( method = "GET",
-                summary = "Find a Continent by Id",
-                description = "Find a Continent by Id",
-                responses = {
-                    @ApiResponse( description = "Success",
-                                  responseCode = "200",
-                                  content = { @Content( mediaType = "application/json",
-                                                        schema = @Schema( implementation = ContinentDTO.class )
-                                                      )
-                                            }
-                                  )
-                },
-                parameters = {
-                    @Parameter( name = "id", required = true, in = ParameterIn.PATH ),
-                    @Parameter( name        = "Bearer",
-                                required    = false,
-                                schema      = @Schema( implementation = String.class ),
-                                in          = ParameterIn.HEADER,
-                                description = "Authentication / Authorization token" )
-                }
-    )
+    @Operation( method = "GET", summary = "Find a Continent by Id", description = "Find a Continent by Id", responses = {
+            @ApiResponse( description = "Success", responseCode = "200", content = {
+                    @Content( mediaType = "application/json", schema = @Schema( implementation = ContinentDTO.class ) ) } ) }, parameters = {
+                            @Parameter( name = "id", required = true, in = ParameterIn.PATH ),
+                            @Parameter( name = "Bearer", required = false, schema = @Schema( implementation = String.class ), in = ParameterIn.HEADER, description = "Authentication / Authorization token" ) } )
     @GetMapping( "/{id}" )
+    @SuppressWarnings( "PMD.ShortVariable" )
     public ResponseEntity<ContinentDTO> restGetFindContinentById( @PathVariable final Integer id )
     {
         final Optional<Continent> optionalContinent = service.findContinentById( id );
 
         if ( optionalContinent.isPresent() )
         {
-            ContinentDTO dto = mapper.continentDomainToApi( optionalContinent.get() );
+            final ContinentDTO dto = mapper.continentDomainToApi( optionalContinent.get() );
 
             return ResponseEntity.ok( dto );
         }
@@ -108,11 +88,11 @@ public class ContinentController
     @GetMapping( "/code/{code}" )
     public ResponseEntity<ContinentDTO> restGetFindContinentByCode( @PathVariable final String code )
     {
-        Optional<Continent> optionalEntity = service.findContinentByCode( code );
+        final Optional<Continent> optionalEntity = service.findContinentByCode( code );
 
         if ( optionalEntity.isPresent() )
         {
-            ContinentDTO dto = mapper.continentDomainToApi( optionalEntity.get() );
+            final ContinentDTO dto = mapper.continentDomainToApi( optionalEntity.get() );
 
             return ResponseEntity.ok( dto );
         }

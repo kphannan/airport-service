@@ -1,4 +1,4 @@
-/* (C)2025 */
+/* (C) 2025 */
 
 package com.example.airline.location;
 
@@ -16,11 +16,15 @@ import lombok.Data;
 
 
 
-// TODO convert to a Java record
+/**
+ * API representation of a Continent.
+ */
 @Data
 @AllArgsConstructor
 public class ContinentDTO
 {
+    // TODO convert to a Java record
+    @SuppressWarnings( "PMD.ShortVariable" )
     private Integer id;
     private String  code;
     private String  name;

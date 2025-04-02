@@ -1,4 +1,4 @@
-/* (C)2025 */
+/* (C) 2025 */
 
 package com.example.airline.airport;
 
@@ -6,11 +6,14 @@ package com.example.airline.airport;
 import java.math.BigDecimal;
 import java.net.URI;
 
-// import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 
+
+/**
+ * API representation of a Airport.
+ */
 @Data
 @AllArgsConstructor
 public class AirportDTO

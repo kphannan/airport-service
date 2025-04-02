@@ -20,9 +20,6 @@
     <rule ref="category/java/bestpractices.xml/AvoidUsingHardCodedIP"/>
     <rule ref="category/java/bestpractices.xml/CheckResultSet"/>
     <rule ref="category/java/bestpractices.xml/ConstantsInInterface"/>
-    <!--  <<<<< deprecation >>>>> -->
-    <!-- <rule ref="category/java/bestpractices.xml/DefaultLabelNotLastInSwitchStmt"/> -->
-    <!--  >>>>> replaced by <<<<< -->
     <rule ref="category/java/bestpractices.xml/DefaultLabelNotLastInSwitch"/>
     <rule ref="category/java/bestpractices.xml/DoubleBraceInitialization"/>
     <rule ref="category/java/bestpractices.xml/ForLoopCanBeForeach"/>
@@ -33,25 +30,11 @@
     <!-- <rule ref="category/java/bestpractices.xml/JUnit4TestShouldUseBeforeAnnotation" /> -->
     <!-- <rule ref="category/java/bestpractices.xml/JUnit4TestShouldUseTestAnnotation" /> -->
     <rule ref="category/java/bestpractices.xml/JUnit5TestShouldBePackagePrivate" />
-    <!--  <<<<< deprecation >>>>> -->
-    <!-- <rule ref="category/java/bestpractices.xml/JUnitAssertionsShouldIncludeMessage" /> -->
-    <!--  >>>>> replaced by <<<<< -->
-    <!-- <rule ref="category/java/bestpractices.xml/UnitTestAssertionsShouldIncludeMessage" /> -->
-    <!--  <<<<< deprecation >>>>> -->
-    <!-- <rule ref="category/java/bestpractices.xml/JUnitTestContainsTooManyAsserts">
-        <properties>
-            <property name="maximumAsserts" value="5" />
-        </properties>
-    </rule> -->
-    <!--  >>>>> replaced by <<<<< -->
     <rule ref="category/java/bestpractices.xml/UnitTestContainsTooManyAsserts">
         <properties>
             <property name="maximumAsserts" value="5" />
         </properties>
     </rule>
-    <!--  <<<<< deprecation >>>>> -->
-    <!-- <rule ref="category/java/bestpractices.xml/JUnitTestsShouldIncludeAssert" /> -->
-    <!--  >>>>> replaced by <<<<< -->
     <rule ref="category/java/bestpractices.xml/UnitTestShouldIncludeAssert" />
     <!-- <rule ref="category/java/bestpractices.xml/JUnitUseExpected" /> -->
     <rule ref="category/java/bestpractices.xml/LiteralsFirstInComparisons" />
@@ -65,9 +48,6 @@
     <rule ref="category/java/bestpractices.xml/ReplaceHashtableWithMap" />
     <rule ref="category/java/bestpractices.xml/ReplaceVectorWithList" />
     <rule ref="category/java/bestpractices.xml/SimplifiableTestAssertion"/>
-    <!--  <<<<< deprecation >>>>> -->
-    <!-- <rule ref="category/java/bestpractices.xml/SwitchStmtsShouldHaveDefault"/> -->
-    <!--  >>>>> replaced by <<<<< -->
     <rule ref="category/java/bestpractices.xml/NonExhaustiveSwitch"/>
     <rule ref="category/java/bestpractices.xml/SystemPrintln" />
     <rule ref="category/java/bestpractices.xml/UnnecessaryVarargsArrayCreation" />
@@ -333,9 +313,6 @@
     <!-- <rule ref="category/java/errorprone.xml/MissingSerialVersionUID" /> -->
     <rule ref="category/java/errorprone.xml/MissingStaticMethodInNonInstantiatableClass"/>
     <rule ref="category/java/errorprone.xml/MoreThanOneLogger" />
-    <!--  <<<<< deprecation >>>>> -->
-    <!-- <rule ref="category/java/errorprone.xml/NonCaseLabelInSwitchStatement"/> -->
-    <!--  >>>>> replaced by <<<<< -->
     <rule ref="category/java/errorprone.xml/NonCaseLabelInSwitch"/>
     <rule ref="category/java/errorprone.xml/NonStaticInitializer"/>
     <rule ref="category/java/errorprone.xml/NullAssignment" />
@@ -401,9 +378,6 @@
     <rule ref="category/java/performance.xml/RedundantFieldInitializer"/>
     <rule ref="category/java/performance.xml/StringInstantiation" />
     <rule ref="category/java/performance.xml/StringToString" />
-    <!--  <<<<< deprecation >>>>> -->
-    <!-- <rule ref="category/java/performance.xml/TooFewBranchesForASwitchStatement"/> -->
-    <!--  >>>>> replaced by <<<<< -->
     <rule ref="category/java/performance.xml/TooFewBranchesForSwitch"/>
     <rule ref="category/java/performance.xml/UseArrayListInsteadOfVector" />
     <rule ref="category/java/performance.xml/UseArraysAsList" />

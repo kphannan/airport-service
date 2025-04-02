@@ -1,4 +1,4 @@
-/* (C)2025 */
+/* (C) 2025 */
 
 package com.example.airline.location.service;
 
@@ -19,62 +19,56 @@ import org.springframework.stereotype.Component;
 // @RefreshScope
 public class RegionsService
 {
-    private RegionsRepository repository;
+    private final RegionsRepository repository;
 
-    private RegionMapper     mapper;
+    private final RegionMapper mapper;
 
-
-
-    public RegionsService( RegionsRepository repository, RegionMapper mapper )
+    public RegionsService( final RegionsRepository repository, final RegionMapper mapper )
     {
         this.repository = repository;
-        this.mapper = mapper;
+        this.mapper     = mapper;
     }
 
 
 
     public Page<Region> findAll( final Pageable pageable )
     {
-        Page<RegionEntity> regions = repository.findAll( pageable );
+        final Page<RegionEntity> regions = repository.findAll( pageable );
 
-        return regions.map( entity -> mapper.regionEntityToDomain(entity));
+        return regions.map( mapper::regionEntityToDomain );
     }
 
 
 
+    @SuppressWarnings( "PMD.ShortVariable" )
     public Optional<Region> findRegionById( final Integer id )
     {
-        Optional<RegionEntity> countryEntity = repository.findById( id );
+        final Optional<RegionEntity> countryEntity = repository.findById( id );
 
         if ( countryEntity.isPresent() )
         {
-            Region country = mapper.regionEntityToDomain( countryEntity.get() );
+            final Region country = mapper.regionEntityToDomain( countryEntity.get() );
 
             return Optional.of( country );
         }
-        else
-        {
-            return Optional.ofNullable( null );
-        }
+
+        return Optional.ofNullable( null );
     }
 
 
 
     public Optional<Region> findRegionByCode( final String code )
     {
-        Optional<RegionEntity> countryEntity = repository.findByCode( code );
+        final Optional<RegionEntity> countryEntity = repository.findByCode( code );
 
         if ( countryEntity.isPresent() )
         {
-            Region country = mapper.regionEntityToDomain( countryEntity.get() );
+            final Region country = mapper.regionEntityToDomain( countryEntity.get() );
 
             return Optional.of( country );
         }
-        else
-        {
-            return Optional.ofNullable( null );
-        }
 
+        return Optional.ofNullable( null );
     }
 
 }

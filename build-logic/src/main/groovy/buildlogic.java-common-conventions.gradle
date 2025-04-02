@@ -218,10 +218,15 @@ spotless {
     }
 
 
-  groovyGradle {
-    target '*.gradle' // default target of groovyGradle
-    greclipse()
-  }
+    // groovyGradle {
+    //     target '*.gradle' // default target of groovyGradle
+    //     greclipse().configFile('grecliplse.properties')
+    // }
+
+    gherkin {
+        target 'src/**/*.feature'
+        gherkinUtils()
+    }
 }
 
 

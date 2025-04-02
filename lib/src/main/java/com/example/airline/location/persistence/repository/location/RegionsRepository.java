@@ -1,4 +1,4 @@
-/* (C)2025 */
+/* (C) 2025 */
 
 package com.example.airline.location.persistence.repository.location;
 
@@ -27,7 +27,7 @@ public interface RegionsRepository extends PagingAndSortingRepository<RegionEnti
      * @return the {@code Region} if found.
      */
     @SuppressWarnings( "PMD.ShortVariable" )
-    Optional<RegionEntity> findById( final Integer id );
+    Optional<RegionEntity> findById( Integer id );
 
     /**
      * Find a single {@code Region} by its ISO code.
@@ -36,7 +36,7 @@ public interface RegionsRepository extends PagingAndSortingRepository<RegionEnti
      *
      * @return the {@code Region} if found.
      */
-    Optional<RegionEntity> findByCode( final String regionCode );
+    Optional<RegionEntity> findByCode( String regionCode );
 
     /**
      * Find all the {@code Region}s on a {@code Continent}.
@@ -46,8 +46,8 @@ public interface RegionsRepository extends PagingAndSortingRepository<RegionEnti
      *
      * @return the paged result of {@code Region}s.
      */
-    Page<RegionEntity> findByContinent( final String continent,
-                                  Pageable paging );
+    Page<RegionEntity> findByContinent( String continent,
+                                        Pageable paging );
 
     /**
      * Find all the {@code Region}s in a {@code Country}.
@@ -57,8 +57,8 @@ public interface RegionsRepository extends PagingAndSortingRepository<RegionEnti
      *
      * @return the paged result of {@code Region}s.
      */
-    Page<RegionEntity> findByCountry( final String country,
-                                Pageable paging );
+    Page<RegionEntity> findByCountry( String country,
+                                      Pageable paging );
 
     /**
      * Retrieve all {@code Region} records by {@code Page}.
@@ -68,5 +68,5 @@ public interface RegionsRepository extends PagingAndSortingRepository<RegionEnti
      * @return the paged result of {@code Region}s.
      */
     @Override
-    Page<RegionEntity> findAll( final Pageable paging );
+    Page<RegionEntity> findAll( Pageable paging );
 }

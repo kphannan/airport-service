@@ -1,4 +1,4 @@
-/* (C)2025 */
+/* (C) 2025 */
 
 package com.example.airline.location;
 
@@ -8,7 +8,6 @@ import java.net.URI;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-// TODO change wikiLink to a URI
 // TODO change code to a 2 character code...
 // record CountryDTO( Long id, String code, String name, String wikiLink,
 // String keywords )
@@ -16,16 +15,21 @@ import lombok.Data;
 
 
 
-// TODO convert to a Java record
+/**
+ * API representation of a Country.
+ */
 @Data
 @AllArgsConstructor
 public class CountryDTO
 {
+    // TODO convert to a Java record
+
     // @Id
     // @GeneratedValue( strategy = GenerationType.AUTO )
     // private final Long id;
 
-    // @NotNull @SuppressWarnings( "PMD.ShortVariable" )
+    // @NotNull
+    @SuppressWarnings( "PMD.ShortVariable" )
     private Integer id;
 
     // @NotNull

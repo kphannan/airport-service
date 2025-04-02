@@ -1,4 +1,4 @@
-/* (C)2025 */
+/* (C) 2025 */
 
 package com.example.airline.location.service;
 
@@ -19,67 +19,56 @@ import org.springframework.stereotype.Component;
 // @RefreshScope
 public class CountryService
 {
-    private CountryRepository repository;
+    private final CountryRepository repository;
 
-    private CountryMapper     mapper;
+    private final CountryMapper mapper;
 
-
-
-    public CountryService( CountryRepository repository, CountryMapper mapper )
+    public CountryService( final CountryRepository repository, final CountryMapper mapper )
     {
         this.repository = repository;
-        this.mapper = mapper;
+        this.mapper     = mapper;
     }
 
 
-
-    // TODO add support for paging.
-    // public List<Country> findAll()
-    // {
-    //     return mapper.countryEntityToDomain( repository.findAll() );
-    // }
 
     public Page<Country> findAll( final Pageable pageable )
     {
-        Page<CountryEntity> countries = repository.findAll( pageable );
+        final Page<CountryEntity> countries = repository.findAll( pageable );
 
-        return countries.map( entity -> mapper.countryEntityToDomain(entity));
+        return countries.map( mapper::countryEntityToDomain );
     }
 
 
+
+    @SuppressWarnings( "PMD.ShortVariable" )
     public Optional<Country> findCountryById( final Integer id )
     {
-        Optional<CountryEntity> countryEntity = repository.findById( id );
+        final Optional<CountryEntity> countryEntity = repository.findById( id );
 
         if ( countryEntity.isPresent() )
         {
-            Country country = mapper.countryEntityToDomain( countryEntity.get() );
+            final Country country = mapper.countryEntityToDomain( countryEntity.get() );
 
             return Optional.of( country );
         }
-        else
-        {
-            return Optional.ofNullable( null );
-        }
+
+        return Optional.ofNullable( null );
     }
 
 
 
     public Optional<Country> findCountryByCode( final String code )
     {
-        Optional<CountryEntity> countryEntity = repository.findByCode( code );
+        final Optional<CountryEntity> countryEntity = repository.findByCode( code );
 
         if ( countryEntity.isPresent() )
         {
-            Country country = mapper.countryEntityToDomain( countryEntity.get() );
+            final Country country = mapper.countryEntityToDomain( countryEntity.get() );
 
             return Optional.of( country );
         }
-        else
-        {
-            return Optional.ofNullable( null );
-        }
 
+        return Optional.ofNullable( null );
     }
 
 }

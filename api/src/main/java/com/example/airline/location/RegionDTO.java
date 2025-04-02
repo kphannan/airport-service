@@ -1,4 +1,4 @@
-/* (C)2025 */
+/* (C) 2025 */
 
 package com.example.airline.location;
 
@@ -8,7 +8,6 @@ import java.net.URI;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-// TODO change wikiLink to a URI
 // TODO change code to a 2 character code...
 // record CountryDTO( Long id, String code, String name, String wikiLink,
 // String keywords )
@@ -16,11 +15,14 @@ import lombok.Data;
 
 
 
-// TODO convert to a Java record
+/**
+ * API representation of a Region.
+ */
 @Data
 @AllArgsConstructor
 public class RegionDTO
 {
+    // TODO convert to a Java record
     /**
      * Internal OurAirports integer identifier for the region. This will stay
      * persistent, even if the region code changes.

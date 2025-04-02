@@ -1,4 +1,4 @@
-/* (C)2024 */
+/* (C) 2024 */
 
 package com.example.utility;
 
@@ -74,8 +74,6 @@ class ValidateUtilityClassTest
     @Test
     void boostrapTest_isTrue()
     {
-        // assertTrue( ValidateUtilityClass.isProperUtilityClass(
-        // ValidateUtilityClass.class, reason ) );
         final StringJoiner reasons = new StringJoiner( "; ", "[", "]" );
 
         assertAll( () -> assertTrue( ValidateUtilityClass.isProperUtilityClass( ValidateUtilityClass.class, null ) ),

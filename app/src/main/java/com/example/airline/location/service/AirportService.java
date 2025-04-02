@@ -1,9 +1,8 @@
-/* (C)2025 */
+/* (C) 2025 */
 
 package com.example.airline.location.service;
 
 
-import java.util.Locale;
 import java.util.Optional;
 
 import com.example.airline.location.Airport;
@@ -12,10 +11,7 @@ import com.example.airline.location.persistence.model.airport.AirportEntity;
 import com.example.airline.location.persistence.repository.airport.AirportRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -23,40 +19,40 @@ import org.springframework.web.bind.annotation.RequestParam;
 // @RefreshScope
 public class AirportService
 {
-    private AirportRepository repository;
+    private final AirportRepository repository;
 
-    private AirportMapper     mapper;
+    private final AirportMapper mapper;
 
-
-
-    public AirportService( AirportRepository repository, AirportMapper mapper )
+    public AirportService( final AirportRepository repository, final AirportMapper mapper )
     {
         this.repository = repository;
-        this.mapper = mapper;
+        this.mapper     = mapper;
     }
 
 
 
     public Page<Airport> findAll( final Pageable pageable )
     {
-        Page<AirportEntity> airports = repository.findAll( pageable );
+        final Page<AirportEntity> airports = repository.findAll( pageable );
 
-        return airports.map( entity -> mapper.airportEntityToDomain(entity));
+        return airports.map( mapper::airportEntityToDomain );
     }
 
 
 
+    @SuppressWarnings( "PMD.ShortVariable" )
     public Optional<Airport> findAirportById( final Long id )
     {
-        Optional<AirportEntity> airportEntity = repository.findAirportById( id );
+        final Optional<AirportEntity> airportEntity = repository.findAirportById( id );
 
         return mapEntityToDomain( airportEntity );
     }
 
 
+
     public Optional<Airport> findAirportByIdent( final String code )
     {
-        Optional<AirportEntity> airportEntity = repository.findAirportByIdent( code );
+        final Optional<AirportEntity> airportEntity = repository.findAirportByIdent( code );
 
         return mapEntityToDomain( airportEntity );
     }
@@ -67,13 +63,12 @@ public class AirportService
                                         final String icaoCode,
                                         final String ident,
                                         final String name,
-                                        final Pageable paging)
+                                        final Pageable paging )
     {
-        Page<AirportEntity> entities = repository.advancedQuery( iataCode, icaoCode, ident, name, paging );
+        final Page<AirportEntity> entities = repository.advancedQuery( iataCode, icaoCode, ident, name, paging );
 
-        return entities.map( entity -> mapper.airportEntityToDomain(entity));
+        return entities.map( mapper::airportEntityToDomain );
     }
-
 
 
 

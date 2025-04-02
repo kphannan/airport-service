@@ -1,4 +1,4 @@
-/* (C)2025 */
+/* (C) 2025 */
 
 package com.example.airline.location;
 
@@ -28,8 +28,7 @@ public class Region
      * local_code prefixed with the country code to make a globally-unique
      * identifier.
      */
-    @NotNull
-    private String code;
+    @NotNull private String code;
 
     /**
      * The local code for the administrative subdivision. Whenever possible, these
@@ -38,31 +37,27 @@ public class Region
      * for each country, which means that the airport has not yet been assigned to a
      * region (or perhaps can't be, as in the case of a deep-sea oil platform).
      */
-    @NotNull
-    private String localCode;
+    @NotNull private String localCode;
 
     /**
      * The common English-language name for the administrative subdivision. In some
      * cases, the name in local languages will appear in the keywords field assist
      * search.
      */
-    @NotNull
-    private String name;
+    @NotNull private String name;
 
     /**
      * The two-character ISO 3166:1-alpha2 code for the country containing the
      * administrative subdivision. A handful of unofficial, non-ISO codes are also
      * in use, such as "XK" for Kosovo.
      */
-    @NotNull
-    private String country; // ! Create domain object for the country code
+    @NotNull private String country; // ! Create domain object for the country code
 
     /**
      * A code for the continent to which the region belongs. See the continent field
      * in airports.csv for a list of codes.
      */
-    @NotNull
-    private String continent; // ! Create domain object for contient code
+    @NotNull private String continent; // ! Create domain object for contient code
 
     /**
      * A link to the Wikipedia article describing the subdivision.

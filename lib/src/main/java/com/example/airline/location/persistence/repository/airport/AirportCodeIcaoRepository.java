@@ -1,4 +1,4 @@
-/* (C)2025 */
+/* (C) 2025 */
 
 package com.example.airline.location.persistence.repository.airport;
 
@@ -30,7 +30,7 @@ public interface AirportCodeIcaoRepository extends PagingAndSortingRepository<Ai
      * @return the record if found.
      */
     @Query( "from #{#entityName} a where a.icaoCode = :icaoCode" )
-    Optional<AirportCodeIcaoEntity> findById( @Param( "icaoCode" ) final String icaoCode );
+    Optional<AirportCodeIcaoEntity> findById( @Param( "icaoCode" ) String icaoCode );
 
     /**
      * Lookup ICAO airport code by a partial, full id. If no ID is specified, the
@@ -45,5 +45,5 @@ public interface AirportCodeIcaoRepository extends PagingAndSortingRepository<Ai
             + " AND LENGTH(a.icaoCode) = 4 AND SUBSTRING(a.icaoCode, 1,1 ) >= 'A'"
             + " AND SUBSTRING(a.icaoCode, 2,1 ) >= 'A'" + " AND SUBSTRING(a.icaoCode, 3,1 ) >= 'A'"
             + " AND SUBSTRING(a.icaoCode, 4,1 ) >= 'A'" )
-    Page<AirportCodeIcaoEntity> findAll( final Pageable paging );
+    Page<AirportCodeIcaoEntity> findAll( Pageable paging );
 }

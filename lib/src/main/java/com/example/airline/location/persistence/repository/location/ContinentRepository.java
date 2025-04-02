@@ -1,4 +1,4 @@
-/* (C)2025 */
+/* (C) 2025 */
 
 package com.example.airline.location.persistence.repository.location;
 
@@ -26,20 +26,35 @@ public interface ContinentRepository extends JpaRepository<ContinentEntity, Inte
     @Override
     List<ContinentEntity> findAll();
 
-    Optional<ContinentEntity> findById( final Integer id );
+    @SuppressWarnings( "PMD.ShortVariable" )
+    Optional<ContinentEntity> findById( Integer id );
 
     /**
-     * Find a single {@code Continent} by its id code.
+     * Find a single {@code Continent} by its 2 character code.
      *
      * @param continentCode the 2-character continent code.
      *
      * @return the {@code Continent} if found.
      */
-    Optional<ContinentEntity> findByCode( final String continentCode );
+    Optional<ContinentEntity> findByCode( String continentCode );
 
-    Optional<List<ContinentEntity>> findByNameLike( final String name );
+    /**
+     * Find a single {@code Continent} whose name contains the specified text.
+     *
+     * @param name the text to find in the continent name.
+     *
+     * @return the {@code Continent} if found.
+     */
+    Optional<List<ContinentEntity>> findByNameLike( String name );
 
-    Optional<List<ContinentEntity>> findByKeywordsLike( final String keyword );
+    /**
+     * Find a single {@code Continent} by ancillary keywords.
+     *
+     * @param keyword criteria for keyword match.
+     *
+     * @return the {@code Continent} if found.
+     */
+    Optional<List<ContinentEntity>> findByKeywordsLike( String keyword );
 
     // /**
     // * Retrive all the countries on a given contintent.

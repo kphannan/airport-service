@@ -1,4 +1,4 @@
-/* (C)2025 */
+/* (C) 2025 */
 
 package com.example.airline.location.api;
 
@@ -30,11 +30,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class RegionsController
 {
     // Autowired via constructor
-    private RegionsService service;
-    private RegionMapper   mapper;
+    private final RegionsService service;
+    private final RegionMapper   mapper;
 
-
-    public RegionsController( RegionsService service, RegionMapper mapper  )
+    public RegionsController( final RegionsService service, final RegionMapper mapper )
     {
         this.service = service;
         this.mapper  = mapper;
@@ -45,21 +44,22 @@ public class RegionsController
     @GetMapping( "" )
     public Page<RegionDTO> restGetFindAll( final Pageable pageable )
     {
-        Page<Region> regions = service.findAll( pageable );
+        final Page<Region> regions = service.findAll( pageable );
 
-        return regions.map( entity -> mapper.regionDomainToApi(entity));
+        return regions.map( entity -> mapper.regionDomainToApi( entity ) );
     }
 
 
 
     @GetMapping( "/{id}" )
+    @SuppressWarnings( "PMD.ShortVariable" )
     public ResponseEntity<RegionDTO> restGetFindRegionById( @PathVariable final Integer id )
     {
         final Optional<Region> optionalRegions = service.findRegionById( id );
 
         if ( optionalRegions.isPresent() )
         {
-            RegionDTO dto = mapper.regionDomainToApi( optionalRegions.get() );
+            final RegionDTO dto = mapper.regionDomainToApi( optionalRegions.get() );
 
             return ResponseEntity.ok( dto );
         }
@@ -72,11 +72,11 @@ public class RegionsController
     @GetMapping( "/code/{code}" )
     public ResponseEntity<RegionDTO> restGetFindRegionByCode( @PathVariable final String code )
     {
-        Optional<Region> optionalEntity = service.findRegionByCode( code );
+        final Optional<Region> optionalEntity = service.findRegionByCode( code );
 
         if ( optionalEntity.isPresent() )
         {
-            RegionDTO dto = mapper.regionDomainToApi( optionalEntity.get() );
+            final RegionDTO dto = mapper.regionDomainToApi( optionalEntity.get() );
 
             return ResponseEntity.ok( dto );
         }

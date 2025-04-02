@@ -1,4 +1,4 @@
-/* (C)2025 */
+/* (C) 2025 */
 
 package com.example.airline.location.persistence.model.airport;
 
@@ -40,11 +40,6 @@ public class AirportCodeIataEntity
 
     private boolean hasText( final String value )
     {
-        if ( null != value )
-        {
-            return !value.trim().isBlank();
-        }
-
-        return false;
+        return null != value && !value.trim().isBlank();
     }
 }

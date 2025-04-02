@@ -1,4 +1,4 @@
-/* (C)2025 */
+/* (C) 2025 */
 
 package com.example.airline.location.api;
 
@@ -30,11 +30,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class CountryController
 {
     // Autowired via constructor
-    private CountryService service;
-    private CountryMapper     mapper;
+    private final CountryService service;
+    private final CountryMapper  mapper;
 
-
-    public CountryController( CountryService service, CountryMapper mapper  )
+    public CountryController( final CountryService service, final CountryMapper mapper )
     {
         this.service = service;
         this.mapper  = mapper;
@@ -45,21 +44,22 @@ public class CountryController
     @GetMapping( "" )
     public Page<CountryDTO> restGetFindAll( final Pageable pageable )
     {
-        Page<Country> countries = service.findAll( pageable );
+        final Page<Country> countries = service.findAll( pageable );
 
-        return countries.map( entity -> mapper.countryDomainToApi( entity ) );
+        return countries.map( mapper::countryDomainToApi );
     }
 
 
 
     @GetMapping( "/{id}" )
+    @SuppressWarnings( "PMD.ShortVariable" )
     public ResponseEntity<CountryDTO> restGetFindCountryById( @PathVariable final Integer id )
     {
         final Optional<Country> optionalCountry = service.findCountryById( id );
 
         if ( optionalCountry.isPresent() )
         {
-            CountryDTO dto = mapper.countryDomainToApi( optionalCountry.get() );
+            final CountryDTO dto = mapper.countryDomainToApi( optionalCountry.get() );
 
             return ResponseEntity.ok( dto );
         }
@@ -72,11 +72,11 @@ public class CountryController
     @GetMapping( "/code/{code}" )
     public ResponseEntity<CountryDTO> restGetFindCountryByCode( @PathVariable final String code )
     {
-        Optional<Country> optionalEntity = service.findCountryByCode( code );
+        final Optional<Country> optionalEntity = service.findCountryByCode( code );
 
         if ( optionalEntity.isPresent() )
         {
-            CountryDTO dto = mapper.countryDomainToApi( optionalEntity.get() );
+            final CountryDTO dto = mapper.countryDomainToApi( optionalEntity.get() );
 
             return ResponseEntity.ok( dto );
         }

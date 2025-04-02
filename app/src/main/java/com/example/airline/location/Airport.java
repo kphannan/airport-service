@@ -1,4 +1,4 @@
-/* (C)2025 */
+/* (C) 2025 */
 
 package com.example.airline.location;
 
@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 
+
 @Data
 @AllArgsConstructor
 public class Airport
@@ -19,6 +20,7 @@ public class Airport
      * T Internal OurAirports integer identifier for the airport. This will stay
      * persistent, even if the airport code changes.
      */
+    @SuppressWarnings( "PMD.ShortVariable" )
     private Long id;
 
     /**
@@ -27,34 +29,29 @@ public class Airport
      * if nothing else is available, an internally-generated code starting with the
      * ISO2 country code, followed by a dash and a four-digit number.
      */
-    @NotNull
-    private String ident;
+    @NotNull private String ident;
 
     /**
      * The type of the airport. Allowed values are "closed_airport", "heliport",
      * "large_airport", "medium_airport", "seaplane_base", and "small_airport". See
      * the map legend for a definition of each type.
      */
-    @NotNull
-    private String type;
+    @NotNull private String type;
 
     /**
      * The official airport name, including "Airport", "Airstrip", etc.
      */
-    @NotNull
-    private String name;
+    @NotNull private String name;
 
     /**
      * The airport latitude in decimal degrees (positive for north).
      */
-    @NotNull
-    private BigDecimal lattitude;
+    @NotNull private BigDecimal lattitude;
 
     /**
      * The airport longitude in decimal degrees (positive for east).
      */
-    @NotNull
-    private BigDecimal longitude;
+    @NotNull private BigDecimal longitude;
 
     /**
      * The airport elevation MSL in feet (not metres).
@@ -66,16 +63,14 @@ public class Airport
      * values are "AF" (Africa), "AN" (Antarctica), "AS" (Asia), "EU" (Europe), "NA"
      * (North America), "OC" (Oceania), or "SA" (South America).
      */
-    @NotNull
-    private String continent;
+    @NotNull private String continent;
 
     /**
      * The two-character ISO 3166:1-alpha2 code for the country where the airport is
      * (primarily) located. A handful of unofficial, non-ISO codes are also in use,
      * such as "XK" for Kosovo. Points to the code column in countries.csv.
      */
-    @NotNull
-    private String isoCountry;
+    @NotNull private String isoCountry;
 
     /**
      * 'An alphanumeric code for the high-level administrative subdivision of a
@@ -84,22 +79,19 @@ public class Airport
      * codes whenever possible, preferring higher administrative levels, but also
      * includes some custom codes. See the documentation for regions.csv.'
      */
-    @NotNull
-    private String isoRegion;
+    @NotNull private String isoRegion;
 
     /**
      * The primary municipality that the airport serves (when available). Note that
      * this is not necessarily the municipality where the airport is physically
      * located.
      */
-    @NotNull
-    private String municipality;
+    @NotNull private String municipality;
 
     /**
      * "yes" if the airport currently has scheduled airline service; "no" otherwise.
      */
-    @NotNull
-    private String scheduledService; // boolean...
+    @NotNull private String scheduledService; // boolean...
 
     /**
      * The code that an aviation GPS database (such as Jeppesen's or Garmin's) would
@@ -107,8 +99,7 @@ public class Airport
      * exists. Note that, unlike the ident column, this is not guaranteed to be
      * globally unique.
      */
-    @NotNull
-    private String gpsCode;
+    @NotNull private String gpsCode;
 
     /**
      * The three-letter IATA code for the airport (if it has one).

@@ -1,4 +1,4 @@
-/* (C)2025 */
+/* (C) 2025 */
 
 package com.example.utility;
 
@@ -203,6 +203,7 @@ class StringUtilityTest
     }
 
 
+
     @Test
     void string_targetCollection_nullTarget_returnsFalse()
     {
@@ -211,11 +212,15 @@ class StringUtilityTest
         assertFalse( StringUtility.hasAllMatchingSubstring( null, desired ) );
     }
 
+
+
     @Test
     void string_targetCollection_nullSubstring_returnsFalse()
     {
         assertFalse( StringUtility.hasAllMatchingSubstring( "Kilroy", null ) );
     }
+
+
 
     @Test
     void string_targetCollection_blankTarget_returnsFalse()
@@ -224,6 +229,8 @@ class StringUtilityTest
 
         assertFalse( StringUtility.hasAllMatchingSubstring( "", desired ) );
     }
+
+
 
     @Test
     void string_targetCollection_fullMatch_returnsTrue()
