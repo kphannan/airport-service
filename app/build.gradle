@@ -34,10 +34,6 @@ configurations {
     integrationTestImplementation.extendsFrom testImplementation
 }
 
-// dependencies {
-//     implementation( "org.apache.commons:commons-text" )
-//     implementation project(':utilities')
-// }
 
 dependencies {
     implementation( "org.apache.commons:commons-text" )
