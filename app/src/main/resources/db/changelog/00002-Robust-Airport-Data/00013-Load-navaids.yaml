@@ -63,7 +63,8 @@ databaseChangeLog:
                   name: magnetic_variation_deg
                   type: numeric
               - column:
-                  name: usageType
+                  name: usage_type
+                  header: usageType
                   type: string
               - column:
                   name: power
@@ -102,8 +103,8 @@ databaseChangeLog:
             splitStatements: true
             stripComments: true
             sql: UPDATE navaids
-                 SET    usageType = NULL
-                 WHERE  usageType = '';
+                 SET    usage_type = NULL
+                 WHERE  usage_type = '';
 
         - sql:
             splitStatements: true
