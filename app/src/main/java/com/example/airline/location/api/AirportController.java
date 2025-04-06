@@ -8,10 +8,18 @@ import java.util.Optional;
 
 import com.example.airline.airport.AirportDTO;
 import com.example.airline.location.Airport;
+import com.example.airline.location.ContinentDTO;
 import com.example.airline.location.config.GlobalApiResponses;
 import com.example.airline.location.config.GlobalApiSecurityResponses;
 import com.example.airline.location.mapper.AirportMapper;
 import com.example.airline.location.service.AirportService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping( "/v1/location/airport" )
+@RequestMapping( "/location/airport" )
 @Tag( name = "Airports" )
 @GlobalApiResponses
 @GlobalApiSecurityResponses
@@ -53,6 +61,37 @@ public class AirportController
 
 
 
+    @Operation( method = "GET",
+            summary = "Find a Continent by Id",
+            description = "Find a Continent by Id",
+            requestBody = @RequestBody( required = false
+//                                            content = { @Content( mediaType = "application/json",
+//                                                                  schema = @Schema( implementation = ContinentDTO.class ) )
+//                                                      }
+            ),
+            responses = { @ApiResponse( description = "Success",
+                    responseCode = "200",
+                    content = { @Content( mediaType = "application/json", schema = @Schema( implementation = AirportDTO.class ) ),
+                                @Content( mediaType = "application/yaml", schema = @Schema( implementation = AirportDTO.class ) ),
+                                @Content( mediaType = "application/xml", schema = @Schema( implementation = AirportDTO.class ) )
+                    }
+            )
+            },
+            parameters = { @Parameter( name = "id", required = true, in = ParameterIn.PATH, description = "Primary Key"),
+                           @Parameter( name = "Bearer", required = false,
+                                   schema = @Schema( implementation = String.class ),
+                                   in = ParameterIn.HEADER,
+                                   description = "Authentication / Authorization token" ),
+                           @Parameter( name = "TRACEPARENT", required = false,
+                                   schema = @Schema( implementation = String.class ),
+                                   in = ParameterIn.HEADER,
+                                   description = "Distributed tracing identifier" ),
+                           @Parameter( name = "TRACESTATE", required = false,
+                                   schema = @Schema( implementation = String.class ),
+                                   in = ParameterIn.HEADER,
+                                   description = "Vendor specific trace identification" )
+            }
+    )
     @GetMapping( "/{id}" )
     @SuppressWarnings( "PMD.ShortVariable" )
     public ResponseEntity<AirportDTO> restGetFindAirportById( @PathVariable final Long id )

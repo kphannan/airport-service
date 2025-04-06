@@ -13,6 +13,11 @@ import org.mapstruct.factory.Mappers;
 
 
 
+/**
+ * MapStruct configuration for Country, CountryEntity, CountryDTO.
+ *
+ * Mapstruct will generate the methods.
+ */
 @Mapper( componentModel = "spring" )
 public interface CountryMapper
 {
@@ -20,28 +25,31 @@ public interface CountryMapper
 
     // --------------------------------
     // ----- Domain / Persistence -----
+    // --- Persistence --> Domain ---
     // --- Instance
-    // Domain --> Persistence
-    // --- n/a
-    // Persistence --> Domain
-    Country countryEntityToDomain( CountryEntity dto );
+    /** Map a single db entity instance to a domain instance. */
+    Country countryEntityToDomain( CountryEntity entity );
 
     // --- Collection
-    // Domain --> Persistence
-    // --- n/a
-    // Persistence --> Domain
-    List<Country> countryEntityToDomain( List<CountryEntity> dtos );
+    /** Map a list of domain instances to a list of db entity instances. */
+    List<Country> countryEntityToDomain( List<CountryEntity> entities );
+
+    // --- Domain --> Persistence ---
+    // --- Instance
+    // --- Collection
 
     // ------------------------
     // ----- Domain / API -----
-    // Domain --> API
+    // --- Domain --> API ---
+    // --- Instance
+    /** Map a domain instance to an API instance. */
     CountryDTO countryDomainToApi( Country country );
 
-    // API --> Domain
-    // --- n/a
     // --- Collection
-    // Domain --> API
+    /** Map a list of domain instances to a list of API instances. */
     List<CountryDTO> countryDomainToApi( List<Country> countrys );
 
-    // API --> Domain
+    // --- API --> Domain ---
+    // --- Instance
+    // --- Collection
 }

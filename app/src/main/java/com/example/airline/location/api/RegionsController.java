@@ -5,12 +5,20 @@ package com.example.airline.location.api;
 
 import java.util.Optional;
 
+import com.example.airline.location.ContinentDTO;
 import com.example.airline.location.Region;
 import com.example.airline.location.RegionDTO;
 import com.example.airline.location.config.GlobalApiResponses;
 import com.example.airline.location.config.GlobalApiSecurityResponses;
 import com.example.airline.location.mapper.RegionMapper;
 import com.example.airline.location.service.RegionsService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping( "/v1/location/region" )
+@RequestMapping( "/location/region" )
 @GlobalApiResponses
 @GlobalApiSecurityResponses
 @Tag( name = "Regions" )
@@ -51,6 +59,37 @@ public class RegionsController
 
 
 
+    @Operation( method = "GET",
+            summary = "Find a Continent by Id",
+            description = "Find a Continent by Id",
+            requestBody = @RequestBody( required = false
+//                                            content = { @Content( mediaType = "application/json",
+//                                                                  schema = @Schema( implementation = ContinentDTO.class ) )
+//                                                      }
+            ),
+            responses = { @ApiResponse( description = "Success",
+                    responseCode = "200",
+                    content = { @Content( mediaType = "application/json", schema = @Schema( implementation = RegionDTO.class ) ),
+                                @Content( mediaType = "application/yaml", schema = @Schema( implementation = RegionDTO.class ) ),
+                                @Content( mediaType = "application/xml", schema = @Schema( implementation = RegionDTO.class ) )
+                    }
+            )
+            },
+            parameters = { @Parameter( name = "id", required = true, in = ParameterIn.PATH, description = "Primary Key" ),
+                           @Parameter( name = "Bearer", required = false,
+                                   schema = @Schema( implementation = String.class ),
+                                   in = ParameterIn.HEADER,
+                                   description = "Authentication / Authorization token" ),
+                           @Parameter( name = "TRACEPARENT", required = false,
+                                   schema = @Schema( implementation = String.class ),
+                                   in = ParameterIn.HEADER,
+                                   description = "Distributed tracing identifier" ),
+                           @Parameter( name = "TRACESTATE", required = false,
+                                   schema = @Schema( implementation = String.class ),
+                                   in = ParameterIn.HEADER,
+                                   description = "Vendor specific trace identification" )
+            }
+    )
     @GetMapping( "/{id}" )
     @SuppressWarnings( "PMD.ShortVariable" )
     public ResponseEntity<RegionDTO> restGetFindRegionById( @PathVariable final Integer id )

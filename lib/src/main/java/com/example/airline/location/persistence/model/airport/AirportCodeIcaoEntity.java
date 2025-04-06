@@ -7,6 +7,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,19 +20,21 @@ import lombok.NoArgsConstructor;
 @Table( name = "icao_airportcode" )
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class AirportCodeIcaoEntity
 {
     @Id
     @Column( name = "icao_code" )
+    // TODO NotNull
     private String icaoCode;
 
-    /**
-     * Instantiate a ICAO airport code record.
-     *
-     * @param icaoCode the ICAO code string.
-     */
-    public AirportCodeIcaoEntity( final String icaoCode )
-    {
-        this.icaoCode = icaoCode;
-    }
+    // /**
+    //  * Instantiate a ICAO airport code record.
+    //  *
+    //  * @param icaoCode the ICAO code string.
+    //  */
+    // public AirportCodeIcaoEntity( final String icaoCode )
+    // {
+    //     this.icaoCode = icaoCode;
+    // }
 }

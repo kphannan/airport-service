@@ -22,6 +22,7 @@ public class AirportDTO
      * T Internal OurAirports integer identifier for the airport. This will stay
      * persistent, even if the airport code changes.
      */
+    @SuppressWarnings( "PMD.ShortVariable" )
     private Long id;
 
     /**

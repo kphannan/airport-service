@@ -10,15 +10,15 @@ import org.junit.jupiter.api.Test;
 
 
 /**
- * Unit tests fro the {@code ContinentDTO}.
+ * Unit tests for the {@code ContinentDTO}.
  */
 @SuppressWarnings( "PMD.AvoidDuplicateLiterals" )
-class StopwatchTest
+class ContinentDTOTest
 {
     @Test
     void constructor_NullArgs_DoesNotCrash()
     {
-        ContinentDTO dto = new ContinentDTO( null, null, null, null, null );
+        final ContinentDTO dto = new ContinentDTO( null, null, null, null, null );
 
         assertNotNull( dto );
     }

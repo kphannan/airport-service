@@ -78,41 +78,19 @@ public final class ValidateUtilityClass
     public static boolean isProperUtilityClass( final Class<?> clazz,
                                                 final StringJoiner reason )
     {
-        // isUtility &= assertAllMethodsAreStatic( clazz, reason );
-        // int mask = 0;
-        // System.out.println( String.format( "0: %s %x %d", intToString( mask, 4, 20 ),
-        // mask, mask ) );
         int mask = isClassFinal( clazz, reason ) ? 0b0001 : 0b0101; // 1 or 5
-        // System.out.println( String.format( "1: %s %x %d\"", intToString( mask, 4, 20
-        // ), mask, mask ) );
         mask <<= 4;
-        // System.out.println( String.format( "2: %s %x %d\"", intToString( mask, 4, 20
-        // ), mask, mask ) );
-        mask |= ( hasOnlyOneConstructor( clazz, reason ) ? 0b0011 : 0b0100 ); // 3 or 4
-        // System.out.println( String.format( "3: %s %x %d\"", intToString( mask, 4, 20
-        // ), mask, mask ) );
+        mask  |= ( hasOnlyOneConstructor( clazz, reason ) ? 0b0011 : 0b0100 );     // 3 or 4
         mask <<= 4;
-        // System.out.println( String.format( "4: %s %x %d\"", intToString( mask, 4, 20
-        // ), mask, mask ) );
-        mask |= ( isConstructorPrivate( clazz, reason ) ? 0b0010 : 0b1100 ); // 2 or 12(C)
-        // System.out.println( String.format( "5: %s %x %d\"", intToString( mask, 4, 20
-        // ), mask, mask ) );
+        mask  |= ( isConstructorPrivate( clazz, reason ) ? 0b0010 : 0b1100 );      // 2 or 12(C)
         mask <<= 4;
-        // System.out.println( String.format( "6: %s %x %d\"", intToString( mask, 4, 20
-        // ), mask, mask ) );
-        mask |= ( isInstantiationDenied( clazz, reason ) ? 0b0110 : 0b1101 ); // 6 or 13(D)
-        // System.out.println( String.format( "7: %s %x %d\"", intToString( mask, 4, 20
-        // ), mask, mask ) );
+        mask  |= ( isInstantiationDenied( clazz, reason ) ? 0b0110 : 0b1101 );     // 6 or 13(D)
         mask <<= 4;
-        // System.out.println( String.format( "8: %s %x %d\"", intToString( mask, 4, 20
-        // ), mask, mask ) );
-        mask |= ( assertAllMethodsAreStatic( clazz, reason ) ? 0b0111 : 0b1111 ); // 7 or 15(F)
-        // System.out.println( String.format( "9: %s %x %d\"", intToString( mask, 4, 20
-        // ), mask, mask ) );
+        mask  |= ( assertAllMethodsAreStatic( clazz, reason ) ? 0b0111 : 0b1111 ); // 7 or 15(F)
 
         // XOR will turn off all the desired bits, the AND strips upper irrelevant bits
         final boolean isUtility = ( ( mask ^ TARGET_MASK ) & RESULT_BITS ) == 0;
-        // final int reasonCode = ( -1 ^ ( mask ^ TARGET_MASK ) );
+
         final int reasonCode = mask ^ TARGET_MASK;
 
         if ( !isUtility )
@@ -185,7 +163,6 @@ public final class ValidateUtilityClass
         {
             // equals(), hashCode(), toString(), getClass(), notify(), notifyAll(), wait()
             // Methods inherited from Object are exempt from being static.
-            // if ( !method.getDeclaringClass().equals( clazz ) )
             if ( method.getDeclaringClass() != clazz )
             {
                 continue;
@@ -260,7 +237,6 @@ public final class ValidateUtilityClass
         {
             reason.add( String.format( "'%s': The no-argument constructor does not exist", clazz.getName() ) );
         }
-        // catch ( IllegalStateException | IllegalAccessException ex )
         catch ( IllegalAccessException ex )
         {
             reason.add( String.format( "%s with cause '%s'", ex.getClass().getName(),

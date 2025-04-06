@@ -84,9 +84,6 @@ public class AirportEntity // extends Auditable<String>
      */
     @Column( name = "ELEVATION_FT" )
     private Integer elevation;
-    // TODO the DB has many rows where this field is null, which doesn't work for a
-    // primative type
-    // TODO do we leverage auto boxing and change it to an Integer object?
 
     /**
      * The code for the continent where the airport is (primarily) located. Allowed

@@ -207,7 +207,7 @@ class StringUtilityTest
     @Test
     void string_targetCollection_nullTarget_returnsFalse()
     {
-        Collection<String> desired = Arrays.asList( "One", "Two", "Three" );
+        final Collection<String> desired = Arrays.asList( "One", "Two", "Three" );
 
         assertFalse( StringUtility.hasAllMatchingSubstring( null, desired ) );
     }
@@ -225,7 +225,7 @@ class StringUtilityTest
     @Test
     void string_targetCollection_blankTarget_returnsFalse()
     {
-        Collection<String> desired = Arrays.asList( "One", "Two", "Three" );
+        final Collection<String> desired = Arrays.asList( "One", "Two", "Three" );
 
         assertFalse( StringUtility.hasAllMatchingSubstring( "", desired ) );
     }
@@ -235,7 +235,7 @@ class StringUtilityTest
     @Test
     void string_targetCollection_fullMatch_returnsTrue()
     {
-        Collection<String> desired = Arrays.asList( "One", "Two", "Three" );
+        final Collection<String> desired = Arrays.asList( "One", "Two", "Three" );
 
         assertTrue( StringUtility.hasAllMatchingSubstring( "ThreeTwoOne", desired ) );
     }

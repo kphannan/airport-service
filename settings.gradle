@@ -25,4 +25,5 @@ dependencyResolutionManagement {
 
 
 rootProject.name = 'airport-service'
-include('app', 'api', 'lib' )
+// include('app', 'api', 'lib' )
+include('lib', 'api', 'app' )

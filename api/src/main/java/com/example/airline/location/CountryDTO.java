@@ -3,6 +3,7 @@
 package com.example.airline.location;
 
 
+import java.io.Serializable;
 import java.net.URI;
 
 import lombok.AllArgsConstructor;
@@ -20,7 +21,7 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class CountryDTO
+public class CountryDTO implements Serializable
 {
     // TODO convert to a Java record
 

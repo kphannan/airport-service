@@ -12,7 +12,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 
-
+/**
+ * MapStruct configuration for Airport, AirportEntity, AirportDTO.
+ */
 @Mapper( componentModel = "spring" )
 public interface AirportMapper
 {
@@ -20,28 +22,31 @@ public interface AirportMapper
 
     // --------------------------------
     // ----- Domain / Persistence -----
+    // --- Persistence --> Domain ---
     // --- Instance
-    // Domain --> Persistence
-    // --- n/a
-    // Persistence --> Domain
+    /** Map a single db entity instance to a domain instance. */
     Airport airportEntityToDomain( AirportEntity entity );
 
     // --- Collection
-    // Domain --> Persistence
-    // --- n/a
-    // Persistence --> Domain
+    /** Map a list of domain instances to a list of db entity instances. */
     List<Airport> airportEntityToDomain( List<AirportEntity> entities );
+
+    // --- Domain --> Persistence ---
+    // --- Instance
+    // --- Collection
 
     // ------------------------
     // ----- Domain / API -----
-    // Domain --> API
+    // --- Domain --> API ---
+    // --- Instance
+    /** Map a domain instance to an API instance. */
     AirportDTO airportDomainToApi( Airport airport );
 
-    // API --> Domain
-    // --- n/a
     // --- Collection
-    // Domain --> API
+    /** Map a list of domain instances to a list of API instances. */
     List<AirportDTO> airportDomainToApi( List<Airport> airports );
 
-    // API --> Domain
+    // --- API --> Domain ---
+    // --- Instance
+    // --- Collection
 }

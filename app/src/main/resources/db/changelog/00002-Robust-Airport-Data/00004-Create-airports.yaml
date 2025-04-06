@@ -105,7 +105,7 @@ databaseChangeLog:
                   remarks: URL of the page on Wikipedia for thhe airport, if one exists.
               - column:
                   name: keywords
-                  type: varchar(256)
+                  type: varchar(512)
                   remarks: Extra keywords/phrases to assist with search, comma-separated. May include former names for the airport, alternate codes, names in other languages, nearby tourist destinations, etc.
 
         - createTable:

@@ -24,6 +24,7 @@ public class AirportCodeIataEntity
     @Id
     @Column( name = "IATA_CODE" )
     // @Value("#{' matches [A-Z]{3}'}")
+    // TODO NotNull
     private String iataCode;
 
     /**

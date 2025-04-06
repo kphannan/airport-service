@@ -6,8 +6,9 @@ buildscript {
 
         // --- Compiler extensions
         checkerFrameworkVersion     = '0.6.52'
+        lombokVersion               = '8.13.1'
         // --- YAML support
-        jacksonDatabindVersion      = '2.18.2'
+        // jacksonDatabindVersion      = '2.18.2'
         // --- Logging (log4j)
         log4jVersion                = '2.24.3'
 
@@ -16,7 +17,10 @@ buildscript {
 
         // ===== Frameworks =====
         // --- model mapping
-        mapstructVersion            = '1.6.3'
+        // mapstructVersion            = '1.6.3'
+
+        // --- Spring  Boot
+    	springCloudVersion          = '2024.0.1'
 
         // ===== Quality checks =====
 
@@ -32,7 +36,7 @@ buildscript {
         // --- Testing ---
         // --- Unit Test
         junitVersion                = '5.9.2'
-        logcaptorVersion            = '2.10.1'
+        // logcaptorVersion            = '2.10.1'
 
         // --- Mutation Testing
         pitPluginVersion            = '1.15.0'
@@ -54,37 +58,50 @@ buildscript {
         // =====
         // --- Code Style
         spotlessVersion             = '7.0.0.BETA4'
+
+    	// set('springCloudVersion', "2024.0.1")     // TODO move to spring convention
     }
+
+
 }
 
 
-plugins {
 
+plugins {
+    // ===== IDE =====
+    id 'idea'
+    id 'eclipse'
+    id 'visual-studio'
+    // id 'com.diffplug.spotless' version "${spotlessVersion}" apply false
+    // id 'com.github.spotbugs' version "${spotbugsVersion}" apply false
+    // id 'checkstyle' version "${checkstyleVersion}" apply false
+    // id 'pmd' version "${pmdVersion}" apply false
+    // id 'net.ltgt.errorprone' version '3.0.1' apply false
+    // id 'net.nemerosa.versioning' version "${nemerosaVersion}" apply false
+    // id 'com.gorylenko.gradle-git-properties' version "${gorylenkoVersion}" apply false
+    // id 'com.github.ben-manes.versions' version '0.48.0' apply false
+    // id 'com.github.spotbugs' version "${spotbugsVersion}" apply false
+    // id 'net.ltgt.errorprone' version '3.0.1' apply false
+    // id 'com.github.ben-manes.versions' version '0.48.0' apply false
     // ===== Frameworks =====
     // --- Spring boot
     id 'org.springframework.boot' version '3.4.4' apply false
     id 'io.spring.dependency-management' version '1.1.7' apply false
 
-    id 'io.freefair.lombok' version "8.13.1" apply false
+    id 'io.freefair.lombok' version "${lombokVersion}" apply false
 
-    // --- Compile time
-    id 'org.checkerframework' version "${checkerFrameworkVersion}" apply false
+    // // --- Compile time
+    // id 'org.checkerframework' version "${checkerFrameworkVersion}" apply false
 
-    // --- Mutation testing
+    // // --- Mutation testing
     id 'info.solidsoft.pitest' version "${pitPluginVersion}" apply false
 
-    // ===== Configuration Management =====
-    // --- Artifact Versioning
-    id 'net.nemerosa.versioning' version "${nemerosaVersion}" apply false
-    id "com.gorylenko.gradle-git-properties" version "${gorylenkoVersion}" apply false
+    // // ===== Configuration Management =====
+    // // --- Artifact Versioning
+    // id 'net.nemerosa.versioning' version "${nemerosaVersion}" apply false
+    // id "com.gorylenko.gradle-git-properties" version "${gorylenkoVersion}" apply false
 
-    id 'com.diffplug.spotless' version "${spotlessVersion}" apply false
+    // id 'com.diffplug.spotless' version "${spotlessVersion}" apply false
 
-    id 'com.github.spotbugs' version "${spotbugsVersion}" apply false
+    // id 'com.github.spotbugs' version "${spotbugsVersion}" apply false
 }
-
-    // ===== Configuration Management =====
-    // id "net.nemerosa.versioning" version "2.9.0"
-    // id "com.gorylenko.gradle-git-properties" version "2.3.2"
-
-

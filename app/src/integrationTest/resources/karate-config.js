@@ -13,7 +13,7 @@ function setupEnvironment() {
 		//appId: 'my.app.id',
 		//appSecret: 'my.secret',
 		host: 'localhost:8080',
-		rootPath: '/v1/location',
+		rootPath: '/api/v1/location',
 		authRootPath: '/authenicate/token',
 		baseUrl: 'http://localhost:8102/killroy/was/here'
 	};

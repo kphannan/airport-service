@@ -10,6 +10,19 @@ datasource:
 
 
 spring:
+  # Specify behavior of Serialization
+  # and Deserialization of JSON
+  # Jackson is the default JSON library
+  # for Spring Boot
+  # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html#application-properties.jackson
+  jackson:
+    default-property-inclusion: non-null
+    serialization:
+      indent-output: true
+      # false means write as ISO-8601
+      write-dates-as-timestamps: false
+
+  # Enable H2 console
   h2:
     console:
       enabled: true
@@ -18,7 +31,9 @@ spring:
         trace: true
         web-allow-others: false
 
+  #  Console output
   output:
+    # Enable ANSI colors in the console
     ansi:
       enabled: ALWAYS
 
@@ -114,7 +129,23 @@ logging:
         ui: INFO
         util: INFO
         validation: DEBUG
-        web: INFO
+        # web: INFO
+        web:
+          # servlet: INFO
+          # servlet:
+          servlet:
+            dispatcher: INFO
+            request: DEBUG
+            response: DEBUG
+            web: INFO
+            webmvc: INFO
+            websocket: INFO
+            webflux: INFO
+            mvc:
+              method:
+                annotation:
+                  HttpEntityMethodProcessor: DEBUG
+
 
     # liquibase: INFO
     liquibase:

@@ -12,7 +12,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 
-
+/**
+ * MapStruct configuration for Continent, ContinentEntity, ContinentDTO.
+ */
 @Mapper( componentModel = "spring" )
 public interface ContinentMapper
 {
@@ -20,28 +22,31 @@ public interface ContinentMapper
 
     // --------------------------------
     // ----- Domain / Persistence -----
+    // --- Persistence --> Domain ---
     // --- Instance
-    // Domain --> Persistence
-    // --- n/a
-    // Persistence --> Domain
+    /** Map a single db entity instance to a domain instance. */
     Continent continentEntityToDomain( ContinentEntity entity );
 
     // --- Collection
-    // Domain --> Persistence
-    // --- n/a
-    // Persistence --> Domain
+    /** Map a list of domain instances to a list of db entity instances. */
     List<Continent> continentEntityToDomain( List<ContinentEntity> entities );
+
+    // --- Domain --> Persistence ---
+    // --- Instance
+    // --- Collection
 
     // ------------------------
     // ----- Domain / API -----
-    // Domain --> API
+    // --- Domain --> API ---
+    // --- Instance
+    /** Map a domain instance to an API instance. */
     ContinentDTO continentDomainToApi( Continent continent );
 
-    // API --> Domain
-    // --- n/a
     // --- Collection
-    // Domain --> API
+    /** Map a list of domain instances to a list of API instances. */
     List<ContinentDTO> continentDomainToApi( List<Continent> continents );
 
-    // API --> Domain
+    // --- API --> Domain ---
+    // --- Instance
+    // --- Collection
 }

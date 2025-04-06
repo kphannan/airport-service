@@ -532,7 +532,7 @@ class ValidateUtilityClassTest
     /** Test target of a valid utility class with a single method. */
     private static final class MethodsAllStatic
     {
-        @SuppressWarnings( { "PMD.UnnecessaryConstructor", "unused" } )
+        @SuppressWarnings( { "PMD.UnnecessaryConstructor" } )
         private MethodsAllStatic()
         {
             // Instances are not allowed for utility classes

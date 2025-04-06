@@ -4,7 +4,6 @@ package com.example.airline.location.persistence.model;
 
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
@@ -30,15 +29,6 @@ public class UriConverter implements AttributeConverter<URI, String>
     @Override
     public URI convertToEntityAttribute( final String dbData )
     {
-        try
-        {
-            return null == dbData ? null : new URI( dbData );
-        }
-        catch ( URISyntaxException e )
-        {
-            log.error( () -> String.format( "Error converting '%s' to a URI", dbData ), e );
-        }
-
-        return null;
+        return null == dbData ? null : URI.create( dbData );
     }
 }

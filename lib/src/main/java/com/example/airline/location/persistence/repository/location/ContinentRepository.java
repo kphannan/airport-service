@@ -27,7 +27,7 @@ public interface ContinentRepository extends JpaRepository<ContinentEntity, Inte
     List<ContinentEntity> findAll();
 
     /**
-     * Find the Continent entry given its primary key;
+     * Find the Continent entry given its primary key.
      *
      * @param id the continent primary key.
      *

@@ -16,6 +16,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.web.HttpMediaTypeException;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -65,7 +68,7 @@ public class GlobalExceptionHandler
      * Create standard error message when an is called requesting either an
      * unsupported media type as input or output.
      *
-     * @param ex the intercepted exception;
+     * @param exception the intercepted exception
      *
      * @return a formatted {@code ProblemDetail}.
      */
@@ -83,13 +86,57 @@ public class GlobalExceptionHandler
         return ResponseEntity.status( HttpStatus.UNSUPPORTED_MEDIA_TYPE ).body( details );
     }
 
+    /**
+     * Create standard error message when an is called requesting either an
+     * unsupported media type as input or output.
+     *
+     * @param exception the intercepted exception
+     *
+     * @return a formatted {@code ProblemDetail}.
+     */
+    @ExceptionHandler( HttpMediaTypeNotAcceptableException.class )
+    @ResponseStatus( HttpStatus.UNSUPPORTED_MEDIA_TYPE )
+    public ResponseEntity<ProblemDetail> handleUnacceptableMediaTypeException( final HttpMediaTypeNotAcceptableException exception )
+    {
+        final StringBuilder detailMessage = new StringBuilder( "Unsupported content type: " )
+//                .append( exception.getContentType() ).append( "; Supported content types: " )
+                .append( MediaType.toString( exception.getSupportedMediaTypes() ) );
+        final ProblemDetail details       = ProblemDetail.forStatusAndDetail( HttpStatus.UNSUPPORTED_MEDIA_TYPE,
+                                                                              detailMessage.toString() );
+        details.setTitle( "Unsupported Media Type" );
+
+        return ResponseEntity.status( HttpStatus.UNSUPPORTED_MEDIA_TYPE ).body( details );
+    }
+
+    /**
+     * Create standard error message when an is called requesting either an
+     * unsupported media type as input or output.
+     *
+     * @param exception the intercepted exception
+     *
+     * @return a formatted {@code ProblemDetail}.
+     */
+    @ExceptionHandler( HttpMediaTypeException.class )
+    @ResponseStatus( HttpStatus.UNSUPPORTED_MEDIA_TYPE )
+    public ResponseEntity<ProblemDetail> handleMediaTypeException( final HttpMediaTypeException exception )
+    {
+        final StringBuilder detailMessage = new StringBuilder( "Unsupported content type: " )
+//                .append( exception.getContentType() ).append( "; Supported content types: " )
+                .append( MediaType.toString( exception.getSupportedMediaTypes() ) );
+        final ProblemDetail details       = ProblemDetail.forStatusAndDetail( HttpStatus.UNSUPPORTED_MEDIA_TYPE,
+                                                                              detailMessage.toString() );
+        details.setTitle( "Unsupported Media Type" );
+
+        return ResponseEntity.status( HttpStatus.UNSUPPORTED_MEDIA_TYPE ).body( details );
+    }
+
 
 
     /**
      * Create standard error message when the input request body contains invalid or
      * missing attributes.
      *
-     * @param ex the intercepted exception;
+     * @param exception the intercepted exception
      *
      * @return a formatted {@code ProblemDetail}.
      */
@@ -142,7 +189,7 @@ public class GlobalExceptionHandler
      * Create standard error message when the input request body contains invalid or
      * missing attributes.
      *
-     * @param ex the intercepted exception;
+     * @param exception the intercepted exception
      *
      * @return a formatted {@code ProblemDetail}.
      */
@@ -166,7 +213,7 @@ public class GlobalExceptionHandler
      * Create standard error message when the input request body contains a
      * malformed request body.
      *
-     * @param ex the intercepted exception;
+     * @param exception the intercepted exception
      *
      * @return a formatted {@code ProblemDetail}.
      */
@@ -180,13 +227,30 @@ public class GlobalExceptionHandler
         return ResponseEntity.badRequest().body( details );
     }
 
+    /**
+     * Create standard error message when the input request body contains a
+     * malformed request body.
+     *
+     * @param exception the intercepted exception
+     *
+     * @return a formatted {@code ProblemDetail}.
+     */
+    @ExceptionHandler( HttpMessageNotWritableException.class )
+    @ResponseStatus( code = HttpStatus.BAD_REQUEST )
+    public ResponseEntity<ProblemDetail> handleMessageNotWritableException( final HttpMessageNotWritableException exception )
+    {
+        final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST,
+                                                                        exception.getMessage() );
+
+        return ResponseEntity.badRequest().body( details );
+    }
 
 
     /**
      * Create standard error message when an unsupported methot (GET, PUT,
      * DELETE...) is specified.
      *
-     * @param ex the intercepted exception;
+     * @param exception the intercepted exception
      *
      * @return a formatted {@code ProblemDetail}.
      */
@@ -211,7 +275,7 @@ public class GlobalExceptionHandler
      * exist in the API. A NOT_FOUND does not mean the requested entity could not be
      * found. This case is represented in a NO_CONTENT response.
      *
-     * @param ex the intercepted exception;
+     * @param exception the intercepted exception
      *
      * @return a formatted {@code ProblemDetail}.
      */
@@ -240,9 +304,9 @@ public class GlobalExceptionHandler
 
 
     /**
-     * Create standard error message as a catch all for any unanticipated exception,
+     * Create standard error message as a catch all for any unanticipated exception.
      *
-     * @param ex the intercepted exception;
+     * @param exception the intercepted exception
      *
      * @return a formatted {@code ProblemDetail}.
      */

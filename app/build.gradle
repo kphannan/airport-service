@@ -6,7 +6,7 @@
 
 plugins {
     id 'buildlogic.java-application-conventions'
-    id 'buildlogic.java-spring-conventions'
+    // id 'buildlogic.java-spring-conventions'
 
     // TODO move these to the spring conventions....
     id 'org.springframework.boot'
@@ -15,7 +15,7 @@ plugins {
     // TODO move to java conventions...
     id 'io.freefair.lombok'
 
-    id 'com.gorylenko.gradle-git-properties'
+    // id 'com.gorylenko.gradle-git-properties'
 }
 
 
@@ -36,51 +36,36 @@ configurations {
 
 
 dependencies {
-    implementation( "org.apache.commons:commons-text" )
+    // implementation( "org.apache.commons:commons-text" )
     // implementation project(':utilities')
     implementation project( ':api' )
     implementation project( ':lib' )
 
-    // implementation( "org.springframework.boot:spring-boot-starter-log4j2" )
-    // modules {
-    // 	module( "org.springframework.boot:spring-boot-starter-logging" ) {
-    // 		replacedBy("org.springframework.boot:spring-boot-starter-log4j2", "Use Log4j2 instead of Logback")
-    // 	}
-    // }
 
-    // TODO move to spring convention
-    implementation( "org.springframework.boot:spring-boot-starter-actuator" )
-    implementation( "org.springframework.boot:spring-boot-starter-validation" )
-    implementation( "org.springframework.boot:spring-boot-starter-web" )
-    implementation( "org.springframework.boot:spring-boot-starter-logging" )
-    // implementation( "org.springframework.boot:spring-boot-starter-log4j2" )
-    // implementation( 'org.springframework.boot:spring-boot-starter-log4j2' ) {
-    //     // implementation( "org.springframework.boot:spring-boot-starter-logging" )
-    //     exclude  group: 'org.springframework.boot', module:  'spring-boot-starter-logging'
-    // }
+	implementation libs.bundles.spring.boot.base
+	implementation libs.bundles.spring.boot.persistence
 
     // --- Annotation Processor
-    implementation( "jakarta.annotation:jakarta.annotation-api:3.0.0" )
+	implementation libs.bundles.spring.validation
 
-    implementation( "org.mapstruct:mapstruct:${mapstructVersion}" )
-    annotationProcessor( "org.mapstruct:mapstruct-processor:${mapstructVersion}" )
+	implementation libs.mapstruct
+    annotationProcessor libs.mapstruct.processor
+
     // ----- Frameworks -----
     // --- Logging
-    // implementation( "org.apache.logging.log4j:log4j-core:${log4jVersion}" )
-    // implementation( "org.apache.logging.log4j:log4j-api:${log4jVersion}" )
     // --- Data format / validation
     //   - needed for yaml configuration of log4j2
-    implementation( "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonDatabindVersion}" )
-    implementation( "com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}" )
+//	implementation libs.jackson.databind
+//	implementation libs.jackson.dataformat.yaml
+//    implementation libs.jackson.dataformat.xml
 
     // --- OpenAPI doc
-    implementation( "org.springdoc:springdoc-openapi-starter-webmvc-ui:${swaggerVersion}" )
+    implementation libs.springdoc.openapi.ui
+    // implementation( "org.springdoc:springdoc-openapi-starter-webmvc-ui:${swaggerVersion}" )
 
     // testImplementation( "org.springdoc:springdoc-openapi-starter-webmvc-api:2.8.6" )
 
     // ===== Persistence =====
-    // implementation( "org.springframework.boot:spring-boot-starter-data-jpa" )
-    implementation( "org.springframework.boot:spring-boot-starter-data-jpa" )
     implementation( "org.liquibase:liquibase-core" )
     // --- Database
     runtimeOnly( "com.h2database:h2" )
@@ -90,9 +75,9 @@ dependencies {
     runtimeOnly( "org.mariadb.jdbc:mariadb-java-client" )
     runtimeOnly( "org.postgresql:postgresql" )
     // ----- Quality Assurance -----
-    testAnnotationProcessor( "org.mapstruct:mapstruct-processor:${mapstructVersion}" )
+    testAnnotationProcessor libs.mapstruct.processor
     // --- Unit Testing
-    testImplementation( "io.github.hakky54:logcaptor:${logcaptorVersion}" )
+	testImplementation libs.logcaptor
 
     testImplementation( "org.springframework.boot:spring-boot-starter-test" )
     // --- BDD
@@ -167,10 +152,10 @@ run {
 // }
 
 
-gitProperties {
-    dotGitDirectory = project.rootProject.layout.projectDirectory.dir(".git")
-    // dotGitDirectory = "${project.rootDir}/.git"
-}
+// gitProperties {
+//     dotGitDirectory = project.rootProject.layout.projectDirectory.dir(".git")
+//     // dotGitDirectory = "${project.rootDir}/.git"
+// }
 
 
 // springBoot {

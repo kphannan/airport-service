@@ -13,6 +13,9 @@ import org.mapstruct.factory.Mappers;
 
 
 
+/**
+ * MapStruct configuration for Region, RegionEntity, RegionDTO.
+ */
 @Mapper( componentModel = "spring" )
 public interface RegionMapper
 {
@@ -20,28 +23,31 @@ public interface RegionMapper
 
     // --------------------------------
     // ----- Domain / Persistence -----
+    // --- Persistence --> Domain ---
     // --- Instance
-    // Domain --> Persistence
-    // --- n/a
-    // Persistence --> Domain
+    /** Map a single db entity instance to a domain instance. */
     Region regionEntityToDomain( RegionEntity dto );
 
     // --- Collection
-    // Domain --> Persistence
-    // --- n/a
-    // Persistence --> Domain
+    /** Map a list of domain instances to a list of db entity instances. */
     List<Region> regionEntityToDomain( List<RegionEntity> dtos );
+
+    // --- Domain --> Persistence ---
+    // --- Instance
+    // --- Collection
 
     // ------------------------
     // ----- Domain / API -----
-    // Domain --> API
+    // --- Domain --> API ---
+    // --- Instance
+    /** Map a domain instance to an API instance. */
     RegionDTO regionDomainToApi( Region region );
 
-    // API --> Domain
-    // --- n/a
     // --- Collection
-    // Domain --> API
+    /** Map a list of domain instances to a list of API instances. */
     List<RegionDTO> regionDomainToApi( List<Region> regions );
 
-    // API --> Domain
+    // --- API --> Domain ---
+    // --- Instance
+    // --- Collection
 }
