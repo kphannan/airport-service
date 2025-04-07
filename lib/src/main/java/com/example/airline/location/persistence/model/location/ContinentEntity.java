@@ -11,10 +11,11 @@ import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 
 
@@ -29,20 +30,20 @@ import lombok.NoArgsConstructor;
 public class ContinentEntity
 {
     @Id
-    @Column( name = "id" )
-    @NotNull @SuppressWarnings( "PMD.ShortVariable" )
-    private Integer id;
+    @Column( name = "id", nullable = false )
+    @SuppressWarnings( "PMD.ShortVariable" )
+    @NonNull private Integer id;
 
-    @Column( name = "code" )
-    @NotNull private String code;
+    @Column( name = "code", length = 2, nullable = false, columnDefinition = "char(2)" )
+    @NonNull private String code;
 
-    @Column( name = "name" )
-    @NotNull private String name;
+    @Column( name = "name", length = 52, nullable = false )
+    @NonNull private String name;
 
-    @Column( name = "wikipedia_link" )
+    @Column( name = "wikipedia_link", length = 255 )
     @Convert( converter = UriConverter.class )
-    private URI wikiLink;
+    @Nullable private URI wikiLink;
 
-    @Column( name = "keywords" )
-    private String keywords; // May not need to exchange this
+    @Column( name = "keywords", length = 255)
+    @Nullable private String keywords; // May not need to exchange this
 }

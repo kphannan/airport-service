@@ -7,7 +7,8 @@ import java.net.URI;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 
 @Data
@@ -15,9 +16,9 @@ import lombok.Data;
 public class Continent
 {
     @SuppressWarnings( "PMD.ShortVariable" )
-    private Integer id;
-    private String  code;     // TODO change code to a 2 character code...
-    private String  name;
-    private URI     wikiLink;
-    private String  keywords; // May not need to exchange this
+    @NonNull private Integer       id;
+    @NonNull private String code;     // TODO change code to a 2 character code...
+    @NonNull private String name;
+    @Nullable private          URI           wikiLink;
+    @Nullable private String        keywords; // May not need to exchange this
 }

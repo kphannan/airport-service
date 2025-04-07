@@ -1,0 +1,42 @@
+# Dev profile utilizes a DB server which could be local or on a dev server
+
+# TODO this should be in a local profile
+datasource:
+  username: root
+  password: crimson
+  # schema: something
+  url: jdbc:mysql://localhost:3306/airport?createDatabaseIfNotExist=true
+  driver:
+    classname: com.mysql.cj.jdbc.Driver
+
+spring:
+
+  output:
+    ansi:
+      enabled: ALWAYS
+
+
+# ##### Logging configuration #####
+logging:
+  level:
+    root: WARN
+
+    com:
+      airline: INFO
+
+    org:
+      apache: ERROR
+
+      hibernate:
+        SQL: INFO
+        type:
+          descriptor:
+            # Enable logging of SQL
+            sql:
+              BasicBinder: TRACE
+
+      springframework:  INFO
+        # boot: debug
+        # beans: debug
+
+    liquibase: INFO

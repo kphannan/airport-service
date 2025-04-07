@@ -22,6 +22,11 @@ spring:
       # false means write as ISO-8601
       write-dates-as-timestamps: false
 
+  jpa:
+    hibernate:
+      # none, validate, update, create, create-drop
+      ddl-auto: validate
+
   # Enable H2 console
   h2:
     console:
@@ -87,6 +92,9 @@ logging:
             function:
               SqmFunctionRegistry: INFO
         SQL: DEBUG
+        tool:
+          schema:
+            spi: DEBUG
         type:
           BasicTypeRegistry: WARN
           descriptor:
@@ -121,7 +129,9 @@ logging:
         jmx: INFO
         messaging: INFO
         mock: INFO
-        orm: INFO
+        # orm: INFO
+        orm:
+          jpa: DEBUG
         r2dbc: INFO
         scripting: INFO
         test: INFO
@@ -204,20 +214,29 @@ management:
       #     out-of-service: 503
 
     liquibase:
-      enabled: true
+      access: UNRESTRICTED
 
     metrics:
-      enabled: true
+      access: UNRESTRICTED
 
     prometheus:
-      enabled: true
+      access: UNRESTRICTED
 
 
-  metrics:
-    export:
-      prometheus:
+#  metrics:
+#    export:
+#      prometheus:
+#        enabled: true
+
+  # ---------- Feature specific configurations ----------
+  # --- Metrics (Prometheus) ---
+  prometheus:
+    metrics:
+      export:
         enabled: true
 
+
+  # --- Informaion about the application ---
   # {"git":{"commit":{"time":"2019-11-23T23:41:52Z","id":"5b27927"},"branch":"development"}}
   info:
     app:

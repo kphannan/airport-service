@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import org.jspecify.annotations.NonNull;
 
 
 /**
@@ -24,9 +24,8 @@ import lombok.NoArgsConstructor;
 public class AirportCodeIcaoEntity
 {
     @Id
-    @Column( name = "icao_code" )
-    // TODO NotNull
-    private String icaoCode;
+    @Column( name = "icao_code", length = 4, nullable = false, columnDefinition = "char(4)" )
+    @NonNull private String icaoCode;
 
     // /**
     //  * Instantiate a ICAO airport code record.

@@ -12,9 +12,10 @@ jacksonDatabindVersion = '2.18.2'
 mapstructVersion = '1.6.3'
 jakartaAnnotationVersion = '3.0.0'
 jakartaValidationVersion = '3.0.2'
-jspecifyVersion = '1.0.0'
 # --- OpenAPI / Swagger ---
 swaggerVersion = '2.8.6'
+# --- JSepcify - tool neutral null checks
+jspecifyVersion = '1.0.0'
 
 [libraries]
 logcaptor = { group = 'io.github.hakky54', name = 'logcaptor', version.ref = 'logcaptorVersion' }

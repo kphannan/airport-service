@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import org.jspecify.annotations.NonNull;
 
 
 /**
@@ -22,10 +22,9 @@ import lombok.NoArgsConstructor;
 public class AirportCodeIataEntity
 {
     @Id
-    @Column( name = "IATA_CODE" )
     // @Value("#{' matches [A-Z]{3}'}")
-    // TODO NotNull
-    private String iataCode;
+    @Column( name = "iata_code", length = 3, nullable = false, columnDefinition = "char(3)" )
+    @NonNull private String iataCode;
 
     /**
      * Instantiate a IATA airport code record.

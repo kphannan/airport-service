@@ -39,14 +39,15 @@ databaseChangeLog:
             referencedTableName: regions
             referencedColumnNames: code
 
-        - addForeignKeyConstraint:
-            constraintName: fk_airport-continent
-
-            baseTableName: airports
-            baseColumnNames: continent
-
-            referencedTableName: continents
-            referencedColumnNames: code
+# TODO Temporary suppression
+#        - addForeignKeyConstraint:
+#            constraintName: fk_airport-continent
+#
+#            baseTableName: airports
+#            baseColumnNames: continent
+#
+#            referencedTableName: continents
+#            referencedColumnNames: code
 
         - addForeignKeyConstraint:
             constraintName: fk_airport-kind

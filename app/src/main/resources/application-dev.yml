@@ -2,14 +2,19 @@
 
 # TODO this should be in a local profile
 datasource:
-  username: root
+  username: postgres
   password: crimson
   # schema: something
-  url: jdbc:mysql://localhost:3306/airports
+  url: jdbc:postgresql://localhost:5432/airport
   driver:
-    classname: com.mysql.cj.jdbc.Driver
+    classname: org.postgresql.Driver
 
 spring:
+
+  jpa:
+    hibernate:
+      # none, validate, update, create, create-drop
+      ddl-auto: none
 
   output:
     ansi:
@@ -40,3 +45,76 @@ logging:
         # beans: debug
 
     liquibase: INFO
+
+management:
+
+  # Auto-configuation of liveness/readiness probes
+  health:
+    probes:
+      enabled: true
+
+  endpoints:
+    # access:
+    #   default: unrestricted
+    web:
+      base-path: /actuator
+      # cors:
+      #   allowed-origins: "http://example.com"
+      #   allowed-methods: "GET,POST"
+      exposure:
+        include: '*'
+
+  endpoint:
+    # SRE Health (liveness, readiness) for integration with kubernetes
+    health:
+      probes:
+        enabled: true
+      liveness:
+        enabled: true
+      readiness:
+        enabled: true
+      show-details: always
+      # status:
+      #   order: fatal,down,out-of-service,degraded,unknown,up
+      #   http-mapping:
+      #     degraded: 242
+      #     unknown: 242
+      #     fatal: 503
+      #     down: 503
+      #     out-of-service: 503
+
+    liquibase:
+      access: UNRESTRICTED
+
+    metrics:
+      access: UNRESTRICTED
+
+    prometheus:
+      access: UNRESTRICTED
+
+
+  # ---------- Feature specific configurations ----------
+  # --- Metrics (Prometheus) ---
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+
+  # --- Informaion about the application ---
+  # {"git":{"commit":{"time":"2019-11-23T23:41:52Z","id":"5b27927"},"branch":"development"}}
+  info:
+    app:
+      name: ${spring.application.name}
+      version: ${project.version}
+      java:
+        version: ${java.version}
+        source: ${java.version}
+        target: ${java.version}
+    env:
+      enabled: true
+    java:
+      enabled: true
+    git:
+      mode: full
+

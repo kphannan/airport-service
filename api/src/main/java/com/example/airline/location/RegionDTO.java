@@ -7,6 +7,8 @@ import java.net.URI;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 // TODO change code to a 2 character code...
 // record CountryDTO( Long id, String code, String name, String wikiLink,
@@ -27,16 +29,14 @@ public class RegionDTO
      * Internal OurAirports integer identifier for the region. This will stay
      * persistent, even if the region code changes.
      */
-    // @NotNull
     @SuppressWarnings( "PMD.ShortVariable" )
-    private Integer id;
+    @NonNull private Integer id;
 
     /**
      * local_code prefixed with the country code to make a globally-unique
      * identifier.
      */
-    // @NotNull
-    private String code;
+    @NonNull private String code;
 
     /**
      * The local code for the administrative subdivision. Whenever possible, these
@@ -45,41 +45,36 @@ public class RegionDTO
      * for each country, which means that the airport has not yet been assigned to a
      * region (or perhaps can't be, as in the case of a deep-sea oil platform).
      */
-    // @NotNull
-    private String localCode;
+    @NonNull private String localCode;
 
     /**
      * The common English-language name for the administrative subdivision. In some
      * cases, the name in local languages will appear in the keywords field assist
      * search.
      */
-    // @NotNull
-    private String name;
+    @NonNull private String name;
 
     /**
      * The two-character ISO 3166:1-alpha2 code for the country containing the
      * administrative subdivision. A handful of unofficial, non-ISO codes are also
      * in use, such as "XK" for Kosovo.
      */
-    // @NotNull
-    private String country; // ! Create domain object for the country code
+    @NonNull private String country; // ! Create domain object for the country code
 
     /**
      * A code for the continent to which the region belongs. See the continent field
      * in airports.csv for a list of codes.
      */
-    // @NotNull
-    private String continent; // ! Create domain object for contient code
+    @NonNull private String continent; // ! Create domain object for contient code
 
     /**
      * A link to the Wikipedia article describing the subdivision.
      */
-    private URI wikipediaLink;
+    @Nullable private URI wikipediaLink;
 
     /**
      * A comma-separated list of keywords to assist with search. May include former
      * names for the region, and/or the region name in other languages.
      */
-    private String keywords;
-
+    @Nullable private String keywords;
 }

@@ -10,26 +10,26 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: integer
+                  type: bigint
                   constraints:
                     primaryKey: true
                     nullable: false
                   remarks: Internal OurAirports integer identifier for the airport. This will stay persistent, even if the airport code changes.
               - column:
                   name: ident
-                  type: char(7)
+                  type: varchar(7)
                   constraints:
                     nullable: false
                   remarks: The text identifier used in the OurAirports URL. This will be the ICAO code if available. Otherwise, it will be a local airport code (if no conflict), or if nothing else is available, an internally-generated code starting with the ISO2 country code, followed by a dash and a four-digit number.
               - column:
                   name: type
-                  type: char(14)
+                  type: varchar(14)
                   constraints:
                     nullable: false
                   remarks: The type of the airport. Allowed values are "closed_airport", "heliport", "large_airport", "medium_airport", "seaplane_base", and "small_airport". See the map legend for a definition of each type.
               - column:
                   name: name
-                  type: char(80)
+                  type: varchar(80)
                   constraints:
                     nullable: false
                   remarks: The official airport name, including "Airport", "Airstrip", etc.
@@ -69,7 +69,7 @@ databaseChangeLog:
                   remarks: An alphanumeric code for the high-level administrative subdivision of a country where the airport is primarily located (e.g. province, governorate), prefixed by the ISO2 country code and a hyphen. OurAirports uses ISO 3166:2 codes whenever possible, preferring higher administrative levels, but also includes some custom codes. See the documentation for regions.csv.
               - column:
                   name: municipality
-                  type: char(60)
+                  type: varchar(60)
                   constraints:
                     # There really should be municipality for every airport....
                     nullable: true
@@ -77,7 +77,7 @@ databaseChangeLog:
               # Actually a boolean
               - column:
                   name: scheduled_service
-                  type: char(3)
+                  type: varchar(3)
                   constraints:
                     nullable: false
                   remarks: \"yes\" if the airport currently has scheduled airline service; \"no\" otherwise.
@@ -93,7 +93,7 @@ databaseChangeLog:
                   remarks: The three-letter IATA code for the airport (if it has one).
               - column:
                   name: local_code
-                  type: char(7)
+                  type: varchar(7)
                   remarks: The local country code for the airport, if different from the gps_code and iata_code fields (used mainly for US airports).
               - column:
                   name: home_link
@@ -124,7 +124,7 @@ databaseChangeLog:
 
               - column:
                   name: kind
-                  type: char(14)
+                  type: varchar(14)
                   constraints:
                     nullable: false
                   remarks: The airport_kind code in english.

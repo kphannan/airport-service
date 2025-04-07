@@ -33,9 +33,11 @@ spring:
     password: ${datasource.password}
 
 
-  jpa:
-    hibernate:
-      ddl-auto: update
+#  jpa:
+#    hibernate:
+    # none, validate, update, create, create-drop
+#      ddl-auto: validate
+
     show-sql: true
     properties:
       hibernate:

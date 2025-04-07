@@ -23,7 +23,7 @@ databaseChangeLog:
                   remarks: The two-character ISO 3166:1-alpha2 code for the country. A handful of unofficial, non-ISO codes are also in use, such as "XK" for Kosovo. The iso_country field in airports.csv points into this column.
               - column:
                   name: name
-                  type: char(52)
+                  type: varchar(52)
                   constraints:
                     nullable: false
                   remarks: The common English-language name for the country. Other variations of the name may appear in the keywords field to assist with search.
