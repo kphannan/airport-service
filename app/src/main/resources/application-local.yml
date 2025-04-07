@@ -24,7 +24,7 @@ spring:
   jpa:
     hibernate:
       # none, validate, update, create, create-drop
-      ddl-auto: validate
+      ddl-auto: none
 
   # Enable H2 console
   h2:

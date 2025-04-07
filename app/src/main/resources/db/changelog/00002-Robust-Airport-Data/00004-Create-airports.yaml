@@ -29,6 +29,7 @@ databaseChangeLog:
                   remarks: The type of the airport. Allowed values are "closed_airport", "heliport", "large_airport", "medium_airport", "seaplane_base", and "small_airport". See the map legend for a definition of each type.
               - column:
                   name: name
+                  # current max length is 108
                   type: varchar(128)
                   constraints:
                     nullable: false
@@ -69,6 +70,7 @@ databaseChangeLog:
                   remarks: An alphanumeric code for the high-level administrative subdivision of a country where the airport is primarily located (e.g. province, governorate), prefixed by the ISO2 country code and a hyphen. OurAirports uses ISO 3166:2 codes whenever possible, preferring higher administrative levels, but also includes some custom codes. See the documentation for regions.csv.
               - column:
                   name: municipality
+                  # current max length is 61
                   type: varchar(80)
                   constraints:
                     # There really should be municipality for every airport....

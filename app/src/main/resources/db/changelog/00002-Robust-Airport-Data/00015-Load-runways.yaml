@@ -80,8 +80,8 @@ databaseChangeLog:
             relativeToChangelogFile: true
             file: data/runways.csv
 
-        # Copy the type column from the original navaids
-        # table to the new navaid_kind table.
+        # Copy the type column from the original runway
+        # table to the new runway_surface_kind table.
         - sql:
             splitStatements: true
             stripComments: true
