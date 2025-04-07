@@ -44,7 +44,7 @@ public class GlobalExceptionHandler
     /**
      * Create standard error message when an API parameter is missing.
      *
-     * @param ex the intercepted exception;
+     * @param exception the intercepted exception;
      *
      * @return a formatted {@code ProblemDetail}.
      */
@@ -309,7 +309,7 @@ public class GlobalExceptionHandler
 
 
     /**
-     * Create standard error message as a catch all for any unanticipated exception.
+     * Create standard error message as a catch-all for any unanticipated exception.
      *
      * @param exception the intercepted exception
      *
@@ -323,11 +323,12 @@ public class GlobalExceptionHandler
         // introduce this.
         // we should not pass our traceId back to the client
         final StringBuilder detailMessage = new StringBuilder( "A problem occurred " ).append( "logref=" )
-                .append( UUID.randomUUID() ).append( "\n" ).append( exception.getMessage() );
+                .append( UUID.randomUUID() ).append( "\n" ).append( exception.getMessage() ).append( "\n" ).append( exception.getCause() );
 
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.INTERNAL_SERVER_ERROR,
                                                                         detailMessage.toString() );
 
+        log.error( "Generic catch-all: ", exception );
         return new ResponseEntity<>( details, HttpStatus.INTERNAL_SERVER_ERROR );
     }
 
