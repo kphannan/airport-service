@@ -125,6 +125,10 @@ databaseChangeLog:
       relativeToChangelogFile: true
       file: 00031-constraints-runways.yaml
 
+  - include:
+      relativeToChangelogFile: true
+      file: 00033-Normalize-runways.yaml
+
 #   - include:
 #       relativeToChangelogFile: true
 #       file: 00032-constraints-faa_abbreviations.yaml

@@ -1,0 +1,492 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00036"
+      author: kevin
+      changes:
+
+
+        - createTable:
+            tableName: surface_kind_fixup
+            remarks: Each row represents a classifier for runway_surface_kind. The surface column in runways.csv refers to the kind column here.
+
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  remarks: Internal integer identifier for the runway_surface_kind. This will stay persistent, even if the kind changes.
+
+              - column:
+                  name: kind
+                  # Review this width (63)
+                  type: char(132)
+                  constraints:
+                    nullable: false
+                  remarks: The runway_surface_kind code in english.
+
+              - column:
+                  name: normalized_kind
+                  # Review this width (63)
+                  type: char(132)
+                  constraints:
+                    nullable: false
+                  remarks: The normalized runway_surface_kind code.
+
+        # Copy the type column from the original runway_surface_kind
+        # table to the new surface_kind_fixup table.
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: INSERT INTO surface_kind_fixup (id, kind, normalized_kind)
+              SELECT id, kind, kind FROM runway_surface_kind;
+
+        # Asphalt
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE surface_kind_fixup
+              SET normalized_kind = 'Asphalt'
+              WHERE lower(kind) IN ('asfalt', 'asfalto', 'asphalt', 'ashpalt', 'ashphalt', 'aspalt',
+                                       'asph', '''asphalt''', 'asp', 'ashp', 'apsh' );
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Asphalt / Concrete'
+              WHERE lower(kind) IN ( 'asphalt concrete', 'asphalt/concrete', 'asphalt/cdncrete', 'asphalt/coccrete', 'asp/con', 'asp/conc', 'asph-conc', 'asph/conc', 'asph/ conc' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Asphalt / Dirt'
+              WHERE lower(kind) IN ( 'asphalt/dirt', 'asph-dirt' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Asphalt / Gravel'
+              WHERE lower(kind) IN ( 'asphalt/gravel', 'asp/gvl', 'asph/grvl', 'asph-grvl' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Asphalt / Grass'
+              WHERE lower(kind) IN ( 'asphalt/grass', 'asp/grs', 'asph/grass' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Asphalt / Treated'
+              WHERE lower(kind) IN ( 'asphalt/treated' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Asphalt / Turf'
+              WHERE lower(kind) IN ( 'asphalt/turf', 'asp/turf', 'asph-turf', 'asph/turf' );
+
+        # Aluminum
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE surface_kind_fixup
+              SET normalized_kind = 'Aluminum'
+              WHERE lower(kind) IN ( 'aluminum', 'alum' );
+
+        # Brick
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE surface_kind_fixup
+              SET normalized_kind = 'Brick'
+              WHERE lower(kind) IN ( 'brick' );
+
+        # Clay
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE surface_kind_fixup
+              SET normalized_kind = 'Clay'
+              WHERE lower(kind) IN ( 'clay' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Clay / Grass'
+              WHERE lower(kind) IN ( 'clay/grass' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Clay / Gravel'
+              WHERE lower(kind) IN ( 'clay/gravel', 'clay/grvl' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Clay / Sand'
+              WHERE lower(kind) IN ( 'clay/sand' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Clay / Turf'
+              WHERE lower(kind) IN ( 'clay/turf' );
+
+        # Concrete
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE surface_kind_fixup
+              SET normalized_kind = 'Concrete'
+              WHERE lower(kind) IN ( 'con', 'conc', 'concrete', '''concrete''' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Concrete / Asphalt'
+              WHERE lower(kind) IN ( 'con/asp', 'conc/asph', 'concrete/asphalt', 'conc-asph' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Concrete / Grass'
+              WHERE lower(kind) IN ( 'concrete/grass', 'con/grs' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Concrete / Gravel'
+              WHERE lower(kind) IN ( 'concrete/gravel', 'conc/grvl', 'con/gvl', 'conc-grvl', 'conc-grvl' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Concrete / Grooved'
+              WHERE lower(kind) IN ( 'concrete - grooved', 'concrete/grooved' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Concrete / Turf'
+              WHERE lower(kind) IN ( 'concrete/turf', 'conc/turf' );
+
+        # Coral
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE surface_kind_fixup
+              SET normalized_kind = 'Coral'
+              WHERE lower(kind) IN ( 'coral' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Coral Grass'
+              WHERE lower(kind) IN ( 'coral grass' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Coral Penetration'
+              WHERE lower(kind) IN ( 'coral penetration' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Coral Sand'
+              WHERE lower(kind) IN ( 'coral sand' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Crushed coral'
+              WHERE lower(kind) IN ( 'Crushed Coral' );
+
+        # Deck
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE surface_kind_fixup
+              SET normalized_kind = 'Deck'
+              WHERE lower(kind) IN ( 'deck' );
+
+        # Dirt
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE surface_kind_fixup
+              SET normalized_kind = 'Dirt'
+              WHERE lower(kind) IN ( 'dirt', 'dirt?' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Dirt / Grass'
+              WHERE lower(kind) IN ( 'dirt/grass' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Dirt / Gravel'
+              WHERE lower(kind) IN ( 'dirt-Gravel', 'dirt/gravel', 'dirt-gravel', 'dirt-grvl' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Dirt / Rock'
+              WHERE lower(kind) IN ( 'dirt/rock' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Dirt / Sand'
+              WHERE lower(kind) IN ( 'dirt-sand' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Dirt / Turf'
+              WHERE lower(kind) IN ( 'dirt/turf', 'dirt-turf' );
+
+        # Earth
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE surface_kind_fixup
+              SET normalized_kind = 'Earth'
+              WHERE lower(kind) IN ( 'earth', 'eartth', 'eerth' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Graded Earth'
+              WHERE lower(kind) IN ( 'graded earth' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Earth / Asphalt'
+              WHERE lower(kind) IN ( 'earth/asphalt' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Earth / Sand'
+              WHERE lower(kind) IN ( 'earth/sand' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Earth / Snow'
+              WHERE lower(kind) IN ( 'earth/snow' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Earth / Turf'
+              WHERE lower(kind) IN ( 'earth/turf' );
+
+        # Grass
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE surface_kind_fixup
+              SET normalized_kind = 'Grass'
+              WHERE lower(kind) IN ( 'grass', 'graas', 'gra', 'gras', 'grasss' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Grass / Clay'
+              WHERE lower(kind) IN ( 'grass/clay' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Grass / Concrete'
+              WHERE lower(kind) IN ( 'grass/concrete' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Grass / Dirt'
+              WHERE lower(kind) IN ( 'grass/dirt', 'grass dirt' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Grass / Earth'
+              WHERE lower(kind) IN ( 'grass/earth' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Grass / Gravel'
+              WHERE lower(kind) IN ( 'grass/gravel', 'grs/gvl' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Grass / Moss'
+              WHERE lower(kind) IN ( 'grass/moss' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Grass / Sand'
+              WHERE lower(kind) IN ( 'grass/sand', 'grass-sand' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Grass / Snow'
+              WHERE lower(kind) IN ( 'grass/snow' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Grass / Sod'
+              WHERE lower(kind) IN ( 'grass / sod' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Grass / Turf'
+              WHERE lower(kind) IN ( 'gras turf', 'grass turf' );
+
+        # Gravel
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE surface_kind_fixup
+              SET normalized_kind = 'Gravel'
+              WHERE lower(kind) IN ( 'gravel', 'grav', 'grv', 'grvl', 'gvl');
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Gravel / Asphalt'
+              WHERE lower(kind) IN ( 'grv/asp', 'grvl/asp', 'gravel/asphalt' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Gravel / Clay'
+              WHERE lower(kind) IN ( 'gravel/clay', 'grvl/clay' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Gravel / Dirt'
+              WHERE lower(kind) IN ( 'grvl-dirt', 'gravel/dirt', 'gravel dirt' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Gravel / Grass'
+              WHERE lower(kind) IN ( 'gravel/grass', 'grv/grass', 'grvl-grass', 'grvl/grass', 'grvl/dirt' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Gravel / Sand'
+              WHERE lower(kind) IN ( 'gravel/sand' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Gravel / Soil'
+              WHERE lower(kind) IN ( 'gravel/soil' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Gravel / Snow'
+              WHERE lower(kind) IN ( 'gravel/snow' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Gravel / Turf'
+              WHERE lower(kind) IN ( 'gravel/turf', 'grvl-turf', 'grvl/turf' );
+
+        # Ground
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE surface_kind_fixup
+              SET normalized_kind = 'Ground'
+              WHERE lower(kind) IN ( 'ground' );
+
+        # Ice
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE surface_kind_fixup
+              SET normalized_kind = 'Ice'
+              WHERE lower(kind) IN ( 'ice' );
+
+        # Paved
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE surface_kind_fixup
+              SET normalized_kind = 'Paved'
+              WHERE lower(kind) IN ( 'paved' );
+
+        # Sand
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE surface_kind_fixup
+              SET normalized_kind = 'Sand'
+              WHERE lower(kind) IN ( 'sand' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Sand / Clay'
+              WHERE lower(kind) IN ( 'sand/clay' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Sand / Grass'
+              WHERE lower(kind) IN ( 'sand/grass', 'sand grass' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Sand / Gravel'
+              WHERE lower(kind) IN ( 'sand/gravel', 'sand/grvl' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Sand / Turf'
+              WHERE lower(kind) IN ( 'sand/turf' );
+
+        # Shale
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE surface_kind_fixup
+              SET normalized_kind = 'Shale'
+              WHERE lower(kind) IN ( 'shale' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Shale / Clay'
+              WHERE lower(kind) IN ( 'shale/clay', 'shaly clay' );
+
+        # Snow
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE surface_kind_fixup
+              SET normalized_kind = 'Snow'
+              WHERE lower(kind) IN ( 'snow' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Snow / Ice'
+              WHERE lower(kind) IN ( 'snow/ice' );
+
+        # Steel
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE surface_kind_fixup
+              SET normalized_kind = 'Steel'
+              WHERE lower(kind) IN ( 'steel' );
+
+        # Turf
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE surface_kind_fixup
+                 SET normalized_kind = 'Turf'
+                 WHERE lower(kind) IN ( 'turf', 'tuef', 'torf' );
+              
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Turf / Aggregate'
+              WHERE lower(kind) IN ( 'turf/aggregate' );
+              
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Turf / Asphalt'
+              WHERE lower(kind) IN ( 'turf/asp', 'turf/asphalt' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Turf / Clay'
+              WHERE lower(kind) IN ( 'turf/clay' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Turf / Concrete'
+              WHERE lower(kind) IN ( 'turf/concrete' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Turf / Dirt'
+              WHERE lower(kind) IN ( 'turf/dirt' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Turf / Earth'
+              WHERE lower(kind) IN ( 'turf/earth' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Turf / Grass'
+              WHERE lower(kind) IN ( 'turf / grass', 'turf/grass' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Turf / Gravel'
+              WHERE lower(kind) IN ( 'turf / gravel', 'turf/gravel', 'turf/grvl', 'turf-grvl' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Turf / Sand'
+              WHERE lower(kind) IN ( 'turf/sand' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Turf / Snow'
+              WHERE lower(kind) IN ( 'turf/snow' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Turf / Soil'
+              WHERE lower(kind) IN ( 'turf/soil' );
+
+        # Unknown
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE surface_kind_fixup
+              SET normalized_kind = 'Unknown'
+              WHERE lower(kind) IN ( 'unk', 'unknown' );
+
+        # Unpaved
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE surface_kind_fixup
+              SET normalized_kind = 'Unpaved'
+              WHERE lower(kind) IN ( 'unpaved' );
+
+        # Unsealed
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE surface_kind_fixup
+              SET normalized_kind = 'Unsealed'
+              WHERE lower(kind) IN ( 'unsealed' );
+
+        # Water
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE surface_kind_fixup
+              SET normalized_kind = 'Water'
+              WHERE lower(kind) IN ( 'water' );
+
+              UPDATE surface_kind_fixup
+              SET normalized_kind = 'Summer Water'
+              WHERE lower(kind) IN ( 'summer water', 'summer water.' );
+
+        # Wood
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE surface_kind_fixup
+              SET normalized_kind = 'Wood'
+              WHERE lower(kind) IN ( 'wood' );
