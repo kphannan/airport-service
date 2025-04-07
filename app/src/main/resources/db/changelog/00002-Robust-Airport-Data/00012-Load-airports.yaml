@@ -49,6 +49,9 @@ databaseChangeLog:
                   name: gps_code
                   type: string
               - column:
+                  name: icao_code
+                  type: string
+              - column:
                   name: iata_code
                   type: string
               - column:

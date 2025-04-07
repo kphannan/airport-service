@@ -23,7 +23,7 @@ databaseChangeLog:
                   remarks: Internal integer foreign key matching the id column for the associated airport in airports.csv. (airport_ident is a better alternative.)
               - column:
                   name: airport_ident
-                  type: char(7)
+                  type: char(8)
                   constraints:
                     nullable: false
                   remarks: Externally-visible string foreign key matching the ident column for the associated airport in airports.csv.
@@ -61,7 +61,7 @@ databaseChangeLog:
 
               - column:
                   name: le_ident
-                  type: char(7)
+                  type: char(8)
                   # Data file contains blanks, yet column is not nullable
                   constraints:
                     nullable: true

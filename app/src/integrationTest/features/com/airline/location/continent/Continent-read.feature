@@ -1,7 +1,7 @@
 Feature: Continent Read Operations
 
   Background:
-    * url baseUrl + '/continent'
+    * url baseUrl + '/location/continent'
 
   @PostDeployment
   Scenario: Retrieve full list of Continents

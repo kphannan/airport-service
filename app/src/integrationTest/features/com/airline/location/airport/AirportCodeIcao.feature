@@ -1,7 +1,7 @@
 Feature: ICAO Airport code CRUD operations
 
   Background:
-    * url baseUrl + '/airport/icao'
+    * url baseUrl + '/location/airport/icao'
 
   # * configure report = { showLog: true, showAllSteps: false, logPrettyRequest: true, logPrettyResponse: true }
   @PostDeployment

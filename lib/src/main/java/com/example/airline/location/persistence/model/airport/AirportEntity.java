@@ -70,7 +70,7 @@ public class AirportEntity // extends Auditable<String>
     /**
      * The official airport name, including "Airport", "Airstrip", etc.
      */
-    @Column( name = "name", length = 80, nullable = false )
+    @Column( name = "name", length = 90, nullable = false )
     @NonNull private String name;
 
     /**
@@ -121,7 +121,7 @@ public class AirportEntity // extends Auditable<String>
      * this is not necessarily the municipality where the airport is physically
      * located.
      */
-    @Column( name = "municipality", length = 60 )
+    @Column( name = "municipality", length = 128 )
     @Nullable private String municipality;
 
     /**
@@ -138,6 +138,12 @@ public class AirportEntity // extends Auditable<String>
      */
     @Column( name = "gps_code", length = 4, columnDefinition = "char(4)" )
     @Nullable private String gpsCode;
+
+    /**
+     * The three-letter ICAO code for the airport (if it has one).
+     */
+    @Column( name = "icao_code", length = 4, columnDefinition = "char(4)" )
+    @Nullable private String icaoCode;
 
     /**
      * The three-letter IATA code for the airport (if it has one).

@@ -1,7 +1,7 @@
 Feature: IATA Airport code CRUD operations
 
   Background:
-    * url baseUrl + '/airport/iata'
+    * url baseUrl + '/location/airport/iata'
 
   @PostDeployment
   Scenario: Retrieve a list of IATA airport codes

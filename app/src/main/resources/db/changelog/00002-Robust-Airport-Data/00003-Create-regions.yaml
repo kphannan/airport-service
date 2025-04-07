@@ -29,7 +29,7 @@ databaseChangeLog:
                   remarks: The local code for the administrative subdivision. Whenever possible, these are official ISO 3166:2, at the highest level available, but in some cases OurAirports has to use unofficial codes. There is also a pseudo code "U-A" for each country, which means that the airport has not yet been assigned to a region (or perhaps cant be, as in the case of a deep-sea oil platform).
               - column:
                   name: name
-                  type: varchar(52)
+                  type: varchar(80)
                   constraints:
                     nullable: false
                   remarks: The common English-language name for the administrative subdivision. In some cases, the name in local languages will appear in the keywords field assist search.

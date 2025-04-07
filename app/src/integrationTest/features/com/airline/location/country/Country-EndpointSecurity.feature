@@ -1,7 +1,7 @@
 Feature: Country API Security
 
   Background:
-    * url baseUrl
+    * url baseUrl + '/location'
 
   # ----- Verify acceptable methods -----
   @SmokeTest @SecurityCheck

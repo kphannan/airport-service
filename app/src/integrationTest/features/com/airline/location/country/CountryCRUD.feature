@@ -1,7 +1,7 @@
 Feature: Country CRUD operations
 
   Background:
-    * url baseUrl
+    * url baseUrl + '/location'
 
   # * configure report = { showLog: true, showAllSteps: false, logPrettyRequest: true, logPrettyResponse: true }
   @PostDeployment
@@ -10,7 +10,7 @@ Feature: Country CRUD operations
     When method GET
     Then status 200
     And match $.pageable contains { "offset": 0, "pageNumber": 0, "pageSize": 20 }
-    And match $ contains { "totalElements": 247, "size": 20, "number": 0 }
+    And match $ contains { "totalElements": 249, "size": 20, "number": 0 }
 
   # And match $.content contains {"iataAirportCode":"MSP"}
   # ----- (GET) Lookup existing airport -----

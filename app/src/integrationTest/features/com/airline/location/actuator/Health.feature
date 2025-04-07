@@ -1,7 +1,7 @@
 Feature: Health, Liveness, Readiness probes
 
   Background:
-    * url host + '/actuator'
+    * url baseUrl + '/actuator'
 
   # ----- (GET)  -----
   @SmokeTest @PostDeployment @Health

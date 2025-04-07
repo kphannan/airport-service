@@ -105,6 +105,11 @@ public class AirportDTO
     @Nullable private String gpsCode;
 
     /**
+     * The three-letter ICAO code for the airport (if it has one).
+     */
+    @Nullable private String icaoCode;
+
+    /**
      * The three-letter IATA code for the airport (if it has one).
      */
     @Nullable private String iataCode;
