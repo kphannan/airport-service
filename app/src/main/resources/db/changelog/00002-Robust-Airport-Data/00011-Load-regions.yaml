@@ -49,3 +49,10 @@ databaseChangeLog:
             sql: UPDATE regions
                  SET    wikipedia_link = NULL
                  WHERE  wikipedia_link = '';
+
+        # Correct errors / problems with the imported data
+        - sql:
+            # Correct errors in wiki URI
+            sql: UPDATE regions
+                 SET wikipedia_link = replace( wikipedia_link, ' ', '' )
+                 WHERE wikipedia_link like '%_ Pro%';
