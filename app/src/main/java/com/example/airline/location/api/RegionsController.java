@@ -5,7 +5,6 @@ package com.example.airline.location.api;
 
 import java.util.Optional;
 
-import com.example.airline.location.ContinentDTO;
 import com.example.airline.location.Region;
 import com.example.airline.location.RegionDTO;
 import com.example.airline.location.config.GlobalApiResponses;
@@ -30,6 +29,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 
+/**
+ * API controller for managing regions.
+ * <p>
+ * This controller provides endpoints to retrieve region information.
+ * </p>
+ * <p>
+ * The API supports pagination and returns data in JSON, YAML, and XML formats.
+ * </p>
+ */
 @RestController
 @RequestMapping( "/location/region" )
 @GlobalApiResponses
@@ -41,6 +49,12 @@ public class RegionsController
     private final RegionsService service;
     private final RegionMapper   mapper;
 
+    /**
+     * Constructor for the RegionsController.
+     *
+     * @param service The service to use for region operations.
+     * @param mapper  The mapper to convert between domain and API objects.
+     */
     public RegionsController( final RegionsService service, final RegionMapper mapper )
     {
         this.service = service;
@@ -49,24 +63,32 @@ public class RegionsController
 
 
 
+    /**
+     * Find all Regions.
+     *
+     * @param pageable The pagination information.
+     * @return A page of RegionDTO objects.
+     */
     @GetMapping( "" )
     public Page<RegionDTO> restGetFindAll( final Pageable pageable )
     {
         final Page<Region> regions = service.findAll( pageable );
 
-        return regions.map( entity -> mapper.regionDomainToApi( entity ) );
+        return regions.map( mapper::regionDomainToApi );
     }
 
 
 
+    /**
+     * Find a Region by Id.
+     *
+     * @param id The primary key of the region.
+     * @return A ResponseEntity containing the RegionDTO object if found, or no content if not found.
+     */
     @Operation( method = "GET",
             summary = "Find a Continent by Id",
             description = "Find a Continent by Id",
-            requestBody = @RequestBody( required = false
-//                                            content = { @Content( mediaType = "application/json",
-//                                                                  schema = @Schema( implementation = ContinentDTO.class ) )
-//                                                      }
-            ),
+            requestBody = @RequestBody( required = false ),
             responses = { @ApiResponse( description = "Success",
                     responseCode = "200",
                     content = { @Content( mediaType = "application/json", schema = @Schema( implementation = RegionDTO.class ) ),
@@ -108,6 +130,12 @@ public class RegionsController
 
 
 
+    /**
+     * Find a Region by code.
+     *
+     * @param code The code of the region.
+     * @return A ResponseEntity containing the RegionDTO object if found, or no content if not found.
+     */
     @GetMapping( "/code/{code}" )
     public ResponseEntity<RegionDTO> restGetFindRegionByCode( @PathVariable final String code )
     {

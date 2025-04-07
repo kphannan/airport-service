@@ -23,7 +23,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 // TODO Trace header.... https://github.com/w3c/trace-context/blob/main/spec/20-http_request_header_format.md
 //      https://w3c.github.io/trace-context/
+
 
 @RestController
 @RequestMapping( "/location/continent" )
@@ -47,6 +47,12 @@ public class ContinentController
 //    private final List<MediaType> restMediaTypes = List.of( MediaType.APPLICATION_JSON, MediaType.APPLICATION_YAML );
 
 
+    /**
+     * Constructor for the ContinentController.
+     *
+     * @param service The service to use for continent operations.
+     * @param mapper  The mapper to convert between domain and API objects.
+     */
     public ContinentController( final ContinentService service, final ContinentMapper mapper )
     {
         this.service = service;
@@ -55,6 +61,12 @@ public class ContinentController
 
 
 
+
+    /**
+     * Find all Continents.
+     * @param requestHeader Request headers with authentication and tracing information.
+     * @return a paged list of ContinentDTO objects.
+     */
     @Operation( method = "GET",
                 summary = "Retrieve all Continents in paged form for performance",
                 description = "Retrieve a paged list of Continents",
@@ -84,6 +96,12 @@ public class ContinentController
 
 
 
+    /**
+     * Find a Continent by Id.
+     * @param id The primary key of the Continent to find.
+     * @param requestHeader Request headers with authentication and tracing information.
+     * @return the ContinentDTO object if found, or a 204 No Content response if not found.
+     */
     @Operation( method = "GET",
                 summary = "Find a Continent by Id",
                 description = "Find a Continent by Id",
@@ -134,9 +152,14 @@ public class ContinentController
 
 
 
+    /**
+     * Find a Continent by code.
+     * @param code The 2-character code of the Continent to find.
+     * @param requestHeader Request headers with authentication and tracing information.
+     * @return the ContinentDTO object if found, or a 204 No Content response if not found.
+     */
     @GetMapping( "/code/{code}" )
-//    public ResponseEntity<ContinentDTO> restGetFindContinentByCode( @PathVariable final String code, @RequestHeader HttpHeaders requestHeader )
-    public ResponseEntity<ContinentDTO> restGetFindContinentByCode( @PathVariable final String code, @RequestHeader HttpHeaders requestHeader )
+    public ResponseEntity<ContinentDTO> restGetFindContinentByCode( @PathVariable final String code, @RequestHeader final HttpHeaders requestHeader )
     {
         final Optional<Continent> optionalEntity = service.findContinentByCode( code );
 
@@ -154,11 +177,15 @@ public class ContinentController
 
 
 
-    private boolean containsAny( Collection source, Collection target )
+    private <T> boolean containsAny( final Collection<T> source, final Collection<T> target )
     {
-        for ( Object t : target )
-            if ( source.contains( t ) )
+        for ( final T value : target )
+        {
+            if ( source.contains( value ) )
+            {
                 return true;
+            }
+        }
 
         return false;
     }

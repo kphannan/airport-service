@@ -59,7 +59,7 @@ public class GlobalExceptionHandler
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST,
                                                                         detailMessage.toString() );
 
-        return ResponseEntity.internalServerError().body( details );
+        return new ResponseEntity<>( details, HttpStatus.INTERNAL_SERVER_ERROR );
     }
 
 
@@ -83,7 +83,7 @@ public class GlobalExceptionHandler
                                                                               detailMessage.toString() );
         details.setTitle( "Unsupported Media Type" );
 
-        return ResponseEntity.status( HttpStatus.UNSUPPORTED_MEDIA_TYPE ).body( details );
+        return new ResponseEntity<>( details, HttpStatus.UNSUPPORTED_MEDIA_TYPE );
     }
 
     /**
@@ -105,7 +105,7 @@ public class GlobalExceptionHandler
                                                                               detailMessage.toString() );
         details.setTitle( "Unsupported Media Type" );
 
-        return ResponseEntity.status( HttpStatus.UNSUPPORTED_MEDIA_TYPE ).body( details );
+        return new ResponseEntity<>( details, HttpStatus.UNSUPPORTED_MEDIA_TYPE );
     }
 
     /**
@@ -127,7 +127,7 @@ public class GlobalExceptionHandler
                                                                               detailMessage.toString() );
         details.setTitle( "Unsupported Media Type" );
 
-        return ResponseEntity.status( HttpStatus.UNSUPPORTED_MEDIA_TYPE ).body( details );
+        return new ResponseEntity<>( details, HttpStatus.UNSUPPORTED_MEDIA_TYPE );
     }
 
 
@@ -180,7 +180,7 @@ public class GlobalExceptionHandler
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST, detailMessage );
         details.setTitle( "RequestBody error" );
 
-        return ResponseEntity.badRequest().body( details );
+        return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );
     }
 
 
@@ -204,7 +204,7 @@ public class GlobalExceptionHandler
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST, detailMessage );
         details.setTitle( "Constraints" );
 
-        return ResponseEntity.badRequest().body( details );
+        return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );
     }
 
 
@@ -224,7 +224,7 @@ public class GlobalExceptionHandler
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST,
                                                                         exception.getMessage() );
 
-        return ResponseEntity.badRequest().body( details );
+        return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );
     }
 
     /**
@@ -242,7 +242,7 @@ public class GlobalExceptionHandler
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST,
                                                                         exception.getMessage() );
 
-        return ResponseEntity.badRequest().body( details );
+        return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );
     }
 
 
@@ -264,7 +264,9 @@ public class GlobalExceptionHandler
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.METHOD_NOT_ALLOWED,
                                                                         detailMessage.toString() );
 
-        return ResponseEntity.status( HttpStatus.METHOD_NOT_ALLOWED ).header( "Allow", exception.getSupportedMethods() )
+        return ResponseEntity
+                .status( HttpStatus.METHOD_NOT_ALLOWED )
+                .header( "Allow", exception.getSupportedMethods() )
                 .body( details );
     }
 
@@ -298,7 +300,10 @@ public class GlobalExceptionHandler
         // details.setTitle(exception.getClass().getSimpleName());
         details.setInstance( URI.create( exception.getResourcePath() ) );
 
-        return ResponseEntity.status( details.getStatus() ).location( details.getInstance() ).body( details );
+        return ResponseEntity
+                .status( details.getStatus() )
+                .location( details.getInstance() )
+                .body( details );
     }
 
 
@@ -323,7 +328,7 @@ public class GlobalExceptionHandler
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.INTERNAL_SERVER_ERROR,
                                                                         detailMessage.toString() );
 
-        return ResponseEntity.internalServerError().body( details );
+        return new ResponseEntity<>( details, HttpStatus.INTERNAL_SERVER_ERROR );
     }
 
 }

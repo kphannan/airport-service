@@ -1,5 +1,4 @@
 
-# TODO this should be in a local profile
 datasource:
   username: sa
   password: sa

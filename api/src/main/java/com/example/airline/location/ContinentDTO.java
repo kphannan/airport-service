@@ -5,7 +5,7 @@ package com.example.airline.location;
 import java.net.URI;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-//import org.hibernate.validator.constraints.Length;
+//import org.hibernate.validator.constraints.Length;    // TODO use Jakarta / Jackson valiations
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;

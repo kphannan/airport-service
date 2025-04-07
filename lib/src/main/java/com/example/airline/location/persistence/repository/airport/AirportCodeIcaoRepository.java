@@ -6,6 +6,7 @@ package com.example.airline.location.persistence.repository.airport;
 import java.util.Optional;
 
 import com.example.airline.location.persistence.model.airport.AirportCodeIcaoEntity;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -45,5 +46,5 @@ public interface AirportCodeIcaoRepository extends PagingAndSortingRepository<Ai
             + " AND LENGTH(a.icaoCode) = 4 AND SUBSTRING(a.icaoCode, 1,1 ) >= 'A'"
             + " AND SUBSTRING(a.icaoCode, 2,1 ) >= 'A'" + " AND SUBSTRING(a.icaoCode, 3,1 ) >= 'A'"
             + " AND SUBSTRING(a.icaoCode, 4,1 ) >= 'A'" )
-    Page<AirportCodeIcaoEntity> findAll( Pageable paging );
+    @NonNull Page<AirportCodeIcaoEntity> findAll( @NonNull Pageable paging );
 }

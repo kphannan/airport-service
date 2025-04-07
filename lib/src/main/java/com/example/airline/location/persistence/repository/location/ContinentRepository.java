@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.airline.location.persistence.model.location.ContinentEntity;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -35,7 +36,7 @@ public interface ContinentRepository extends JpaRepository<ContinentEntity, Inte
      */
     @SuppressWarnings( "PMD.ShortVariable" )
     @Override
-    Optional<ContinentEntity> findById( Integer id );
+    @NonNull Optional<ContinentEntity> findById( @NonNull Integer id );
 
     /**
      * Find a single {@code Continent} by its 2 character code.

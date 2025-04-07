@@ -5,7 +5,6 @@ package com.example.airline.location.api;
 
 import java.util.Optional;
 
-import com.example.airline.location.ContinentDTO;
 import com.example.airline.location.Country;
 import com.example.airline.location.CountryDTO;
 import com.example.airline.location.config.GlobalApiResponses;
@@ -30,6 +29,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 
+/**
+ * API controller for managing countries.
+ * <p>
+ * This controller provides endpoints to retrieve country information.
+ * </p>
+ * <p>
+ * The API supports pagination and returns data in JSON, YAML, and XML formats.
+ * </p>
+ */
 @RestController
 @RequestMapping( "/location/country" )
 @Tag( name = "Countries" )
@@ -41,6 +49,12 @@ public class CountryController
     private final CountryService service;
     private final CountryMapper  mapper;
 
+    /**
+     * Constructor for the CountryController.
+     *
+     * @param service The service to use for country operations.
+     * @param mapper  The mapper to convert between domain and API objects.
+     */
     public CountryController( final CountryService service, final CountryMapper mapper )
     {
         this.service = service;
@@ -49,6 +63,12 @@ public class CountryController
 
 
 
+    /**
+     * Find all Countries.
+     *
+     * @param pageable The pagination information.
+     * @return A Page of CountryDTO objects.
+     */
     @GetMapping( "" )
     public Page<CountryDTO> restGetFindAll( final Pageable pageable )
     {
@@ -59,14 +79,16 @@ public class CountryController
 
 
 
+    /**
+     * Find a Country by Id.
+     *
+     * @param id The primary key of the country to find.
+     * @return A ResponseEntity containing the found CountryDTO or no content if not found.
+     */
     @Operation( method = "GET",
             summary = "Find a Continent by Id",
             description = "Find a Continent by Id",
-            requestBody = @RequestBody( required = false
-//                                            content = { @Content( mediaType = "application/json",
-//                                                                  schema = @Schema( implementation = ContinentDTO.class ) )
-//                                                      }
-            ),
+            requestBody = @RequestBody( required = false ),
             responses = { @ApiResponse( description = "Success",
                     responseCode = "200",
                     content = { @Content( mediaType = "application/json", schema = @Schema( implementation = CountryDTO.class ) ),
@@ -108,6 +130,12 @@ public class CountryController
 
 
 
+    /**
+     * Find a Country by code.
+     *
+     * @param code The 2-character alpha code of the country to find.
+     * @return A ResponseEntity containing the found CountryDTO or no content if not found.
+     */
     @GetMapping( "/code/{code}" )
     public ResponseEntity<CountryDTO> restGetFindCountryByCode( @PathVariable final String code )
     {

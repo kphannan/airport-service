@@ -8,7 +8,6 @@ import java.util.Optional;
 
 import com.example.airline.airport.AirportDTO;
 import com.example.airline.location.Airport;
-import com.example.airline.location.ContinentDTO;
 import com.example.airline.location.config.GlobalApiResponses;
 import com.example.airline.location.config.GlobalApiSecurityResponses;
 import com.example.airline.location.mapper.AirportMapper;
