@@ -57,17 +57,17 @@ databaseChangeLog:
                     nullable: false
                   remarks: The code for the continent where the airport is (primarily) located. Allowed values are "AF" (Africa), "AN" (Antarctica), "AS" (Asia), "EU" (Europe), "NA" (North America), "OC" (Oceania), or "SA" (South America).
               - column:
-                  name: iso_country
-                  type: char(2)
-                  constraints:
-                    nullable: false
-                  remarks: The two-character ISO 3166:1-alpha2 code for the country where the airport is (primarily) located. A handful of unofficial, non-ISO codes are also in use, such as "XK" for Kosovo. Points to the code column in countries.csv.
-              - column:
                   name: iso_region
                   type: char(7)
                   constraints:
                     nullable: false
                   remarks: An alphanumeric code for the high-level administrative subdivision of a country where the airport is primarily located (e.g. province, governorate), prefixed by the ISO2 country code and a hyphen. OurAirports uses ISO 3166:2 codes whenever possible, preferring higher administrative levels, but also includes some custom codes. See the documentation for regions.csv.
+              - column:
+                  name: iso_country
+                  type: char(2)
+                  constraints:
+                    nullable: false
+                  remarks: The two-character ISO 3166:1-alpha2 code for the country where the airport is (primarily) located. A handful of unofficial, non-ISO codes are also in use, such as "XK" for Kosovo. Points to the code column in countries.csv.
               - column:
                   name: municipality
                   # current max length is 61
