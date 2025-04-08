@@ -39,6 +39,78 @@ databaseChangeLog:
             sql: INSERT INTO surface_kind_fixup (id, kind, normalized_kind)
               SELECT id, kind, kind FROM runway_surface_kind;
 
+        # Preprocess some embedded substrings
+        # subsequent statements will
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql:
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/ASPHALT', '/Asphalt');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/ASPH', '/Asphalt');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/APSH', '/Asphalt');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '-ASPH', '/Asphalt');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/ASP', '/Asphalt');
+
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/CLAY', '/Clay');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/clay', '/Clay');
+
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/Cdncrete', '/Concrete');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/Coccrete', '/Concrete');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/concrete', '/Concrete');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '-CONC', '-Concrete');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/CONC', '/Concrete');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/ CONC', '/Concrete');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/CON', '/Concrete');
+
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '-dirt', '-Dirt');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/dirt', '/Dirt');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '-DIRT', '-Dirt');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/DIRT', '/Dirt');
+
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/EARTH', '/Earth');
+
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '-GRASS', '-Grass');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/GRASS', '/Grass');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/grass', '/Grass');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '-grass', '-Grass');
+
+
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/GRAVEL', '/Gravel');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '-GRAVEL', '-Gravel');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, ';GRAVEL', '-Gravel');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/gravel', '/Gravel');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '-GRAV', '-Gravel');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/GRAV', '/Gravel');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '-GRVL', '-Gravel');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/GRVL', '/Gravel');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '-GVL', '-Gravel');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/GVL', '/Gravel');
+
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/grooved', '/Grooved');
+
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/PAD', '/Pad');
+
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/rock', '/Rock');
+
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/SAND', '/Sand');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '-SAND', '/Sand');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/sand', '/Sand');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '-sand', '-Sand');
+
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/ SOD', '/Sod');
+
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/soil', '/Soil');
+
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/TREATED', '/Treated');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/treated', '/Treated');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/TRTD', '/Treated');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '-TRTD', '/Treated');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, ', TRTD', '/Treated');
+
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/TURF', '/Turf');
+              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '-TURF', '-Turf');
+
+
         # Asphalt
         - sql:
             splitStatements: true
@@ -108,6 +180,22 @@ databaseChangeLog:
               SET normalized_kind = 'Brick'
               WHERE lower(kind) IN ( 'brick' );
 
+        # Caliche
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE surface_kind_fixup
+              SET normalized_kind = 'Caliche'
+              WHERE lower(kind) IN ( 'CALICHE' );
+
+        # Closed
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: UPDATE surface_kind_fixup
+              SET normalized_kind = 'Closed'
+              WHERE lower(kind) IN ( 'CLOSED' );
+
         # Clay
         - sql:
             splitStatements: true
@@ -117,8 +205,6 @@ databaseChangeLog:
               UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, 'CLAY-', 'Clay / ');
               UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, 'Clay/', 'Clay / ');
               UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, 'Clay-', 'Clay / ');
-
-              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/CLAY', '/Clay');
 
               UPDATE surface_kind_fixup
               SET normalized_kind = 'Clay'
@@ -158,12 +244,6 @@ databaseChangeLog:
               UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, 'concrete/', 'Concrete / ');
               UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, 'concrete-', 'Concrete / ');
               UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, 'Concrete and', 'Concrete / ');
-              
-              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/  CONC', '/ Concrete');
-              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/ CONC', '/ Concrete');
-              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/ Cdncrete', '/ Concrete');
-              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/ Coccrete', '/ Concrete');
-              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/ Concrete', '/ Concrete');
 
               UPDATE surface_kind_fixup
               SET normalized_kind = 'Concrete'
@@ -234,10 +314,6 @@ databaseChangeLog:
               UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, 'Dirt-', 'Dirt / ');
               UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, 'Dirt,', 'Dirt / ');
 
-              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '-DIRT', '-Dirt');
-              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/dirt', '/Dirt');
-              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/ DIRT', '/ Dirt');
-              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/ dirt', '/ Dirt');
 
               UPDATE surface_kind_fixup
               SET normalized_kind = 'Dirt'
@@ -318,11 +394,6 @@ databaseChangeLog:
               UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, 'GRASS&amp;', 'Grass / ');
               UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, 'Grassed', 'Grass / ');
 
-              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/GRASS', '/Grass');
-              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '-GRASS', '-Grass');
-              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/grass', '/Grass');
-              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '-grass', '-Grass');
-              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/ grass', '/ Grass');
 
               UPDATE surface_kind_fixup
               SET normalized_kind = 'Grass'
@@ -389,14 +460,6 @@ databaseChangeLog:
               UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, 'GRV/', 'Gravel / ');
               UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, 'GRV-', 'Gravel / ');
 
-              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '-GRVL', '-Gravel');
-              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/GRVL', '/Gravel');
-              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/GRAVEL', '/Gravel');
-              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/ GRVL', '/ Gravel');
-              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/ GRAVEL', '/ Gravel');
-              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/ GVL', '/ Gravel');
-
-              UPDATE surface_kind_fixup SET normalized_kind = replace( normalized_kind, '/ gravel', '/ Gravel');
 
                UPDATE surface_kind_fixup
                SET normalized_kind = 'Gravel'
