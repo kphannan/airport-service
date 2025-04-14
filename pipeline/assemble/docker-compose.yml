@@ -1,0 +1,47 @@
+services:
+  airport-proxy:
+    image: nginx:latest
+#    container_name: nginx
+    ports:
+      - "8080:80"
+      - "8443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - airport-network
+    depends_on:
+      - airport-service
+
+  airport-db:
+    image: arm64v8/postgres
+    environment:
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: crimson
+      POSTGRES_DB: airport
+    ports:
+      - "5433:5432"
+    networks:
+      - airport-network
+    volumes:
+      - db_data_pg:/var/lib/postgresql/data:rw,z
+
+  # Airport API server
+  airport-service:
+    image: airport:latest
+    ports:
+      - "8100:8100"
+    networks:
+      - airport-network
+    environment:
+      - DATABASE_URL=jdbc:postgresql://airport-db:5433/airport
+      - SPRING_PROFILES_ACTIVE=prod
+    depends_on:
+      - airport-db
+
+networks:
+  airport-network:
+    name: airport-network
+    driver: bridge
+
+volumes:
+  db_data_pg:
