@@ -9,13 +9,16 @@
 timeline
     title Stages of the pipeline
     Source : Write Code
-           : Unit testing
+           : Compile
+           : Test Automation (Unit, Regression...)
+           : Standards Checks (Style, Vulnerability)
            : Source Control
            : Code review
            : Pull Request
     Build : Checkout
           : Compile
-          : Quality Checks
+          : Test Automation (Unit, Regression...)
+          : Standards Checks (Style, Vulnerability)
           : Package
           : Publish
     Publish : Vulnerability checks
@@ -27,8 +30,8 @@ timeline
          : Penetration
          : Acceptance
          : Approval
-    Delivery : Staging
-             : Activating
+    Deliver : Staging
+            : Activating
 ```
 
 <!-- ```mermaid
