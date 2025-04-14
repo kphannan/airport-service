@@ -67,35 +67,35 @@ databaseChangeLog:
 
   - include:
       relativeToChangelogFile: true
-      file: 00017-index-continents.yaml
+      file: 00017-Index-continents.yaml
 
   - include:
       relativeToChangelogFile: true
-      file: 00018-index-countries.yaml
+      file: 00018-Index-countries.yaml
 
   - include:
       relativeToChangelogFile: true
-      file: 00019-index-regions.yaml
+      file: 00019-Index-regions.yaml
 
   - include:
       relativeToChangelogFile: true
-      file: 00020-index-airports.yaml
+      file: 00020-Index-airports.yaml
 
   - include:
       relativeToChangelogFile: true
-      file: 00021-index-navaids.yaml
+      file: 00021-Index-navaids.yaml
 
   - include:
       relativeToChangelogFile: true
-      file: 00022-index-airport_frequencies.yaml
+      file: 00022-Index-airport_frequencies.yaml
 
   - include:
       relativeToChangelogFile: true
-      file: 00023-index-runways.yaml
+      file: 00023-Index-runways.yaml
 
   - include:
       relativeToChangelogFile: true
-      file: 00024-index-faa_abbreviations.yaml
+      file: 00024-Index-faa_abbreviations.yaml
 
   - include:
       relativeToChangelogFile: true

@@ -131,7 +131,6 @@ public class GlobalExceptionHandler
     }
 
 
-
     /**
      * Create standard error message when the input request body contains invalid or
      * missing attributes.
@@ -140,11 +139,36 @@ public class GlobalExceptionHandler
      *
      * @return a formatted {@code ProblemDetail}.
      */
+//    @ExceptionHandler( MethodArgumentNotValidException.class )
+//    @ResponseStatus( code = HttpStatus.BAD_REQUEST )
+//    public ResponseEntity<Map<String, String>> handleRestValidationException2( WebRequest request,
+//                                                                        final MethodArgumentNotValidException exception )
+//    {
+//        Map<String, String> errors = new HashMap<>();
+//
+//        exception
+//                .getBindingResult()
+//                .getFieldErrors()
+//                .forEach( error -> errors.put( error.getField(), error.getDefaultMessage() ) );
+//
+//        return ResponseEntity.badRequest().body( errors );
+//    }
+
+
+        /**
+         * Create standard error message when the input request body contains invalid or
+         * missing attributes.
+         *
+         * @param exception the intercepted exception
+         *
+         * @return a formatted {@code ProblemDetail}.
+         */
     @ExceptionHandler( MethodArgumentNotValidException.class )
     @ResponseStatus( code = HttpStatus.BAD_REQUEST )
     public ResponseEntity<ProblemDetail> handleRestValidationException( WebRequest request,
                                                                         final MethodArgumentNotValidException exception )
     {
+        // getBindingResult()
         // List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
         // List<ObjectError> globalErrors = ex.getBindingResult().getGlobalErrors();
         // List<String> errors = new ArrayList<>(fieldErrors.size() +
@@ -177,8 +201,12 @@ public class GlobalExceptionHandler
                 // , globalError.getDefaultMessage() ) )
                 .collect( Collectors.joining( ".  \n" ) );
 
+        // exception.getBindingResult() contains fieldErrors ... build a Map of them and add them to
+        // ProblemDetails.properties -- Look at FieldError and ObjectError classes....
+
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST, detailMessage );
-        details.setTitle( "RequestBody error" );
+//        details.setTitle( "RequestBody error" );
+        details.setTitle( exception.getBindingResult().getGlobalError().getDefaultMessage() );
 
         return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );
     }

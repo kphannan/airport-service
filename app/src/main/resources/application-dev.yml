@@ -5,7 +5,7 @@ datasource:
   username: postgres
   password: crimson
   # schema: something
-  url: jdbc:postgresql://localhost:5432/airport
+  url: jdbc:postgresql://localhost:5433/airport
   driver:
     classname: org.postgresql.Driver
 
