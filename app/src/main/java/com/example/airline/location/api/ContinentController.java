@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag( name = "Continents" )
 @GlobalApiResponses
 @GlobalApiSecurityResponses
+@Log4j2
 public class ContinentController
 {
     // Autowired via constructor
@@ -57,6 +59,7 @@ public class ContinentController
     {
         this.service = service;
         this.mapper  = mapper;
+        log.error( "ContinentController c'tor" );
     }
 
 
