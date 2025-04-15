@@ -252,3 +252,6 @@ management:
     git:
       mode: full
 
+  tracing:
+    sampling:
+      probability: 1.0
