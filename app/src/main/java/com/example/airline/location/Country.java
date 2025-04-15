@@ -10,6 +10,9 @@ import lombok.Data;
 
 
 
+/**
+ * Domain model object representing a single Country.
+ */
 @Data
 @AllArgsConstructor
 public class Country

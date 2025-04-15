@@ -11,7 +11,9 @@ import lombok.Data;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-
+/**
+ * Domain model object representing a single airport.
+ */
 @Data
 @AllArgsConstructor
 public class Airport

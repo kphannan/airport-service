@@ -124,25 +124,25 @@ public class ContinentController
                 )
                 },
                 parameters = {
-                        @Parameter( name = "id", required = true, in = ParameterIn.PATH, description = "Primary Key" ),
-                        @Parameter( name = "Bearer", required = false,
-                                    schema = @Schema( implementation = String.class ),
-                                    in = ParameterIn.HEADER,
-                                    description = "Authentication / Authorization token" ),
-                        @Parameter( name = "TRACEPARENT", required = false,
-                                    schema = @Schema( implementation = String.class ),
-                                    in = ParameterIn.HEADER,
-                                    description = "Distributed tracing identifier" ),
-                        @Parameter( name = "TRACESTATE", required = false,
-                                    schema = @Schema( implementation = String.class ),
-                                    in = ParameterIn.HEADER,
-                                    description = "Vendor specific trace identification" )
+                    @Parameter( name = "id", required = true, in = ParameterIn.PATH, description = "Primary Key" ),
+                    @Parameter( name = "Bearer", required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Authentication / Authorization token" ),
+                    @Parameter( name = "TRACEPARENT", required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Distributed tracing identifier" ),
+                    @Parameter( name = "TRACESTATE", required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Vendor specific trace identification" )
                 }
     )
     @GetMapping( "/{id}" )
     @SuppressWarnings( "PMD.ShortVariable" )
-    public ResponseEntity<ContinentDTO> restGetFindContinentById( @PathVariable final Integer id, @RequestHeader HttpHeaders requestHeader )
-//    public ResponseEntity<ContinentDTO> restGetFindContinentById( @PathVariable final Integer id )
+    public ResponseEntity<ContinentDTO> restGetFindContinentById( @PathVariable final Integer id,
+                                                                  @RequestHeader HttpHeaders requestHeader )
     {
         final Optional<Continent> optionalContinent = service.findContinentById( id );
 
@@ -165,7 +165,8 @@ public class ContinentController
      * @return the ContinentDTO object if found, or a 204 No Content response if not found.
      */
     @GetMapping( "/code/{code}" )
-    public ResponseEntity<ContinentDTO> restGetFindContinentByCode( @PathVariable final String code, @RequestHeader final HttpHeaders requestHeader )
+    public ResponseEntity<ContinentDTO> restGetFindContinentByCode( @PathVariable final String code,
+                                                                    @RequestHeader final HttpHeaders requestHeader )
     {
         final Optional<Continent> optionalEntity = service.findContinentByCode( code );
 

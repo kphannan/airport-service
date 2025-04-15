@@ -11,6 +11,9 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 
+/**
+ * Domain model object representing a single Continent.
+ */
 @Data
 @AllArgsConstructor
 public class Continent

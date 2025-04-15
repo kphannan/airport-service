@@ -14,6 +14,9 @@ import org.jspecify.annotations.Nullable;
 
 
 
+/**
+ * Domain model object representing a single geographic Region.
+ */
 @Data
 @AllArgsConstructor
 public class Region

@@ -10,18 +10,26 @@ import com.example.airline.location.Continent;
 import com.example.airline.location.mapper.ContinentMapper;
 import com.example.airline.location.persistence.model.location.ContinentEntity;
 import com.example.airline.location.persistence.repository.location.ContinentRepository;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 
 
-@Component
-// @RefreshScope
+/**
+ * Spring Service (business logic) supporting the Continent domain object.
+ */
+@Service
 public class ContinentService
 {
     private final ContinentRepository repository;
 
     private final ContinentMapper mapper;
 
+    /**
+     * Create a ContinentService supported by autowire.
+     *
+     * @param repository jpa repository of Continents
+     * @param mapper maps entities to/from the domain model
+     */
     public ContinentService( final ContinentRepository repository, final ContinentMapper mapper )
     {
         this.repository = repository;
@@ -30,6 +38,11 @@ public class ContinentService
 
 
 
+    /**
+     * Retrieve a list of Continents.
+     *
+     * @return a list of Continents.
+     */
     public List<Continent> findAll()
     {
         return mapper.continentEntityToDomain( repository.findAll() );
@@ -37,6 +50,12 @@ public class ContinentService
 
 
 
+    /**
+     * Find a continent by its id.
+     *
+     * @param id the id of the desired continent.
+     * @return the optional continent if it was found.
+     */
     @SuppressWarnings( "PMD.ShortVariable" )
     public Optional<Continent> findContinentById( final Integer id )
     {
@@ -47,6 +66,12 @@ public class ContinentService
 
 
 
+    /**
+     * Find a continent by its standard two-letter code.
+     *
+     * @param code the 2-letter code.
+     * @return optionally, the continent corresponding to the code.
+     */
     public Optional<Continent> findContinentByCode( final String code )
     {
         final Optional<ContinentEntity> continentEntity = repository.findByCode( code );
@@ -60,6 +85,7 @@ public class ContinentService
     {
         if ( from.isPresent() )
         {
+            // TODO refactor mapper method to just 'entityToDomain(...)'
             final Continent continent = mapper.continentEntityToDomain( from.get() );
 
             return Optional.of( continent );
