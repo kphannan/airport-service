@@ -45,11 +45,11 @@ public class CountryEntity
     @Column( name = "continent", length = 2, nullable = false, columnDefinition = "char(2)" )
     @NonNull private String continent;
 
-    @Column( name = "wikipedia_link", length = 255)
+    @Column( name = "wikipedia_link", length = 255 )
     @Convert( converter = UriConverter.class )
     @Nullable private URI wikipediaLink;
 
-    @Column( name = "keywords", length = 255)
+    @Column( name = "keywords", length = 255 )
     @Nullable private String keywords;
 
 }

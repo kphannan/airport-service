@@ -50,7 +50,8 @@ public class GlobalExceptionHandler
      */
     @ExceptionHandler( MissingServletRequestParameterException.class )
     @ResponseStatus( code = HttpStatus.BAD_REQUEST )
-    public ResponseEntity<ProblemDetail> handleMissingServletRequestParameterException( final MissingServletRequestParameterException exception )
+    public ResponseEntity<ProblemDetail>
+    handleMissingServletRequestParameterException( final MissingServletRequestParameterException exception )
     {
 
         final StringBuilder detailMessage = new StringBuilder().append( exception.getParameterName() ).append( ", " )
@@ -74,7 +75,8 @@ public class GlobalExceptionHandler
      */
     @ExceptionHandler( HttpMediaTypeNotSupportedException.class )
     @ResponseStatus( HttpStatus.UNSUPPORTED_MEDIA_TYPE )
-    public ResponseEntity<ProblemDetail> handleUnsupportedMediaTypeException( final HttpMediaTypeNotSupportedException exception )
+    public ResponseEntity<ProblemDetail>
+    handleUnsupportedMediaTypeException( final HttpMediaTypeNotSupportedException exception )
     {
         final StringBuilder detailMessage = new StringBuilder( "Unsupported content type: " )
                 .append( exception.getContentType() ).append( "; Supported content types: " )
@@ -96,10 +98,11 @@ public class GlobalExceptionHandler
      */
     @ExceptionHandler( HttpMediaTypeNotAcceptableException.class )
     @ResponseStatus( HttpStatus.UNSUPPORTED_MEDIA_TYPE )
-    public ResponseEntity<ProblemDetail> handleUnacceptableMediaTypeException( final HttpMediaTypeNotAcceptableException exception )
+    public ResponseEntity<ProblemDetail>
+    handleUnacceptableMediaTypeException( final HttpMediaTypeNotAcceptableException exception )
     {
         final StringBuilder detailMessage = new StringBuilder( "Unsupported content type: " )
-//                .append( exception.getContentType() ).append( "; Supported content types: " )
+                // .append( exception.getContentType() ).append( "; Supported content types: " )
                 .append( MediaType.toString( exception.getSupportedMediaTypes() ) );
         final ProblemDetail details       = ProblemDetail.forStatusAndDetail( HttpStatus.UNSUPPORTED_MEDIA_TYPE,
                                                                               detailMessage.toString() );
@@ -120,8 +123,9 @@ public class GlobalExceptionHandler
     @ResponseStatus( HttpStatus.UNSUPPORTED_MEDIA_TYPE )
     public ResponseEntity<ProblemDetail> handleMediaTypeException( final HttpMediaTypeException exception )
     {
+        // TODO Message should indicate the bad media type as well as the acceptable types
         final StringBuilder detailMessage = new StringBuilder( "Unsupported content type: " )
-//                .append( exception.getContentType() ).append( "; Supported content types: " )
+                // .append( exception.getContentType() ).append( "; Supported content types: " )
                 .append( MediaType.toString( exception.getSupportedMediaTypes() ) );
         final ProblemDetail details       = ProblemDetail.forStatusAndDetail( HttpStatus.UNSUPPORTED_MEDIA_TYPE,
                                                                               detailMessage.toString() );
@@ -131,14 +135,14 @@ public class GlobalExceptionHandler
     }
 
 
-    /**
-     * Create standard error message when the input request body contains invalid or
-     * missing attributes.
-     *
-     * @param exception the intercepted exception
-     *
-     * @return a formatted {@code ProblemDetail}.
-     */
+//    /**
+//     * Create standard error message when the input request body contains invalid or
+//     * missing attributes.
+//     *
+//     * @param exception the intercepted exception
+//     *
+//     * @return a formatted {@code ProblemDetail}.
+//     */
 //    @ExceptionHandler( MethodArgumentNotValidException.class )
 //    @ResponseStatus( code = HttpStatus.BAD_REQUEST )
 //    public ResponseEntity<Map<String, String>> handleRestValidationException2( WebRequest request,
@@ -155,14 +159,14 @@ public class GlobalExceptionHandler
 //    }
 
 
-        /**
-         * Create standard error message when the input request body contains invalid or
-         * missing attributes.
-         *
-         * @param exception the intercepted exception
-         *
-         * @return a formatted {@code ProblemDetail}.
-         */
+    /**
+     * Create standard error message when the input request body contains invalid or
+     * missing attributes.
+     *
+     * @param exception the intercepted exception
+     *
+     * @return a formatted {@code ProblemDetail}.
+     */
     @ExceptionHandler( MethodArgumentNotValidException.class )
     @ResponseStatus( code = HttpStatus.BAD_REQUEST )
     public ResponseEntity<ProblemDetail> handleRestValidationException( WebRequest request,
@@ -205,7 +209,6 @@ public class GlobalExceptionHandler
         // ProblemDetails.properties -- Look at FieldError and ObjectError classes....
 
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST, detailMessage );
-//        details.setTitle( "RequestBody error" );
         details.setTitle( exception.getBindingResult().getGlobalError().getDefaultMessage() );
 
         return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );
@@ -286,8 +289,10 @@ public class GlobalExceptionHandler
     @ResponseStatus( HttpStatus.METHOD_NOT_ALLOWED )
     public ResponseEntity<ProblemDetail> handleMethodNotSupportedException( final HttpRequestMethodNotSupportedException exception )
     {
-        final StringBuilder detailMessage = new StringBuilder().append( exception.getMessage() )
-                .append( "; Supported methods: " ).append( String.join( ", ", exception.getSupportedMethods() ) );
+        final StringBuilder detailMessage = new StringBuilder()
+                .append( exception.getMessage() )
+                .append( "; Supported methods: " )
+                .append( String.join( ", ", exception.getSupportedMethods() ) );
 
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.METHOD_NOT_ALLOWED,
                                                                         detailMessage.toString() );
@@ -350,8 +355,13 @@ public class GlobalExceptionHandler
         // TODO the MDC should include the traceId (UUID) and log pattern should
         // introduce this.
         // we should not pass our traceId back to the client
-        final StringBuilder detailMessage = new StringBuilder( "A problem occurred " ).append( "logref=" )
-                .append( UUID.randomUUID() ).append( "\n" ).append( exception.getMessage() ).append( "\n" ).append( exception.getCause() );
+        final StringBuilder detailMessage = new StringBuilder( "A problem occurred " )
+                .append( "logref=" )
+                .append( UUID.randomUUID() )
+                .append( "\n" )
+                .append( exception.getMessage() )
+                .append( "\n" )
+                .append( exception.getCause() );
 
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.INTERNAL_SERVER_ERROR,
                                                                         detailMessage.toString() );

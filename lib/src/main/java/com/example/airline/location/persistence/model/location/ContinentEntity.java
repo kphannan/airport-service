@@ -44,6 +44,6 @@ public class ContinentEntity
     @Convert( converter = UriConverter.class )
     @Nullable private URI wikiLink;
 
-    @Column( name = "keywords", length = 255)
+    @Column( name = "keywords", length = 255 )
     @Nullable private String keywords; // May not need to exchange this
 }

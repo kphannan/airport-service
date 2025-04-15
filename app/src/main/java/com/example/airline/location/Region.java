@@ -5,9 +5,9 @@ package com.example.airline.location;
 
 import java.net.URI;
 
-import org.jspecify.annotations.NonNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 // TODO change code to a 2 character code...

@@ -43,7 +43,7 @@ public class ContinentController
 {
     // Autowired via constructor
     private final ContinentService service;
-    private final ContinentMapper mapper;
+    private final ContinentMapper  mapper;
 //    private final List<MediaType> restMediaTypes = List.of( MediaType.APPLICATION_JSON, MediaType.APPLICATION_YAML );
 
 
@@ -60,10 +60,9 @@ public class ContinentController
     }
 
 
-
-
     /**
      * Find all Continents.
+     *
      * @param requestHeader Request headers with authentication and tracing information.
      * @return a paged list of ContinentDTO objects.
      */
@@ -72,20 +71,23 @@ public class ContinentController
                 description = "Retrieve a paged list of Continents",
 
                 responses = { @ApiResponse( description = "Success",
-                        responseCode = "200",
-                        content = { @Content( mediaType = "application/json" /*, schema = @Schema( implementation = ContinentDTO.class ) */ ),
-                                    @Content( mediaType = "application/yaml" /*, schema = @Schema( implementation = ContinentDTO.class ) */ ),
-                                    @Content( mediaType = "application/xml"  /*, schema = @Schema( implementation = ContinentDTO.class ) */ )
-                        }
+                                            responseCode = "200",
+                                            content = { @Content( mediaType = "application/json"
+                                                    /*, schema = @Schema( implementation = ContinentDTO.class ) */ ),
+                                                        @Content( mediaType = "application/yaml"
+                                                                /*, schema = @Schema( implementation = ContinentDTO.class ) */ ),
+                                                        @Content( mediaType = "application/xml"
+                                                                /*, schema = @Schema( implementation = ContinentDTO.class ) */ )
+                                            }
                 )
                 }
 //                responses = {
 //                    @ApiResponse( description = "Success", responseCode = "200" )
-            // @ApiResponse( description = "Unauthorized", responseCode = "403" )
+                // @ApiResponse( description = "Unauthorized", responseCode = "403" )
 //    }
-    )
+                )
     @GetMapping( "" )
-    public ResponseEntity<List<ContinentDTO>> restGetFindAll()
+    public ResponseEntity<List<ContinentDTO>> restGetFindAll( @RequestHeader final HttpHeaders requestHeader )
     {
         final List<Continent> continents = service.findAll();
 
@@ -95,10 +97,10 @@ public class ContinentController
     }
 
 
-
     /**
      * Find a Continent by Id.
-     * @param id The primary key of the Continent to find.
+     *
+     * @param id            The primary key of the Continent to find.
      * @param requestHeader Request headers with authentication and tracing information.
      * @return the ContinentDTO object if found, or a 204 No Content response if not found.
      */
@@ -109,28 +111,32 @@ public class ContinentController
 //                                            content = { @Content( mediaType = "application/json",
 //                                                                  schema = @Schema( implementation = ContinentDTO.class ) )
 //                                                      }
-                              ),
+),
                 responses = { @ApiResponse( description = "Success",
                                             responseCode = "200",
-                                            content = { @Content( mediaType = "application/json", schema = @Schema( implementation = ContinentDTO.class ) ),
-                                                        @Content( mediaType = "application/yaml", schema = @Schema( implementation = ContinentDTO.class ) ),
-                                                        @Content( mediaType = "application/xml", schema = @Schema( implementation = ContinentDTO.class ) )
+                                            content = { @Content( mediaType = "application/json", schema = @Schema(
+                                                    implementation = ContinentDTO.class ) ),
+                                                        @Content( mediaType = "application/yaml", schema = @Schema(
+                                                                implementation = ContinentDTO.class ) ),
+                                                        @Content( mediaType = "application/xml", schema = @Schema(
+                                                                implementation = ContinentDTO.class ) )
                                             }
-                              )
+                )
                 },
-                parameters = { @Parameter( name = "id", required = true, in = ParameterIn.PATH, description = "Primary Key" ),
-                               @Parameter( name = "Bearer", required = false,
-                                           schema = @Schema( implementation = String.class ),
-                                           in = ParameterIn.HEADER,
-                                           description = "Authentication / Authorization token" ),
-                               @Parameter( name = "TRACEPARENT", required = false,
-                                       schema = @Schema( implementation = String.class ),
-                                       in = ParameterIn.HEADER,
-                                       description = "Distributed tracing identifier" ),
-                               @Parameter( name = "TRACESTATE", required = false,
-                                       schema = @Schema( implementation = String.class ),
-                                       in = ParameterIn.HEADER,
-                                       description = "Vendor specific trace identification" )
+                parameters = {
+                        @Parameter( name = "id", required = true, in = ParameterIn.PATH, description = "Primary Key" ),
+                        @Parameter( name = "Bearer", required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Authentication / Authorization token" ),
+                        @Parameter( name = "TRACEPARENT", required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Distributed tracing identifier" ),
+                        @Parameter( name = "TRACESTATE", required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Vendor specific trace identification" )
                 }
     )
     @GetMapping( "/{id}" )
@@ -151,10 +157,10 @@ public class ContinentController
     }
 
 
-
     /**
      * Find a Continent by code.
-     * @param code The 2-character code of the Continent to find.
+     *
+     * @param code          The 2-character code of the Continent to find.
      * @param requestHeader Request headers with authentication and tracing information.
      * @return the ContinentDTO object if found, or a 204 No Content response if not found.
      */
@@ -174,7 +180,6 @@ public class ContinentController
         return ResponseEntity.noContent().build();
         // return ResponseEntity.noContent().location().build();
     }
-
 
 
     private <T> boolean containsAny( final Collection<T> source, final Collection<T> target )
