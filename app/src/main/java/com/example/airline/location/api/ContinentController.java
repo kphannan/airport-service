@@ -94,7 +94,7 @@ public class ContinentController
     {
         final List<Continent> continents = service.findAll();
 
-        final List<ContinentDTO> dtos = mapper.continentDomainToApi( continents );
+        final List<ContinentDTO> dtos = mapper.domainToApi( continents );
 
         return ResponseEntity.ok( dtos );
     }
@@ -151,7 +151,7 @@ public class ContinentController
 
         if ( optionalContinent.isPresent() )
         {
-            final ContinentDTO dto = mapper.continentDomainToApi( optionalContinent.get() );
+            final ContinentDTO dto = mapper.domainToApi( optionalContinent.get() );
 
             return new ResponseEntity<ContinentDTO>( dto, HttpStatus.OK );
         }
@@ -175,7 +175,7 @@ public class ContinentController
 
         if ( optionalEntity.isPresent() )
         {
-            final ContinentDTO dto = mapper.continentDomainToApi( optionalEntity.get() );
+            final ContinentDTO dto = mapper.domainToApi( optionalEntity.get() );
 
             return ResponseEntity.ok( dto );
         }

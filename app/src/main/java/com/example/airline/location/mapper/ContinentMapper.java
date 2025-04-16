@@ -25,11 +25,11 @@ public interface ContinentMapper
     // --- Persistence --> Domain ---
     // --- Instance
     /** Map a single db entity instance to a domain instance. */
-    Continent continentEntityToDomain( ContinentEntity entity );
+    Continent entityToDomain( ContinentEntity entity );
 
     // --- Collection
     /** Map a list of domain instances to a list of db entity instances. */
-    List<Continent> continentEntityToDomain( List<ContinentEntity> entities );
+    List<Continent> entityToDomain( List<ContinentEntity> entities );
 
     // --- Domain --> Persistence ---
     // --- Instance
@@ -40,11 +40,11 @@ public interface ContinentMapper
     // --- Domain --> API ---
     // --- Instance
     /** Map a domain instance to an API instance. */
-    ContinentDTO continentDomainToApi( Continent continent );
+    ContinentDTO domainToApi( Continent continent );
 
     // --- Collection
     /** Map a list of domain instances to a list of API instances. */
-    List<ContinentDTO> continentDomainToApi( List<Continent> continents );
+    List<ContinentDTO> domainToApi( List<Continent> continents );
 
     // --- API --> Domain ---
     // --- Instance

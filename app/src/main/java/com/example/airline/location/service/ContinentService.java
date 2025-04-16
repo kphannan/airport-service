@@ -45,7 +45,7 @@ public class ContinentService
      */
     public List<Continent> findAll()
     {
-        return mapper.continentEntityToDomain( repository.findAll() );
+        return mapper.entityToDomain( repository.findAll() );
     }
 
 
@@ -86,7 +86,7 @@ public class ContinentService
         if ( from.isPresent() )
         {
             // TODO refactor mapper method to just 'entityToDomain(...)'
-            final Continent continent = mapper.continentEntityToDomain( from.get() );
+            final Continent continent = mapper.entityToDomain( from.get() );
 
             return Optional.of( continent );
         }

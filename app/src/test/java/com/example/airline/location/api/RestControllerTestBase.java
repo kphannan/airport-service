@@ -71,9 +71,20 @@ public abstract class RestControllerTestBase
      */
     protected MockHttpServletRequestBuilder withHeaders( MockHttpServletRequestBuilder builder )
     {
+        return withHeaders( builder, MediaType.APPLICATION_JSON );
+    }
+
+    /**
+     * Add required headers of Accept and Content-Type.
+     *
+     * @param builder the request builder
+     * @return chain the builder after adding headers
+     */
+    protected MockHttpServletRequestBuilder withHeaders( MockHttpServletRequestBuilder builder, MediaType mediaType )
+    {
         return builder
-                .header( HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE )
-                .header( HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE );
+                .header( HttpHeaders.ACCEPT, mediaType.toString() )
+                .header( HttpHeaders.CONTENT_TYPE, mediaType.toString() );
     }
 
 }

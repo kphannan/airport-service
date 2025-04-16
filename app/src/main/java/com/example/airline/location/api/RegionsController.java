@@ -74,7 +74,7 @@ public class RegionsController
     {
         final Page<Region> regions = service.findAll( pageable );
 
-        return regions.map( mapper::regionDomainToApi );
+        return regions.map( mapper::domainToApi );
     }
 
 
@@ -120,7 +120,7 @@ public class RegionsController
 
         if ( optionalRegions.isPresent() )
         {
-            final RegionDTO dto = mapper.regionDomainToApi( optionalRegions.get() );
+            final RegionDTO dto = mapper.domainToApi( optionalRegions.get() );
 
             return ResponseEntity.ok( dto );
         }
@@ -143,7 +143,7 @@ public class RegionsController
 
         if ( optionalEntity.isPresent() )
         {
-            final RegionDTO dto = mapper.regionDomainToApi( optionalEntity.get() );
+            final RegionDTO dto = mapper.domainToApi( optionalEntity.get() );
 
             return ResponseEntity.ok( dto );
         }

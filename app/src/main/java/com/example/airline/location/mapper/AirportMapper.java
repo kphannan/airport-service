@@ -25,11 +25,11 @@ public interface AirportMapper
     // --- Persistence --> Domain ---
     // --- Instance
     /** Map a single db entity instance to a domain instance. */
-    Airport airportEntityToDomain( AirportEntity entity );
+    Airport entityToDomain( AirportEntity entity );
 
     // --- Collection
     /** Map a list of domain instances to a list of db entity instances. */
-    List<Airport> airportEntityToDomain( List<AirportEntity> entities );
+    List<Airport> entityToDomain( List<AirportEntity> entities );
 
     // --- Domain --> Persistence ---
     // --- Instance
@@ -40,11 +40,11 @@ public interface AirportMapper
     // --- Domain --> API ---
     // --- Instance
     /** Map a domain instance to an API instance. */
-    AirportDTO airportDomainToApi( Airport airport );
+    AirportDTO domainToApi( Airport airport );
 
     // --- Collection
     /** Map a list of domain instances to a list of API instances. */
-    List<AirportDTO> airportDomainToApi( List<Airport> airports );
+    List<AirportDTO> domainToApi( List<Airport> airports );
 
     // --- API --> Domain ---
     // --- Instance

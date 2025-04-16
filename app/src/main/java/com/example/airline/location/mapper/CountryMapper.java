@@ -28,11 +28,11 @@ public interface CountryMapper
     // --- Persistence --> Domain ---
     // --- Instance
     /** Map a single db entity instance to a domain instance. */
-    Country countryEntityToDomain( CountryEntity entity );
+    Country entityToDomain( CountryEntity entity );
 
     // --- Collection
     /** Map a list of domain instances to a list of db entity instances. */
-    List<Country> countryEntityToDomain( List<CountryEntity> entities );
+    List<Country> entityToDomain( List<CountryEntity> entities );
 
     // --- Domain --> Persistence ---
     // --- Instance
@@ -43,11 +43,11 @@ public interface CountryMapper
     // --- Domain --> API ---
     // --- Instance
     /** Map a domain instance to an API instance. */
-    CountryDTO countryDomainToApi( Country country );
+    CountryDTO domainToApi( Country country );
 
     // --- Collection
     /** Map a list of domain instances to a list of API instances. */
-    List<CountryDTO> countryDomainToApi( List<Country> countrys );
+    List<CountryDTO> domainToApi( List<Country> countrys );
 
     // --- API --> Domain ---
     // --- Instance

@@ -55,7 +55,7 @@ public class AirportController
     {
         final Page<Airport> regions = service.findAll( pageable );
 
-        return regions.map( mapper::airportDomainToApi );
+        return regions.map( mapper::domainToApi );
     }
 
 
@@ -99,7 +99,7 @@ public class AirportController
 
         if ( optionalAirport.isPresent() )
         {
-            final AirportDTO dto = mapper.airportDomainToApi( optionalAirport.get() );
+            final AirportDTO dto = mapper.domainToApi( optionalAirport.get() );
 
             return ResponseEntity.ok( dto );
         }
@@ -116,7 +116,7 @@ public class AirportController
 
         if ( optionalEntity.isPresent() )
         {
-            final AirportDTO dto = mapper.airportDomainToApi( optionalEntity.get() );
+            final AirportDTO dto = mapper.domainToApi( optionalEntity.get() );
 
             return ResponseEntity.ok( dto );
         }
@@ -152,7 +152,7 @@ public class AirportController
                                                             null == ident ? "" : ident.toUpperCase( Locale.US ),
                                                             null == name ? "" : name.toUpperCase( Locale.US ), paging );
 
-        return result.map( mapper::airportDomainToApi );
+        return result.map( mapper::domainToApi );
     }
 
 }

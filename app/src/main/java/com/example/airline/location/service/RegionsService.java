@@ -48,7 +48,7 @@ public class RegionsService
     {
         final Page<RegionEntity> regions = repository.findAll( pageable );
 
-        return regions.map( mapper::regionEntityToDomain );
+        return regions.map( mapper::entityToDomain );
     }
 
 
@@ -66,7 +66,7 @@ public class RegionsService
 
         if ( countryEntity.isPresent() )
         {
-            final Region country = mapper.regionEntityToDomain( countryEntity.get() );
+            final Region country = mapper.entityToDomain( countryEntity.get() );
 
             return Optional.of( country );
         }
@@ -88,7 +88,7 @@ public class RegionsService
 
         if ( countryEntity.isPresent() )
         {
-            final Region country = mapper.regionEntityToDomain( countryEntity.get() );
+            final Region country = mapper.entityToDomain( countryEntity.get() );
 
             return Optional.of( country );
         }

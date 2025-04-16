@@ -74,7 +74,7 @@ public class CountryController
     {
         final Page<Country> countries = service.findAll( pageable );
 
-        return countries.map( mapper::countryDomainToApi );
+        return countries.map( mapper::domainToApi );
     }
 
 
@@ -120,7 +120,7 @@ public class CountryController
 
         if ( optionalCountry.isPresent() )
         {
-            final CountryDTO dto = mapper.countryDomainToApi( optionalCountry.get() );
+            final CountryDTO dto = mapper.domainToApi( optionalCountry.get() );
 
             return ResponseEntity.ok( dto );
         }
@@ -143,7 +143,7 @@ public class CountryController
 
         if ( optionalEntity.isPresent() )
         {
-            final CountryDTO dto = mapper.countryDomainToApi( optionalEntity.get() );
+            final CountryDTO dto = mapper.domainToApi( optionalEntity.get() );
 
             return ResponseEntity.ok( dto );
         }

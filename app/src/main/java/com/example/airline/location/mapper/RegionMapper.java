@@ -26,11 +26,11 @@ public interface RegionMapper
     // --- Persistence --> Domain ---
     // --- Instance
     /** Map a single db entity instance to a domain instance. */
-    Region regionEntityToDomain( RegionEntity dto );
+    Region entityToDomain( RegionEntity dto );
 
     // --- Collection
     /** Map a list of domain instances to a list of db entity instances. */
-    List<Region> regionEntityToDomain( List<RegionEntity> dtos );
+    List<Region> entityToDomain( List<RegionEntity> dtos );
 
     // --- Domain --> Persistence ---
     // --- Instance
@@ -41,11 +41,11 @@ public interface RegionMapper
     // --- Domain --> API ---
     // --- Instance
     /** Map a domain instance to an API instance. */
-    RegionDTO regionDomainToApi( Region region );
+    RegionDTO domainToApi( Region region );
 
     // --- Collection
     /** Map a list of domain instances to a list of API instances. */
-    List<RegionDTO> regionDomainToApi( List<Region> regions );
+    List<RegionDTO> domainToApi( List<Region> regions );
 
     // --- API --> Domain ---
     // --- Instance

@@ -49,7 +49,7 @@ public class CountryService
     {
         final Page<CountryEntity> countries = repository.findAll( pageable );
 
-        return countries.map( mapper::countryEntityToDomain );
+        return countries.map( mapper::entityToDomain );
     }
 
 
@@ -67,7 +67,7 @@ public class CountryService
 
         if ( countryEntity.isPresent() )
         {
-            final Country country = mapper.countryEntityToDomain( countryEntity.get() );
+            final Country country = mapper.entityToDomain( countryEntity.get() );
 
             return Optional.of( country );
         }
@@ -89,7 +89,7 @@ public class CountryService
 
         if ( countryEntity.isPresent() )
         {
-            final Country country = mapper.countryEntityToDomain( countryEntity.get() );
+            final Country country = mapper.entityToDomain( countryEntity.get() );
 
             return Optional.of( country );
         }

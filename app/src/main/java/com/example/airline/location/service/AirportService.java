@@ -50,7 +50,7 @@ public class AirportService
     {
         final Page<AirportEntity> airports = repository.findAll( pageable );
 
-        return airports.map( mapper::airportEntityToDomain );
+        return airports.map( mapper::entityToDomain );
     }
 
 
@@ -109,7 +109,7 @@ public class AirportService
     {
         final Page<AirportEntity> entities = repository.advancedQuery( iataCode, icaoCode, ident, name, paging );
 
-        return entities.map( mapper::airportEntityToDomain );
+        return entities.map( mapper::entityToDomain );
     }
 
 
@@ -119,7 +119,7 @@ public class AirportService
         if ( entity.isPresent() )
         {
             // TODO refactor mapper method to be 'entityToDomain(...)'
-            return Optional.of( mapper.airportEntityToDomain( entity.get() ) );
+            return Optional.of( mapper.entityToDomain( entity.get() ) );
         }
 
         return Optional.ofNullable( null );
