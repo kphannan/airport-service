@@ -19,9 +19,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 // @EnableCaching
 // @EnableZuulProxy
 // @EnableFeignClients
-// @EnableJpaRepositories("com.airline.locationservice.repository")
-// @EnableJpaRepositories( "com.airline.locationservice" )
-@EnableJpaRepositories( "com.example.airline.location" )
+// @EnableJpaRepositories - JpaConfiguration is in a configuration class in ./config
 public final class AirportServiceApplication
 {
 
