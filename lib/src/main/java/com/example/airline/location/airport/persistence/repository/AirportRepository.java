@@ -6,6 +6,7 @@ package com.example.airline.location.airport.persistence.repository;
 import java.util.Optional;
 
 import com.example.airline.location.persistence.model.airport.AirportEntity;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -29,7 +30,7 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
      * @return the located page, whose body contains the found records.
      */
     @Override
-    Page<AirportEntity> findAll( Pageable paging );
+    @NonNull Page<AirportEntity> findAll( @NonNull Pageable paging );
 
     /**
      * Lookup a {@code Airport} by its unique identifier.

@@ -6,6 +6,7 @@ package com.example.airline.location.region.persistence.repository;
 import java.util.Optional;
 
 import com.example.airline.location.persistence.model.location.RegionEntity;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -68,5 +69,5 @@ public interface RegionsRepository extends PagingAndSortingRepository<RegionEnti
      * @return the paged result of {@code Region}s.
      */
     @Override
-    Page<RegionEntity> findAll( Pageable paging );
+    @NonNull Page<RegionEntity> findAll( @NonNull Pageable paging );
 }

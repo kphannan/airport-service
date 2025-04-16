@@ -1,10 +1,6 @@
 package com.example.airline.location.region.api;
 
 
-//import static org.assertj.core.api.Assertions.assertThat;
-//import static org.assertj.core.api.Assertions.*;
-//import static org.junit.jupiter.api.Assertions.assertAll;
-//import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -14,11 +10,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Optional;
 
-//import com.example.airline.location.api.RestControllerTestBase;
-import com.example.airline.location.continent.api.ContinentController;
-import com.example.airline.location.region.mapper.RegionMapper;
 import com.example.airline.location.persistence.model.location.RegionEntity;
-import com.example.airline.location.region.model.Region;
+import com.example.airline.location.region.mapper.RegionMapper;
 import com.example.airline.location.region.persistence.repository.RegionsRepository;
 import com.example.airline.location.region.service.RegionsService;
 import org.junit.jupiter.api.Test;

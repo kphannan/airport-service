@@ -108,7 +108,6 @@ Once an artifact has satisfied tests it moves on to the `Deplivery` phase.
 
 Here `Deploy` specifically means deployment to the production environment.  There is a more fundamental meaning of deploy which is the delivery and activation of an artifact to an environment.
 
-
 ## Assemble
 
 Assembles artifacts that will move through the pipeline.
@@ -127,6 +126,3 @@ Declares the topology of an environment.
 ## Stages
 
 Declares the stage or phase of pipeline.
-
-## Test
-

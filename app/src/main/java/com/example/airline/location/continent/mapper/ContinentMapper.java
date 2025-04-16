@@ -5,11 +5,10 @@ package com.example.airline.location.continent.mapper;
 
 import java.util.List;
 
-import com.example.airline.location.continent.model.Continent;
 import com.example.airline.location.ContinentDTO;
+import com.example.airline.location.continent.model.Continent;
 import com.example.airline.location.persistence.model.location.ContinentEntity;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 
 /**

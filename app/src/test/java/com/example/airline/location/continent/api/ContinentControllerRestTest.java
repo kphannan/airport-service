@@ -4,8 +4,6 @@ package com.example.airline.location.continent.api;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -18,16 +16,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 import java.util.Optional;
 
-import com.example.airline.location.continent.model.Continent;
 import com.example.airline.location.continent.mapper.ContinentMapper;
-import com.example.airline.location.persistence.model.location.ContinentEntity;
-import com.example.airline.location.persistence.repository.airport.AirportCodeIataRepository;
-import com.example.airline.location.persistence.repository.airport.AirportCodeIcaoRepository;
-import com.example.airline.location.airport.persistence.repository.AirportRepository;
+import com.example.airline.location.continent.model.Continent;
 import com.example.airline.location.continent.persistence.repository.ContinentRepository;
-import com.example.airline.location.country.persistence.repository.CountryRepository;
-import com.example.airline.location.region.persistence.repository.RegionsRepository;
 import com.example.airline.location.continent.service.ContinentService;
+import com.example.airline.location.persistence.model.location.ContinentEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -107,40 +100,37 @@ class ContinentControllerRestTest
     @Autowired
     protected MockMvc mvc;
 
-//    @MockitoBean
-//    @Spy
     @Autowired
+    @SuppressWarnings( "unused" )
     private ContinentService service;
 
-//    @MockitoBean
     @Autowired
+    @SuppressWarnings( "unused" )
     private ContinentMapper mapper;
-//    @Spy
-//    private ContinentMapper mapper = Mappers.getMapper( ContinentMapper.class );
 
     @MockitoBean
     private ContinentRepository repository;
 
     // TODO Excludes don't seem to work either as a REGEX, or @Repository annotation or explicitly listed
-    @MockitoBean
-    private RegionsRepository regionsRepository;    // ???
-    @MockitoBean
-    private AirportRepository airportRepository;    // ???
-    @MockitoBean
-    private CountryRepository         countryRepository;    // ???
-    @MockitoBean
-    private AirportCodeIcaoRepository airportCodeIcaoRepository;    // ???
-    @MockitoBean
-    private AirportCodeIataRepository airportCodeIataRepository;    // ???
+//     @MockitoBean
+//     private RegionsRepository regionsRepository;    // ???
+//     @MockitoBean
+//     private AirportRepository airportRepository;    // ???
+//     @MockitoBean
+//     private CountryRepository         countryRepository;    // ???
+//     @MockitoBean
+//     private AirportCodeIcaoRepository airportCodeIcaoRepository;    // ???
+//     @MockitoBean
+//     private AirportCodeIataRepository airportCodeIataRepository;    // ???
 
 
     @Test
     void restGetById_withId_returns() throws Exception
     {
-        ContinentEntity continentEntity = new ContinentEntity( 1, "NA", "North", null, null );
-        Continent continent = new Continent( 1, "NA", "North", null, null );
+        final ContinentEntity continentEntity = new ContinentEntity( 1, "NA", "North", null, null );
+        final Continent continent = new Continent( 1, "NA", "North", null, null );
 //        RequestBuilder request = withHeaders( MockMvcRequestBuilders.get("/api/v1/location/continent/{id}", 123 ) );
-        RequestBuilder request = withHeaders( MockMvcRequestBuilders.get("/location/continent/{id}", 1 ) );
+        final RequestBuilder request = withHeaders( MockMvcRequestBuilders.get("/location/continent/{id}", 1 ) );
 
 //        when(repository.findById( any() ))
 //                .thenReturn( Optional.ofNullable( null ) );
@@ -152,13 +142,13 @@ class ContinentControllerRestTest
 //                .thenCallRealMethod();
 
 
-        MvcResult result = mvc
+        final MvcResult result = mvc
                 .perform( request )
                 //.andExpect( content().contentTypeCompatibleWith( "application/json" ) )
                 //.andExpect( result().ok() )
                 .andReturn();
 
-        MockHttpServletResponse response = result.getResponse();
+        final MockHttpServletResponse response = result.getResponse();
 
         // TODO need to assert the resulting JSON....
         assertAll( () -> assertEquals( HttpStatus.OK.value(), result.getResponse().getStatus() ),
@@ -177,19 +167,19 @@ class ContinentControllerRestTest
     void restGetById_withTextId_returnsBadRequestWithProblemDetail() throws Exception
     {
         // --- given
-        RequestBuilder request = withHeaders( MockMvcRequestBuilders.get( "/location/continent/code" ) );
+        final RequestBuilder request = withHeaders( MockMvcRequestBuilders.get( "/location/continent/code" ) );
 
         when(repository.findByCode( anyString() ))
                 .thenReturn( Optional.ofNullable( null ) );
 
 
         // --- when
-        MvcResult result = mvc
+        final MvcResult result = mvc
                 .perform( request )
                 .andDo( print() )
                 .andExpect( status().isBadRequest() )
                 .andReturn();
-        MockHttpServletResponse response = result.getResponse();
+        final MockHttpServletResponse response = result.getResponse();
 
         // --- then
         // TODO examine the ProblemDetail
@@ -202,15 +192,15 @@ class ContinentControllerRestTest
     void restGetByCode_withCode_returnsSuccess() throws Exception
     {
         // --- given
-        ContinentEntity continentEntity = new ContinentEntity( 1, "ZZ", "::NAME::", null, null  );
-        RequestBuilder request = withHeaders( MockMvcRequestBuilders.get( "/location/continent/code/{code}", "ZZ" ) );
+        final ContinentEntity continentEntity = new ContinentEntity( 1, "ZZ", "::NAME::", null, null  );
+        final RequestBuilder request = withHeaders( MockMvcRequestBuilders.get( "/location/continent/code/{code}", "ZZ" ) );
 
         when(repository.findByCode( eq("ZZ" ) ))
                 .thenReturn( Optional.of( continentEntity ) );
 
 
         // --- when
-        MvcResult result = mvc
+        final MvcResult result = mvc
                 .perform( request )
                 .andExpect( status().isOk() )
                 .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ))
@@ -222,8 +212,8 @@ class ContinentControllerRestTest
                 .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
                 .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
                 .andReturn();
-        MockHttpServletResponse response = result.getResponse();
-        String jsonString =
+        final MockHttpServletResponse response = result.getResponse();
+        final String jsonString =
                 """
                 {
                    "id": 1,
@@ -253,18 +243,18 @@ class ContinentControllerRestTest
     void restGetByCode_withInvalidCode_returnsNoContent() throws Exception
     {
         // --- given
-        RequestBuilder request = withHeaders( MockMvcRequestBuilders.get( "/location/continent/code/{code}", "ZZ" ) );
+        final RequestBuilder request = withHeaders( MockMvcRequestBuilders.get( "/location/continent/code/{code}", "ZZ" ) );
 
         when(repository.findByCode( anyString() ))
                 .thenReturn( Optional.ofNullable( null ) );
 
 
         // --- when
-        MvcResult result = mvc
+        final MvcResult result = mvc
                 .perform( request )
                 .andExpect( status().isNoContent() )
                 .andReturn();
-        MockHttpServletResponse response = result.getResponse();
+        final MockHttpServletResponse response = result.getResponse();
 
         // --- then
         assertThat( response.getContentAsString() )
@@ -275,19 +265,19 @@ class ContinentControllerRestTest
     void restGetByCode_withNoCode_returnsNotFoundWithProblemDetail() throws Exception
     {
         // --- given
-        RequestBuilder request = withHeaders( MockMvcRequestBuilders.get( "/location/continent/code/" ) );
+        final RequestBuilder request = withHeaders( MockMvcRequestBuilders.get( "/location/continent/code/" ) );
 
         when(repository.findByCode( anyString() ))
                 .thenReturn( Optional.ofNullable( null ) );
 
 
         // --- when
-        MvcResult result = mvc
+        final MvcResult result = mvc
                 .perform( request )
                 .andDo( print() )
                 .andExpect( status().isNotFound() )
                 .andReturn();
-        MockHttpServletResponse response = result.getResponse();
+        final MockHttpServletResponse response = result.getResponse();
 
         // --- then
         // TODO examine the ProblemDetail
@@ -300,20 +290,20 @@ class ContinentControllerRestTest
     void restGetAll_returnsSuccess() throws Exception
     {
         // --- given
-        ContinentEntity continentEntity = new ContinentEntity( 1, "ZZ", "::NAME::", null, null  );
-        List<ContinentEntity> resultList =
+        // ContinentEntity continentEntity = new ContinentEntity( 1, "ZZ", "::NAME::", null, null  );
+        final List<ContinentEntity> resultList =
                 List.of(
                         new ContinentEntity( 1, "XX", "::XNAMEX::", null, null  ),
                         new ContinentEntity( 2, "YY", "::YNAMEY::", null, null  ),
                         new ContinentEntity( 3, "ZZ", "::ZNAMEZ::", null, null  )
                                             );
-        RequestBuilder request = withHeaders( MockMvcRequestBuilders.get( "/location/continent" ) );
+        final RequestBuilder request = withHeaders( MockMvcRequestBuilders.get( "/location/continent" ) );
 
         when(repository.findAll())
                 .thenReturn( resultList );
 
         // --- when
-        MvcResult result = mvc
+        final MvcResult result = mvc
                 .perform( request )
                 .andExpect( status().isOk() )
                 .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ))
@@ -326,8 +316,8 @@ class ContinentControllerRestTest
 //                .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
 //                .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
                 .andReturn();
-        MockHttpServletResponse response = result.getResponse();
-        String jsonString =
+        final MockHttpServletResponse response = result.getResponse();
+        final String jsonString =
                 """
                 [
                     {
