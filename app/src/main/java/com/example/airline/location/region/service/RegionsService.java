@@ -5,6 +5,8 @@ package com.example.airline.location.region.service;
 
 import java.util.Optional;
 
+import com.example.airline.location.continent.model.Continent;
+import com.example.airline.location.persistence.model.location.ContinentEntity;
 import com.example.airline.location.region.model.Region;
 import com.example.airline.location.region.mapper.RegionMapper;
 import com.example.airline.location.persistence.model.location.RegionEntity;
@@ -46,9 +48,9 @@ public class RegionsService
      */
     public Page<Region> findAll( final Pageable pageable )
     {
-        final Page<RegionEntity> regions = repository.findAll( pageable );
+        final Page<RegionEntity> pageItems = repository.findAll( pageable );
 
-        return regions.map( mapper::entityToDomain );
+        return pageItems.map( mapper::entityToDomain );
     }
 
 
@@ -62,16 +64,7 @@ public class RegionsService
     @SuppressWarnings( "PMD.ShortVariable" )
     public Optional<Region> findRegionById( final Integer id )
     {
-        final Optional<RegionEntity> countryEntity = repository.findById( id );
-
-        if ( countryEntity.isPresent() )
-        {
-            final Region country = mapper.entityToDomain( countryEntity.get() );
-
-            return Optional.of( country );
-        }
-
-        return Optional.ofNullable( null );
+        return mapOptionalEntityToDomain( repository.findById( id ) );
     }
 
 
@@ -84,16 +77,35 @@ public class RegionsService
      */
     public Optional<Region> findRegionByCode( final String code )
     {
-        final Optional<RegionEntity> countryEntity = repository.findByCode( code );
+        return mapOptionalEntityToDomain( repository.findByCode( code ) );
+    }
 
-        if ( countryEntity.isPresent() )
+
+
+
+    private Optional<Region> mapOptionalEntityToDomain( final Optional<RegionEntity> from )
+    {
+        if ( from.isPresent() )
         {
-            final Region country = mapper.entityToDomain( countryEntity.get() );
+            final Region item = mapper.entityToDomain( from.get() );
 
-            return Optional.of( country );
+            return Optional.of( item );
         }
 
         return Optional.ofNullable( null );
     }
+
+
+//    private <T,S> Optional<T> mapOptional( final Optional<S> from )
+//    {
+//        if ( from.isPresent() )
+//        {
+//            final T item = mapper.entityToDomain( from.get() );
+//
+//            return Optional.of( item );
+//        }
+//
+//        return Optional.ofNullable( null );
+//    }
 
 }

@@ -11,6 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.StringJoiner;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -38,6 +40,7 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 class NumberFormatTest
 {
     @Test
+    @DisplayName( "NumberFormat is a proper utility class" )
     void isUtility()
     {
         final StringJoiner reason = new StringJoiner( "; ", "[", "]" );
@@ -49,53 +52,59 @@ class NumberFormatTest
     // ----- Exceptions -----
 
 
-
-    @Test
-    void binaryString_shortWithNegativeBits_throwsIlllegalArgumentException()
+    @Nested
+    @DisplayName( "An exception is thrown when")
+    class Exceptions
     {
-        final Throwable thrown = assertThrows( IllegalArgumentException.class,
-                                               () -> NumberFormat.toBinaryString( (short)0xDEAF, 4, -1 ) );
 
-        assertEquals( "-1 bits exceeds the length (64) of a long primative", thrown.getMessage() );
+        @Test
+        @DisplayName( "number of bits to display is negative" )
+        void binaryString_shortWithNegativeBits_throwsIllegalArgumentException()
+        {
+            final Throwable thrown = assertThrows( IllegalArgumentException.class,
+                                                   () -> NumberFormat.toBinaryString( (short)0xDEAF, 4, -1 ) );
+
+            assertEquals( "-1 bits exceeds the length (64) of a long primitive", thrown.getMessage() );
+        }
+
+
+        @Test
+        @DisplayName( "asked to display 17 bits for a short (16 bit value)" )
+        void binaryString_shortWith17Bits_throwsIllegalArgumentException()
+        {
+            final Throwable thrown = assertThrows( IllegalArgumentException.class,
+                                                   () -> NumberFormat.toBinaryString( (short)0xDEAF, 4, 17 ) );
+
+            assertEquals( "17 bits exceeds the length (16) of a short primitive", thrown.getMessage() );
+        }
+
+
+        @Test
+        @DisplayName( "asked to display 33 bits for a int (32 bit value)" )
+        void binaryString_intWith33Bits_throwsIllegalArgumentException()
+        {
+            final Throwable thrown = assertThrows( IllegalArgumentException.class,
+                                                   () -> NumberFormat.toBinaryString( 0xDEADBEEF, 4, 33 ) );
+
+            assertEquals( "33 bits exceeds the length (32) of a int primitive", thrown.getMessage() );
+        }
+
+
+        @Test
+        @DisplayName( "asked to display 65 bits for a long (65 bit value)" )
+        void binaryString_longWith65Bits_throwsIllegalArgumentException()
+        {
+            final Throwable thrown = assertThrows( IllegalArgumentException.class,
+                                                   () -> NumberFormat.toBinaryString( 0xBEADCAFEFACEFADEL, 4, 65 ) );
+
+            assertEquals( "65 bits exceeds the length (64) of a long primitive", thrown.getMessage() );
+        }
     }
-
-
-
-    @Test
-    void binaryString_shortWith17Bits_throwsIlllegalArgumentException()
-    {
-        final Throwable thrown = assertThrows( IllegalArgumentException.class,
-                                               () -> NumberFormat.toBinaryString( (short)0xDEAF, 4, 17 ) );
-
-        assertEquals( "17 bits exceeds the length (16) of a short primative", thrown.getMessage() );
-    }
-
-
-
-    @Test
-    void binaryString_intWith33Bits_throwsIlllegalArgumentException()
-    {
-        final Throwable thrown = assertThrows( IllegalArgumentException.class,
-                                               () -> NumberFormat.toBinaryString( 0xDEADBEEF, 4, 33 ) );
-
-        assertEquals( "33 bits exceeds the length (32) of a int primative", thrown.getMessage() );
-    }
-
-
-
-    @Test
-    void binaryString_longWith65Bits_throwsIlllegalArgumentException()
-    {
-        final Throwable thrown = assertThrows( IllegalArgumentException.class,
-                                               () -> NumberFormat.toBinaryString( 0xBEADCAFEFACEFADEL, 4, 65 ) );
-
-        assertEquals( "65 bits exceeds the length (64) of a long primative", thrown.getMessage() );
-    }
-
 
 
     /** A bit size of zero (0) is a trivial case that produces and empty string. */
     @Test
+    @DisplayName( "Zero bits is an empty string" )
     void binaryString_zeroBits_returnsEmptyString()
     {
         final String value = NumberFormat.toBinaryString( 0xDEAF, 4, 0 );
@@ -107,6 +116,7 @@ class NumberFormatTest
 
 
     @Test
+    @DisplayName( "16 bits format correctly" )
     void binaryString_shortArg_returnsFormattedString()
     {
         final short  number = (short)0xDEAF;
@@ -119,6 +129,7 @@ class NumberFormatTest
 
 
     @Test
+    @DisplayName( "32 bits format correctly" )
     void binaryString_intArg_returnsFormattedString()
     {
         final String value = NumberFormat.toBinaryString( 0xDEADBEEF, 4, 32 );
@@ -130,6 +141,7 @@ class NumberFormatTest
 
 
     @Test
+    @DisplayName( "64 bits format correctly" )
     void binaryString_longArg_returnsFormattedString()
     {
         final String value = NumberFormat.toBinaryString( 0xBEADCAFEFACEFADEL, 4, 64 );
@@ -141,11 +153,9 @@ class NumberFormatTest
     /** Parameterized test input for {@code toBinaryString()}. */
     private static final class SimpleFormatProvider implements ArgumentsProvider
     {
-
         @Override
         public Stream<? extends Arguments> provideArguments( ExtensionContext context ) throws Exception
         {
-
             return Stream.of( Arguments.of( 0, 0, 0, "" ), //
                               Arguments.of( 0, 1, 1, "0" ), //
                               Arguments.of( 1, 1, 1, "1" ), //
@@ -159,7 +169,9 @@ class NumberFormatTest
         }
     }
 
-    @ParameterizedTest
+    @DisplayName( "format various length integers" )
+//    @ParameterizedTest( name = "{3} is produced by binaryString( {0}, {1}, {2} )" )
+    @ParameterizedTest( name = "{2} bits with grouping {1} is ({3})" )
     @ArgumentsSource( SimpleFormatProvider.class )
     void binaryString_validInput_returnCorrectString( final long number,
                                                       final int groupSize,

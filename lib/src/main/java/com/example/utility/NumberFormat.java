@@ -62,7 +62,7 @@ public final class NumberFormat
         if ( bits > 16 )
         {
             throw new IllegalArgumentException(
-                    String.format( "%d bits exceeds the length (16) of a short primative", bits ) );
+                    String.format( "%d bits exceeds the length (16) of a short primitive", bits ) );
         }
 
         return toBinaryString( (long)number, groupSize, bits );
@@ -86,7 +86,7 @@ public final class NumberFormat
         if ( bits > 32 )
         {
             throw new IllegalArgumentException(
-                    String.format( "%d bits exceeds the length (32) of a int primative", bits ) );
+                    String.format( "%d bits exceeds the length (32) of a int primitive", bits ) );
         }
 
         return toBinaryString( (long)number, groupSize, bits );
@@ -110,7 +110,7 @@ public final class NumberFormat
         if ( bits < 0 || bits > 64 )
         {
             throw new IllegalArgumentException(
-                    String.format( "%d bits exceeds the length (64) of a long primative", bits ) );
+                    String.format( "%d bits exceeds the length (64) of a long primitive", bits ) );
         }
 
         final StringBuilder result = new StringBuilder();

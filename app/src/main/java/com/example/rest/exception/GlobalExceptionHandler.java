@@ -238,7 +238,12 @@ public class GlobalExceptionHandler
         // ProblemDetails.properties -- Look at FieldError and ObjectError classes....
 
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST, detailMessage );
-        details.setTitle( exception.getBindingResult().getGlobalError().getDefaultMessage() );
+        // var y = exception.getBindingResult().getAllErrors().getFirst();
+        // var x = exception.getBindingResult();
+        // x.getAllErrors().getFirst();
+        var globalError = exception.getBindingResult().getGlobalError();
+        final String title = globalError == null ? "" : globalError.getDefaultMessage();
+        details.setTitle( title );
 
         return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );
     }

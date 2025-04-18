@@ -24,6 +24,27 @@ public final class StringUtility
 
 
     /**
+     * Null safe check if a {@code substring} is found within (@code target}.
+     *
+     * @param target    the string to examine.
+     * @param criteria the possible sub-string.
+     *
+     * @return true if the substring is found, false otherwise.
+     */
+    public static boolean nullSafeContains( @Nullable final String target,
+                                            @Nullable final String criteria )
+    {
+        if ( null == target || null == criteria )
+        {
+            return false;
+        }
+
+        return target.contains( criteria );
+    }
+
+
+
+    /**
      * Iterate over the elements in the collection {@code messages} checking each
      * element for {@code desiredSubstring} as a substring within the element.
      *
@@ -33,12 +54,12 @@ public final class StringUtility
      *
      * @return true if the {@code desiredString} is present.
      */
-    public static boolean contains( final List<String> messages,
-                                    final String desiredString )
+    public static boolean inAnyOf( final List<String> messages,
+                                   final String criteria )
     {
         if ( null != messages && !messages.isEmpty() )
         {
-            return null != desiredString && messages.stream().anyMatch( e -> 0 <= e.indexOf( desiredString ) );
+            return null != criteria && messages.stream().anyMatch( e -> 0 <= e.indexOf( criteria ) );
         }
 
         return false;
@@ -46,24 +67,6 @@ public final class StringUtility
 
 
 
-    /**
-     * Null safe check if a {@code substring} is found within (@code target}.
-     *
-     * @param target    the string to examine.
-     * @param substring the possible sub-string.
-     *
-     * @return true if the substring is found, false otherwise.
-     */
-    public static boolean hasMatchingSubstring( @Nullable final String target,
-                                                @Nullable final String substring )
-    {
-        if ( null == target || null == substring )
-        {
-            return false;
-        }
-
-        return target.contains( substring );
-    }
 
 
 
@@ -75,8 +78,8 @@ public final class StringUtility
      *
      * @return true if one of the substrings is found, false otherwise.
      */
-    public static boolean hasMatchingSubstring( @Nullable final String target,
-                                                @Nullable final Collection<String> substrings )
+    public static boolean hasAnyOf( @Nullable final String target,
+                                    @Nullable final Collection<String> substrings )
     {
         if ( null == substrings )
         {
@@ -85,7 +88,7 @@ public final class StringUtility
 
         for ( final String substring : substrings )
         {
-            if ( hasMatchingSubstring( target, substring ) )
+            if ( nullSafeContains( target, substring ) )
             {
                 return true;
             }
@@ -104,8 +107,8 @@ public final class StringUtility
      *
      * @return true if one of the substrings is found, false otherwise.
      */
-    public static boolean hasAllMatchingSubstring( @Nullable final String target,
-                                                   @Nullable final Collection<String> substrings )
+    public static boolean hasAllOf( @Nullable final String target,
+                                    @Nullable final Collection<String> substrings )
     {
         if ( null == substrings )
         {
@@ -114,7 +117,7 @@ public final class StringUtility
 
         for ( final String substring : substrings )
         {
-            if ( !hasMatchingSubstring( target, substring ) )
+            if ( !nullSafeContains( target, substring ) )
             {
                 return false;
             }

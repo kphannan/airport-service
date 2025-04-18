@@ -1,6 +1,7 @@
 package com.example.airline.location.continent.api;
 
 
+import static com.example.rest.utility.HeaderUtility.withHeaders;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,6 +13,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -112,29 +115,19 @@ class ContinentControllerRestTest
     private ContinentRepository repository;
 
     // TODO Excludes don't seem to work either as a REGEX, or @Repository annotation or explicitly listed
-//     @MockitoBean
-//     private RegionsRepository regionsRepository;    // ???
-//     @MockitoBean
-//     private AirportRepository airportRepository;    // ???
-//     @MockitoBean
-//     private CountryRepository         countryRepository;    // ???
-//     @MockitoBean
-//     private AirportCodeIcaoRepository airportCodeIcaoRepository;    // ???
-//     @MockitoBean
-//     private AirportCodeIataRepository airportCodeIataRepository;    // ???
 
 
     @Test
-    void restGetById_withId_returns() throws Exception
+    void restGetById_withId_returnsItem() throws Exception
     {
         final ContinentEntity continentEntity = new ContinentEntity( 1, "NA", "North", null, null );
         final Continent continent = new Continent( 1, "NA", "North", null, null );
-//        RequestBuilder request = withHeaders( MockMvcRequestBuilders.get("/api/v1/location/continent/{id}", 123 ) );
-        final RequestBuilder request = withHeaders( MockMvcRequestBuilders.get("/location/continent/{id}", 1 ) );
+//        RequestBuilder request = withHeaders( get("/api/v1/location/continent/{id}", 123 ) );
+        final RequestBuilder request = withHeaders( get("/location/continent/{id}", 1 ) );
 
 //        when(repository.findById( any() ))
 //                .thenReturn( Optional.ofNullable( null ) );
-        when(repository.findById( anyInt() ))
+        when(repository.findById( eq( 1 ) ))
                 .thenReturn( Optional.of( continentEntity ) );
 //        when(service.findContinentById( any() ))
 //                .thenReturn( Optional.of( continent ) );
@@ -163,11 +156,37 @@ class ContinentControllerRestTest
 //                .isEqualToIgnoreCase( "foo" );
     }
 
+
+
+    @Test
+    void restGetById_withWrongId_returnsNoContent() throws Exception
+    {
+        // --- given
+        final RequestBuilder request = withHeaders( get("/location/continent/{id}", 1 ) );
+
+        when(repository.findById( anyInt() ))
+                .thenReturn( Optional.ofNullable( null ) );
+
+        // --- when
+        final MvcResult result = mvc
+                .perform( request )
+                .andDo( print() )
+                .andReturn();
+
+        // --- then
+        final MockHttpServletResponse response = result.getResponse();
+
+        assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() )
+                 );
+    }
+
+
+
     @Test
     void restGetById_withTextId_returnsBadRequestWithProblemDetail() throws Exception
     {
         // --- given
-        final RequestBuilder request = withHeaders( MockMvcRequestBuilders.get( "/location/continent/code" ) );
+        final RequestBuilder request = withHeaders( get( "/location/continent/code" ) );
 
         when(repository.findByCode( anyString() ))
                 .thenReturn( Optional.ofNullable( null ) );
@@ -189,11 +208,11 @@ class ContinentControllerRestTest
 
 
     @Test
-    void restGetByCode_withCode_returnsSuccess() throws Exception
+    void restGetByCode_withCode_returnsItem() throws Exception
     {
         // --- given
         final ContinentEntity continentEntity = new ContinentEntity( 1, "ZZ", "::NAME::", null, null  );
-        final RequestBuilder request = withHeaders( MockMvcRequestBuilders.get( "/location/continent/code/{code}", "ZZ" ) );
+        final RequestBuilder request = withHeaders( get( "/location/continent/code/{code}", "ZZ" ) );
 
         when(repository.findByCode( eq("ZZ" ) ))
                 .thenReturn( Optional.of( continentEntity ) );
@@ -243,7 +262,7 @@ class ContinentControllerRestTest
     void restGetByCode_withInvalidCode_returnsNoContent() throws Exception
     {
         // --- given
-        final RequestBuilder request = withHeaders( MockMvcRequestBuilders.get( "/location/continent/code/{code}", "ZZ" ) );
+        final RequestBuilder request = withHeaders( get( "/location/continent/code/{code}", "ZZ" ) );
 
         when(repository.findByCode( anyString() ))
                 .thenReturn( Optional.ofNullable( null ) );
@@ -265,7 +284,7 @@ class ContinentControllerRestTest
     void restGetByCode_withNoCode_returnsNotFoundWithProblemDetail() throws Exception
     {
         // --- given
-        final RequestBuilder request = withHeaders( MockMvcRequestBuilders.get( "/location/continent/code/" ) );
+        final RequestBuilder request = withHeaders( get( "/location/continent/code/" ) );
 
         when(repository.findByCode( anyString() ))
                 .thenReturn( Optional.ofNullable( null ) );
@@ -297,7 +316,7 @@ class ContinentControllerRestTest
                         new ContinentEntity( 2, "YY", "::YNAMEY::", null, null  ),
                         new ContinentEntity( 3, "ZZ", "::ZNAMEZ::", null, null  )
                                             );
-        final RequestBuilder request = withHeaders( MockMvcRequestBuilders.get( "/location/continent" ) );
+        final RequestBuilder request = withHeaders( get( "/location/continent" ) );
 
         when(repository.findAll())
                 .thenReturn( resultList );
@@ -310,7 +329,7 @@ class ContinentControllerRestTest
                 // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
                 //      don't complain about lack of assertions in tests
                 .andDo( print() )
-//                .andExpect( jsonPath( "$.id" ).value( 1 ) )
+                .andExpect( jsonPath( "$[0].id" ).value( 1 ) )
 //                .andExpect( jsonPath( "$.code" ).value( "ZZ" ) )
 //                .andExpect( jsonPath( "$.name" ).value( "::NAME::" ) )
 //                .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
@@ -353,23 +372,6 @@ class ContinentControllerRestTest
 
 //        JSONAssert.assertEquals
 
-    }
-
-
-
-
-
-    /**
-     * Add required headers of Accept and Content-Type.
-     *
-     * @param builder the request builder
-     * @return chain the builder after adding headers
-     */
-    private MockHttpServletRequestBuilder withHeaders( MockHttpServletRequestBuilder builder )
-    {
-        return builder
-                .header( HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE )
-                .header( HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE );
     }
 
 }

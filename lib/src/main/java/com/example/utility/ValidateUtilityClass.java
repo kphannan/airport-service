@@ -75,7 +75,7 @@ public final class ValidateUtilityClass
      * @throws ExceptionInInitializerError if the initialization provoked by this
      *                                     method fails.
      */
-    public static boolean isProperUtilityClass( final Class<?> clazz,
+    public static synchronized boolean isProperUtilityClass( final Class<?> clazz,
                                                 final StringJoiner reason )
     {
         int mask = isClassFinal( clazz, reason ) ? 0b0001 : 0b0101; // 1 or 5
@@ -123,7 +123,7 @@ public final class ValidateUtilityClass
 
 
     /* default */
-    static boolean isClassFinal( final Class<?> clazz,
+    static synchronized boolean isClassFinal( final Class<?> clazz,
                                  final StringJoiner reason )
     {
         final boolean isFinal = Modifier.isFinal( clazz.getModifiers() );
@@ -138,7 +138,7 @@ public final class ValidateUtilityClass
 
 
     /* default */
-    static boolean hasOnlyOneConstructor( final Class<?> clazz,
+    static synchronized boolean hasOnlyOneConstructor( final Class<?> clazz,
                                           final StringJoiner reason )
     {
         final boolean hasSingleConstructor = 1 == clazz.getDeclaredConstructors().length;
@@ -154,7 +154,7 @@ public final class ValidateUtilityClass
 
 
     /* default */
-    static boolean assertAllMethodsAreStatic( final Class<?> clazz,
+    static synchronized boolean assertAllMethodsAreStatic( final Class<?> clazz,
                                               final StringJoiner reason )
     {
         boolean hasAllStaticMethods = true;
@@ -182,7 +182,7 @@ public final class ValidateUtilityClass
 
 
     /* default */
-    static boolean isConstructorPrivate( final Class<?> clazz,
+    static synchronized boolean isConstructorPrivate( final Class<?> clazz,
                                          final StringJoiner reason )
     {
         try
@@ -217,7 +217,7 @@ public final class ValidateUtilityClass
      */
     @SuppressWarnings( { "PMD.UnusedPrivateField" } )
     /* default */
-    static boolean isInstantiationDenied( final Class<?> clazz,
+    static synchronized boolean isInstantiationDenied( final Class<?> clazz,
                                           final StringJoiner reason )
     {
         Object instance = null;
@@ -230,7 +230,7 @@ public final class ValidateUtilityClass
 
             instance = constructor.newInstance();
 
-            // If the class is instantiated, the is an error. Explain why.
+            // If the class is instantiated, there is an error. Explain why.
             reason.add( String.format( "'%s': Must prevent instantiation", clazz.getName() ) );
         }
         catch ( NoSuchMethodException ex )

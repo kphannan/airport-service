@@ -47,6 +47,8 @@ public interface RegionMapper
     /** Map a list of domain instances to a list of API instances. */
     List<RegionDTO> domainToApi( List<Region> regions );
 
+//    <T,S> T entityToDomain( S s );
+
     // --- API --> Domain ---
     // --- Instance
     // --- Collection
