@@ -35,12 +35,12 @@ buildscript {
 
         // --- Testing ---
         // --- Unit Test
-        junitVersion                = '5.9.2'
+        junitVersion                = '5.12.2'
         // logcaptorVersion            = '2.10.1'
 
         // --- Mutation Testing
         pitPluginVersion            = '1.15.0'
-        pitVersion                  = '1.19.0'
+        pitVersion                  = '1.19.1'
 
         // --- BDD / REST Testing
         karateVersion               = '1.5.1'

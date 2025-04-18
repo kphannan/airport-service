@@ -7,7 +7,7 @@ springCloudVersion = '2024.0.1'
 #
 lombokVersion = '8.13.1'
 versioningVersion = '3.1.0'
-logcaptorVersion = '2.10.1'
+logcaptorVersion = '2.10.2'
 jacksonDatabindVersion = '2.18.2'
 mapstructVersion = '1.6.3'
 jakartaAnnotationVersion = '3.0.0'
