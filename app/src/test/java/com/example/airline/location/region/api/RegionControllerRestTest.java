@@ -4,6 +4,7 @@ package com.example.airline.location.region.api;
 import static com.example.rest.utility.HeaderUtility.withHeaders;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -34,6 +35,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -134,6 +136,30 @@ class RegionControllerRestTest //extends RestControllerTestBase
 
     }
 
+    @Test
+    void restGetById_withBadId_returnsNoContent() throws Exception
+    {
+        // --- given
+        final RequestBuilder request = withHeaders( get( "/location/region/{id}", 99 ) );
+
+        when(repository.findById( anyInt() ))
+                .thenReturn( Optional.ofNullable( null ) );
+
+
+        // --- when
+        final MvcResult result = mvc
+                .perform( request )
+                .andExpect( status().isNoContent() )
+                .andReturn();
+        MockHttpServletResponse response = result.getResponse();
+
+        // --- then
+        assertThat( response.getStatus() )
+                .isEqualTo( HttpStatus.NO_CONTENT.value() );
+//        assertThat( response.getContentType() )
+//                .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+    }
+
 
     @Test
     void restGetByCode_withValidCode_returnsItem() throws Exception
@@ -183,6 +209,29 @@ class RegionControllerRestTest //extends RestControllerTestBase
                 .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
     }
 
+    @Test
+    void restGetByCode_withBadCode_returnsNoContent() throws Exception
+    {
+        // --- given
+        final RequestBuilder request = withHeaders( get( "/location/region/code/{code}", "ZZ" ) );
+
+        when(repository.findByCode( anyString() ))
+                .thenReturn( Optional.ofNullable( null ) );
+
+        // --- when
+        final MvcResult result = mvc
+                .perform( request )
+                .andExpect( status().isNoContent() )
+//                .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ))
+                .andReturn();
+        MockHttpServletResponse response = result.getResponse();
+
+        // --- then
+        assertThat( response.getStatus() )
+                .isEqualTo( HttpStatus.NO_CONTENT.value() );
+//        assertThat( response.getContentType() )
+//                .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+    }
 
 
     @Test

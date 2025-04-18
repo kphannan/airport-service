@@ -41,7 +41,7 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
      * @return the record if found.
      */
     @SuppressWarnings( "PMD.ShortVariable" )
-    Optional<AirportEntity> findAirportById( Long id );
+    Optional<AirportEntity> findById( Long id );
 
     /**
      * Find an airport from its commonly used identifier, often this is the iata
@@ -51,7 +51,7 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
      *
      * @return the DB entry for the target airport.
      */
-    Optional<AirportEntity> findAirportByIdent( String ident );
+    Optional<AirportEntity> findByIdent( String ident );
 
     /**
      * Search for {@code Airport} records that contain any of the query parameters.

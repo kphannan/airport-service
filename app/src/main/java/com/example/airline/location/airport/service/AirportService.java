@@ -65,7 +65,7 @@ public class AirportService
     @SuppressWarnings( "PMD.ShortVariable" )
     public Optional<Airport> findAirportById( final Long id )
     {
-        final Optional<AirportEntity> airportEntity = repository.findAirportById( id );
+        final Optional<AirportEntity> airportEntity = repository.findById( id );
 
         return mapEntityToDomain( airportEntity );
     }
@@ -82,7 +82,7 @@ public class AirportService
      */
     public Optional<Airport> findAirportByIdent( final String code )
     {
-        final Optional<AirportEntity> airportEntity = repository.findAirportByIdent( code );
+        final Optional<AirportEntity> airportEntity = repository.findByIdent( code );
 
         return mapEntityToDomain( airportEntity );
     }
