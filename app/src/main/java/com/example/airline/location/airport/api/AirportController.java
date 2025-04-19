@@ -61,11 +61,11 @@ public class AirportController
 
 
     @Operation( method = "GET",
-            summary = "Find a Continent by Id",
-            description = "Find a Continent by Id",
+            summary = "Find a Airport by Id",
+            description = "Find a Airport by Id",
             requestBody = @RequestBody( required = false
 //                                            content = { @Content( mediaType = "application/json",
-//                                                                  schema = @Schema( implementation = ContinentDTO.class ) )
+//                                                                  schema = @Schema( implementation = AirportDTO.class ) )
 //                                                      }
             ),
             responses = { @ApiResponse( description = "Success",
