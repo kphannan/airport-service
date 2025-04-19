@@ -22,6 +22,8 @@ import com.example.airline.location.country.persistence.repository.CountryReposi
 import com.example.airline.location.country.service.CountryService;
 import com.example.airline.location.persistence.model.location.CountryEntity;
 import com.example.rest.utility.PageableAssert;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,47 +69,50 @@ class CountryControllerRestTest //extends RestControllerTestBase
 //                             .build();
 //    }
 
-
-    @Test
-    void restGetById_withValidId_returnsItem() throws Exception
+    @Nested
+    @DisplayName( "/country - HTTP GET")
+    class Get
     {
-        // --- given
-        final CountryEntity countryEntity = new CountryEntity( 1,  "XXX", "::NAME::", "AS", null, null );
-        final RequestBuilder request = withHeaders( get( "/location/country/{id}", 1 ) );
+        @Test
+        void restGetById_withValidId_returnsItem() throws Exception
+        {
+            // --- given
+            final CountryEntity countryEntity = new CountryEntity( 1,  "XXX", "::NAME::", "AS", null, null );
+            final RequestBuilder request = withHeaders( get( "/location/country/{id}", 1 ) );
 
-        when(repository.findById( any() ))
-                .thenReturn( Optional.of( countryEntity ) );
+            when(repository.findById( any() ))
+                    .thenReturn( Optional.of( countryEntity ) );
 
 
-        // --- when
-        final MvcResult result = mvc
-                .perform( request )
-                .andExpect( status().isOk() )
-                .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ))
-                // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
-                //      don't complain about lack of assertions in tests
-                .andExpect( jsonPath( "$.id" ).value( 1 ) )
-                .andExpect( jsonPath( "$.code" ).value( "XXX" ) )
-                .andExpect( jsonPath( "$.name" ).value( "::NAME::" ) )
-                .andExpect( jsonPath( "$.continent" ).value( "AS" ) )
-                .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
-                .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
-                .andReturn();
-        MockHttpServletResponse response = result.getResponse();
-        String jsonString =
-                """
-                {
-                   "id": 1,
-                   "code: "ZZZ",
-                   "localCode": "LCL",
-                   "name": "foo",
-                   "country": "ZZ",
-                   "continent": "NA"
-                }
-                """;
+            // --- when
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andExpect( status().isOk() )
+                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ))
+                    // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
+                    //      don't complain about lack of assertions in tests
+                    .andExpect( jsonPath( "$.id" ).value( 1 ) )
+                    .andExpect( jsonPath( "$.code" ).value( "XXX" ) )
+                    .andExpect( jsonPath( "$.name" ).value( "::NAME::" ) )
+                    .andExpect( jsonPath( "$.continent" ).value( "AS" ) )
+                    .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
+                    .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
+                    .andReturn();
+            MockHttpServletResponse response = result.getResponse();
+            String jsonString =
+                    """
+                    {
+                       "id": 1,
+                       "code: "ZZZ",
+                       "localCode": "LCL",
+                       "name": "foo",
+                       "country": "ZZ",
+                       "continent": "NA"
+                    }
+                    """;
 //        MediaType.
-        // --- then
-        // TODO need to assert the resulting JSON....
+            // --- then
+            // TODO need to assert the resulting JSON....
 
 //        assertThat( MediaType.parseMediaType( response.getContentType() ))
 //        MediaType.parseMediaType( response.getContentType() ).isCompatibleWith( MediaType.APPLICATION_JSON );;
@@ -115,10 +120,10 @@ class CountryControllerRestTest //extends RestControllerTestBase
 //                .isCompatibleWith( MediaType.APPLICATION_JSON );
 //        assertThat( response ).isNotNull();
 
-        assertThat( response.getContentType() )
-                .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+            assertThat( response.getContentType() )
+                    .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
 
-        //        assertThat( result.getResponse() )
+            //        assertThat( result.getResponse() )
 ////                .startsWith( "Foo" )
 //                .isEqualToIgnoreCase( "foo" );
 //        assertThat( response )
@@ -127,175 +132,193 @@ class CountryControllerRestTest //extends RestControllerTestBase
 
 //        JSONAssert.assertEquals
 
-    }
+        }
 
-    @Test
-    void restGetById_withBadId_returnsNoContent() throws Exception
-    {
-        // --- given
-        final RequestBuilder request = withHeaders( get( "/location/country/{id}", 99 ) );
+        @Test
+        void restGetById_withBadId_returnsNoContent() throws Exception
+        {
+            // --- given
+            final RequestBuilder request = withHeaders( get( "/location/country/{id}", 99 ) );
 
-        when(repository.findById( anyInt() ))
-                .thenReturn( Optional.ofNullable( null ) );
+            when(repository.findById( anyInt() ))
+                    .thenReturn( Optional.ofNullable( null ) );
 
 
-        // --- when
-        final MvcResult result = mvc
-                .perform( request )
-                .andExpect( status().isNoContent() )
-                .andReturn();
-        MockHttpServletResponse response = result.getResponse();
+            // --- when
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andExpect( status().isNoContent() )
+                    .andReturn();
+            MockHttpServletResponse response = result.getResponse();
 
-        // --- then
-        assertThat( response.getStatus() )
-                .isEqualTo( HttpStatus.NO_CONTENT.value() );
+            // --- then
+            assertThat( response.getStatus() )
+                    .isEqualTo( HttpStatus.NO_CONTENT.value() );
 //        assertThat( response.getContentType() )
 //                .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
-    }
+        }
 
 
-    @Test
-    void restGetByCode_withValidCode_returnsItem() throws Exception
-    {
-        // --- given
-        final CountryEntity countryEntity = new CountryEntity(2,  "XXX", "::NAME::", "NA", null, null );
-        final RequestBuilder request = withHeaders( get( "/location/country/code/{code}", 1 ) );
+        @Test
+        void restGetByCode_withValidCode_returnsItem() throws Exception
+        {
+            // --- given
+            final CountryEntity countryEntity = new CountryEntity(2,  "XXX", "::NAME::", "NA", null, null );
+            final RequestBuilder request = withHeaders( get( "/location/country/code/{code}", 1 ) );
 
-        when(repository.findByCode( anyString() ))
-                .thenReturn( Optional.of( countryEntity ) );
-
-
-        // --- when
-        final MvcResult result = mvc
-                .perform( request )
-                .andExpect( status().isOk() )
-                .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ))
-                // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
-                //      don't complain about lack of assertions in tests
-                .andExpect( jsonPath( "$.id" ).value( 2 ) )
-                .andExpect( jsonPath( "$.code" ).value( "XXX" ) )
-                .andExpect( jsonPath( "$.name" ).value( "::NAME::" ) )
-                .andExpect( jsonPath( "$.continent" ).value( "NA" ) )
-                .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
-                .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
-                .andReturn();
-        MockHttpServletResponse response = result.getResponse();
-        String jsonString =
-                """
-                {
-                   "id": 2,
-                   "code: "XXX",
-                   "name": "::NAME::",
-                   "continent": "NA"
-                }
-                """;
-
-        // --- then
-        // TODO need to assert the resulting JSON....
-
-        assertThat( response.getContentType() )
-                .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
-    }
-
-    @Test
-    void restGetByCode_withBadCode_returnsNoContent() throws Exception
-    {
-        // --- given
-        final RequestBuilder request = withHeaders( get( "/location/country/code/{code}", "ZZ" ) );
-
-        when(repository.findByCode( anyString() ))
-                .thenReturn( Optional.ofNullable( null ) );
-
-        // --- when
-        final MvcResult result = mvc
-                .perform( request )
-                .andExpect( status().isNoContent() )
-//                .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ))
-                .andReturn();
-        MockHttpServletResponse response = result.getResponse();
-
-        // --- then
-        assertThat( response.getStatus() )
-                .isEqualTo( HttpStatus.NO_CONTENT.value() );
-//        assertThat( response.getContentType() )
-//                .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
-    }
+            when(repository.findByCode( anyString() ))
+                    .thenReturn( Optional.of( countryEntity ) );
 
 
-    @Test
-    void restGetAll_returnsSuccess() throws Exception
-    {
-        // --- given
-        // ContinentEntity continentEntity = new ContinentEntity( 1, "ZZ", "::NAME::", null, null  );
-        final List<CountryEntity> entities =
-                List.of(
-                        new CountryEntity( 1,  "XXX", "::X_NAME_X::", "AS", null, null ),
-                        new CountryEntity( 2,  "YYY", "::Y_NAME_Y::", "AS", null, null ),
-                        new CountryEntity( 3,  "ZZZ", "::Z_NAME_Z::", "AS", null, null )
-                       );
-        final RequestBuilder request = withHeaders( get( "/location/country" ) )
-                .param( "page", "5" )
-                .param( "size", "10" )
-                .param( "sort", "id,desc" )    // <-- no space after comma!
-                .param( "sort", "name,asc" );  // <-- no space after comma!
-
-        Page<CountryEntity> page = new PageImpl( entities );
-        when(repository.findAll( any( Pageable.class ) ) )
-                .thenReturn( page );
-
-        // --- when
-        final MvcResult result = mvc
-                .perform( request )
-                .andExpect( status().isOk() )
-                .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ))
-                // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
-                //      don't complain about lack of assertions in tests
-                .andDo( print() )
-                .andExpect( jsonPath( "$.content[0].id" ).value( 1 ) )
-                .andExpect( jsonPath( "$.content[0].code" ).value( "XXX" ) )
-                .andExpect( jsonPath( "$.content[0].name" ).value( "::X_NAME_X::" ) )
-                .andExpect( jsonPath( "$.content[0].wikipediaLink" ).doesNotExist() )
-                .andExpect( jsonPath( "$.content[0].keywords" ).doesNotExist() )
-                .andReturn();
-        final MockHttpServletResponse response = result.getResponse();
-        final String jsonString =
-                """
-                [
-                    {
-                       "id": 1,
-                       "code: "XX",
-                       "name": "::XNAMEX::"
-                    },
+            // --- when
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andExpect( status().isOk() )
+                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ))
+                    // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
+                    //      don't complain about lack of assertions in tests
+                    .andExpect( jsonPath( "$.id" ).value( 2 ) )
+                    .andExpect( jsonPath( "$.code" ).value( "XXX" ) )
+                    .andExpect( jsonPath( "$.name" ).value( "::NAME::" ) )
+                    .andExpect( jsonPath( "$.continent" ).value( "NA" ) )
+                    .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
+                    .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
+                    .andReturn();
+            MockHttpServletResponse response = result.getResponse();
+            String jsonString =
+                    """
                     {
                        "id": 2,
-                       "code: "YY",
-                       "name": "::YNAMEY::"
-                    },
-                    {
-                       "id": 3,
-                       "code: "ZZ",
-                       "name": "::ZNAMEZ::"
+                       "code: "XXX",
+                       "name": "::NAME::",
+                       "continent": "NA"
                     }
-                ]
-                """;
+                    """;
 
-        // --- then
-        // TODO need to assert the resulting JSON....
-        final ArgumentCaptor<Pageable> pageableCaptor =
-                ArgumentCaptor.forClass( Pageable.class );
-        verify( repository ).findAll( pageableCaptor.capture() );
-        final PageRequest pageable = (PageRequest) pageableCaptor.getValue();
+            // --- then
+            // TODO need to assert the resulting JSON....
+
+            assertThat( response.getContentType() )
+                    .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+        }
+
+        @Test
+        void restGetByCode_withBadCode_returnsNoContent() throws Exception
+        {
+            // --- given
+            final RequestBuilder request = withHeaders( get( "/location/country/code/{code}", "ZZ" ) );
+
+            when(repository.findByCode( anyString() ))
+                    .thenReturn( Optional.ofNullable( null ) );
+
+            // --- when
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andExpect( status().isNoContent() )
+//                .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ))
+                    .andReturn();
+            MockHttpServletResponse response = result.getResponse();
+
+            // --- then
+            assertThat( response.getStatus() )
+                    .isEqualTo( HttpStatus.NO_CONTENT.value() );
+//        assertThat( response.getContentType() )
+//                .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+        }
 
 
-        PageableAssert
-                .assertThat( pageable )
-                .hasPageNumber( 5 )
-                .hasPageSize( 10 )
-                .hasSort( "name", Sort.Direction.ASC )
-                .hasSort( "id", Sort.Direction.DESC );
+        @Test
+        void restGetAll_returnsSuccess() throws Exception
+        {
+            // --- given
+            // ContinentEntity continentEntity = new ContinentEntity( 1, "ZZ", "::NAME::", null, null  );
+            final List<CountryEntity> entities =
+                    List.of(
+                            new CountryEntity( 1,  "XXX", "::X_NAME_X::", "AS", null, null ),
+                            new CountryEntity( 2,  "YYY", "::Y_NAME_Y::", "AS", null, null ),
+                            new CountryEntity( 3,  "ZZZ", "::Z_NAME_Z::", "AS", null, null )
+                           );
+            final RequestBuilder request = withHeaders( get( "/location/country" ) )
+                    .param( "page", "5" )
+                    .param( "size", "10" )
+                    .param( "sort", "id,desc" )    // <-- no space after comma!
+                    .param( "sort", "name,asc" );  // <-- no space after comma!
 
-        assertThat( response.getContentType() )
-                .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+            Page<CountryEntity> page = new PageImpl( entities );
+            when(repository.findAll( any( Pageable.class ) ) )
+                    .thenReturn( page );
+
+            // --- when
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andExpect( status().isOk() )
+                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ))
+                    // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
+                    //      don't complain about lack of assertions in tests
+                    .andDo( print() )
+                    .andExpect( jsonPath( "$.content[0].id" ).value( 1 ) )
+                    .andExpect( jsonPath( "$.content[0].code" ).value( "XXX" ) )
+                    .andExpect( jsonPath( "$.content[0].name" ).value( "::X_NAME_X::" ) )
+                    .andExpect( jsonPath( "$.content[0].wikipediaLink" ).doesNotExist() )
+                    .andExpect( jsonPath( "$.content[0].keywords" ).doesNotExist() )
+                    .andReturn();
+            final MockHttpServletResponse response = result.getResponse();
+            final String jsonString =
+                    """
+                    [
+                        {
+                           "id": 1,
+                           "code: "XX",
+                           "name": "::XNAMEX::"
+                        },
+                        {
+                           "id": 2,
+                           "code: "YY",
+                           "name": "::YNAMEY::"
+                        },
+                        {
+                           "id": 3,
+                           "code: "ZZ",
+                           "name": "::ZNAMEZ::"
+                        }
+                    ]
+                    """;
+
+            // --- then
+            // TODO need to assert the resulting JSON....
+            final ArgumentCaptor<Pageable> pageableCaptor =
+                    ArgumentCaptor.forClass( Pageable.class );
+            verify( repository ).findAll( pageableCaptor.capture() );
+            final PageRequest pageable = (PageRequest) pageableCaptor.getValue();
+
+
+            PageableAssert
+                    .assertThat( pageable )
+                    .hasPageNumber( 5 )
+                    .hasPageSize( 10 )
+                    .hasSort( "name", Sort.Direction.ASC )
+                    .hasSort( "id", Sort.Direction.DESC );
+
+            assertThat( response.getContentType() )
+                    .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+        }
     }
+
+    @Nested
+    @DisplayName( "/country - HTTP POST")
+    class Post
+    {}
+
+    @Nested
+    @DisplayName( "/country - HTTP PUT")
+    class Put
+    {}
+
+    @Nested
+    @DisplayName( "/country - HTTP DELETE")
+    class Delete
+    {}
+
+
 
 }
