@@ -13,7 +13,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.security.SecuritySchemes;
 import io.swagger.v3.oas.annotations.servers.Server;
-
+import io.swagger.v3.oas.models.annotations.OpenAPI31;
 
 
 @OpenAPIDefinition( info = @Info( contact = @Contact( name = "Kevin", email = "kphannan@gmail.com" ),
@@ -23,9 +23,10 @@ import io.swagger.v3.oas.annotations.servers.Server;
                                   license = @License( name = "GNU General Public License, Version 3.0", url = "https://www.gnu.org/licenses/gpl-3.0.en.html" ),
                                   termsOfService = "Terms of Service"
                     ),
+
                     servers = {
-                        @Server( description = "Local developer", url = "http://localhost:8100" ),
-                        @Server( description = "Shared Dev", url = "http://localhost:8080" )
+                        @Server( description = "Local developer", url = "http://localhost:8100/api/v1" ),
+                        @Server( description = "Shared Dev", url = "http://localhost:8080/api/v1" )
                     },
                     security = @SecurityRequirement( name = "bearerAuth" )
 )
