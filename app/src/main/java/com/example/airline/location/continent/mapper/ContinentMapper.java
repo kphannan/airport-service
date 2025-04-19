@@ -32,6 +32,7 @@ public interface ContinentMapper
 
     // --- Domain --> Persistence ---
     // --- Instance
+    ContinentEntity domainToEntity( Continent domain );
     // --- Collection
 
     // ------------------------
@@ -47,5 +48,6 @@ public interface ContinentMapper
 
     // --- API --> Domain ---
     // --- Instance
+    Continent apiToDomain( ContinentDTO dto );
     // --- Collection
 }

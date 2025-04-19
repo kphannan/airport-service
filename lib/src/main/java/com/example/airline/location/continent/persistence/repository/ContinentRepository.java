@@ -19,6 +19,16 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ContinentRepository extends JpaRepository<ContinentEntity, Integer>
 {
+
+    /**
+     * Determine if an element exists in the DB.
+     *
+     * @param id must not be {@literal null}.
+     * @return
+     */
+    @Override
+    public  boolean existsById( final Integer id );
+
     /**
      * Retrieve all {@code Continent} records.
      *
@@ -36,7 +46,7 @@ public interface ContinentRepository extends JpaRepository<ContinentEntity, Inte
      */
     @SuppressWarnings( "PMD.ShortVariable" )
     @Override
-    @NonNull Optional<ContinentEntity> findById( @NonNull Integer id );
+    @NonNull ContinentEntity getReferenceById( @NonNull Integer id );
 
     /**
      * Find a single {@code Continent} by its 2 character code.
@@ -72,4 +82,14 @@ public interface ContinentRepository extends JpaRepository<ContinentEntity, Inte
     // * @return the paged result of {@code Continent}s.
     // */
     // List<Continent> findByContinent( final String continent );
+
+
+
+    // ========== Create ==========
+    public ContinentEntity save( ContinentEntity entity );
+
+    // ========== Update ==========
+    // ========== Delete ==========
+    public void delete( ContinentEntity entity );
+    public void deleteById( Integer id );
 }

@@ -37,7 +37,6 @@ public final class HeaderUtility
      */
     public static  MockHttpServletRequestBuilder withHeaders( final MockHttpServletRequestBuilder builder, final MediaType mediaType )
     {
-        // TODO don't add the header/value if it already exists.
         return builder
                 .header( HttpHeaders.ACCEPT, mediaType.toString() )
                 .header( HttpHeaders.CONTENT_TYPE, mediaType.toString() );

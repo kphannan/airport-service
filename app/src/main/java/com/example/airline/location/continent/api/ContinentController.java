@@ -23,10 +23,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 // TODO Trace header.... https://github.com/w3c/trace-context/blob/main/spec/20-http_request_header_format.md
@@ -143,18 +148,18 @@ public class ContinentController
     public ResponseEntity<ContinentDTO> restGetFindContinentById( @PathVariable final Integer id,
                                                                   @RequestHeader HttpHeaders requestHeader )
     {
-        final Optional<Continent> optionalContinent = service.findById( id );
+        final Optional<Continent> optionalContinent = service.getReferenceById( id );
 
         if ( optionalContinent.isPresent() )
         {
             final ContinentDTO dto = mapper.domainToApi( optionalContinent.get() );
 
-            return new ResponseEntity<ContinentDTO>( dto, HttpStatus.OK );
+            return ResponseEntity.ok( dto );
+//            return new ResponseEntity<>( dto, HttpStatus.OK );
         }
 
         return ResponseEntity.noContent().build();
     }
-
 
     /**
      * Find a Continent by code.
@@ -182,16 +187,111 @@ public class ContinentController
     }
 
 
-//    private <T> boolean containsAny( final Collection<T> source, final Collection<T> target )
-//    {
-//        for ( final T value : target )
-//        {
-//            if ( source.contains( value ) )
-//            {
-//                return true;
-//            }
-//        }
+
+
+    // ===== POST =====
+    @PostMapping( "" )
+    public ResponseEntity<ContinentDTO> restPostAddContinent( @RequestHeader HttpHeaders requestHeader )
+    {
+//        final Optional<Continent> optionalContinent = service.findById( id );
 //
-//        return false;
+//        if ( optionalContinent.isPresent() )
+//        {
+//            final ContinentDTO dto = mapper.domainToApi( optionalContinent.get() );
+//
+//            return new ResponseEntity<ContinentDTO>( dto, HttpStatus.OK );
+//        }
+
+        return ResponseEntity.noContent().build();
+    }
+
+
+
+    // ===== PUT =====
+//    @PutMapping( "/{id}" )
+    @PutMapping( "" )
+    @SuppressWarnings( "PMD.ShortVariable" )
+    public ResponseEntity<ContinentDTO> restPutContinentById( //@PathVariable( "id" ) final Integer id,
+                                                              @org.springframework.web.bind.annotation.RequestBody ContinentDTO continentDTO,
+                                                              @RequestHeader HttpHeaders requestHeader )
+    {
+        Continent continent = service.update( mapper.apiToDomain( continentDTO ) );
+        if ( null != continent )
+        {
+            return ResponseEntity.ok( mapper.domainToApi( continent ) );
+        }
+
+        // The item is not in the DB.  If client intention is to insert
+        // then a POST should have been used.
+        return ResponseEntity
+                .status( HttpStatus.CONFLICT )
+//                .body( "Continent does not exist" );
+                .build();
+    }
+
+    // ===== DELETE =====
+    @DeleteMapping( "/{id}" )
+    @SuppressWarnings( "PMD.ShortVariable" )
+    public ResponseEntity<ContinentDTO> restDeleteContinentById( @PathVariable final Integer id,
+                                                                 @RequestHeader HttpHeaders requestHeader )
+    {
+        // Delete is idempotent and will return NO_CONTENT regardless if
+        // the item was deleted, or if it didn't exist.
+        service.deleteById( id );
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping( "" )
+    @SuppressWarnings( "PMD.ShortVariable" )
+    public ResponseEntity<ContinentDTO> restDelete( @org.springframework.web.bind.annotation.RequestBody ContinentDTO continentDTO,
+                                                    @RequestHeader HttpHeaders requestHeader )
+    {
+        // Delete is idempotent and will return NO_CONTENT regardless if
+        // the item was deleted, or if it didn't exist.
+        service.deleteById( continentDTO.getId() );
+
+        return ResponseEntity.noContent().build();
+    }
+
+    // ===== PATCH =====
+    @PatchMapping( "/{id}" )
+    @SuppressWarnings( "PMD.ShortVariable" )
+    public ResponseEntity<ContinentDTO> restPatchContinentById( @PathVariable final Integer id,
+                                                                     @RequestHeader HttpHeaders requestHeader )
+    {
+        return ResponseEntity.noContent().build();
+    }
+
+    // ===== Options =====
+    @RequestMapping( value = "", method = RequestMethod.OPTIONS )
+    public ResponseEntity<Void> restOptionsContinent( @RequestHeader HttpHeaders requestHeader )
+    {
+        // "detail": "Request method 'DELETE' is not supported; Supported methods: HEAD, TRACE, POST, GET, OPTIONS",
+
+        return ResponseEntity.noContent().build();
+    }
+
+    // ===== HEAD =====
+    @RequestMapping( value = "", method = RequestMethod.HEAD )
+    public ResponseEntity<Void> restHeadContinent( @RequestHeader HttpHeaders requestHeader )
+    {
+        // "detail": "Request method 'DELETE' is not supported; Supported methods: HEAD, TRACE, POST, GET, OPTIONS",
+        return ResponseEntity.noContent().build();
+    }
+
+    // ===== INFO =====
+//    @RequestMapping( value = "", method = RequestMethod.INFO )
+//    public ResponseEntity<ContinentDTO> restInfoContinent( @RequestHeader HttpHeaders requestHeader )
+//    {
+//        return ResponseEntity.noContent().build();
 //    }
+
+    // ===== TRACE =====
+    @RequestMapping( value = "", method = RequestMethod.TRACE )
+    public ResponseEntity<Void> restTraceContinent( @RequestHeader HttpHeaders requestHeader )
+    {
+        return ResponseEntity.noContent().build();
+    }
+
 }

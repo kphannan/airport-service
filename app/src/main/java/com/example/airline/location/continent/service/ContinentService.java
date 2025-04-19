@@ -10,6 +10,8 @@ import com.example.airline.location.continent.model.Continent;
 import com.example.airline.location.continent.mapper.ContinentMapper;
 import com.example.airline.location.persistence.model.location.ContinentEntity;
 import com.example.airline.location.continent.persistence.repository.ContinentRepository;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 
@@ -37,6 +39,10 @@ public class ContinentService
     }
 
 
+    public  boolean existsById( final Integer id )
+    {
+        return repository.existsById( id );
+    }
 
     /**
      * Retrieve a list of Continents.
@@ -57,11 +63,11 @@ public class ContinentService
      * @return the optional continent if it was found.
      */
     @SuppressWarnings( "PMD.ShortVariable" )
-    public Optional<Continent> findById( final Integer id )
+    public Optional<Continent> getReferenceById( final Integer id )
     {
-        final Optional<ContinentEntity> continentEntity = repository.findById( id );
+        final ContinentEntity continentEntity = repository.getReferenceById( id );
 
-        return mapOptionalEntityToDomain( continentEntity );
+        return mapOptionalEntityToDomain( Optional.ofNullable( continentEntity ) );
     }
 
 
@@ -79,6 +85,35 @@ public class ContinentService
         return mapOptionalEntityToDomain( continentEntity );
     }
 
+    // ========== Create ==========
+    public ContinentEntity save( ContinentEntity entity )
+    {
+        return repository.save( entity );
+    }
+
+    // ========== Update ==========
+    public @Nullable Continent update( @NonNull Continent entity )
+    {
+        if ( repository.existsById( entity.getId() ) )
+        {
+            save( mapper.domainToEntity( entity ));
+
+            return entity;
+        }
+
+        return null;
+    }
+
+    // ========== Delete ==========
+    public void delete( ContinentEntity entity )
+    {
+        repository.delete( entity );
+    }
+
+    public void deleteById( Integer id )
+    {
+        repository.deleteById( id );
+    }
 
 
     private Optional<Continent> mapOptionalEntityToDomain( final Optional<ContinentEntity> from )
