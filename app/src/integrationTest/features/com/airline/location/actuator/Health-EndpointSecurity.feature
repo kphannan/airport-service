@@ -5,7 +5,7 @@ Feature: Health, Liveness, Readiness probes
 
   # ----- Verify acceptable methods -----
   @SmokeTest @PostDeployment @SecurityCheck
-  Scenario Outline: Method "<method>" on endpoint <target> should return "<response>"
+  Scenario Outline: <target> - "<method>" should return "<response>"
     Given path <target>
     When method <method>
     Then status <response>

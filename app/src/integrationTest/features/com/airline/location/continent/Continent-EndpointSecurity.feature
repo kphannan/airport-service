@@ -3,9 +3,10 @@ Feature: Continent API Security
   Background:
     * url baseUrl + '/location'
 
+  # POST, PUT methods will return 400 here as these tests don't provide a request body
   # ----- Verify acceptable methods -----
   @SmokeTest @SecurityCheck
-  Scenario Outline: Method "<method>" on endpoint <target> should return "<response>"
+  Scenario Outline: <target> - "<method>" should return "<response>"
     Given path <target>
     When method <method>
     Then status <response>
@@ -14,7 +15,7 @@ Feature: Continent API Security
       | target               | method  | response |
       | '/continent'         | GET     | 200      |
       | '/continent'         | PUT     | 400      |
-      | '/continent'         | POST    | 204      |
+      | '/continent'         | POST    | 400      |
       | '/continent'         | DELETE  | 400      |
       | '/continent'         | OPTIONS | 204      |
       | '/continent'         | HEAD    | 204      |
@@ -27,6 +28,7 @@ Feature: Continent API Security
       | '/continent/code/NA' | GET     | 200      |
       | '/continent/code/NA' | PUT     | 405      |
       | '/continent/code/NA' | POST    | 405      |
+      | '/continent/code/NA' | PATCH   | 405      |
       | '/continent/code/NA' | DELETE  | 405      |
 # ----- (GET)  -----
 # ----- (GET)  -----
