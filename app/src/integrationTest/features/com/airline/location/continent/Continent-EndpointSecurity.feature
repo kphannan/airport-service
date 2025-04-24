@@ -24,12 +24,12 @@ Feature: Continent API Security
       | '/continent/99'      | PUT     | 405      |
       | '/continent/99'      | POST    | 405      |
       | '/continent/99'      | PATCH   | 204      |
-      | '/continent/99'      | DELETE  | 204      |
+      | '/continent/99'      | DELETE  | 410      |
       | '/continent/code/NA' | GET     | 200      |
       | '/continent/code/NA' | PUT     | 405      |
       | '/continent/code/NA' | POST    | 405      |
       | '/continent/code/NA' | PATCH   | 405      |
-      | '/continent/code/NA' | DELETE  | 405      |
+      | '/continent/code/NA' | DELETE  | 410      |
 # ----- (GET)  -----
 # ----- (GET)  -----
 # ----- (POST)  -----

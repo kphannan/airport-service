@@ -319,6 +319,29 @@ class CountryControllerRestTest //extends RestControllerTestBase
     class Delete
     {}
 
+    @Nested
+    @DisplayName( "/continent - HTTP PATCH")
+    class Patch
+    {
+    }
+
+    @Nested
+    @DisplayName( "/continent - HTTP INFO")
+    class Info
+    {
+    }
+
+    @Nested
+    @DisplayName( "/continent - HTTP HEAD")
+    class Head
+    {
+    }
+
+    @Nested
+    @DisplayName( "/continent - HTTP OPT")
+    class Opt
+    {
+    }
 
 
 }

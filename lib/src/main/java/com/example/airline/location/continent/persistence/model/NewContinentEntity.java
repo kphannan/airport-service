@@ -1,6 +1,6 @@
 /* (C) 2025 */
 
-package com.example.airline.location.persistence.model.location;
+package com.example.airline.location.continent.persistence.model;
 
 
 import java.net.URI;
@@ -18,7 +18,6 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 
-
 /**
  * Persistence object representing a single Continent.
  */
@@ -27,12 +26,12 @@ import org.jspecify.annotations.Nullable;
 @Data
 @NoArgsConstructor // required by JPA
 @AllArgsConstructor
-public class ContinentEntity
+public class NewContinentEntity
 {
     @Id
-    @Column( name = "id", nullable = false )
+    @Column( name = "id", nullable = true )
     @SuppressWarnings( "PMD.ShortVariable" )
-    @NonNull private Integer id;
+    private Integer id;
 
     @Column( name = "code", length = 2, nullable = false, columnDefinition = "char(2)" )
     @NonNull private String code;

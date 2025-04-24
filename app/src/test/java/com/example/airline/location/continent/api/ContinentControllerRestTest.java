@@ -5,56 +5,46 @@ import static com.example.rest.utility.HeaderUtility.withHeaders;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-
 
 import java.util.List;
 import java.util.Optional;
 
 import com.example.airline.location.continent.mapper.ContinentMapper;
-import com.example.airline.location.continent.model.Continent;
 import com.example.airline.location.continent.persistence.repository.ContinentRepository;
 import com.example.airline.location.continent.service.ContinentService;
-import com.example.airline.location.persistence.model.location.ContinentEntity;
-import org.json.JSONObject;
+import com.example.airline.location.continent.persistence.model.ContinentEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.json.JsonAssert;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 
-//public class YourControllerTest {
-//
-//    @Autowired
-//    private MockMvc mockMvc;
-//
-//    // your test methods
-//}
 
 
 /**
@@ -396,14 +386,99 @@ class ContinentControllerRestTest
     @Nested
     @DisplayName( "/continent - HTTP POST")
     class Post
-    {}
+    {
+        @Test
+        void restPut_withExisting_returnsConflict() throws Exception
+        {
+            // --- given
+            final String jsonString =
+                    """
+                    {
+                       "id": 77,
+                       "code": "CC",
+                       "name": "foo"
+                    }
+                    """;
+            final RequestBuilder request = withHeaders( post("/location/continent" ) )
+                    .content( jsonString );
+            // -- mocks behavior
+            when(repository.existsByCode( anyString() ))
+                    .thenReturn( true );
+
+
+            // --- when
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andDo( print() )
+                    .andReturn();
+
+            // --- then
+            final MockHttpServletResponse response = result.getResponse();
+            // TODO verify the JSON is the created entity
+
+            assertAll( () -> assertEquals( HttpStatus.CONFLICT.value(), result.getResponse().getStatus() )
+                     );
+           verify(repository).existsByCode( anyString() );
+           verify(repository, never()).save( any( ContinentEntity.class ) );
+        }
+
+
+        @Test
+        void restPut_withNew_returnsCreated() throws Exception
+        {
+            // --- given
+            ContinentEntity entity = new ContinentEntity( 22, "CC", "::ZNAMEZ::", null, null  );
+            final String jsonString =
+                    """
+                    {
+                       "id": 77,
+                       "code": "CC",
+                       "name": "foo"
+                    }
+                    """;
+            final RequestBuilder request = withHeaders( post("/location/continent" ) )
+                    .content( jsonString );
+
+            when(repository.existsByCode( anyString() ))
+                    .thenReturn( false );
+            when(repository.save( any( ContinentEntity.class ) ))
+                    .thenReturn( entity );
+
+            // --- when
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andDo( print() )
+                    .andReturn();
+
+            // --- then
+            final MockHttpServletResponse response = result.getResponse();
+            // TODO verify the JSON is the created entity
+
+            // It is desired to have all 'asserts' as soft asserts.
+            assertAll( () -> assertEquals( HttpStatus.CREATED.value(), result.getResponse().getStatus() ),
+                       () -> assertTrue( result.getResponse().containsHeader( "Location" ) )
+                     );
+            verify(repository).existsByCode( anyString() );
+            verify(repository).save( any( ContinentEntity.class ) );
+
+            // The newly created resource's address is returned
+            // - only verify the end since the host and context root may vary by environment
+            // - final number (22) is the id of the created row
+            assertThat( result.getResponse().getRedirectedUrl() ).contains( "/location/continent/22" );;
+            assertThat( result.getResponse().getHeader( "Location" ) ).contains( "/location/continent/22" );;
+        }
+
+
+
+    }
 
     @Nested
     @DisplayName( "/continent - HTTP PUT")
     class Put
     {
         @Test
-        void restPutById_withWrongId_returnsConflict() throws Exception
+        @DisplayName( "can't create a new instance" )
+        void restPut_withNewEntity_returnsConflict() throws Exception
         {
             // --- given
             ContinentEntity entity = new ContinentEntity( 22, "ZZ", "::ZNAMEZ::", null, null  );
@@ -415,7 +490,6 @@ class ContinentControllerRestTest
                        "name": "foo"
                     }
                     """;
-//            final RequestBuilder request = withHeaders( put("/location/continent/{id}", 55 ) )
             final RequestBuilder request = withHeaders( put("/location/continent" ) )
                     .content( jsonString );
 
@@ -435,6 +509,54 @@ class ContinentControllerRestTest
 
             assertAll( () -> assertEquals( HttpStatus.CONFLICT.value(), result.getResponse().getStatus() )
                      );
+            verify(repository).existsById( eq( 77 ) );
+            verify(repository, never()).save( any( ContinentEntity.class ) );
+        }
+
+        @Test
+        @DisplayName( "only updates an existing instance" )
+        void restPut_withExistingEntity_returnsOK() throws Exception
+        {
+            // --- given
+            ContinentEntity entity = new ContinentEntity( 22, "ZZ", "::ZNAMEZ::", null, null  );
+            final String jsonString =
+                    """
+                    {
+                       "id": 77,
+                       "code": "CC",
+                       "name": "foo"
+                    }
+                    """;
+            final RequestBuilder request = withHeaders( put("/location/continent" ) )
+                    .content( jsonString );
+
+            when(repository.existsById( anyInt() ))
+                    .thenReturn( true );
+            when(repository.save( any( ContinentEntity.class ) ))
+                    .thenReturn( entity );
+
+            // --- when
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andDo( print() )
+                    .andExpect( content().contentTypeCompatibleWith( "application/json" ) )
+                    .andExpect( jsonPath( "$.id" ).value( 77 ) )
+                    .andExpect( jsonPath( "$.code" ).value( "CC" ) )
+                    .andExpect( jsonPath( "$.name" ).value( "foo" ) )
+                    .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
+                    .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
+//                    .andExpect( result().ok() )
+                    .andReturn();
+
+            // --- then
+            final MockHttpServletResponse response = result.getResponse();
+
+            assertAll( () -> assertEquals( HttpStatus.OK.value(), result.getResponse().getStatus() )
+                     );
+            verify(repository)
+                    .existsById( eq( 77 ) );
+            verify(repository, times( 1 )).
+                    save( any( ContinentEntity.class ) );
         }
     }
 
@@ -450,8 +572,80 @@ class ContinentControllerRestTest
     @Nested
     @DisplayName( "/continent - HTTP DELETE")
     class Delete
-    {}
+    {
+        @Test
+        void restDeleteById_withId_returnsGone() throws Exception
+        {
+            // --- given
+            final RequestBuilder request = withHeaders( delete("/location/continent/{id}", 99 ) );
 
+            // --- when
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andDo( print() )
+                    .andReturn();
 
+            // --- then
+            final MockHttpServletResponse response = result.getResponse();
 
+            assertAll( () -> assertEquals( HttpStatus.GONE.value(), result.getResponse().getStatus() ),
+                       () -> verify(repository).deleteById( anyInt() )
+                     );
+//
+//            verify(repository).delete( any( ContinentEntity.class ) );
+        }
+
+        @Test
+        void restDelete_withEntity_returnsGone() throws Exception
+        {
+            // --- given
+            final String jsonString =
+                    """
+                    {
+                       "id": 77,
+                       "code": "CC",
+                       "name": "foo"
+                    }
+                    """;
+            final RequestBuilder request = withHeaders( delete("/location/continent" ) )
+                    .content( jsonString );
+
+            // --- when
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andDo( print() )
+                    .andReturn();
+
+            // --- then
+            final MockHttpServletResponse response = result.getResponse();
+
+            assertAll( () -> assertEquals( HttpStatus.GONE.value(), result.getResponse().getStatus() ),
+                       () -> verify(repository).delete( any( ContinentEntity.class ) )
+                     );
+        }
+    }
+
+    @Nested
+    @DisplayName( "/continent - HTTP PATCH")
+    class Patch
+    {
+    }
+
+    @Nested
+    @DisplayName( "/continent - HTTP INFO")
+    class Info
+    {
+    }
+
+    @Nested
+    @DisplayName( "/continent - HTTP HEAD")
+    class Head
+    {
+    }
+
+    @Nested
+    @DisplayName( "/continent - HTTP OPT")
+    class Opt
+    {
+    }
 }

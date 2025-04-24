@@ -6,8 +6,11 @@ package com.example.airline.location.continent.mapper;
 import java.util.List;
 
 import com.example.airline.location.ContinentDTO;
+import com.example.airline.location.NewContinentDTO;
 import com.example.airline.location.continent.model.Continent;
-import com.example.airline.location.persistence.model.location.ContinentEntity;
+import com.example.airline.location.continent.model.NewContinent;
+import com.example.airline.location.continent.persistence.model.ContinentEntity;
+import com.example.airline.location.continent.persistence.model.NewContinentEntity;
 import org.mapstruct.Mapper;
 
 
@@ -25,6 +28,7 @@ public interface ContinentMapper
     // --- Instance
     /** Map a single db entity instance to a domain instance. */
     Continent entityToDomain( ContinentEntity entity );
+//    Continent entityToDomain( NewContinentEntity entity );
 
     // --- Collection
     /** Map a list of domain instances to a list of db entity instances. */
@@ -33,6 +37,7 @@ public interface ContinentMapper
     // --- Domain --> Persistence ---
     // --- Instance
     ContinentEntity domainToEntity( Continent domain );
+    ContinentEntity domainToEntity( NewContinent domain );
     // --- Collection
 
     // ------------------------
@@ -49,5 +54,6 @@ public interface ContinentMapper
     // --- API --> Domain ---
     // --- Instance
     Continent apiToDomain( ContinentDTO dto );
+    NewContinent apiToDomain( NewContinentDTO dto );
     // --- Collection
 }

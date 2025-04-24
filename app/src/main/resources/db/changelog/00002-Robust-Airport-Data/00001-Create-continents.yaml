@@ -22,7 +22,7 @@ databaseChangeLog:
                   type: char(2)
                   constraints:
                     nullable: false
-                  remarks: The two-character continent code.
+                  remarks: The two-character uppercase alphabetic continent code.
 
               - column:
                   name: name

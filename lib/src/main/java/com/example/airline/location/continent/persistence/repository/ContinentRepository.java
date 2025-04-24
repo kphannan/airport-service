@@ -6,7 +6,8 @@ package com.example.airline.location.continent.persistence.repository;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.airline.location.persistence.model.location.ContinentEntity;
+import com.example.airline.location.continent.persistence.model.ContinentEntity;
+import com.example.airline.location.continent.persistence.model.NewContinentEntity;
 import org.jspecify.annotations.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -27,7 +28,9 @@ public interface ContinentRepository extends JpaRepository<ContinentEntity, Inte
      * @return
      */
     @Override
-    public  boolean existsById( final Integer id );
+    boolean existsById( final Integer id );
+
+    boolean existsByCode( final String code );
 
     /**
      * Retrieve all {@code Continent} records.
@@ -86,10 +89,10 @@ public interface ContinentRepository extends JpaRepository<ContinentEntity, Inte
 
 
     // ========== Create ==========
-    public ContinentEntity save( ContinentEntity entity );
+    ContinentEntity save( NewContinentEntity entity );
 
     // ========== Update ==========
     // ========== Delete ==========
-    public void delete( ContinentEntity entity );
-    public void deleteById( Integer id );
+    void delete( ContinentEntity entity );
+    void deleteById( Integer continentId );
 }

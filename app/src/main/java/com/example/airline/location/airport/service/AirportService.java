@@ -114,7 +114,7 @@ public class AirportService
 
 
 
-    private Optional<Airport> mapEntityToDomain( Optional<AirportEntity> entity )
+    private Optional<Airport> mapEntityToDomain( final Optional<AirportEntity> entity )
     {
         if ( entity.isPresent() )
         {

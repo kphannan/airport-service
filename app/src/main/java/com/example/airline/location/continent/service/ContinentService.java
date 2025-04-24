@@ -8,8 +8,10 @@ import java.util.Optional;
 
 import com.example.airline.location.continent.model.Continent;
 import com.example.airline.location.continent.mapper.ContinentMapper;
-import com.example.airline.location.persistence.model.location.ContinentEntity;
+import com.example.airline.location.continent.model.NewContinent;
+import com.example.airline.location.continent.persistence.model.ContinentEntity;
 import com.example.airline.location.continent.persistence.repository.ContinentRepository;
+import lombok.extern.log4j.Log4j2;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
  * Spring Service (business logic) supporting the Continent domain object.
  */
 @Service
+@Log4j2
 public class ContinentService
 {
     private final ContinentRepository repository;
@@ -39,10 +42,10 @@ public class ContinentService
     }
 
 
-    public  boolean existsById( final Integer id )
-    {
-        return repository.existsById( id );
-    }
+//    public boolean existsById( final Integer id )
+//    {
+//        return repository.existsById( id );
+//    }
 
     /**
      * Retrieve a list of Continents.
@@ -67,6 +70,7 @@ public class ContinentService
     {
         final ContinentEntity continentEntity = repository.getReferenceById( id );
 
+        log.error( continentEntity );
         return mapOptionalEntityToDomain( Optional.ofNullable( continentEntity ) );
     }
 
@@ -86,6 +90,18 @@ public class ContinentService
     }
 
     // ========== Create ==========
+    // TODO use a NewContinentDTO....
+    public Continent create( NewContinent entity )
+    {
+        if ( repository.existsByCode( entity.getCode()) )
+        {
+            return null;
+        }
+
+        var result = repository.save( mapper.domainToEntity( entity ) );
+
+        return mapper.entityToDomain( result );
+    }
     public ContinentEntity save( ContinentEntity entity )
     {
         return repository.save( entity );
@@ -105,9 +121,9 @@ public class ContinentService
     }
 
     // ========== Delete ==========
-    public void delete( ContinentEntity entity )
+    public void delete( Continent entity )
     {
-        repository.delete( entity );
+        repository.delete( mapper.domainToEntity( entity ) );
     }
 
     public void deleteById( Integer id )
@@ -116,13 +132,18 @@ public class ContinentService
     }
 
 
+
+
+
     private Optional<Continent> mapOptionalEntityToDomain( final Optional<ContinentEntity> from )
     {
         if ( from.isPresent() )
         {
+            log.error( from );
+            log.error( from.get() );
             final Continent continent = mapper.entityToDomain( from.get() );
 
-            return Optional.of( continent );
+            return Optional.ofNullable( continent );
         }
 
         return Optional.ofNullable( null );

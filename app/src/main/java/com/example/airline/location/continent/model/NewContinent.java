@@ -5,9 +5,9 @@ package com.example.airline.location.continent.model;
 
 import java.net.URI;
 
-import com.example.airline.location.NewContinentDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -17,22 +17,13 @@ import org.jspecify.annotations.Nullable;
  */
 @Data
 @AllArgsConstructor
-public class Continent //extends NewContinent
+@NoArgsConstructor
+public class NewContinent
 {
     @SuppressWarnings( "PMD.ShortVariable" )
-    private Integer   id;
+//    @NonNull private Integer   id;
     @NonNull private String    code;     // TODO change code to a 2 character code...
     @NonNull private String    name;
     @Nullable private URI      wikiLink;
     @Nullable private String   keywords; // May not need to exchange this
-
-
-//    public Continent( final NewContinentDTO newContinent )
-//    {
-//        code = newContinent.getCode();
-//        name = newContinent.getName();
-//        wikiLink = newContinent.getWikiLink();
-//        keywords = newContinent.getKeywords();
-//    }
-
 }

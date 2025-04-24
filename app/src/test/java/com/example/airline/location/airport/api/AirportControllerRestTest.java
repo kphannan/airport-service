@@ -348,5 +348,28 @@ class AirportControllerRestTest //extends RestControllerTestBase
     class Delete
     {}
 
+    @Nested
+    @DisplayName( "/airport - HTTP PATCH")
+    class Patch
+    {
+    }
+
+    @Nested
+    @DisplayName( "/airport - HTTP INFO")
+    class Info
+    {
+    }
+
+    @Nested
+    @DisplayName( "/airport - HTTP HEAD")
+    class Head
+    {
+    }
+
+    @Nested
+    @DisplayName( "/airport - HTTP OPT")
+    class Opt
+    {
+    }
 
 }

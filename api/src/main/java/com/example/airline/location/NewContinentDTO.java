@@ -5,12 +5,10 @@ package com.example.airline.location;
 import java.net.URI;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-//import org.hibernate.validator.constraints.Length;    // TODO use Jakarta / Jackson valiations
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 // TODO change code to a 2 character code...
@@ -19,44 +17,38 @@ import org.jspecify.annotations.Nullable;
 // {}
 
 
-
 /**
  * API representation of a Continent.
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ContinentDTO //implements Serializable
+public class NewContinentDTO //implements Serializable
 {
     // TODO convert to a Java record
-    @SuppressWarnings( "PMD.ShortVariable" )
-    @JsonProperty( "id" )
-    @Schema( name = "id",
-             description = "Unique identifier",
-             requiredMode = Schema.RequiredMode.REQUIRED )
-    @Nullable private Integer id;
     @JsonProperty( "code" )
+//    @Size( 2 )
     @Schema( name = "code",
-             description = "Unique abbreviation, which is a 2-character uppercase alphabetic code",
+             description = "Unique abbreviation, which is a 2-character uppercase alphabetic code\"",
              requiredMode = Schema.RequiredMode.REQUIRED,
              minLength = 2,
              maxLength = 2,
              pattern = "[A-Z]{2}",
-             example = "AS" )
-    @NonNull
-    private           String  code;
+             example = "NA" )
+    @Nullable private String  code;
     @JsonProperty( "name" )
+    //    @Length( min = 0, max = 32 )
     @Schema( name = "name",
              description = "Common use name",
-             example = "Asia",
+             example = "North America",
              requiredMode = Schema.RequiredMode.REQUIRED,
              minLength = 2,
              maxLength = 52 )
-    @NonNull private String  name;
+    @Nullable private String  name;
     @JsonProperty( "wikilink" )
     @Schema( name = "wikiLink",
-             description = "URI link to Wikipedia information",
-             example = "https://en.wikipedia.org/wiki/Asia",
+             description = "Wikipedia information",
+             example = "https://en.wikipedia.org/wiki/North_America",
              requiredMode = Schema.RequiredMode.NOT_REQUIRED,
              maxLength = 255 )
     @Nullable private URI     wikiLink;

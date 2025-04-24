@@ -17,13 +17,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 import java.util.Optional;
 
-import com.example.airline.location.persistence.model.location.ContinentEntity;
 import com.example.airline.location.persistence.model.location.RegionEntity;
 import com.example.airline.location.region.mapper.RegionMapper;
 import com.example.airline.location.region.persistence.repository.RegionsRepository;
 import com.example.airline.location.region.service.RegionsService;
 import com.example.rest.utility.PageableAssert;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -36,7 +34,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -44,7 +41,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @WebMvcTest( controllers = RegionsController.class )
 @ComponentScan( basePackages = { "com.example.airline.location.region" } )
@@ -330,6 +326,30 @@ class RegionControllerRestTest //extends RestControllerTestBase
     @DisplayName( "/region - HTTP DELETE")
     class Delete
     {}
+
+    @Nested
+    @DisplayName( "/region - HTTP PATCH")
+    class Patch
+    {
+    }
+
+    @Nested
+    @DisplayName( "/region - HTTP INFO")
+    class Info
+    {
+    }
+
+    @Nested
+    @DisplayName( "/region - HTTP HEAD")
+    class Head
+    {
+    }
+
+    @Nested
+    @DisplayName( "/region - HTTP OPT")
+    class Opt
+    {
+    }
 
 
 

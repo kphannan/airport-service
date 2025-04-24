@@ -44,12 +44,27 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
         @ApiResponse( description = "Method Not Allowed",
                       responseCode = "405",
                       content = {
-                        @Content( mediaType = "application/json",
-                                  schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
-                        @Content( mediaType = "application/yaml",
-                                  schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
-                        @Content( mediaType = "application/xml",
-                                 schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) )
+                              @Content( mediaType = "application/json",
+                                        schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
+                              @Content( mediaType = "application/yaml",
+                                        schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
+                              @Content( mediaType = "application/xml",
+                                        schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) )
+                      }
+        ),
+        @ApiResponse( description = """
+                                    Item does not exist.  The request was  processed, with no item found for the ID
+                                    provided.  This is similar to a NOT_FOUND (404) except it  the API exists, only
+                                    that the item requested is not known.
+                                    """,
+                      responseCode = "410",
+                      content = {
+                              @Content( mediaType = "application/json",
+                                        schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
+                              @Content( mediaType = "application/yaml",
+                                        schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
+                              @Content( mediaType = "application/xml",
+                                        schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) )
                       }
         ),
         @ApiResponse( description = "Unsupported Media Type",

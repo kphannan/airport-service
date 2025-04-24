@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.log4j.Log4j2;
@@ -33,8 +34,8 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 
 /**
- * Exception handler to catch application specific exceptions and format them in
- * a consistent manner.
+ * Exception handler to catch application-specific exceptions and format them consistently.
+ *
  */
 @ControllerAdvice
 // @RestContollerAdvice
@@ -43,9 +44,32 @@ public class GlobalExceptionHandler
 {
 
 
+    /**
+     * Create a standard error message when an API parameter is the wrong type.
+     *
+     * @param exception the intercepted exception;
+     *
+     * @return a formatted {@code ProblemDetail}.
+     */
+    @ExceptionHandler( EntityNotFoundException.class )
+    @ResponseStatus( code = HttpStatus.BAD_REQUEST )
+    public ResponseEntity<ProblemDetail>
+    handleEntityNotFoundException( final EntityNotFoundException exception )
+    {
+        final StringBuilder detailMessage =
+                new StringBuilder()
+                    .append( exception.getMessage() );
+
+        log.error( exception );
+
+        final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.GONE,
+                                                                        detailMessage.toString() );
+
+        return new ResponseEntity<>( details, HttpStatus.GONE );
+    }
 
     /**
-     * Create standard error message when an API parameter is the wrong type.
+     * Create a standard error message when an API parameter is the wrong type.
      *
      * @param exception the intercepted exception;
      *
@@ -58,8 +82,6 @@ public class GlobalExceptionHandler
     {
         final StringBuilder detailMessage =
                 new StringBuilder()
-//                        .append( exception.getMostSpecificCause() )
-//                        .append( ", " )
                         .append( exception.getMessage() );
 
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST,
@@ -71,7 +93,7 @@ public class GlobalExceptionHandler
 
 
     /**
-     * Create standard error message when an API parameter is missing.
+     * Create a standard error message when an API parameter is missing.
      *
      * @param exception the intercepted exception;
      *
@@ -95,8 +117,8 @@ public class GlobalExceptionHandler
 
 
     /**
-     * Create standard error message when an is called requesting either an
-     * unsupported media type as input or output.
+     * Create a standard error message when called requesting an unsupported
+     * media type as input or output.
      *
      * @param exception the intercepted exception
      *
@@ -108,7 +130,8 @@ public class GlobalExceptionHandler
     handleUnsupportedMediaTypeException( final HttpMediaTypeNotSupportedException exception )
     {
         final StringBuilder detailMessage = new StringBuilder( "Unsupported content type: " )
-                .append( exception.getContentType() ).append( "; Supported content types: " )
+                .append( exception.getContentType() )
+                .append( "; Supported content types: " )
                 .append( MediaType.toString( exception.getSupportedMediaTypes() ) );
         final ProblemDetail details       = ProblemDetail.forStatusAndDetail( HttpStatus.UNSUPPORTED_MEDIA_TYPE,
                                                                               detailMessage.toString() );
@@ -118,7 +141,7 @@ public class GlobalExceptionHandler
     }
 
     /**
-     * Create standard error message when an is called requesting either an
+     * Create a standard error message when requesting an
      * unsupported media type as input or output.
      *
      * @param exception the intercepted exception
@@ -131,7 +154,6 @@ public class GlobalExceptionHandler
     handleUnacceptableMediaTypeException( final HttpMediaTypeNotAcceptableException exception )
     {
         final StringBuilder detailMessage = new StringBuilder( "Unsupported content type: " )
-                // .append( exception.getContentType() ).append( "; Supported content types: " )
                 .append( MediaType.toString( exception.getSupportedMediaTypes() ) );
         final ProblemDetail details       = ProblemDetail.forStatusAndDetail( HttpStatus.UNSUPPORTED_MEDIA_TYPE,
                                                                               detailMessage.toString() );
@@ -141,8 +163,8 @@ public class GlobalExceptionHandler
     }
 
     /**
-     * Create standard error message when an is called requesting either an
-     * unsupported media type as input or output.
+     * Create a standard error message when the request is for an unsupported
+     * media type.
      *
      * @param exception the intercepted exception
      *
@@ -154,7 +176,6 @@ public class GlobalExceptionHandler
     {
         // TODO Message should indicate the bad media type as well as the acceptable types
         final StringBuilder detailMessage = new StringBuilder( "Unsupported content type: " )
-                // .append( exception.getContentType() ).append( "; Supported content types: " )
                 .append( MediaType.toString( exception.getSupportedMediaTypes() ) );
         final ProblemDetail details       = ProblemDetail.forStatusAndDetail( HttpStatus.UNSUPPORTED_MEDIA_TYPE,
                                                                               detailMessage.toString() );
@@ -165,7 +186,7 @@ public class GlobalExceptionHandler
 
 
 //    /**
-//     * Create standard error message when the input request body contains invalid or
+//     * Create a standard error message when the input request body contains invalid or
 //     * missing attributes.
 //     *
 //     * @param exception the intercepted exception
@@ -189,7 +210,7 @@ public class GlobalExceptionHandler
 
 
     /**
-     * Create standard error message when the input request body contains invalid or
+     * Create a standard error message when the input request body contains invalid or
      * missing attributes.
      *
      * @param exception the intercepted exception
@@ -251,7 +272,7 @@ public class GlobalExceptionHandler
 
 
     /**
-     * Create standard error message when the input request body contains invalid or
+     * Create a standard error message when the input request body contains invalid or
      * missing attributes.
      *
      * @param exception the intercepted exception
@@ -275,7 +296,7 @@ public class GlobalExceptionHandler
 
 
     /**
-     * Create standard error message when the input request body contains a
+     * Create a standard error message when the input request body contains a
      * malformed request body.
      *
      * @param exception the intercepted exception
@@ -293,7 +314,7 @@ public class GlobalExceptionHandler
     }
 
     /**
-     * Create standard error message when the input request body contains a
+     * Create a standard error message when the input request body contains a
      * malformed request body.
      *
      * @param exception the intercepted exception
@@ -312,7 +333,7 @@ public class GlobalExceptionHandler
 
 
     /**
-     * Create standard error message when an unsupported methot (GET, PUT,
+     * Create a standard error message when an unsupported methot (GET, PUT,
      * DELETE...) is specified.
      *
      * @param exception the intercepted exception
@@ -340,7 +361,7 @@ public class GlobalExceptionHandler
 
 
     /**
-     * Create standard error message when the the specified resource (URI) does not
+     * Create a standard error message when the specified resource (URI) does not
      * exist in the API. A NOT_FOUND does not mean the requested entity could not be
      * found. This case is represented in a NO_CONTENT response.
      *
@@ -377,7 +398,7 @@ public class GlobalExceptionHandler
 
 
     /**
-     * Create standard error message as a catch-all for any unanticipated exception.
+     * Create a standard error message as a catch-all for any unanticipated exception.
      *
      * @param exception the intercepted exception
      *
@@ -393,9 +414,9 @@ public class GlobalExceptionHandler
         final StringBuilder detailMessage = new StringBuilder( "A problem occurred " )
                 .append( "logref=" )
                 .append( UUID.randomUUID() )
-                .append( "\n" )
+                .append( '\n' )
                 .append( exception.getMessage() )
-                .append( "\n" )
+                .append( '\n' )
                 .append( exception.getCause() );
 
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.INTERNAL_SERVER_ERROR,
