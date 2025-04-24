@@ -344,8 +344,8 @@ public class GlobalExceptionHandler
     @ResponseStatus( HttpStatus.METHOD_NOT_ALLOWED )
     public ResponseEntity<ProblemDetail> handleMethodNotSupportedException( final HttpRequestMethodNotSupportedException exception )
     {
-        final StringBuilder detailMessage = new StringBuilder()
-                .append( exception.getMessage() )
+        final StringBuilder detailMessage = new StringBuilder( exception.getMessage() )
+//                .append( exception.getMessage() )
                 .append( "; Supported methods: " )
                 .append( String.join( ", ", exception.getSupportedMethods() ) );
 

@@ -6,12 +6,11 @@ package com.example.airline.location.continent.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.airline.location.continent.model.Continent;
 import com.example.airline.location.continent.mapper.ContinentMapper;
+import com.example.airline.location.continent.model.Continent;
 import com.example.airline.location.continent.model.NewContinent;
 import com.example.airline.location.continent.persistence.model.ContinentEntity;
 import com.example.airline.location.continent.persistence.repository.ContinentRepository;
-import lombok.extern.log4j.Log4j2;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Service;
  * Spring Service (business logic) supporting the Continent domain object.
  */
 @Service
-@Log4j2
 public class ContinentService
 {
     private final ContinentRepository repository;
@@ -70,7 +68,6 @@ public class ContinentService
     {
         final ContinentEntity continentEntity = repository.getReferenceById( id );
 
-        log.error( continentEntity );
         return mapOptionalEntityToDomain( Optional.ofNullable( continentEntity ) );
     }
 
@@ -91,24 +88,25 @@ public class ContinentService
 
     // ========== Create ==========
     // TODO use a NewContinentDTO....
-    public Continent create( NewContinent entity )
+    public Continent create( final NewContinent entity )
     {
         if ( repository.existsByCode( entity.getCode()) )
         {
             return null;
         }
 
-        var result = repository.save( mapper.domainToEntity( entity ) );
+        final var result = repository.save( mapper.domainToEntity( entity ) );
 
         return mapper.entityToDomain( result );
     }
-    public ContinentEntity save( ContinentEntity entity )
+
+    public ContinentEntity save( final ContinentEntity entity )
     {
         return repository.save( entity );
     }
 
     // ========== Update ==========
-    public @Nullable Continent update( @NonNull Continent entity )
+    public @Nullable Continent update( @NonNull final Continent entity )
     {
         if ( repository.existsById( entity.getId() ) )
         {
@@ -121,14 +119,14 @@ public class ContinentService
     }
 
     // ========== Delete ==========
-    public void delete( Continent entity )
+    public void delete( final Continent entity )
     {
         repository.delete( mapper.domainToEntity( entity ) );
     }
 
-    public void deleteById( Integer id )
+    public void deleteById( final Integer continentId )
     {
-        repository.deleteById( id );
+        repository.deleteById( continentId );
     }
 
 
@@ -139,8 +137,6 @@ public class ContinentService
     {
         if ( from.isPresent() )
         {
-            log.error( from );
-            log.error( from.get() );
             final Continent continent = mapper.entityToDomain( from.get() );
 
             return Optional.ofNullable( continent );

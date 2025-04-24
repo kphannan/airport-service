@@ -340,7 +340,7 @@ public class ContinentController
                                                               @Valid @org.springframework.web.bind.annotation.RequestBody final ContinentDTO continentDTO,
                                                               @RequestHeader HttpHeaders requestHeader )
     {
-        Continent continent = service.update( mapper.apiToDomain( continentDTO ) );
+        final Continent continent = service.update( mapper.apiToDomain( continentDTO ) );
         if ( null != continent )
         {
             return ResponseEntity.ok( mapper.domainToApi( continent ) );
@@ -439,7 +439,7 @@ public class ContinentController
                                     description = "Vendor specific trace identification" )
                 }
     )
-    public ResponseEntity<ContinentDTO> restDelete( @Valid @org.springframework.web.bind.annotation.RequestBody ContinentDTO continentDTO,
+    public ResponseEntity<ContinentDTO> restDelete( @Valid @org.springframework.web.bind.annotation.RequestBody final ContinentDTO continentDTO,
                                                     @RequestHeader HttpHeaders requestHeader )
     {
         // Delete is idempotent and will return NO_CONTENT regardless if
@@ -514,9 +514,9 @@ public class ContinentController
     // TODO build the header as a static the first time is is requested....
     private static HttpHeaders optionsHeaders()
     {
-        HttpHeaders headers = new HttpHeaders();
+        final HttpHeaders headers = new HttpHeaders();
 
-        List<HttpMethod> allows = List.of(
+        final List<HttpMethod> allows = List.of(
                 HttpMethod.DELETE,
                 HttpMethod.GET,
                 HttpMethod.HEAD,
@@ -526,11 +526,11 @@ public class ContinentController
                 HttpMethod.PUT,
                 HttpMethod.TRACE
                                          );
-        List<MediaType> mediaType = List.of( MediaType.APPLICATION_JSON,
+        final List<MediaType> mediaType = List.of( MediaType.APPLICATION_JSON,
                                              MediaType.APPLICATION_YAML,
                                              MediaType.APPLICATION_XML );
-        String allowsString = allows.stream().map( HttpMethod::name ).collect( Collectors.joining( ","));
-        String mediaTypeString = mediaType.stream().map( MediaType::toString ).collect( Collectors.joining( ",") );
+        final String allowsString = allows.stream().map( HttpMethod::name ).collect( Collectors.joining( ","));
+        final String mediaTypeString = mediaType.stream().map( MediaType::toString ).collect( Collectors.joining( ",") );
 
         headers.add( HttpHeaders.ALLOW, allowsString );
         headers.add( HttpHeaders.ACCEPT, mediaTypeString );
