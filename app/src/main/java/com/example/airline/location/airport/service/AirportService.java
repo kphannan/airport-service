@@ -108,7 +108,7 @@ public class AirportService
                                         final Pageable paging )
     {
         final Page<AirportEntity> entities = repository.advancedQuery( iataCode, icaoCode, ident, name, paging );
-
+        // TODO should probably think about handling null here though it shouldn't ever happen.
         return entities.map( mapper::entityToDomain );
     }
 
