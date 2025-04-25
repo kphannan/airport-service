@@ -35,7 +35,8 @@ public final class HeaderUtility
      * @param mediaType the media type to add to the header
      * @return chain the builder after adding headers
      */
-    public static  MockHttpServletRequestBuilder withHeaders( final MockHttpServletRequestBuilder builder, final MediaType mediaType )
+    public static  MockHttpServletRequestBuilder withHeaders( final MockHttpServletRequestBuilder builder,
+                                                              final MediaType mediaType )
     {
         return builder
                 .header( HttpHeaders.ACCEPT, mediaType.toString() )

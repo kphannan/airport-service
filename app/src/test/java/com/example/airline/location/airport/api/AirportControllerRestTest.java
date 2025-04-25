@@ -4,7 +4,6 @@ package com.example.airline.location.airport.api;
 import static com.example.rest.utility.HeaderUtility.withHeaders;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
@@ -50,13 +49,10 @@ class AirportControllerRestTest //extends RestControllerTestBase
 {
     @Autowired
     protected MockMvc mvc;
-
-    @Autowired
-    private AirportService service;
-
     @MockitoBean
     protected AirportRepository repository;
-
+    @Autowired
+    private AirportService service;
     @Autowired
     private AirportMapper mapper;
 
@@ -75,38 +71,38 @@ class AirportControllerRestTest //extends RestControllerTestBase
     private AirportEntity buildEntity()
     {
         return AirportEntity.builder()
-                .id( 1L )
-                .ident( "KATL" )
-                .type( "large_airport" )
-                .name( "::NAME::" )
-                .latitude( BigDecimal.valueOf( 123.456 ) )
-                .longitude( BigDecimal.valueOf( 987.654 ) )
-                .elevation( 55 )
-                .continent( "NA" )
-                .isoCountry( "USA" )
-                .isoRegion( "GA" )
-                .municipality( "Atlanta" )
-                .scheduledService( "yes" )
-                .gpsCode( "KATL" )
-                .iataCode( "KATL" )
-                .icaoCode( "ATL" )
-                .localCode( "KATL" )
-                .build();
+                            .id( 1L )
+                            .ident( "KATL" )
+                            .type( "large_airport" )
+                            .name( "::NAME::" )
+                            .latitude( BigDecimal.valueOf( 123.456 ) )
+                            .longitude( BigDecimal.valueOf( 987.654 ) )
+                            .elevation( 55 )
+                            .continent( "NA" )
+                            .isoCountry( "USA" )
+                            .isoRegion( "GA" )
+                            .municipality( "Atlanta" )
+                            .scheduledService( "yes" )
+                            .gpsCode( "KATL" )
+                            .iataCode( "KATL" )
+                            .icaoCode( "ATL" )
+                            .localCode( "KATL" )
+                            .build();
     }
 
 
     @Nested
-    @DisplayName( "/airport - HTTP GET")
+    @DisplayName( "/airport - HTTP GET" )
     class Get
     {
         @Test
         void restGetById_withValidId_returnsItem() throws Exception
         {
             // --- given
-            final AirportEntity airportEntity = buildEntity();
-            final RequestBuilder request = withHeaders( get( "/location/airport/{id}", 1 ) );
+            final AirportEntity  airportEntity = buildEntity();
+            final RequestBuilder request       = withHeaders( get( "/location/airport/{id}", 1 ) );
 
-            when(repository.findById( any() ))
+            when( repository.findById( any() ) )
                     .thenReturn( Optional.of( airportEntity ) );
 
 
@@ -114,7 +110,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
             final MvcResult result = mvc
                     .perform( request )
                     .andExpect( status().isOk() )
-                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ))
+                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
                     // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
                     //      don't complain about lack of assertions in tests
                     .andExpect( jsonPath( "$.id" ).value( 1 ) )
@@ -127,36 +123,36 @@ class AirportControllerRestTest //extends RestControllerTestBase
             MockHttpServletResponse response = result.getResponse();
             String jsonString =
                     """
-                    {
-                       "id": 1,
-                       "code: "ZZZ",
-                       "localCode": "LCL",
-                       "name": "foo",
-                       "country": "ZZ",
-                       "continent": "NA"
-                    }
-                    """;
-    //        MediaType.
+                            {
+                               "id": 1,
+                               "code: "ZZZ",
+                               "localCode": "LCL",
+                               "name": "foo",
+                               "country": "ZZ",
+                               "continent": "NA"
+                            }
+                            """;
+            //        MediaType.
             // --- then
             // TODO need to assert the resulting JSON....
 
-    //        assertThat( MediaType.parseMediaType( response.getContentType() ))
-    //        MediaType.parseMediaType( response.getContentType() ).isCompatibleWith( MediaType.APPLICATION_JSON );;
-    //        assertThat( MediaType.parseMediaType( response.getContentType() ) )
-    //                .isCompatibleWith( MediaType.APPLICATION_JSON );
-    //        assertThat( response ).isNotNull();
+            //        assertThat( MediaType.parseMediaType( response.getContentType() ))
+            //        MediaType.parseMediaType( response.getContentType() ).isCompatibleWith( MediaType.APPLICATION_JSON );;
+            //        assertThat( MediaType.parseMediaType( response.getContentType() ) )
+            //                .isCompatibleWith( MediaType.APPLICATION_JSON );
+            //        assertThat( response ).isNotNull();
 
             assertThat( response.getContentType() )
                     .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
 
             //        assertThat( result.getResponse() )
-    ////                .startsWith( "Foo" )
-    //                .isEqualToIgnoreCase( "foo" );
-    //        assertThat( response )
-    //                .isNotNull()
-    //                .returns( "RP" );
+            ////                .startsWith( "Foo" )
+            //                .isEqualToIgnoreCase( "foo" );
+            //        assertThat( response )
+            //                .isNotNull()
+            //                .returns( "RP" );
 
-    //        JSONAssert.assertEquals
+            //        JSONAssert.assertEquals
 
         }
 
@@ -166,7 +162,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
             // --- given
             final RequestBuilder request = withHeaders( get( "/location/airport/{id}", 99 ) );
 
-            when(repository.findById( anyLong() ))
+            when( repository.findById( anyLong() ) )
                     .thenReturn( Optional.ofNullable( null ) );
 
 
@@ -180,8 +176,8 @@ class AirportControllerRestTest //extends RestControllerTestBase
             // --- then
             assertThat( response.getStatus() )
                     .isEqualTo( HttpStatus.NO_CONTENT.value() );
-    //        assertThat( response.getContentType() )
-    //                .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+            //        assertThat( response.getContentType() )
+            //                .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
         }
 
 
@@ -189,10 +185,10 @@ class AirportControllerRestTest //extends RestControllerTestBase
         void restGetByIdent_withValidIdent_returnsItem() throws Exception
         {
             // --- given
-            final AirportEntity airportEntity = buildEntity();
-            final RequestBuilder request = withHeaders( get( "/location/airport/code/{code}", 1 ) );
+            final AirportEntity  airportEntity = buildEntity();
+            final RequestBuilder request       = withHeaders( get( "/location/airport/code/{code}", 1 ) );
 
-            when(repository.findByIdent( anyString() ))
+            when( repository.findByIdent( anyString() ) )
                     .thenReturn( Optional.of( airportEntity ) );
 
 
@@ -200,7 +196,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
             final MvcResult result = mvc
                     .perform( request )
                     .andExpect( status().isOk() )
-                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ))
+                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
                     // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
                     //      don't complain about lack of assertions in tests
                     .andExpect( jsonPath( "$.id" ).value( 1 ) )
@@ -215,13 +211,13 @@ class AirportControllerRestTest //extends RestControllerTestBase
             MockHttpServletResponse response = result.getResponse();
             String jsonString =
                     """
-                    {
-                       "id": 2,
-                       "code: "XXX",
-                       "name": "::NAME::",
-                       "continent": "NA"
-                    }
-                    """;
+                            {
+                               "id": 2,
+                               "code: "XXX",
+                               "name": "::NAME::",
+                               "continent": "NA"
+                            }
+                            """;
 
             // --- then
             // TODO need to assert the resulting JSON....
@@ -236,22 +232,22 @@ class AirportControllerRestTest //extends RestControllerTestBase
             // --- given
             final RequestBuilder request = withHeaders( get( "/location/airport/code/{code}", "ZZ" ) );
 
-            when(repository.findByIdent( anyString() ))
+            when( repository.findByIdent( anyString() ) )
                     .thenReturn( Optional.ofNullable( null ) );
 
             // --- when
             final MvcResult result = mvc
                     .perform( request )
                     .andExpect( status().isNoContent() )
-    //                .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ))
+                    //                .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ))
                     .andReturn();
             MockHttpServletResponse response = result.getResponse();
 
             // --- then
             assertThat( response.getStatus() )
                     .isEqualTo( HttpStatus.NO_CONTENT.value() );
-    //        assertThat( response.getContentType() )
-    //                .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+            //        assertThat( response.getContentType() )
+            //                .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
         }
 
 
@@ -273,14 +269,14 @@ class AirportControllerRestTest //extends RestControllerTestBase
                     .param( "sort", "name,asc" );  // <-- no space after comma!
 
             Page<AirportEntity> page = new PageImpl( entities );
-            when(repository.findAll( any( Pageable.class ) ) )
+            when( repository.findAll( any( Pageable.class ) ) )
                     .thenReturn( page );
 
             // --- when
             final MvcResult result = mvc
                     .perform( request )
                     .andExpect( status().isOk() )
-                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ))
+                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
                     // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
                     //      don't complain about lack of assertions in tests
                     .andDo( print() )
@@ -293,31 +289,31 @@ class AirportControllerRestTest //extends RestControllerTestBase
             final MockHttpServletResponse response = result.getResponse();
             final String jsonString =
                     """
-                    [
-                        {
-                           "id": 1,
-                           "code: "XX",
-                           "name": "::XNAMEX::"
-                        },
-                        {
-                           "id": 2,
-                           "code: "YY",
-                           "name": "::YNAMEY::"
-                        },
-                        {
-                           "id": 3,
-                           "code: "ZZ",
-                           "name": "::ZNAMEZ::"
-                        }
-                    ]
-                    """;
+                            [
+                                {
+                                   "id": 1,
+                                   "code: "XX",
+                                   "name": "::XNAMEX::"
+                                },
+                                {
+                                   "id": 2,
+                                   "code: "YY",
+                                   "name": "::YNAMEY::"
+                                },
+                                {
+                                   "id": 3,
+                                   "code: "ZZ",
+                                   "name": "::ZNAMEZ::"
+                                }
+                            ]
+                            """;
 
             // --- then
             // TODO need to assert the resulting JSON....
             final ArgumentCaptor<Pageable> pageableCaptor =
                     ArgumentCaptor.forClass( Pageable.class );
             verify( repository ).findAll( pageableCaptor.capture() );
-            final PageRequest pageable = (PageRequest) pageableCaptor.getValue();
+            final PageRequest pageable = (PageRequest)pageableCaptor.getValue();
 
 
             PageableAssert
@@ -334,40 +330,43 @@ class AirportControllerRestTest //extends RestControllerTestBase
 
 
     @Nested
-    @DisplayName( "/airport - HTTP POST")
+    @DisplayName( "/airport - HTTP POST" )
     class Post
-    {}
+    {
+    }
 
     @Nested
-    @DisplayName( "/airport - HTTP PUT")
+    @DisplayName( "/airport - HTTP PUT" )
     class Put
-    {}
+    {
+    }
 
     @Nested
-    @DisplayName( "/airport - HTTP DELETE")
+    @DisplayName( "/airport - HTTP DELETE" )
     class Delete
-    {}
+    {
+    }
 
     @Nested
-    @DisplayName( "/airport - HTTP PATCH")
+    @DisplayName( "/airport - HTTP PATCH" )
     class Patch
     {
     }
 
     @Nested
-    @DisplayName( "/airport - HTTP INFO")
+    @DisplayName( "/airport - HTTP INFO" )
     class Info
     {
     }
 
     @Nested
-    @DisplayName( "/airport - HTTP HEAD")
+    @DisplayName( "/airport - HTTP HEAD" )
     class Head
     {
     }
 
     @Nested
-    @DisplayName( "/airport - HTTP OPT")
+    @DisplayName( "/airport - HTTP OPT" )
     class Opt
     {
     }

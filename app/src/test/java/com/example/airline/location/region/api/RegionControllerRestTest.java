@@ -48,13 +48,10 @@ class RegionControllerRestTest //extends RestControllerTestBase
 {
     @Autowired
     protected MockMvc mvc;
-
-    @Autowired
-    private RegionsService service;
-
     @MockitoBean
     protected RegionsRepository repository;
-
+    @Autowired
+    private RegionsService service;
     @Autowired
     private RegionMapper mapper;
 
@@ -70,18 +67,18 @@ class RegionControllerRestTest //extends RestControllerTestBase
 //    }
 
     @Nested
-    @DisplayName( "/region - HTTP GET")
+    @DisplayName( "/region - HTTP GET" )
     class Get
     {
         @Test
         void restGetById_withValidId_returnsItem() throws Exception
         {
             // --- given
-            final RegionEntity regionEntity = new RegionEntity( 1,  "ZZZ", "LCL", "foo", "ZZ", "NA", null, null );
+            final RegionEntity regionEntity = new RegionEntity( 1, "ZZZ", "LCL", "foo", "ZZ", "NA", null, null );
 //        Region       region       = new Region( 1,  "ZZZ", "LCL", "foo", "ZZ", "NA", null, null  );
             final RequestBuilder request = withHeaders( get( "/location/region/{id}", 1 ) );
 
-            when(repository.findById( any() ))
+            when( repository.findById( any() ) )
                     .thenReturn( Optional.of( regionEntity ) );
 
 
@@ -89,7 +86,7 @@ class RegionControllerRestTest //extends RestControllerTestBase
             final MvcResult result = mvc
                     .perform( request )
                     .andExpect( status().isOk() )
-                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ))
+                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
                     // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
                     //      don't complain about lack of assertions in tests
                     .andExpect( jsonPath( "$.id" ).value( 1 ) )
@@ -104,15 +101,15 @@ class RegionControllerRestTest //extends RestControllerTestBase
             MockHttpServletResponse response = result.getResponse();
             String jsonString =
                     """
-                    {
-                       "id": 1,
-                       "code: "ZZZ",
-                       "localCode": "LCL",
-                       "name": "foo",
-                       "country": "ZZ",
-                       "continent": "NA"
-                    }
-                    """;
+                            {
+                               "id": 1,
+                               "code: "ZZZ",
+                               "localCode": "LCL",
+                               "name": "foo",
+                               "country": "ZZ",
+                               "continent": "NA"
+                            }
+                            """;
 //        MediaType.
             // --- then
             // TODO need to assert the resulting JSON....
@@ -143,7 +140,7 @@ class RegionControllerRestTest //extends RestControllerTestBase
             // --- given
             final RequestBuilder request = withHeaders( get( "/location/region/{id}", 99 ) );
 
-            when(repository.findById( anyInt() ))
+            when( repository.findById( anyInt() ) )
                     .thenReturn( Optional.ofNullable( null ) );
 
 
@@ -166,11 +163,11 @@ class RegionControllerRestTest //extends RestControllerTestBase
         void restGetByCode_withValidCode_returnsItem() throws Exception
         {
             // --- given
-            final RegionEntity regionEntity = new RegionEntity( 2,  "ZZZ", "LCL", "::NAME::", "ZZ", "NA", null, null );
+            final RegionEntity regionEntity = new RegionEntity( 2, "ZZZ", "LCL", "::NAME::", "ZZ", "NA", null, null );
 //        Region       region       = new Region( 1,  "ZZZ", "LCL", "foo", "ZZ", "NA", null, null  );
             final RequestBuilder request = withHeaders( get( "/location/region/code/{code}", 1 ) );
 
-            when(repository.findByCode( anyString() ))
+            when( repository.findByCode( anyString() ) )
                     .thenReturn( Optional.of( regionEntity ) );
 
 
@@ -178,7 +175,7 @@ class RegionControllerRestTest //extends RestControllerTestBase
             final MvcResult result = mvc
                     .perform( request )
                     .andExpect( status().isOk() )
-                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ))
+                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
                     // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
                     //      don't complain about lack of assertions in tests
                     .andExpect( jsonPath( "$.id" ).value( 2 ) )
@@ -193,15 +190,15 @@ class RegionControllerRestTest //extends RestControllerTestBase
             MockHttpServletResponse response = result.getResponse();
             String jsonString =
                     """
-                    {
-                       "id": 2,
-                       "code: "ZZZ",
-                       "localCode": "LCL",
-                       "name": "::NAME::",
-                       "country": "ZZ",
-                       "continent": "NA"
-                    }
-                    """;
+                            {
+                               "id": 2,
+                               "code: "ZZZ",
+                               "localCode": "LCL",
+                               "name": "::NAME::",
+                               "country": "ZZ",
+                               "continent": "NA"
+                            }
+                            """;
 
             // --- then
             // TODO need to assert the resulting JSON....
@@ -216,7 +213,7 @@ class RegionControllerRestTest //extends RestControllerTestBase
             // --- given
             final RequestBuilder request = withHeaders( get( "/location/region/code/{code}", "ZZ" ) );
 
-            when(repository.findByCode( anyString() ))
+            when( repository.findByCode( anyString() ) )
                     .thenReturn( Optional.ofNullable( null ) );
 
             // --- when
@@ -242,9 +239,9 @@ class RegionControllerRestTest //extends RestControllerTestBase
             // ContinentEntity continentEntity = new ContinentEntity( 1, "ZZ", "::NAME::", null, null  );
             final List<RegionEntity> entities =
                     List.of(
-                            new RegionEntity( 1,  "XXX", "YYY", "::X_NAME_X::", "ZZ", "NA", null, null ),
-                            new RegionEntity( 2,  "YYY", "YYY", "::Y_NAME_Y::", "ZZ", "NA", null, null ),
-                            new RegionEntity( 3,  "ZZZ", "LCL", "::Z_NAME_Z::", "ZZ", "NA", null, null )
+                            new RegionEntity( 1, "XXX", "YYY", "::X_NAME_X::", "ZZ", "NA", null, null ),
+                            new RegionEntity( 2, "YYY", "YYY", "::Y_NAME_Y::", "ZZ", "NA", null, null ),
+                            new RegionEntity( 3, "ZZZ", "LCL", "::Z_NAME_Z::", "ZZ", "NA", null, null )
                            );
             final RequestBuilder request = withHeaders( get( "/location/region" ) )
                     .param( "page", "5" )
@@ -253,14 +250,14 @@ class RegionControllerRestTest //extends RestControllerTestBase
                     .param( "sort", "name,asc" );  // <-- no space after comma!
 
             Page<RegionEntity> page = new PageImpl( entities );
-            when(repository.findAll( any( Pageable.class ) ) )
+            when( repository.findAll( any( Pageable.class ) ) )
                     .thenReturn( page );
 
             // --- when
             final MvcResult result = mvc
                     .perform( request )
                     .andExpect( status().isOk() )
-                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ))
+                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
                     // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
                     //      don't complain about lack of assertions in tests
                     .andDo( print() )
@@ -273,31 +270,31 @@ class RegionControllerRestTest //extends RestControllerTestBase
             final MockHttpServletResponse response = result.getResponse();
             final String jsonString =
                     """
-                    [
-                        {
-                           "id": 1,
-                           "code: "XX",
-                           "name": "::XNAMEX::"
-                        },
-                        {
-                           "id": 2,
-                           "code: "YY",
-                           "name": "::YNAMEY::"
-                        },
-                        {
-                           "id": 3,
-                           "code: "ZZ",
-                           "name": "::ZNAMEZ::"
-                        }
-                    ]
-                    """;
+                            [
+                                {
+                                   "id": 1,
+                                   "code: "XX",
+                                   "name": "::XNAMEX::"
+                                },
+                                {
+                                   "id": 2,
+                                   "code: "YY",
+                                   "name": "::YNAMEY::"
+                                },
+                                {
+                                   "id": 3,
+                                   "code: "ZZ",
+                                   "name": "::ZNAMEZ::"
+                                }
+                            ]
+                            """;
 
             // --- then
             // TODO need to assert the resulting JSON....
             final ArgumentCaptor<Pageable> pageableCaptor =
                     ArgumentCaptor.forClass( Pageable.class );
             verify( repository ).findAll( pageableCaptor.capture() );
-            final PageRequest pageable = (PageRequest) pageableCaptor.getValue();
+            final PageRequest pageable = (PageRequest)pageableCaptor.getValue();
 
 
             PageableAssert
@@ -313,44 +310,46 @@ class RegionControllerRestTest //extends RestControllerTestBase
     }
 
     @Nested
-    @DisplayName( "/region - HTTP POST")
+    @DisplayName( "/region - HTTP POST" )
     class Post
-    {}
+    {
+    }
 
     @Nested
-    @DisplayName( "/region - HTTP PUT")
+    @DisplayName( "/region - HTTP PUT" )
     class Put
-    {}
+    {
+    }
 
     @Nested
-    @DisplayName( "/region - HTTP DELETE")
+    @DisplayName( "/region - HTTP DELETE" )
     class Delete
-    {}
+    {
+    }
 
     @Nested
-    @DisplayName( "/region - HTTP PATCH")
+    @DisplayName( "/region - HTTP PATCH" )
     class Patch
     {
     }
 
     @Nested
-    @DisplayName( "/region - HTTP INFO")
+    @DisplayName( "/region - HTTP INFO" )
     class Info
     {
     }
 
     @Nested
-    @DisplayName( "/region - HTTP HEAD")
+    @DisplayName( "/region - HTTP HEAD" )
     class Head
     {
     }
 
     @Nested
-    @DisplayName( "/region - HTTP OPT")
+    @DisplayName( "/region - HTTP OPT" )
     class Opt
     {
     }
-
 
 
 }

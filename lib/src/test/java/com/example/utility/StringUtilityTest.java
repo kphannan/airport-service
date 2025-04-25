@@ -204,6 +204,7 @@ class StringUtilityTest
         {
             assertEquals( expected, StringUtility.hasAnyOf( target, criteria ) );
         }
+
         private static final class SubstringIsIncluded implements ArgumentsProvider
         {
             @Override
@@ -230,7 +231,7 @@ class StringUtilityTest
     class OneOfMany
     {
         @Nested
-        @DisplayName( "null or blank collection")
+        @DisplayName( "null or blank collection" )
         class NullOrBlankCollection
         {
             /**
@@ -341,9 +342,10 @@ class StringUtilityTest
     class AnyListWithList
     {
         @Nested
-        @DisplayName( "null or blank collection")
+        @DisplayName( "null or blank collection" )
         class NullOrBlankCollection
         {}
+
         @Test
         @DisplayName( "Desired strings may occur anywhere in the target" )
         void string_targetCollection_fullMatch_returnsTrue()

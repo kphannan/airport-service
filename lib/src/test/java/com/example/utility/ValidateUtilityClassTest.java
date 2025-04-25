@@ -114,6 +114,8 @@ class ValidateUtilityClassTest
             // This constructor is intentionally empty. Nothing special is needed here.
         }
     }
+
+
     /** Improper utility class: a constructor with arguments. */
     private static final class ConstructorWithArguments
     {
@@ -191,15 +193,15 @@ class ValidateUtilityClassTest
 
     // ----- Class declaration -----
     @Nested
-    @DisplayName( "Individual Criteria")
+    @DisplayName( "Individual Criteria" )
     class IndividualCriteria
     {
         @Nested
-        @DisplayName( "A class")
+        @DisplayName( "A class" )
         class ClassCriteria
         {
             @Nested
-            @DisplayName( "Is final")
+            @DisplayName( "Is final" )
             class ClassCriteriaFinal
             {
 
@@ -240,7 +242,7 @@ class ValidateUtilityClassTest
             }
 
             @Nested
-            @DisplayName( "Not be abstract")
+            @DisplayName( "Not be abstract" )
             class ClassCriteriaNotAbstract
             {
 
@@ -248,7 +250,7 @@ class ValidateUtilityClassTest
         }
 
         @Nested
-        @DisplayName( "Constructor shall")
+        @DisplayName( "Constructor shall" )
         class ClassCriteriaConstructor
         {
 
@@ -353,7 +355,8 @@ class ValidateUtilityClassTest
                 void validate_constructorWithArgs_returnFalse()
                 {
                     // --- when
-                    final boolean isUtility = ValidateUtilityClass.isConstructorPrivate( ConstructorWithArguments.class, reason );
+                    final boolean isUtility = ValidateUtilityClass
+                            .isConstructorPrivate( ConstructorWithArguments.class, reason );
 
                     // --- then
                     assertAll( () -> assertFalse( isUtility ),
@@ -462,8 +465,9 @@ class ValidateUtilityClassTest
                 void validate_constructorThrowsCorrectException_returnTrue()
                 {
                     // --- when
-                    final boolean isUtility = ValidateUtilityClass.isInstantiationDenied( ConstructorThrowsCorrectException.class,
-                                                                                          reason );
+                    final boolean isUtility = ValidateUtilityClass
+                            .isInstantiationDenied( ConstructorThrowsCorrectException.class,
+                                                    reason );
                     // final boolean isUtility = ValidateUtilityClass
                     // .isProperUtilityClass( ConstructorThrowsCorrectException.class, reason );
                     // final List<String> debugLogs = logCaptor.getLogs();
@@ -550,7 +554,8 @@ class ValidateUtilityClassTest
                                // Verify reason text
                                // exception without a message
                                () -> assertEquals( "[Unexpected cause 'java.lang.IllegalArgumentException' for "
-                                                           + "InvocationTargetException, expecting IllegalStateException]", reason.toString() ) );
+                                                           + "InvocationTargetException, expecting IllegalStateException]",
+                                                   reason.toString() ) );
                 }
 
 
@@ -627,7 +632,7 @@ class ValidateUtilityClassTest
         }
 
         @Nested
-        @DisplayName( "Methods...")
+        @DisplayName( "Methods..." )
         class ClassCriteriaMethods
         {
             // ----- Static methods
@@ -886,7 +891,9 @@ class ValidateUtilityClassTest
         @Test
         void utilty_methodsAllStatic_returnTrue()
         {
-            assertAll( () -> assertTrue( ValidateUtilityClass.isProperUtilityClass( IndividualCriteria.ClassCriteriaMethods.MethodsAllStatic.class, reason ) ),
+            assertAll( () -> assertTrue( ValidateUtilityClass.isProperUtilityClass( IndividualCriteria
+                                                                                            .ClassCriteriaMethods
+                                                                                            .MethodsAllStatic.class, reason ) ),
                        // log output
                        () -> assertTrue( logCaptor.getLogs().isEmpty() ),
                        // reason text
@@ -900,7 +907,9 @@ class ValidateUtilityClassTest
         void utilty_methodsNotAllStatic_returnFalse()
         {
             // --- when
-            final boolean      isUtility = ValidateUtilityClass.isProperUtilityClass( IndividualCriteria.ClassCriteriaMethods.MethodsNotAllStatic.class, reason );
+            final boolean      isUtility =
+                    ValidateUtilityClass
+                            .isProperUtilityClass( IndividualCriteria.ClassCriteriaMethods.MethodsNotAllStatic.class, reason );
             final List<String> debugLogs = logCaptor.getLogs();
 
             // --- then
