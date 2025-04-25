@@ -201,12 +201,12 @@ class ContinentControllerRestTest
                     .andDo( print() )
                     .andExpect( status().isBadRequest() )
                     .andReturn();
-            // final MockHttpServletResponse response = result.getResponse();
+             final MockHttpServletResponse response = result.getResponse();
 
             // --- then
             // TODO examine the ProblemDetail
-//        assertThat( response.getContentAsString() )
-//                .isBlank();
+        assertThat( response.getContentAsString() )
+                .isNotBlank();      // TODO Check for proper ProblemDetails
         }
 
 
@@ -281,12 +281,12 @@ class ContinentControllerRestTest
                     .andDo( print() )
                     .andExpect( status().isNotFound() )
                     .andReturn();
-            // final MockHttpServletResponse response = result.getResponse();
+             final MockHttpServletResponse response = result.getResponse();
 
             // --- then
             // TODO examine the ProblemDetail
-//        assertThat( response.getContentAsString() )
-//                .isBlank();
+        assertThat( response.getContentAsString() )
+                .isNotBlank();      // TODO Check for proper ProblemDetails
         }
 
 
@@ -637,7 +637,7 @@ class ContinentControllerRestTest
     class Trace
     {
         @Test
-        void restTrace_returnsNoContent() throws Exception
+        void restTrace_returnsOk() throws Exception
         {
             // --- given
             final RequestBuilder request = withHeaders( MockMvcRequestBuilders.request( HttpMethod.TRACE,
@@ -652,7 +652,7 @@ class ContinentControllerRestTest
             // --- then
 //            final MockHttpServletResponse response = result.getResponse();
 
-            assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() )
+            assertAll( () -> assertEquals( HttpStatus.OK.value(), result.getResponse().getStatus() )
                      );
         }
     }
