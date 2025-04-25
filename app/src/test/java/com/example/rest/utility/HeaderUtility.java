@@ -7,14 +7,14 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 
 
 /**
- * Utilty supporting HttpHeaders.
+ * Utility supporting HttpHeaders.
  */
 public final class HeaderUtility
 {
 
     private HeaderUtility()
     {
-        // Intentional -- needed as a utility class to prevent in stantiation
+        // Intentional -- needed as a utility class to prevent instantiation
     }
 
     /**

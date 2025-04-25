@@ -6,7 +6,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -130,39 +129,12 @@ class AirportControllerRestTest //extends RestControllerTestBase
                         .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
                         .andReturn();
                 MockHttpServletResponse response = result.getResponse();
-                String jsonString =
-                        """
-                                {
-                                   "id": 1,
-                                   "code: "ZZZ",
-                                   "localCode": "LCL",
-                                   "name": "foo",
-                                   "country": "ZZ",
-                                   "continent": "NA"
-                                }
-                                """;
-                //        MediaType.
+
                 // --- then
                 // TODO need to assert the resulting JSON....
 
-                //        assertThat( MediaType.parseMediaType( response.getContentType() ))
-                //        MediaType.parseMediaType( response.getContentType() ).isCompatibleWith( MediaType.APPLICATION_JSON );;
-                //        assertThat( MediaType.parseMediaType( response.getContentType() ) )
-                //                .isCompatibleWith( MediaType.APPLICATION_JSON );
-                //        assertThat( response ).isNotNull();
-
                 assertThat( response.getContentType() )
                         .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
-
-                //        assertThat( result.getResponse() )
-                ////                .startsWith( "Foo" )
-                //                .isEqualToIgnoreCase( "foo" );
-                //        assertThat( response )
-                //                .isNotNull()
-                //                .returns( "RP" );
-
-                //        JSONAssert.assertEquals
-
             }
 
             @Test
@@ -172,7 +144,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
                 final RequestBuilder request = withHeaders( get( "/location/airport/{id}", 99 ) );
 
                 when( repository.findById( anyLong() ) )
-                        .thenReturn( Optional.ofNullable( null ) );
+                        .thenReturn( Optional.empty() );
 
 
                 // --- when
@@ -222,15 +194,6 @@ class AirportControllerRestTest //extends RestControllerTestBase
                         .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
                         .andReturn();
                 MockHttpServletResponse response = result.getResponse();
-                String jsonString =
-                        """
-                                {
-                                   "id": 2,
-                                   "code: "XXX",
-                                   "name": "::NAME::",
-                                   "continent": "NA"
-                                }
-                                """;
 
                 // --- then
                 // TODO need to assert the resulting JSON....
@@ -246,7 +209,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
                 final RequestBuilder request = withHeaders( get( "/location/airport/code/{code}", "ZZ" ) );
 
                 when( repository.findByIdent( anyString() ) )
-                        .thenReturn( Optional.ofNullable( null ) );
+                        .thenReturn( Optional.empty() );
 
                 // --- when
                 final MvcResult result = mvc
@@ -285,7 +248,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
                         .param( "sort", "id,desc" )    // <-- no space after comma!
                         .param( "sort", "name,asc" );  // <-- no space after comma!
 
-                Page<AirportEntity> page = new PageImpl( entities );
+                Page<AirportEntity> page = new PageImpl<>( entities );
                 when( repository.findAll( any( Pageable.class ) ) )
                         .thenReturn( page );
 
@@ -304,26 +267,6 @@ class AirportControllerRestTest //extends RestControllerTestBase
                         .andExpect( jsonPath( "$.content[0].keywords" ).doesNotExist() )
                         .andReturn();
                 final MockHttpServletResponse response = result.getResponse();
-                final String jsonString =
-                        """
-                                [
-                                    {
-                                       "id": 1,
-                                       "code: "XX",
-                                       "name": "::XNAMEX::"
-                                    },
-                                    {
-                                       "id": 2,
-                                       "code: "YY",
-                                       "name": "::YNAMEY::"
-                                    },
-                                    {
-                                       "id": 3,
-                                       "code: "ZZ",
-                                       "name": "::ZNAMEZ::"
-                                    }
-                                ]
-                                """;
 
                 // --- then
                 // TODO need to assert the resulting JSON....
@@ -368,7 +311,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
                         .param( "sort", "id,desc" )    // <-- no space after comma!
                         .param( "sort", "name,asc" );  // <-- no space after comma!
 
-                page = new PageImpl( entities );
+                page = new PageImpl<>( entities );
                 when( repository.advancedQuery( anyString(),    // iataCode
                                                 anyString(),    // icaoCode
                                                 anyString(),    // ident

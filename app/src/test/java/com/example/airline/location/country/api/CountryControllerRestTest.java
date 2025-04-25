@@ -96,39 +96,12 @@ class CountryControllerRestTest //extends RestControllerTestBase
                     .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
                     .andReturn();
             MockHttpServletResponse response = result.getResponse();
-            String jsonString =
-                    """
-                            {
-                               "id": 1,
-                               "code: "ZZZ",
-                               "localCode": "LCL",
-                               "name": "foo",
-                               "country": "ZZ",
-                               "continent": "NA"
-                            }
-                            """;
-//        MediaType.
+
             // --- then
             // TODO need to assert the resulting JSON....
 
-//        assertThat( MediaType.parseMediaType( response.getContentType() ))
-//        MediaType.parseMediaType( response.getContentType() ).isCompatibleWith( MediaType.APPLICATION_JSON );;
-//        assertThat( MediaType.parseMediaType( response.getContentType() ) )
-//                .isCompatibleWith( MediaType.APPLICATION_JSON );
-//        assertThat( response ).isNotNull();
-
             assertThat( response.getContentType() )
                     .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
-
-            //        assertThat( result.getResponse() )
-////                .startsWith( "Foo" )
-//                .isEqualToIgnoreCase( "foo" );
-//        assertThat( response )
-//                .isNotNull()
-//                .returns( "RP" );
-
-//        JSONAssert.assertEquals
-
         }
 
         @Test
@@ -138,7 +111,7 @@ class CountryControllerRestTest //extends RestControllerTestBase
             final RequestBuilder request = withHeaders( get( "/location/country/{id}", 99 ) );
 
             when( repository.findById( anyInt() ) )
-                    .thenReturn( Optional.ofNullable( null ) );
+                    .thenReturn( Optional.empty() );
 
 
             // --- when
@@ -206,7 +179,7 @@ class CountryControllerRestTest //extends RestControllerTestBase
             final RequestBuilder request = withHeaders( get( "/location/country/code/{code}", "ZZ" ) );
 
             when( repository.findByCode( anyString() ) )
-                    .thenReturn( Optional.ofNullable( null ) );
+                    .thenReturn( Optional.empty() );
 
             // --- when
             final MvcResult result = mvc
@@ -219,8 +192,6 @@ class CountryControllerRestTest //extends RestControllerTestBase
             // --- then
             assertThat( response.getStatus() )
                     .isEqualTo( HttpStatus.NO_CONTENT.value() );
-//        assertThat( response.getContentType() )
-//                .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
         }
 
 
@@ -241,7 +212,7 @@ class CountryControllerRestTest //extends RestControllerTestBase
                     .param( "sort", "id,desc" )    // <-- no space after comma!
                     .param( "sort", "name,asc" );  // <-- no space after comma!
 
-            Page<CountryEntity> page = new PageImpl( entities );
+            Page<CountryEntity> page = new PageImpl<>( entities );
             when( repository.findAll( any( Pageable.class ) ) )
                     .thenReturn( page );
 

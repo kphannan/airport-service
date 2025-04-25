@@ -169,7 +169,7 @@ class ContinentControllerRestTest
             final RequestBuilder request = withHeaders( get( "/location/continent/{id}", 1 ) );
 
             when( repository.findById( anyInt() ) )
-                    .thenReturn( Optional.ofNullable( null ) );
+                    .thenReturn( Optional.empty() );
 
             // --- when
             final MvcResult result = mvc
@@ -178,7 +178,7 @@ class ContinentControllerRestTest
                     .andReturn();
 
             // --- then
-            final MockHttpServletResponse response = result.getResponse();
+            // final MockHttpServletResponse response = result.getResponse();
 
             assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() )
                      );
@@ -192,7 +192,7 @@ class ContinentControllerRestTest
             final RequestBuilder request = withHeaders( get( "/location/continent/code" ) );
 
             when( repository.findByCode( anyString() ) )
-                    .thenReturn( Optional.ofNullable( null ) );
+                    .thenReturn( Optional.empty() );
 
 
             // --- when
@@ -201,7 +201,7 @@ class ContinentControllerRestTest
                     .andDo( print() )
                     .andExpect( status().isBadRequest() )
                     .andReturn();
-            final MockHttpServletResponse response = result.getResponse();
+            // final MockHttpServletResponse response = result.getResponse();
 
             // --- then
             // TODO examine the ProblemDetail
@@ -235,36 +235,12 @@ class ContinentControllerRestTest
                     .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
                     .andReturn();
             final MockHttpServletResponse response = result.getResponse();
-            final String jsonString =
-                    """
-                            {
-                               "id": 1,
-                               "code: "ZZZ",
-                               "name": "foo"
-                            }
-                            """;
 
-//        JSONObject json = new JSONObject( response.getContentAsString() );
-//        JSONAssert jsa = new JsonAssert( response.getContentAsString() );
-//        assertThat( json.get( "id") )
-//                .isEqualTo( 1 );
-
-//        assertThat( json ).
             // --- then
             // TODO need to assert the resulting JSON....
 
             assertThat( response.getContentType() )
                     .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
-
-            //        assertThat( result.getResponse() )
-////                .startsWith( "Foo" )
-//                .isEqualToIgnoreCase( "foo" );
-//        assertThat( response )
-//                .isNotNull()
-//                .returns( "RP" );
-
-//        JSONAssert.assertEquals
-
         }
 
         @Test
@@ -274,7 +250,7 @@ class ContinentControllerRestTest
             final RequestBuilder request = withHeaders( get( "/location/continent/code/{code}", "ZZ" ) );
 
             when( repository.findByCode( anyString() ) )
-                    .thenReturn( Optional.ofNullable( null ) );
+                    .thenReturn( Optional.empty() );
 
 
             // --- when
@@ -296,7 +272,7 @@ class ContinentControllerRestTest
             final RequestBuilder request = withHeaders( get( "/location/continent/code/" ) );
 
             when( repository.findByCode( anyString() ) )
-                    .thenReturn( Optional.ofNullable( null ) );
+                    .thenReturn( Optional.empty() );
 
 
             // --- when
@@ -305,7 +281,7 @@ class ContinentControllerRestTest
                     .andDo( print() )
                     .andExpect( status().isNotFound() )
                     .andReturn();
-            final MockHttpServletResponse response = result.getResponse();
+            // final MockHttpServletResponse response = result.getResponse();
 
             // --- then
             // TODO examine the ProblemDetail
@@ -373,7 +349,7 @@ class ContinentControllerRestTest
                     .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
 
             //        assertThat( result.getResponse() )
-////                .startsWith( "Foo" )
+//                .startsWith( "Foo" )
 //                .isEqualToIgnoreCase( "foo" );
 //        assertThat( response )
 //                .isNotNull()
@@ -414,7 +390,7 @@ class ContinentControllerRestTest
                     .andReturn();
 
             // --- then
-            final MockHttpServletResponse response = result.getResponse();
+            // final MockHttpServletResponse response = result.getResponse();
             // TODO verify the JSON is the created entity
 
             assertAll( () -> assertEquals( HttpStatus.CONFLICT.value(), result.getResponse().getStatus() )
@@ -452,7 +428,7 @@ class ContinentControllerRestTest
                     .andReturn();
 
             // --- then
-            final MockHttpServletResponse response = result.getResponse();
+            // final MockHttpServletResponse response = result.getResponse();
             // TODO verify the JSON is the created entity
 
             // It is desired to have all 'asserts' as soft asserts.
@@ -466,9 +442,7 @@ class ContinentControllerRestTest
             // - only verify the end since the host and context root may vary by environment
             // - final number (22) is the id of the created row
             assertThat( result.getResponse().getRedirectedUrl() ).contains( "/location/continent/22" );
-            ;
             assertThat( result.getResponse().getHeader( "Location" ) ).contains( "/location/continent/22" );
-            ;
         }
 
 
@@ -507,7 +481,7 @@ class ContinentControllerRestTest
                     .andReturn();
 
             // --- then
-            final MockHttpServletResponse response = result.getResponse();
+            // final MockHttpServletResponse response = result.getResponse();
 
             assertAll( () -> assertEquals( HttpStatus.CONFLICT.value(), result.getResponse().getStatus() )
                      );
@@ -551,7 +525,7 @@ class ContinentControllerRestTest
                     .andReturn();
 
             // --- then
-            final MockHttpServletResponse response = result.getResponse();
+            // final MockHttpServletResponse response = result.getResponse();
 
             assertAll( () -> assertEquals( HttpStatus.OK.value(), result.getResponse().getStatus() )
                      );
@@ -588,7 +562,7 @@ class ContinentControllerRestTest
                     .andReturn();
 
             // --- then
-            final MockHttpServletResponse response = result.getResponse();
+            // final MockHttpServletResponse response = result.getResponse();
 
             assertAll( () -> assertEquals( HttpStatus.GONE.value(), result.getResponse().getStatus() ),
                        () -> verify( repository ).deleteById( anyInt() )
@@ -619,7 +593,7 @@ class ContinentControllerRestTest
                     .andReturn();
 
             // --- then
-            final MockHttpServletResponse response = result.getResponse();
+            // final MockHttpServletResponse response = result.getResponse();
 
             assertAll( () -> assertEquals( HttpStatus.GONE.value(), result.getResponse().getStatus() ),
                        () -> verify( repository ).delete( any( ContinentEntity.class ) )
@@ -700,7 +674,7 @@ class ContinentControllerRestTest
                     .andReturn();
 
             // --- then
-            final MockHttpServletResponse response = result.getResponse();
+            // final MockHttpServletResponse response = result.getResponse();
 
             assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() )
                      );

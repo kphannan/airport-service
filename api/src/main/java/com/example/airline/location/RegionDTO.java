@@ -33,7 +33,7 @@ public class RegionDTO
     @NonNull private Integer id;
 
     /**
-     * local_code prefixed with the country code to make a globally-unique
+     * local_code prefixed with the country code to make a globally unique
      * identifier.
      */
     @NonNull private String code;
@@ -41,7 +41,7 @@ public class RegionDTO
     /**
      * The local code for the administrative subdivision. Whenever possible, these
      * are official ISO 3166:2, at the highest level available, but in some cases
-     * OurAirports has to use unofficial codes. There is also a pseudo code "U-A"
+     * OurAirports has to use unofficial codes. There is also a pseudocode "U-A"
      * for each country, which means that the airport has not yet been assigned to a
      * region (or perhaps can't be, as in the case of a deep-sea oil platform).
      */
@@ -49,7 +49,7 @@ public class RegionDTO
 
     /**
      * The common English-language name for the administrative subdivision. In some
-     * cases, the name in local languages will appear in the keywords field assist
+     * cases, the name in local languages will appear in the 'keywords' field assist
      * search.
      */
     @NonNull private String name;
@@ -59,13 +59,13 @@ public class RegionDTO
      * administrative subdivision. A handful of unofficial, non-ISO codes are also
      * in use, such as "XK" for Kosovo.
      */
-    @NonNull private String country; // ! Create domain object for the country code
+    @NonNull private String country; // ! Create domain-object for the country code
 
     /**
      * A code for the continent to which the region belongs. See the continent field
      * in airports.csv for a list of codes.
      */
-    @NonNull private String continent; // ! Create domain object for contient code
+    @NonNull private String continent; // ! Create domain-object for continent code
 
     /**
      * A link to the Wikipedia article describing the subdivision.
@@ -73,7 +73,7 @@ public class RegionDTO
     @Nullable private URI wikipediaLink;
 
     /**
-     * A comma-separated list of keywords to assist with search. May include former
+     * A comma-separated list of keywords for helping with search. May include former
      * names for the region, and/or the region name in other languages.
      */
     @Nullable private String keywords;

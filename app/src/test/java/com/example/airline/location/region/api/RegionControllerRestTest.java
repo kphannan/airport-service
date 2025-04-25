@@ -56,16 +56,6 @@ class RegionControllerRestTest //extends RestControllerTestBase
     private RegionMapper mapper;
 
 
-//    @BeforeEach
-//    void setup()
-//    {
-//        mvc = MockMvcBuilders.standaloneSetup( service )
-//                             .setCustomArgumentResolvers( new PageableHandlerMethodArgumentResolver() )
-//                             // .setControllerAdvice(new SuperHeroExceptionHandler())
-//                             // .addFilters(new SuperHeroFilter())
-//                             .build();
-//    }
-
     @Nested
     @DisplayName( "/region - HTTP GET" )
     class Get
@@ -75,12 +65,10 @@ class RegionControllerRestTest //extends RestControllerTestBase
         {
             // --- given
             final RegionEntity regionEntity = new RegionEntity( 1, "ZZZ", "LCL", "foo", "ZZ", "NA", null, null );
-//        Region       region       = new Region( 1,  "ZZZ", "LCL", "foo", "ZZ", "NA", null, null  );
             final RequestBuilder request = withHeaders( get( "/location/region/{id}", 1 ) );
 
             when( repository.findById( any() ) )
                     .thenReturn( Optional.of( regionEntity ) );
-
 
             // --- when
             final MvcResult result = mvc
@@ -99,39 +87,12 @@ class RegionControllerRestTest //extends RestControllerTestBase
                     .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
                     .andReturn();
             MockHttpServletResponse response = result.getResponse();
-            String jsonString =
-                    """
-                            {
-                               "id": 1,
-                               "code: "ZZZ",
-                               "localCode": "LCL",
-                               "name": "foo",
-                               "country": "ZZ",
-                               "continent": "NA"
-                            }
-                            """;
-//        MediaType.
+
             // --- then
             // TODO need to assert the resulting JSON....
 
-//        assertThat( MediaType.parseMediaType( response.getContentType() ))
-//        MediaType.parseMediaType( response.getContentType() ).isCompatibleWith( MediaType.APPLICATION_JSON );;
-//        assertThat( MediaType.parseMediaType( response.getContentType() ) )
-//                .isCompatibleWith( MediaType.APPLICATION_JSON );
-//        assertThat( response ).isNotNull();
-
             assertThat( response.getContentType() )
                     .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
-
-            //        assertThat( result.getResponse() )
-////                .startsWith( "Foo" )
-//                .isEqualToIgnoreCase( "foo" );
-//        assertThat( response )
-//                .isNotNull()
-//                .returns( "RP" );
-
-//        JSONAssert.assertEquals
-
         }
 
         @Test
@@ -141,7 +102,7 @@ class RegionControllerRestTest //extends RestControllerTestBase
             final RequestBuilder request = withHeaders( get( "/location/region/{id}", 99 ) );
 
             when( repository.findById( anyInt() ) )
-                    .thenReturn( Optional.ofNullable( null ) );
+                    .thenReturn( Optional.empty() );
 
 
             // --- when
@@ -154,8 +115,6 @@ class RegionControllerRestTest //extends RestControllerTestBase
             // --- then
             assertThat( response.getStatus() )
                     .isEqualTo( HttpStatus.NO_CONTENT.value() );
-//        assertThat( response.getContentType() )
-//                .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
         }
 
 
@@ -164,7 +123,6 @@ class RegionControllerRestTest //extends RestControllerTestBase
         {
             // --- given
             final RegionEntity regionEntity = new RegionEntity( 2, "ZZZ", "LCL", "::NAME::", "ZZ", "NA", null, null );
-//        Region       region       = new Region( 1,  "ZZZ", "LCL", "foo", "ZZ", "NA", null, null  );
             final RequestBuilder request = withHeaders( get( "/location/region/code/{code}", 1 ) );
 
             when( repository.findByCode( anyString() ) )
@@ -188,17 +146,6 @@ class RegionControllerRestTest //extends RestControllerTestBase
                     .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
                     .andReturn();
             MockHttpServletResponse response = result.getResponse();
-            String jsonString =
-                    """
-                            {
-                               "id": 2,
-                               "code: "ZZZ",
-                               "localCode": "LCL",
-                               "name": "::NAME::",
-                               "country": "ZZ",
-                               "continent": "NA"
-                            }
-                            """;
 
             // --- then
             // TODO need to assert the resulting JSON....
@@ -214,21 +161,18 @@ class RegionControllerRestTest //extends RestControllerTestBase
             final RequestBuilder request = withHeaders( get( "/location/region/code/{code}", "ZZ" ) );
 
             when( repository.findByCode( anyString() ) )
-                    .thenReturn( Optional.ofNullable( null ) );
+                    .thenReturn( Optional.empty() );
 
             // --- when
             final MvcResult result = mvc
                     .perform( request )
                     .andExpect( status().isNoContent() )
-//                .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ))
                     .andReturn();
             MockHttpServletResponse response = result.getResponse();
 
             // --- then
             assertThat( response.getStatus() )
                     .isEqualTo( HttpStatus.NO_CONTENT.value() );
-//        assertThat( response.getContentType() )
-//                .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
         }
 
 
@@ -249,7 +193,7 @@ class RegionControllerRestTest //extends RestControllerTestBase
                     .param( "sort", "id,desc" )    // <-- no space after comma!
                     .param( "sort", "name,asc" );  // <-- no space after comma!
 
-            Page<RegionEntity> page = new PageImpl( entities );
+            Page<RegionEntity> page = new PageImpl<>( entities );
             when( repository.findAll( any( Pageable.class ) ) )
                     .thenReturn( page );
 
@@ -268,26 +212,6 @@ class RegionControllerRestTest //extends RestControllerTestBase
                     .andExpect( jsonPath( "$.content[0].keywords" ).doesNotExist() )
                     .andReturn();
             final MockHttpServletResponse response = result.getResponse();
-            final String jsonString =
-                    """
-                            [
-                                {
-                                   "id": 1,
-                                   "code: "XX",
-                                   "name": "::XNAMEX::"
-                                },
-                                {
-                                   "id": 2,
-                                   "code: "YY",
-                                   "name": "::YNAMEY::"
-                                },
-                                {
-                                   "id": 3,
-                                   "code: "ZZ",
-                                   "name": "::ZNAMEZ::"
-                                }
-                            ]
-                            """;
 
             // --- then
             // TODO need to assert the resulting JSON....
