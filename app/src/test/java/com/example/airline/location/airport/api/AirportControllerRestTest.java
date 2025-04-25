@@ -44,6 +44,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 @WebMvcTest( controllers = AirportController.class )
 @ComponentScan( basePackages = { "com.example.airline.location.airport" } )
@@ -99,7 +100,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
     {
 
         @Nested
-        @DisplayName( "by ID" )
+        @DisplayName( "by Key" )
         class ById
         {
 
@@ -345,39 +346,42 @@ class AirportControllerRestTest //extends RestControllerTestBase
         }
 
         @Nested
-        @DisplayName( "Search" )
+        @DisplayName( "by Query (search)" )
         class Search
         {
+            List<AirportEntity>           entities;
+            MockHttpServletRequestBuilder request;
+            Page<AirportEntity>           page;
+
             @BeforeEach
             void setUp()
             {
+                entities =
+                        List.of(
+                                buildEntity(),
+                                buildEntity(),
+                                buildEntity()
+                               );
+                request = withHeaders( get( "/location/airport/search" ) )
+                        .param( "page", "1" )
+                        .param( "size", "10" )
+                        .param( "sort", "id,desc" )    // <-- no space after comma!
+                        .param( "sort", "name,asc" );  // <-- no space after comma!
 
+                page = new PageImpl( entities );
+                when( repository.advancedQuery( anyString(),    // iataCode
+                                                anyString(),    // icaoCode
+                                                anyString(),    // ident
+                                                anyString(),    // name
+                                                any( Pageable.class ) ) )
+                    .thenReturn( page );
             }
 
             @Test
             void restGetSearch_name_returnsSuccess() throws Exception
             {
                 // --- given
-                final List<AirportEntity> entities =
-                        List.of(
-                                buildEntity(),
-                                buildEntity(),
-                                buildEntity()
-                               );
-                final RequestBuilder request = withHeaders( get( "/location/airport/search" ) )
-                        .param( "name", "Hartsfield" )
-                        .param( "page", "1" )
-                        .param( "size", "10" )
-                        .param( "sort", "id,desc" )    // <-- no space after comma!
-                        .param( "sort", "name,asc" );  // <-- no space after comma!
-
-                Page<AirportEntity> page = new PageImpl( entities );
-                when( repository.advancedQuery( anyString(),    // iataCode
-                                                anyString(),    // icaoCode
-                                                anyString(),    // ident
-                                                anyString(),    // name
-                                                any( Pageable.class ) ) )  // TODO advancedQuery( iataCode, icaoCode, ident, name, paging );
-                        .thenReturn( page );
+                request.param( "name", "Hartsfield" );
 
                 // --- when
                 final MvcResult result = mvc
@@ -393,31 +397,100 @@ class AirportControllerRestTest //extends RestControllerTestBase
                         .andExpect( jsonPath( "$.content[0].wikipediaLink" ).doesNotExist() )
                         .andExpect( jsonPath( "$.content[0].keywords" ).doesNotExist() )
                         .andReturn();
-                final MockHttpServletResponse response = result.getResponse();
 
                 // --- then
+                verifyPagedResponse();
+
+                final MockHttpServletResponse response = result.getResponse();
                 // TODO need to assert the resulting JSON....
-                final ArgumentCaptor<Pageable> pageableCaptor =
-                        ArgumentCaptor.forClass( Pageable.class );
-                verify( repository ).advancedQuery( anyString(),
-                                                    anyString(),
-                                                    anyString(),
-                                                    anyString(),
-                                                    pageableCaptor.capture() );
-                final PageRequest pageable = (PageRequest)pageableCaptor.getValue();
-
-                PageableAssert
-                        .assertThat( pageable )
-                        .hasPageNumber( 1 )
-                        .hasPageSize( 10 )
-                        .hasSort( "name", Sort.Direction.ASC )
-                        .hasSort( "id", Sort.Direction.DESC );
-
                 assertThat( response.getContentType() )
                         .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
             }
+
+
+            @Test
+            void restGetSearch_identifier_returnsSuccess() throws Exception
+            {
+                // --- given
+                request.param( "ident", "KATL" );
+
+                // --- when
+                final MvcResult result = mvc
+                        .perform( request )
+                        .andExpect( status().isOk() )
+                        .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
+                        // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
+                        //      don't complain about lack of assertions in tests
+                        .andDo( print() )
+                        .andExpect( jsonPath( "$.content[0].id" ).value( 1 ) )
+                        .andExpect( jsonPath( "$.content[0].ident" ).value( "KATL" ) )
+                        .andExpect( jsonPath( "$.content[0].name" ).value( "::NAME::" ) )
+                        .andExpect( jsonPath( "$.content[0].wikipediaLink" ).doesNotExist() )
+                        .andExpect( jsonPath( "$.content[0].keywords" ).doesNotExist() )
+                        .andReturn();
+
+                // --- then
+                verifyPagedResponse();
+
+                final MockHttpServletResponse response = result.getResponse();
+                // TODO need to assert the resulting JSON....
+                assertThat( response.getContentType() )
+                        .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+            }
+
+
+            @Test
+            void restGetSearch_icaoCode_returnsSuccess() throws Exception
+            {
+                // --- given
+                request.param( "icaoCode", "KATL" );
+
+                // --- when
+                final MvcResult result = mvc
+                        .perform( request )
+                        .andExpect( status().isOk() )
+                        .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
+                        // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
+                        //      don't complain about lack of assertions in tests
+                        .andDo( print() )
+                        .andExpect( jsonPath( "$.content[0].id" ).value( 1 ) )
+                        .andExpect( jsonPath( "$.content[0].ident" ).value( "KATL" ) )
+                        .andExpect( jsonPath( "$.content[0].name" ).value( "::NAME::" ) )
+                        .andExpect( jsonPath( "$.content[0].wikipediaLink" ).doesNotExist() )
+                        .andExpect( jsonPath( "$.content[0].keywords" ).doesNotExist() )
+                        .andReturn();
+
+                // --- then
+                verifyPagedResponse();
+
+                final MockHttpServletResponse response = result.getResponse();
+                // TODO need to assert the resulting JSON....
+                assertThat( response.getContentType() )
+                        .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+            }
+
         }
 
+
+
+        void verifyPagedResponse()
+        {
+            final ArgumentCaptor<Pageable> pageableCaptor =
+                    ArgumentCaptor.forClass( Pageable.class );
+            verify( repository ).advancedQuery( anyString(),
+                                                anyString(),
+                                                anyString(),
+                                                anyString(),
+                                                pageableCaptor.capture() );
+            final PageRequest pageable = (PageRequest)pageableCaptor.getValue();
+
+            PageableAssert
+                    .assertThat( pageable )
+                    .hasPageNumber( 1 )
+                    .hasPageSize( 10 )
+                    .hasSort( "name", Sort.Direction.ASC )
+                    .hasSort( "id", Sort.Direction.DESC );
+        }
 
     }
 
