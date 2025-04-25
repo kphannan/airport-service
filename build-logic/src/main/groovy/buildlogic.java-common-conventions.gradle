@@ -67,7 +67,7 @@ clean {
 
 
 compileJava {
-    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation" << "-Amapstruct.verbose=true"
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation" << "-Amapstruct.verbose=false"
 }
 
 test {
@@ -96,29 +96,68 @@ java {
 // --- Code coverage
 jacocoTestCoverageVerification {
     violationRules {
+        // https://docs.gradle.org/current/javadoc/org/gradle/testing/jacoco/tasks/rules/JacocoViolationRule.html
         rule {
             limit {
-                minimum = 0.1
+                minimum = 0.55
+            }
+        }
+
+        // Flag complex methods
+        rule {
+            element = "METHOD"
+            failOnViolation = false
+            excludes = ['*App*','*Config','**.mapper.*']
+            limit {
+                counter = 'COMPLEXITY'
+                value   = 'TOTALCOUNT'
+                maximum = 5
             }
         }
 
         rule {
+            failOnViolation = false
+            excludes = ['*App*','*Config','**.mapper.*']
             limit {
-                counter = 'LINE'
+                counter = 'INSTRUCTION'
                 value   = 'COVEREDRATIO'
-                minimum = 0.1
+                minimum = 0.80
             }
         }
 
         rule {
-            enabled = false
-            element = 'CLASS'
-            includes = ['org.gradle.*']
-
+            failOnViolation = false
+            excludes = ['*App*','*Config','**.mapper.*']
             limit {
-                counter = 'LINE'
-                value = 'TOTALCOUNT'
-                maximum = 0.1
+                counter = 'BRANCH'
+                value   = 'COVEREDRATIO'
+                minimum = 0.80
+            }
+        }
+
+        rule {
+            failOnViolation = false
+            element = 'CLASS'
+            // Ignore:
+            //     the main Application,
+            //     spring 'Config'  classes as they typically only have annotations
+            //     MapStruct generated implementations
+            excludes = ['*App*','*Config','**.mapper.*']
+
+            // Branch coverage
+            limit {
+                // INSTRUCTION, BRANCH, LINE, COMPLEXITY, METHOD, CLASS
+                counter = 'BRANCH'
+                // COVEREDCOUNT, COVEREDRATION, MISSEDCOUNT, TOTALCOUNT
+                value   = 'COVEREDRATIO'
+                minimum = 0.85
+            }
+
+            // Instruction coverage
+            limit {
+                counter = 'INSTRUCTION'
+                value   = 'COVEREDRATIO'
+                minimum = 0.85
             }
         }
     }
@@ -136,6 +175,7 @@ jacocoTestReport {
             fileTree(dir: it, exclude: [
                       "**/*Application.class"  // Do not include the application class in coverage stats
                     , "**/*App.class"          // Do not include the application class in coverage stats
+                    , "**/mapper/*"            // Ignore MapStruct generated classes
             ])
         }))
     }
