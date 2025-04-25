@@ -16,6 +16,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.head;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -38,6 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -45,6 +47,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 
 /**
@@ -634,12 +637,74 @@ class ContinentControllerRestTest
     @DisplayName( "/continent - HTTP INFO" )
     class Info
     {
+//        @Test
+//        void restTrace_returnsNoContent() throws Exception
+//        {
+//            // --- given
+//            final RequestBuilder request = withHeaders( MockMvcRequestBuilders.request( HttpMethod.INFO,
+//                                                                                        "/location/continent" ) );
+//
+//            // --- when
+//            final MvcResult result = mvc
+//                    .perform( request )
+//                    .andDo( print() )
+//                    .andReturn();
+//
+//            // --- then
+//            final MockHttpServletResponse response = result.getResponse();
+//
+//            assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() )
+//                     );
+//        }
+    }
+
+    @Nested
+    @DisplayName( "/continent - HTTP TRACE" )
+    class Trace
+    {
+        @Test
+        void restTrace_returnsNoContent() throws Exception
+        {
+            // --- given
+            final RequestBuilder request = withHeaders( MockMvcRequestBuilders.request( HttpMethod.TRACE,
+                                                                                        "/location/continent" ) );
+
+            // --- when
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andDo( print() )
+                    .andReturn();
+
+            // --- then
+//            final MockHttpServletResponse response = result.getResponse();
+
+            assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() )
+                     );
+        }
     }
 
     @Nested
     @DisplayName( "/continent - HTTP HEAD" )
     class Head
     {
+        @Test
+        void restHead_returnsNoContent() throws Exception
+        {
+            // --- given
+            final RequestBuilder request = withHeaders( head( "/location/continent" ) );
+
+            // --- when
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andDo( print() )
+                    .andReturn();
+
+            // --- then
+            final MockHttpServletResponse response = result.getResponse();
+
+            assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() )
+                     );
+        }
     }
 
     @Nested
