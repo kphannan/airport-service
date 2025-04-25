@@ -5,11 +5,11 @@ package com.example.airline.location.country.api;
 
 import java.util.Optional;
 
-import com.example.airline.location.country.model.Country;
 import com.example.airline.location.CountryDTO;
 import com.example.airline.location.config.GlobalApiResponses;
 import com.example.airline.location.config.GlobalApiSecurityResponses;
 import com.example.airline.location.country.mapper.CountryMapper;
+import com.example.airline.location.country.model.Country;
 import com.example.airline.location.country.service.CountryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -91,13 +91,19 @@ public class CountryController
             requestBody = @RequestBody( required = false ),
             responses = { @ApiResponse( description = "Success",
                     responseCode = "200",
-                    content = { @Content( mediaType = "application/json", schema = @Schema( implementation = CountryDTO.class ) ),
-                                @Content( mediaType = "application/yaml", schema = @Schema( implementation = CountryDTO.class ) ),
-                                @Content( mediaType = "application/xml", schema = @Schema( implementation = CountryDTO.class ) )
+                    content = { @Content( mediaType = "application/json",
+                                          schema = @Schema( implementation = CountryDTO.class ) ),
+                                @Content( mediaType = "application/yaml",
+                                          schema = @Schema( implementation = CountryDTO.class ) ),
+                                @Content( mediaType = "application/xml",
+                                          schema = @Schema( implementation = CountryDTO.class ) )
                     }
             )
             },
-            parameters = { @Parameter( name = "id", required = true, in = ParameterIn.PATH, description = "Primary Key" ),
+            parameters = { @Parameter( name = "id",
+                                       required = true,
+                                       in = ParameterIn.PATH,
+                                       description = "Primary Key" ),
                            @Parameter( name = "Bearer", required = false,
                                    schema = @Schema( implementation = String.class ),
                                    in = ParameterIn.HEADER,

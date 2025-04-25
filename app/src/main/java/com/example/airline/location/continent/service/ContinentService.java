@@ -16,7 +16,6 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 
-
 /**
  * Spring Service (business logic) supporting the Continent domain object.
  */
@@ -31,7 +30,7 @@ public class ContinentService
      * Create a ContinentService supported by autowire.
      *
      * @param repository jpa repository of Continents
-     * @param mapper maps entities to/from the domain model
+     * @param mapper     maps entities to/from the domain model
      */
     public ContinentService( final ContinentRepository repository, final ContinentMapper mapper )
     {
@@ -56,7 +55,6 @@ public class ContinentService
     }
 
 
-
     /**
      * Find a continent by its id.
      *
@@ -70,7 +68,6 @@ public class ContinentService
 
         return mapOptionalEntityToDomain( Optional.ofNullable( continentEntity ) );
     }
-
 
 
     /**
@@ -90,7 +87,7 @@ public class ContinentService
     // TODO use a NewContinentDTO....
     public Continent create( final NewContinent entity )
     {
-        if ( repository.existsByCode( entity.getCode()) )
+        if ( repository.existsByCode( entity.getCode() ) )
         {
             return null;
         }
@@ -110,7 +107,7 @@ public class ContinentService
     {
         if ( repository.existsById( entity.getId() ) )
         {
-            save( mapper.domainToEntity( entity ));
+            save( mapper.domainToEntity( entity ) );
 
             return entity;
         }
@@ -128,9 +125,6 @@ public class ContinentService
     {
         repository.deleteById( continentId );
     }
-
-
-
 
 
     private Optional<Continent> mapOptionalEntityToDomain( final Optional<ContinentEntity> from )

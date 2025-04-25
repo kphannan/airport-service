@@ -25,12 +25,12 @@ public interface ContinentRepository extends JpaRepository<ContinentEntity, Inte
      * Determine if an element exists in the DB.
      *
      * @param id must not be {@literal null}.
-     * @return
+     * @return true if the continent is found, false otherwise.
      */
     @Override
-    boolean existsById( final Integer id );
+    boolean existsById( final Integer continentId );
 
-    boolean existsByCode( final String code );
+    boolean existsByCode( final String continentCode );
 
     /**
      * Retrieve all {@code Continent} records.
@@ -94,5 +94,6 @@ public interface ContinentRepository extends JpaRepository<ContinentEntity, Inte
     // ========== Update ==========
     // ========== Delete ==========
     void delete( ContinentEntity entity );
+
     void deleteById( Integer continentId );
 }

@@ -10,7 +10,6 @@ import com.example.airline.location.NewContinentDTO;
 import com.example.airline.location.continent.model.Continent;
 import com.example.airline.location.continent.model.NewContinent;
 import com.example.airline.location.continent.persistence.model.ContinentEntity;
-import com.example.airline.location.continent.persistence.model.NewContinentEntity;
 import org.mapstruct.Mapper;
 
 
@@ -26,17 +25,24 @@ public interface ContinentMapper
     // ----- Domain / Persistence -----
     // --- Persistence --> Domain ---
     // --- Instance
-    /** Map a single db entity instance to a domain instance. */
+
+    /**
+     * Map a single db entity instance to a domain instance.
+     */
     Continent entityToDomain( ContinentEntity entity );
 //    Continent entityToDomain( NewContinentEntity entity );
 
     // --- Collection
-    /** Map a list of domain instances to a list of db entity instances. */
+
+    /**
+     * Map a list of domain instances to a list of db entity instances.
+     */
     List<Continent> entityToDomain( List<ContinentEntity> entities );
 
     // --- Domain --> Persistence ---
     // --- Instance
     ContinentEntity domainToEntity( Continent domain );
+
     ContinentEntity domainToEntity( NewContinent domain );
     // --- Collection
 
@@ -44,16 +50,23 @@ public interface ContinentMapper
     // ----- Domain / API -----
     // --- Domain --> API ---
     // --- Instance
-    /** Map a domain instance to an API instance. */
+
+    /**
+     * Map a domain instance to an API instance.
+     */
     ContinentDTO domainToApi( Continent continent );
 
     // --- Collection
-    /** Map a list of domain instances to a list of API instances. */
+
+    /**
+     * Map a list of domain instances to a list of API instances.
+     */
     List<ContinentDTO> domainToApi( List<Continent> continents );
 
     // --- API --> Domain ---
     // --- Instance
     Continent apiToDomain( ContinentDTO dto );
+
     NewContinent apiToDomain( NewContinentDTO dto );
     // --- Collection
 }
