@@ -19,7 +19,7 @@ import org.mapstruct.factory.Mappers;
 @Mapper( componentModel = "spring" )
 public interface RegionMapper
 {
-    RegionMapper INSTANCE = Mappers.getMapper( RegionMapper.class );
+//    RegionMapper INSTANCE = Mappers.getMapper( RegionMapper.class );
 
     // --------------------------------
     // ----- Domain / Persistence -----

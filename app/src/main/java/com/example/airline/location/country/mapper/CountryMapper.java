@@ -20,7 +20,7 @@ import org.mapstruct.factory.Mappers;
 @Mapper( componentModel = "spring" )
 public interface CountryMapper
 {
-    CountryMapper INSTANCE = Mappers.getMapper( CountryMapper.class );
+//    CountryMapper INSTANCE = Mappers.getMapper( CountryMapper.class );
 
     // --------------------------------
     // ----- Domain / Persistence -----

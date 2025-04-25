@@ -18,7 +18,7 @@ import org.mapstruct.factory.Mappers;
 @Mapper( componentModel = "spring" )
 public interface AirportMapper
 {
-    AirportMapper INSTANCE = Mappers.getMapper( AirportMapper.class );
+//    AirportMapper INSTANCE = Mappers.getMapper( AirportMapper.class );
 
     // --------------------------------
     // ----- Domain / Persistence -----
