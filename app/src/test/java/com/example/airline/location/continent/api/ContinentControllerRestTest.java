@@ -16,6 +16,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -36,6 +37,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -644,5 +646,27 @@ class ContinentControllerRestTest
     @DisplayName( "/continent - HTTP OPT" )
     class Opt
     {
+        @Test
+        void restOptions_returnsHeaders() throws Exception
+        {
+            // --- given
+            final RequestBuilder request = withHeaders( options( "/location/continent" ) );
+
+            // --- when
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andDo( print() )
+                    .andReturn();
+
+            // --- then
+            final MockHttpServletResponse response = result.getResponse();
+
+            assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() ),
+                       () -> assertEquals( "DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT,TRACE",
+                                           response.getHeader( HttpHeaders.ALLOW ) ),
+                       () -> assertEquals( "application/json,application/yaml,application/xml",
+                                           response.getHeader( HttpHeaders.ACCEPT ) )
+                     );
+        }
     }
 }
