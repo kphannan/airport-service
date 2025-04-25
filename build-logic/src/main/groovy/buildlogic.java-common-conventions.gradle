@@ -175,6 +175,9 @@ jacocoTestReport {
             fileTree(dir: it, exclude: [
                       "**/*Application.class"  // Do not include the application class in coverage stats
                     , "**/*App.class"          // Do not include the application class in coverage stats
+                    , "**/*Config"             // Ignore Config classes - they are just carriers for annotations -- so far
+                                               // OpenApiConfig, JpaConfig
+                                               // Spring security will probably break this rule....
                     , "**/mapper/*"            // Ignore MapStruct generated classes
             ])
         }))
