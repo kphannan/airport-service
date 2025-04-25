@@ -13,6 +13,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -43,31 +44,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 public class GlobalExceptionHandler
 {
 
-
-    /**
-     * Create a standard error message when an API parameter is the wrong type.
-     *
-     * @param exception the intercepted exception;
-     *
-     * @return a formatted {@code ProblemDetail}.
-     */
-    @ExceptionHandler( EntityNotFoundException.class )
-    @ResponseStatus( code = HttpStatus.BAD_REQUEST )
-    public ResponseEntity<ProblemDetail>
-    handleEntityNotFoundException( final EntityNotFoundException exception )
-    {
-        final StringBuilder detailMessage =
-                new StringBuilder()
-                    .append( exception.getMessage() );
-
-        log.error( exception );
-
-        final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.GONE,
-                                                                        detailMessage.toString() );
-
-        return new ResponseEntity<>( details, HttpStatus.GONE );
-    }
-
+    // ========== Type / Argument Mismatch ==========
     /**
      * Create a standard error message when an API parameter is the wrong type.
      *
@@ -89,7 +66,6 @@ public class GlobalExceptionHandler
 
         return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );
     }
-
 
 
     /**
@@ -116,6 +92,8 @@ public class GlobalExceptionHandler
 
 
 
+
+    // ========== MediaType ==========
     /**
      * Create a standard error message when called requesting an unsupported
      * media type as input or output.
@@ -129,13 +107,15 @@ public class GlobalExceptionHandler
     public ResponseEntity<ProblemDetail>
     handleUnsupportedMediaTypeException( final HttpMediaTypeNotSupportedException exception )
     {
-        final StringBuilder detailMessage = new StringBuilder( "Unsupported content type: " )
-                .append( exception.getContentType() )
-                .append( "; Supported content types: " )
-                .append( MediaType.toString( exception.getSupportedMediaTypes() ) );
-        final ProblemDetail details       = ProblemDetail.forStatusAndDetail( HttpStatus.UNSUPPORTED_MEDIA_TYPE,
-                                                                              detailMessage.toString() );
+        final ProblemDetail details = ProblemDetail.forStatus( HttpStatus.UNSUPPORTED_MEDIA_TYPE );
         details.setTitle( "Unsupported Media Type" );
+        details.setDetail( exception.getMessage() );
+        details.setProperty( "Unsupported content:", exception.getContentType().toString() );
+        details.setProperty( "Supported content:",
+                             exception.getSupportedMediaTypes()
+                                      .stream()
+                                      .map( MediaType::toString )
+                                      .collect( Collectors.joining(", ") ) );
 
         return new ResponseEntity<>( details, HttpStatus.UNSUPPORTED_MEDIA_TYPE );
     }
@@ -153,11 +133,14 @@ public class GlobalExceptionHandler
     public ResponseEntity<ProblemDetail>
     handleUnacceptableMediaTypeException( final HttpMediaTypeNotAcceptableException exception )
     {
-        final StringBuilder detailMessage = new StringBuilder( "Unsupported content type: " )
-                .append( MediaType.toString( exception.getSupportedMediaTypes() ) );
-        final ProblemDetail details       = ProblemDetail.forStatusAndDetail( HttpStatus.UNSUPPORTED_MEDIA_TYPE,
-                                                                              detailMessage.toString() );
-        details.setTitle( "Unsupported Media Type" );
+        final ProblemDetail details = ProblemDetail.forStatus( HttpStatus.UNSUPPORTED_MEDIA_TYPE );
+        details.setTitle( "Unacceptable Media Type" );
+        details.setDetail( exception.getMessage() );
+        details.setProperty( "Supported content:",
+                             exception.getSupportedMediaTypes()
+                                      .stream()
+                                      .map( MediaType::toString )
+                                      .collect( Collectors.joining(", ") ) );
 
         return new ResponseEntity<>( details, HttpStatus.UNSUPPORTED_MEDIA_TYPE );
     }
@@ -174,17 +157,38 @@ public class GlobalExceptionHandler
     @ResponseStatus( HttpStatus.UNSUPPORTED_MEDIA_TYPE )
     public ResponseEntity<ProblemDetail> handleMediaTypeException( final HttpMediaTypeException exception )
     {
-        // TODO Message should indicate the bad media type as well as the acceptable types
-        final StringBuilder detailMessage = new StringBuilder( "Unsupported content type: " )
-                .append( MediaType.toString( exception.getSupportedMediaTypes() ) );
-        final ProblemDetail details       = ProblemDetail.forStatusAndDetail( HttpStatus.UNSUPPORTED_MEDIA_TYPE,
-                                                                              detailMessage.toString() );
-        details.setTitle( "Unsupported Media Type" );
 
-        return new ResponseEntity<>( details, HttpStatus.UNSUPPORTED_MEDIA_TYPE );
+//        final ProblemDetail details = ProblemDetail.forStatus( HttpStatus.UNSUPPORTED_MEDIA_TYPE );
+        final ProblemDetail details = ProblemDetail.forStatus( exception.getStatusCode() );
+        details.setTitle( "Bad Media Type" );
+//        details.setTitle( "Bad Media Type" );
+        details.setDetail( exception.getMessage() );
+        details.setProperty( "Supported content:",
+                             exception.getSupportedMediaTypes()
+                                      .stream()
+                                      .map( MediaType::toString )
+                                      .collect( Collectors.joining(", ") ) );
+
+        return new ResponseEntity<>( details, exception.getStatusCode() );
+
+
+
+
+
+
+        // TODO Message should indicate the bad media type as well as the acceptable types
+//        final StringBuilder detailMessage = new StringBuilder( "Unsupported content type: " )
+//                .append( MediaType.toString( exception.getSupportedMediaTypes() ) );
+//        final ProblemDetail details       = ProblemDetail.forStatusAndDetail( HttpStatus.UNSUPPORTED_MEDIA_TYPE,
+//                                                                              detailMessage.toString() );
+//        details.setTitle( "Unsupported Media Type" );
+//
+//        return new ResponseEntity<>( details, HttpStatus.UNSUPPORTED_MEDIA_TYPE );
     }
 
 
+
+    // ========== Validation ==========
 //    /**
 //     * Create a standard error message when the input request body contains invalid or
 //     * missing attributes.
@@ -295,6 +299,7 @@ public class GlobalExceptionHandler
 
 
 
+    // ========== Malformed ==========
     /**
      * Create a standard error message when the input request body contains a
      * malformed request body.
@@ -332,6 +337,8 @@ public class GlobalExceptionHandler
     }
 
 
+
+    // ========== Unsupported Method ==========
     /**
      * Create a standard error message when an unsupported methot (GET, PUT,
      * DELETE...) is specified.
@@ -360,6 +367,7 @@ public class GlobalExceptionHandler
 
 
 
+    // ========== ResourceNotFound ==========
     /**
      * Create a standard error message when the specified resource (URI) does not
      * exist in the API. A NOT_FOUND does not mean the requested entity could not be
@@ -395,8 +403,34 @@ public class GlobalExceptionHandler
                 .body( details );
     }
 
+    /**
+     * Create a standard error message when an API parameter is the wrong type.
+     *
+     * @param exception the intercepted exception;
+     *
+     * @return a formatted {@code ProblemDetail}.
+     */
+    @ExceptionHandler( EntityNotFoundException.class )
+    @ResponseStatus( code = HttpStatus.BAD_REQUEST )
+    public ResponseEntity<ProblemDetail>
+    handleEntityNotFoundException( final EntityNotFoundException exception )
+    {
+        final StringBuilder detailMessage =
+                new StringBuilder()
+                        .append( exception.getMessage() );
+
+        log.error( exception );
+
+        final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.GONE,
+                                                                        detailMessage.toString() );
+
+        return new ResponseEntity<>( details, HttpStatus.GONE );
+    }
 
 
+
+
+    // ========== Catch-All ==========
     /**
      * Create a standard error message as a catch-all for any unanticipated exception.
      *
