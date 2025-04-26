@@ -12,7 +12,7 @@ import com.example.airline.location.ContinentDTO;
 import com.example.airline.location.NewContinentDTO;
 import com.example.airline.location.config.GlobalApiResponses;
 import com.example.airline.location.config.GlobalApiSecurityResponses;
-import com.example.airline.location.continent.mapper.ContinentMapper;
+import com.example.airline.location.continent.mapper.DtoMapper;
 import com.example.airline.location.continent.model.Continent;
 import com.example.airline.location.continent.service.ContinentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -56,8 +56,7 @@ public class ContinentController
 {
     // Autowired via constructor
     private final ContinentService service;
-    private final ContinentMapper  mapper;
-//    private final List<MediaType> restMediaTypes = List.of( MediaType.APPLICATION_JSON, MediaType.APPLICATION_YAML );
+    private final DtoMapper        mapper;
 
 
     /**
@@ -66,7 +65,7 @@ public class ContinentController
      * @param service The service to use for continent operations.
      * @param mapper  The mapper to convert between domain and API objects.
      */
-    public ContinentController( final ContinentService service, final ContinentMapper mapper )
+    public ContinentController( final ContinentService service, final DtoMapper mapper )
     {
         this.service = service;
         this.mapper  = mapper;

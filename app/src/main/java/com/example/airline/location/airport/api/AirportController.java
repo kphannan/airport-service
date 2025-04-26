@@ -7,7 +7,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 import com.example.airline.airport.AirportDTO;
-import com.example.airline.location.airport.mapper.AirportMapper;
+import com.example.airline.location.airport.mapper.DtoMapper;
 import com.example.airline.location.airport.model.Airport;
 import com.example.airline.location.airport.service.AirportService;
 import com.example.airline.location.config.GlobalApiResponses;
@@ -40,9 +40,9 @@ public class AirportController
 {
     // Autowired via constructor
     private final AirportService service;
-    private final AirportMapper  mapper;
+    private final DtoMapper      mapper;
 
-    public AirportController( final AirportService service, final AirportMapper mapper )
+    public AirportController( final AirportService service, final DtoMapper mapper )
     {
         this.service = service;
         this.mapper  = mapper;
@@ -141,7 +141,7 @@ public class AirportController
      *         criteria.
      */
     @GetMapping( path = "/search" )
-    public Page<AirportDTO> advancedQuery( @RequestParam( name = "iataCode", required = false ) final String iataCode,
+    public Page<AirportDTO> ßadvancedQuery( @RequestParam( name = "iataCode", required = false ) final String iataCode,
                                            @RequestParam( name = "icaoCode", required = false ) final String icaoCode,
                                            @RequestParam( name = "ident", required = false ) final String ident,
                                            @RequestParam( name = "name", required = false ) final String name,

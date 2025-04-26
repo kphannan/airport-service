@@ -9,7 +9,7 @@ import com.example.airline.location.region.model.Region;
 import com.example.airline.location.RegionDTO;
 import com.example.airline.location.config.GlobalApiResponses;
 import com.example.airline.location.config.GlobalApiSecurityResponses;
-import com.example.airline.location.region.mapper.RegionMapper;
+import com.example.airline.location.region.mapper.DtoMapper;
 import com.example.airline.location.region.service.RegionsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -47,7 +47,7 @@ public class RegionsController
 {
     // Autowired via constructor
     private final RegionsService service;
-    private final RegionMapper   mapper;
+    private final DtoMapper      mapper;
 
     /**
      * Constructor for the RegionsController.
@@ -55,7 +55,7 @@ public class RegionsController
      * @param service The service to use for region operations.
      * @param mapper  The mapper to convert between domain and API objects.
      */
-    public RegionsController( final RegionsService service, final RegionMapper mapper )
+    public RegionsController( final RegionsService service, final DtoMapper mapper )
     {
         this.service = service;
         this.mapper  = mapper;

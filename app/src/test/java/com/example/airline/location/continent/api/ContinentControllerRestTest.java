@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 import java.util.Optional;
 
-import com.example.airline.location.continent.mapper.ContinentMapper;
+import com.example.airline.location.continent.mapper.DtoMapper;
 import com.example.airline.location.continent.persistence.model.ContinentEntity;
 import com.example.airline.location.continent.persistence.repository.ContinentRepository;
 import com.example.airline.location.continent.service.ContinentService;
@@ -110,7 +110,7 @@ class ContinentControllerRestTest
 
     @Autowired
     @SuppressWarnings( "unused" )
-    private ContinentMapper mapper;
+    private DtoMapper mapper;
 
     @MockitoBean
     private ContinentRepository repository;

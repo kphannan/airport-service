@@ -5,22 +5,18 @@ package com.example.airline.location.region.mapper;
 
 import java.util.List;
 
-import com.example.airline.location.region.model.Region;
 import com.example.airline.location.RegionDTO;
 import com.example.airline.location.persistence.model.location.RegionEntity;
+import com.example.airline.location.region.model.Region;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
-
 
 
 /**
- * MapStruct configuration for Region, RegionEntity, RegionDTO.
+ * MapStruct configuration for Region, RegionEntity.
  */
 @Mapper( componentModel = "spring" )
-public interface RegionMapper
+public interface EntityMapper
 {
-//    RegionMapper INSTANCE = Mappers.getMapper( RegionMapper.class );
-
     // --------------------------------
     // ----- Domain / Persistence -----
     // --- Persistence --> Domain ---
@@ -33,23 +29,6 @@ public interface RegionMapper
     List<Region> entityToDomain( List<RegionEntity> dtos );
 
     // --- Domain --> Persistence ---
-    // --- Instance
-    // --- Collection
-
-    // ------------------------
-    // ----- Domain / API -----
-    // --- Domain --> API ---
-    // --- Instance
-    /** Map a domain instance to an API instance. */
-    RegionDTO domainToApi( Region region );
-
-    // --- Collection
-    /** Map a list of domain instances to a list of API instances. */
-    List<RegionDTO> domainToApi( List<Region> regions );
-
-//    <T,S> T entityToDomain( S s );
-
-    // --- API --> Domain ---
     // --- Instance
     // --- Collection
 }

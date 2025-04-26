@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.airline.location.airport.mapper.AirportMapper;
+import com.example.airline.location.airport.mapper.DtoMapper;
 import com.example.airline.location.airport.persistence.repository.AirportRepository;
 import com.example.airline.location.airport.service.AirportService;
 import com.example.airline.location.persistence.model.airport.AirportEntity;
@@ -56,7 +56,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
     @Autowired
     private AirportService service;
     @Autowired
-    private AirportMapper mapper;
+    private DtoMapper mapper;
 
 
 //    @BeforeEach
