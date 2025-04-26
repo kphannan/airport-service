@@ -2,7 +2,7 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-springBootVersion = '3.2.5'
+springBootVersion = '3.4.5'
 springCloudVersion = '2024.0.1'
 #
 lombokVersion = '8.13.1'
