@@ -418,10 +418,9 @@ public class GlobalExceptionHandler
                 new StringBuilder()
                         .append( exception.getMessage() );
 
-        log.error( exception );
-
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.GONE,
                                                                         detailMessage.toString() );
+        details.setTitle( "Not Found" );
 
         return new ResponseEntity<>( details, HttpStatus.GONE );
     }

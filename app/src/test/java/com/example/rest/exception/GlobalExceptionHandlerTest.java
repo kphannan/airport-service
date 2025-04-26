@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -131,6 +132,36 @@ public class GlobalExceptionHandlerTest
                            () -> assertEquals( HttpStatus.ALREADY_REPORTED, result.getStatusCode() )
                          );
             }
+        }
+    }
+
+
+
+
+
+    @Nested
+    @DisplayName( "When trouble with persistence" )
+    class Persistence
+    {
+        @Test
+        void exceptionPersistence_notFound_formatsProblemDetails()
+        {
+            // --- given
+            Exception except = new Exception( "Test cause" );
+            final EntityNotFoundException exception =
+                    new EntityNotFoundException( "Dummy message", except );
+
+            // --- when
+            ResponseEntity<ProblemDetail> result =
+                    handler.handleEntityNotFoundException( exception );
+            ProblemDetail detail = result.getBody();
+
+            // --- then
+            assertAll( () -> assertNotNull( result ),
+                       () -> assertEquals( "Not Found", detail.getTitle() ),
+                       () -> assertEquals( 410, detail.getStatus() ),
+                       () -> assertEquals( "Dummy message", detail.getDetail() )
+                     );
         }
     }
 }
