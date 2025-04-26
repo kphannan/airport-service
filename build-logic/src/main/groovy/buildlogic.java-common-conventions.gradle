@@ -195,7 +195,7 @@ pitest {
     // Ignore:
     //     Spring application (unless it includes more than boilerplate)
     //     MapStruct generated implementation classes.  Maybe later force the generated source to be included.
-    excludedTestClasses = [ "**/*App*.*", "**/mapper/*Impl.*", "**/*Config.*" ]
+    excludedTestClasses = [ '**.*App*', '**.mapper.*Impl', '**.*Config' ]
     threads = 16
     timestampedReports = false
     withHistory = false
