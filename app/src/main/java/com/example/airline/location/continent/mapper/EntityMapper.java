@@ -5,8 +5,6 @@ package com.example.airline.location.continent.mapper;
 
 import java.util.List;
 
-import com.example.airline.location.ContinentDTO;
-import com.example.airline.location.NewContinentDTO;
 import com.example.airline.location.continent.model.Continent;
 import com.example.airline.location.continent.model.NewContinent;
 import com.example.airline.location.continent.persistence.model.ContinentEntity;
@@ -17,7 +15,7 @@ import org.mapstruct.Mapper;
  * MapStruct configuration for Continent, ContinentEntity, ContinentDTO.
  */
 @Mapper( componentModel = "spring" )
-public interface ContinentMapper
+public interface EntityMapper
 {
     //ContinentMapper INSTANCE = Mappers.getMapper( ContinentMapper.class );
 
@@ -46,27 +44,27 @@ public interface ContinentMapper
     ContinentEntity domainToEntity( NewContinent domain );
     // --- Collection
 
-    // ------------------------
-    // ----- Domain / API -----
-    // --- Domain --> API ---
-    // --- Instance
-
-    /**
-     * Map a domain instance to an API instance.
-     */
-    ContinentDTO domainToApi( Continent continent );
-
-    // --- Collection
-
-    /**
-     * Map a list of domain instances to a list of API instances.
-     */
-    List<ContinentDTO> domainToApi( List<Continent> continents );
-
-    // --- API --> Domain ---
-    // --- Instance
-    Continent apiToDomain( ContinentDTO dto );
-
-    NewContinent apiToDomain( NewContinentDTO dto );
-    // --- Collection
+//    // ------------------------
+//    // ----- Domain / API -----
+//    // --- Domain --> API ---
+//    // --- Instance
+//
+//    /**
+//     * Map a domain instance to an API instance.
+//     */
+//    ContinentDTO domainToApi( Continent continent );
+//
+//    // --- Collection
+//
+//    /**
+//     * Map a list of domain instances to a list of API instances.
+//     */
+//    List<ContinentDTO> domainToApi( List<Continent> continents );
+//
+//    // --- API --> Domain ---
+//    // --- Instance
+//    Continent apiToDomain( ContinentDTO dto );
+//
+//    NewContinent apiToDomain( NewContinentDTO dto );
+//    // --- Collection
 }

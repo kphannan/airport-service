@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.airline.location.persistence.model.location.RegionEntity;
-import com.example.airline.location.region.mapper.RegionMapper;
+import com.example.airline.location.region.mapper.DtoMapper;
 import com.example.airline.location.region.persistence.repository.RegionsRepository;
 import com.example.airline.location.region.service.RegionsService;
 import com.example.rest.utility.PageableAssert;
@@ -53,7 +53,7 @@ class RegionControllerRestTest //extends RestControllerTestBase
     @Autowired
     private RegionsService service;
     @Autowired
-    private RegionMapper mapper;
+    private DtoMapper      mapper;
 
 
     @Nested

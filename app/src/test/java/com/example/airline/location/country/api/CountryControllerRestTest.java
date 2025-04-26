@@ -17,9 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 import java.util.Optional;
 
-import com.example.airline.location.country.mapper.CountryMapper;
 import com.example.airline.location.country.persistence.repository.CountryRepository;
-import com.example.airline.location.country.service.CountryService;
 import com.example.airline.location.persistence.model.location.CountryEntity;
 import com.example.rest.utility.PageableAssert;
 import org.junit.jupiter.api.DisplayName;
@@ -50,10 +48,10 @@ class CountryControllerRestTest //extends RestControllerTestBase
     protected MockMvc mvc;
     @MockitoBean
     protected CountryRepository repository;
-    @Autowired
-    private CountryService service;
-    @Autowired
-    private CountryMapper mapper;
+//    @Autowired
+//    private CountryService service;
+//    @Autowired
+//    private DtoMapper mapper;
 
 
 //    @BeforeEach
@@ -155,15 +153,6 @@ class CountryControllerRestTest //extends RestControllerTestBase
                     .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
                     .andReturn();
             MockHttpServletResponse response = result.getResponse();
-            String jsonString =
-                    """
-                            {
-                               "id": 2,
-                               "code: "XXX",
-                               "name": "::NAME::",
-                               "continent": "NA"
-                            }
-                            """;
 
             // --- then
             // TODO need to assert the resulting JSON....
@@ -231,26 +220,6 @@ class CountryControllerRestTest //extends RestControllerTestBase
                     .andExpect( jsonPath( "$.content[0].keywords" ).doesNotExist() )
                     .andReturn();
             final MockHttpServletResponse response = result.getResponse();
-            final String jsonString =
-                    """
-                            [
-                                {
-                                   "id": 1,
-                                   "code: "XX",
-                                   "name": "::XNAMEX::"
-                                },
-                                {
-                                   "id": 2,
-                                   "code: "YY",
-                                   "name": "::YNAMEY::"
-                                },
-                                {
-                                   "id": 3,
-                                   "code: "ZZ",
-                                   "name": "::ZNAMEZ::"
-                                }
-                            ]
-                            """;
 
             // --- then
             // TODO need to assert the resulting JSON....

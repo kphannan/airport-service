@@ -311,6 +311,8 @@ public class GlobalExceptionHandler
     @ResponseStatus( code = HttpStatus.BAD_REQUEST )
     public ResponseEntity<ProblemDetail> handleMessageNotReadableException( final HttpMessageNotReadableException exception )
     {
+        // TODO potentially a problem with the content-type or lack of mapping to/from the
+        // requested format and the internal POJO.
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST,
                                                                         exception.getMessage() );
 

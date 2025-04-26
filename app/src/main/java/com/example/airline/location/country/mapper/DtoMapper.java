@@ -9,40 +9,16 @@ import com.example.airline.location.CountryDTO;
 import com.example.airline.location.country.model.Country;
 import com.example.airline.location.persistence.model.location.CountryEntity;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 
 /**
- * MapStruct configuration for Country, CountryEntity, CountryDTO.
+ * MapStruct configuration for Country, CountryDTO.
  * <p>
  * Mapstruct will generate the methods.
  */
 @Mapper( componentModel = "spring" )
-public interface CountryMapper
+public interface DtoMapper
 {
-//    CountryMapper INSTANCE = Mappers.getMapper( CountryMapper.class );
-
-    // --------------------------------
-    // ----- Domain / Persistence -----
-    // --- Persistence --> Domain ---
-    // --- Instance
-
-    /**
-     * Map a single db entity instance to a domain instance.
-     */
-    Country entityToDomain( CountryEntity entity );
-
-    // --- Collection
-
-    /**
-     * Map a list of domain instances to a list of db entity instances.
-     */
-    List<Country> entityToDomain( List<CountryEntity> entities );
-
-    // --- Domain --> Persistence ---
-    // --- Instance
-    // --- Collection
-
     // ------------------------
     // ----- Domain / API -----
     // --- Domain --> API ---

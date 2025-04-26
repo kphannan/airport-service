@@ -6,7 +6,7 @@ package com.example.airline.location.continent.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.airline.location.continent.mapper.ContinentMapper;
+import com.example.airline.location.continent.mapper.EntityMapper;
 import com.example.airline.location.continent.model.Continent;
 import com.example.airline.location.continent.model.NewContinent;
 import com.example.airline.location.continent.persistence.model.ContinentEntity;
@@ -24,7 +24,7 @@ public class ContinentService
 {
     private final ContinentRepository repository;
 
-    private final ContinentMapper mapper;
+    private final EntityMapper mapper;
 
     /**
      * Create a ContinentService supported by autowire.
@@ -32,7 +32,7 @@ public class ContinentService
      * @param repository jpa repository of Continents
      * @param mapper     maps entities to/from the domain model
      */
-    public ContinentService( final ContinentRepository repository, final ContinentMapper mapper )
+    public ContinentService( final ContinentRepository repository, final EntityMapper mapper )
     {
         this.repository = repository;
         this.mapper     = mapper;
