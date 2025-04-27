@@ -1,5 +1,7 @@
 /* (C) 2025 */
 
+// Helpful reference - https://exceptiondecoded.com
+
 package com.example.rest.exception;
 
 
@@ -315,6 +317,11 @@ public class GlobalExceptionHandler
         // requested format and the internal POJO.
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST,
                                                                         exception.getMessage() );
+        details.setTitle( "Malformed Request" );
+        details.setProperty( "Possibility 1", "Malformed request body" );
+        details.setProperty( "Possibility 2", "Invalid request parameters" );
+        details.setProperty( "Possibility 3", "Incompatible data format" );
+        details.setProperty( "Possibility 4", "Serialization errors" );
 
         return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );
     }
@@ -331,10 +338,11 @@ public class GlobalExceptionHandler
     @ResponseStatus( code = HttpStatus.BAD_REQUEST )
     public ResponseEntity<ProblemDetail> handleMessageNotWritableException( final HttpMessageNotWritableException exception )
     {
-        final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST,
+        final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.NOT_IMPLEMENTED,
                                                                         exception.getMessage() );
+        details.setTitle( "Unable to produce requested response format" );
 
-        return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );
+        return new ResponseEntity<>( details, HttpStatus.NOT_IMPLEMENTED );
     }
 
 
@@ -352,13 +360,9 @@ public class GlobalExceptionHandler
     @ResponseStatus( HttpStatus.METHOD_NOT_ALLOWED )
     public ResponseEntity<ProblemDetail> handleMethodNotSupportedException( final HttpRequestMethodNotSupportedException exception )
     {
-        final StringBuilder detailMessage = new StringBuilder( exception.getMessage() )
-//                .append( exception.getMessage() )
-                .append( "; Supported methods: " )
-                .append( String.join( ", ", exception.getSupportedMethods() ) );
+        final ProblemDetail details = exception.getBody();
 
-        final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.METHOD_NOT_ALLOWED,
-                                                                        detailMessage.toString() );
+        details.setProperty( "TraceId: ", UUID.randomUUID() );  // TODO change to pull the traceID from MDC
 
         return ResponseEntity
                 .status( HttpStatus.METHOD_NOT_ALLOWED )
@@ -383,19 +387,9 @@ public class GlobalExceptionHandler
     public ResponseEntity<ProblemDetail> handleResourceNotFoundException( final NoResourceFoundException exception )
     {
         // TODO the MDC should include the traceId (UUID) and log pattern should
-        // introduce this.
-        // we should not pass our traceId back to the client
-        // final StringBuilder detailMessage = new
-        // StringBuilder( "Resource Not Found ")
-        // .append( "logref=" )
-        // .append( UUID.randomUUID() )
-        // .append( "\n" )
-        // .append( exception.getMessage() );
 
-        final ProblemDetail details =
-                ProblemDetail.forStatusAndDetail( HttpStatus.NOT_FOUND, exception.getMessage() );
-        details.setTitle( "Resource Not Found" );
-        // details.setTitle(exception.getClass().getSimpleName());
+        final ProblemDetail details = exception.getBody();
+        details.setProperty( "TraceId: ", UUID.randomUUID() );  // TODO change to pull the traceID from MDC
         details.setInstance( URI.create( exception.getResourcePath() ) );
 
         return ResponseEntity

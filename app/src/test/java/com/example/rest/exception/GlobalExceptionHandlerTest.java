@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -11,15 +13,21 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.web.HttpMediaTypeException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 public class GlobalExceptionHandlerTest
 {
@@ -130,6 +138,138 @@ public class GlobalExceptionHandlerTest
                                                detail.getProperties()
                                                      .get( "Supported content:" ) ),
                            () -> assertEquals( HttpStatus.ALREADY_REPORTED, result.getStatusCode() )
+                         );
+            }
+        }
+
+        @Nested
+        @DisplayName( "Resources" )
+        class UriIssues
+        {
+
+            @Test
+            @DisplayName( "404 for resource (URI) not found" )
+            void exceptionUri_notFound_formatsProblemDetails()
+            {
+                // --- given
+                final NoResourceFoundException exception =
+                        new NoResourceFoundException( HttpMethod.GET, "/some/resource/path" );
+
+                // --- when
+                ResponseEntity<ProblemDetail> result =
+                        handler.handleResourceNotFoundException( exception );
+                ProblemDetail detail = result.getBody();
+
+                // --- then
+                assertAll( () -> assertNotNull( result ),
+                           () -> assertEquals( "Not Found", detail.getTitle() ),
+                           () -> assertEquals( 404, detail.getStatus() ),
+                           () -> assertEquals( "No static resource /some/resource/path.", detail.getDetail() )
+                         );
+            }
+        }
+
+        @Nested
+        @DisplayName( "with bad HttpMethod" )
+        class HttpMethodIssues
+        {
+
+            @Test
+            @DisplayName( "405 for HttpMethod not implemented" )
+            void exceptionHttpMethod_notSupported_formatsProblemDetails()
+            {
+                // --- given
+                final HttpRequestMethodNotSupportedException exception =
+                        new HttpRequestMethodNotSupportedException( "GET", List.of( "PUT", "POST", "DELETE") );
+
+                // --- when
+                ResponseEntity<ProblemDetail> result =
+                        handler.handleMethodNotSupportedException( exception );
+                ProblemDetail detail = result.getBody();
+
+                // --- then
+                assertAll( () -> assertNotNull( result ),
+                           () -> assertEquals( "Method Not Allowed", detail.getTitle() ),
+                           () -> assertEquals( 405, detail.getStatus() ),
+                           () -> assertEquals( "Method 'GET' is not supported.", detail.getDetail() )
+                         );
+            }
+        }
+
+
+        @Nested
+        @DisplayName( "with malformed message" )
+        class MisunderstoodMessage
+        {
+            @Test
+            @DisplayName( "400 for MessageNotReadable" )
+            void exceptionMessage_notReadable_formatsProblemDetails()
+            {
+                // --- given
+                final HttpInputMessage input = new HttpInputMessage()
+                {
+                    @Override
+                    public InputStream getBody() throws IOException
+                    {
+                        return null;
+                    }
+
+                    @Override
+                    public HttpHeaders getHeaders()
+                    {
+                        return null;
+                    }
+                };
+
+                final HttpMessageNotReadableException exception =
+                        new HttpMessageNotReadableException( "Test exception", input );
+
+                // --- when
+                ResponseEntity<ProblemDetail> result =
+                        handler.handleMessageNotReadableException( exception );
+                ProblemDetail detail = result.getBody();
+
+                // --- then
+                assertAll( () -> assertNotNull( result ),
+                           () -> assertEquals( "Malformed Request", detail.getTitle() ),
+                           () -> assertEquals( 400, detail.getStatus() ),
+                           () -> assertEquals( "Test exception", detail.getDetail() )
+                         );
+            }
+
+            @Test
+            @DisplayName( "501 for MessageNotWritable" )
+            void exceptionMessage_notWritable_formatsProblemDetails()
+            {
+                // --- given
+                final HttpInputMessage input = new HttpInputMessage()
+                {
+                    @Override
+                    public InputStream getBody() throws IOException
+                    {
+                        return null;
+                    }
+
+                    @Override
+                    public HttpHeaders getHeaders()
+                    {
+                        return null;
+                    }
+                };
+
+                final HttpMessageNotWritableException exception =
+                        new HttpMessageNotWritableException( "Test writable exception" );
+
+                // --- when
+                ResponseEntity<ProblemDetail> result =
+                        handler.handleMessageNotWritableException( exception );
+                ProblemDetail detail = result.getBody();
+
+                // --- then
+                assertAll( () -> assertNotNull( result ),
+                           () -> assertEquals( "Unable to produce requested response format", detail.getTitle() ),
+                           () -> assertEquals( 501, detail.getStatus() ),
+                           () -> assertEquals( "Test writable exception", detail.getDetail() )
                          );
             }
         }
