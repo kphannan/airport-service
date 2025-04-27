@@ -58,12 +58,9 @@ public class GlobalExceptionHandler
     public ResponseEntity<ProblemDetail>
     handleMethodArgumentTypeMismatchException( final MethodArgumentTypeMismatchException exception )
     {
-        final StringBuilder detailMessage =
-                new StringBuilder()
-                        .append( exception.getMessage() );
-
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST,
-                                                                        detailMessage.toString() );
+                                                                        exception.getMessage() );
+        details.setTitle( "Parameter Type Mismatch" );
 
         return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );
     }

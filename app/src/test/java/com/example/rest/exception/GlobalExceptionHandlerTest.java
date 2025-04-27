@@ -6,7 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Parameter;
+//import java.lang.reflect.Method;
+//import java.lang.reflect.Parameter;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -30,6 +32,7 @@ import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 public class GlobalExceptionHandlerTest
@@ -287,8 +290,6 @@ public class GlobalExceptionHandlerTest
             void exceptionParameter_missing_formatsProblemDetails()
             {
                 // --- given
-//                final Parameter parameter = new Parameter( "Param", 0, null, 1 );
-
                 final MissingServletRequestParameterException exception =
                         new MissingServletRequestParameterException( "Param1", "String" );
 
@@ -302,6 +303,28 @@ public class GlobalExceptionHandlerTest
                            () -> assertEquals( "Missing Parameter", detail.getTitle() ),
                            () -> assertEquals( 400, detail.getStatus() ),
                            () -> assertEquals( "Required parameter 'Param1' is not present.", detail.getDetail() )
+                         );
+            }
+
+            @Test
+            @DisplayName( "parameter type mismatch 400" )
+            void exceptionParameter_typeMismatch_formatsProblemDetails() throws NoSuchMethodException
+            {
+                // --- given
+                final MethodArgumentTypeMismatchException exception =
+                        new MethodArgumentTypeMismatchException( "value", ArrayList.class, "name", null, null );
+
+                // --- when
+                ResponseEntity<ProblemDetail> result =
+                        handler.handleMethodArgumentTypeMismatchException( exception );
+                ProblemDetail detail = result.getBody();
+
+                // --- then
+                assertAll( () -> assertNotNull( result ),
+                           () -> assertEquals( "Parameter Type Mismatch", detail.getTitle() ),
+                           () -> assertEquals( 400, detail.getStatus() ),
+                           () -> assertEquals( "Method parameter 'name': Failed to convert value of type 'java.lang.String' to required type 'java.util.ArrayList'",
+                                               detail.getDetail() )
                          );
             }
 
