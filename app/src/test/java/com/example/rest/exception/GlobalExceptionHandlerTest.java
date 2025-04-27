@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Parameter;
 import java.util.List;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpMethod;
@@ -27,6 +29,7 @@ import org.springframework.web.HttpMediaTypeException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 public class GlobalExceptionHandlerTest
@@ -272,6 +275,36 @@ public class GlobalExceptionHandlerTest
                            () -> assertEquals( "Test writable exception", detail.getDetail() )
                          );
             }
+        }
+
+
+        @Nested
+        @DisplayName( "with parameter errors" )
+        class ParameterErrors
+        {
+            @Test
+            @DisplayName( "missing parameter returns 400" )
+            void exceptionParameter_missing_formatsProblemDetails()
+            {
+                // --- given
+//                final Parameter parameter = new Parameter( "Param", 0, null, 1 );
+
+                final MissingServletRequestParameterException exception =
+                        new MissingServletRequestParameterException( "Param1", "String" );
+
+                // --- when
+                ResponseEntity<ProblemDetail> result =
+                        handler.handleMissingServletRequestParameterException( exception );
+                ProblemDetail detail = result.getBody();
+
+                // --- then
+                assertAll( () -> assertNotNull( result ),
+                           () -> assertEquals( "Missing Parameter", detail.getTitle() ),
+                           () -> assertEquals( 400, detail.getStatus() ),
+                           () -> assertEquals( "Required parameter 'Param1' is not present.", detail.getDetail() )
+                         );
+            }
+
         }
     }
 

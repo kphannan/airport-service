@@ -81,12 +81,14 @@ public class GlobalExceptionHandler
     public ResponseEntity<ProblemDetail>
     handleMissingServletRequestParameterException( final MissingServletRequestParameterException exception )
     {
+        // TODO potentially a problem with the content-type or lack of mapping to/from the
+        // requested format and the internal POJO.
+        final ProblemDetail details = exception.getBody();
 
-        final StringBuilder detailMessage = new StringBuilder().append( exception.getParameterName() ).append( ", " )
-                .append( exception.getMessage() );
-
-        final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST,
-                                                                        detailMessage.toString() );
+        details.setTitle( "Missing Parameter" );
+        details.setProperty( "Possibility 1", "Missing Path Variables" );
+        details.setProperty( "Possibility 2", "Missing Query Parameter" );
+        details.setProperty( "Possibility 3", "Missing Form Data" );
 
         return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );
     }
