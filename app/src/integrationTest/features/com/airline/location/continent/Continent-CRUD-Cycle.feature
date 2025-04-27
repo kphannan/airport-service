@@ -6,7 +6,7 @@ Feature: Continent Read Operations
   @Functional
   Scenario: Create, Read, Update and Delete a test-only continent
              # Create a test continent
-         And request
+       Given request
               """
               {
                 code: "BB",
@@ -15,15 +15,15 @@ Feature: Continent Read Operations
               """
         When method POST
         Then status 201
-             # Get the ID of the created entity
-             * def id = $.id
+           * def id = $.id
+
              # Can it be read back
-    Given path id
-    When method GET
-    Then status 200
+       Given path id
+        When method GET
+        Then status 200
 
              # Update the name
-    And request
+       Given request
             """
             {
             "id" : #(id),
@@ -31,19 +31,22 @@ Feature: Continent Read Operations
             "name" : "Bogus continent name changed"
             }
             """
-    When method PUT
-    Then status 200
+        When method PUT
+        Then status 200
+         And match $.name == "Bogus continent name changed"
+
              # Read back the updated name
-    Given path id
-    When method GET
-    Then status 200
+       Given path id
+        When method GET
+        Then status 200
+         And match $.name == "Bogus continent name changed"
 
              # Delete the test only continent
-    Given path id
-    When method DELETE
-    Then status 410
+       Given path id
+        When method DELETE
+        Then status 410
 
              # Verify it is gone
-    Given path id
-    When method GET
-    Then status 410
+       Given path id
+        When method GET
+        Then status 410
