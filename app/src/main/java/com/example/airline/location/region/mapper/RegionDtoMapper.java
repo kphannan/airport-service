@@ -6,7 +6,6 @@ package com.example.airline.location.region.mapper;
 import java.util.List;
 
 import com.example.airline.location.RegionDTO;
-import com.example.airline.location.persistence.model.location.RegionEntity;
 import com.example.airline.location.region.model.Region;
 import org.mapstruct.Mapper;
 
@@ -15,7 +14,7 @@ import org.mapstruct.Mapper;
  * MapStruct configuration for Region, RegionDTO.
  */
 @Mapper( componentModel = "spring" )
-public interface DtoMapper
+public interface RegionDtoMapper
 {
     // ------------------------
     // ----- Domain / API -----

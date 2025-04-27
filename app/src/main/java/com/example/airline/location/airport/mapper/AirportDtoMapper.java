@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.example.airline.airport.AirportDTO;
 import com.example.airline.location.airport.model.Airport;
-import com.example.airline.location.persistence.model.airport.AirportEntity;
 import org.mapstruct.Mapper;
 
 
@@ -15,7 +14,7 @@ import org.mapstruct.Mapper;
  * MapStruct configuration for Airport, AirportDTO.
  */
 @Mapper( componentModel = "spring" )
-public interface DtoMapper
+public interface AirportDtoMapper
 {
     // ------------------------
     // ----- Domain / API -----

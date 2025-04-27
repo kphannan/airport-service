@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.airline.location.country.persistence.repository.CountryRepository;
-import com.example.airline.location.persistence.model.location.CountryEntity;
+import com.example.airline.location.country.persistence.model.CountryEntity;
 import com.example.rest.utility.PageableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

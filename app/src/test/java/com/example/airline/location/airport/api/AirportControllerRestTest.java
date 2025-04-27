@@ -18,10 +18,10 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.airline.location.airport.mapper.DtoMapper;
+import com.example.airline.location.airport.mapper.AirportDtoMapper;
 import com.example.airline.location.airport.persistence.repository.AirportRepository;
 import com.example.airline.location.airport.service.AirportService;
-import com.example.airline.location.persistence.model.airport.AirportEntity;
+import com.example.airline.location.airport.persistence.model.AirportEntity;
 import com.example.rest.utility.PageableAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -54,9 +54,9 @@ class AirportControllerRestTest //extends RestControllerTestBase
     @MockitoBean
     protected AirportRepository repository;
     @Autowired
-    private AirportService service;
+    private AirportService   service;
     @Autowired
-    private DtoMapper mapper;
+    private AirportDtoMapper mapper;
 
 
 //    @BeforeEach

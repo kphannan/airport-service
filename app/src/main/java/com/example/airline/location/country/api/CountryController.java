@@ -8,7 +8,7 @@ import java.util.Optional;
 import com.example.airline.location.CountryDTO;
 import com.example.airline.location.config.GlobalApiResponses;
 import com.example.airline.location.config.GlobalApiSecurityResponses;
-import com.example.airline.location.country.mapper.DtoMapper;
+import com.example.airline.location.country.mapper.CountryDtoMapper;
 import com.example.airline.location.country.model.Country;
 import com.example.airline.location.country.service.CountryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -46,8 +46,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class CountryController
 {
     // Autowired via constructor
-    private final CountryService service;
-    private final DtoMapper      mapper;
+    private final CountryService   service;
+    private final CountryDtoMapper mapper;
 
     /**
      * Constructor for the CountryController.
@@ -55,7 +55,7 @@ public class CountryController
      * @param service The service to use for country operations.
      * @param mapper  The mapper to convert between domain and API objects.
      */
-    public CountryController( final CountryService service, final DtoMapper mapper )
+    public CountryController( final CountryService service, final CountryDtoMapper mapper )
     {
         this.service = service;
         this.mapper  = mapper;

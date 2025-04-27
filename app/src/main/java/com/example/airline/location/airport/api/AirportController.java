@@ -7,7 +7,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 import com.example.airline.airport.AirportDTO;
-import com.example.airline.location.airport.mapper.DtoMapper;
+import com.example.airline.location.airport.mapper.AirportDtoMapper;
 import com.example.airline.location.airport.model.Airport;
 import com.example.airline.location.airport.service.AirportService;
 import com.example.airline.location.config.GlobalApiResponses;
@@ -39,10 +39,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class AirportController
 {
     // Autowired via constructor
-    private final AirportService service;
-    private final DtoMapper      mapper;
+    private final AirportService   service;
+    private final AirportDtoMapper mapper;
 
-    public AirportController( final AirportService service, final DtoMapper mapper )
+    public AirportController( final AirportService service, final AirportDtoMapper mapper )
     {
         this.service = service;
         this.mapper  = mapper;

@@ -1,6 +1,6 @@
 /* (C) 2025 */
 
-package com.example.airline.location.persistence.model.airport;
+package com.example.airline.location.airport.persistence.model;
 
 
 import jakarta.persistence.Column;

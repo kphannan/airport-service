@@ -1,11 +1,11 @@
 /* (C) 2025 */
 
-package com.example.airline.location.persistence.repository.airport;
+package com.example.airline.location.airport.persistence.repository;
 
 
 import java.util.Optional;
 
-import com.example.airline.location.persistence.model.airport.AirportCodeIcaoEntity;
+import com.example.airline.location.airport.persistence.model.AirportCodeIcaoEntity;
 import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

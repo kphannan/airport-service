@@ -9,15 +9,16 @@ import com.example.airline.location.continent.model.Continent;
 import com.example.airline.location.continent.model.NewContinent;
 import com.example.airline.location.continent.persistence.model.ContinentEntity;
 import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
 
 /**
  * MapStruct configuration for Continent, ContinentEntity, ContinentDTO.
  */
 @Mapper( componentModel = "spring" )
-public interface EntityMapper
+public interface ContinentEntityMapper
 {
-    //ContinentMapper INSTANCE = Mappers.getMapper( ContinentMapper.class );
+    ContinentEntityMapper INSTANCE = Mappers.getMapper( ContinentEntityMapper.class );
 
     // --------------------------------
     // ----- Domain / Persistence -----
