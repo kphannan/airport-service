@@ -28,10 +28,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 import java.util.Optional;
 
-import com.example.airline.location.continent.mapper.DtoMapper;
+import com.example.airline.location.continent.mapper.ContinentDtoMapper;
 import com.example.airline.location.continent.persistence.model.ContinentEntity;
 import com.example.airline.location.continent.persistence.repository.ContinentRepository;
-import com.example.airline.location.continent.service.ContinentService;
+import com.example.airline.location.continent.service.ContinentReadService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -106,11 +106,11 @@ class ContinentControllerRestTest
 
     @Autowired
     @SuppressWarnings( "unused" )
-    private ContinentService service;
+    private ContinentReadService service;
 
     @Autowired
     @SuppressWarnings( "unused" )
-    private DtoMapper mapper;
+    private ContinentDtoMapper mapper;
 
     @MockitoBean
     private ContinentRepository repository;
@@ -516,12 +516,11 @@ class ContinentControllerRestTest
                     .perform( request )
                     .andDo( print() )
                     .andExpect( content().contentTypeCompatibleWith( "application/json" ) )
-                    .andExpect( jsonPath( "$.id" ).value( 77 ) )
-                    .andExpect( jsonPath( "$.code" ).value( "CC" ) )
-                    .andExpect( jsonPath( "$.name" ).value( "foo" ) )
+                    .andExpect( jsonPath( "$.id" ).value( 22 ) )
+                    .andExpect( jsonPath( "$.code" ).value( "ZZ" ) )
+                    .andExpect( jsonPath( "$.name" ).value( "::ZNAMEZ::" ) )
                     .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
                     .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
-//                    .andExpect( result().ok() )
                     .andReturn();
 
             // --- then

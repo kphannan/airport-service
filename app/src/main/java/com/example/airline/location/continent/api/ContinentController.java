@@ -12,9 +12,12 @@ import com.example.airline.location.ContinentDTO;
 import com.example.airline.location.NewContinentDTO;
 import com.example.airline.location.config.GlobalApiResponses;
 import com.example.airline.location.config.GlobalApiSecurityResponses;
-import com.example.airline.location.continent.mapper.DtoMapper;
+import com.example.airline.location.continent.mapper.ContinentDtoMapper;
 import com.example.airline.location.continent.model.Continent;
-import com.example.airline.location.continent.service.ContinentService;
+import com.example.airline.location.continent.service.ContinentDeleteService;
+import com.example.airline.location.continent.service.ContinentReadService;
+import com.example.airline.location.continent.service.ContinentCreateService;
+import com.example.airline.location.continent.service.ContinentUpdateService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -55,8 +58,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class ContinentController
 {
     // Autowired via constructor
-    private final ContinentService service;
-    private final DtoMapper        mapper;
+    private final ContinentReadService   service;
+    private final ContinentCreateService createService;
+    private final ContinentUpdateService updateService;
+    private final ContinentDeleteService deleteService;
+    private final ContinentDtoMapper     mapper;
 
 
     /**
@@ -65,10 +71,17 @@ public class ContinentController
      * @param service The service to use for continent operations.
      * @param mapper  The mapper to convert between domain and API objects.
      */
-    public ContinentController( final ContinentService service, final DtoMapper mapper )
+    public ContinentController( final ContinentReadService service,
+                                final ContinentCreateService createService,
+                                final ContinentUpdateService updateService,
+                                final ContinentDeleteService deleteService,
+                                final ContinentDtoMapper mapper )
     {
-        this.service = service;
-        this.mapper  = mapper;
+        this.service       = service;
+        this.createService = createService;
+        this.updateService = updateService;
+        this.deleteService = deleteService;
+        this.mapper        = mapper;
     }
 
 
@@ -270,7 +283,7 @@ public class ContinentController
     public ResponseEntity<ContinentDTO> restPostAddContinent( @Valid @org.springframework.web.bind.annotation.RequestBody final NewContinentDTO newContinentDTO,
                                                               @RequestHeader HttpHeaders requestHeader )
     {
-        final Continent continent = service.create( mapper.apiToDomain( newContinentDTO ) );
+        final Continent continent = createService.create( mapper.apiToDomain( newContinentDTO ) );
         if ( null != continent )
         {
             // Build the resource id (path) of the newly created item
@@ -295,7 +308,6 @@ public class ContinentController
 
 
     // ===== PUT =====
-//    @PutMapping( "/{continentId}" )
     @Operation( method = "PUT",
                 summary = "Update a Continent",
                 description = "Update a Continent only if it exists",
@@ -339,7 +351,7 @@ public class ContinentController
                                                               @Valid @org.springframework.web.bind.annotation.RequestBody final ContinentDTO continentDTO,
                                                               @RequestHeader HttpHeaders requestHeader )
     {
-        final Continent continent = service.update( mapper.apiToDomain( continentDTO ) );
+        final Continent continent = updateService.update( mapper.apiToDomain( continentDTO ) );
         if ( null != continent )
         {
             return ResponseEntity.ok( mapper.domainToApi( continent ) );
@@ -394,7 +406,7 @@ public class ContinentController
     {
         // Delete is idempotent and will return NO_CONTENT regardless if
         // the item was deleted, or if it didn't exist.
-        service.deleteById( continentId );
+        deleteService.deleteById( continentId );
 
         return ResponseEntity.status( HttpStatus.GONE ).build();
     }
@@ -443,7 +455,7 @@ public class ContinentController
     {
         // Delete is idempotent and will return NO_CONTENT regardless if
         // the item was deleted, or if it didn't exist.
-        service.delete( mapper.apiToDomain( continentDTO ) );
+        deleteService.delete( mapper.apiToDomain( continentDTO ) );
 
         return ResponseEntity.status( HttpStatus.GONE ).build();
     }
@@ -552,11 +564,11 @@ public class ContinentController
     }
 
     // ===== INFO =====
-//    @RequestMapping( value = "", method = RequestMethod.INFO )
-//    public ResponseEntity<ContinentDTO> restInfoContinent( @RequestHeader HttpHeaders requestHeader )
-//    {
-//        return ResponseEntity.noContent().build();
-//    }
+    // @RequestMapping( value = "", method = RequestMethod.INFO )
+    // public ResponseEntity<ContinentDTO> restInfoContinent( @RequestHeader HttpHeaders requestHeader )
+    // {
+    //     return ResponseEntity.noContent().build();
+    // }
 
     // ===== TRACE =====
     @RequestMapping( value = "", method = RequestMethod.TRACE )

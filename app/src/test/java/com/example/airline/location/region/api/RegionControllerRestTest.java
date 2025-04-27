@@ -17,8 +17,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 import java.util.Optional;
 
-import com.example.airline.location.persistence.model.location.RegionEntity;
-import com.example.airline.location.region.mapper.DtoMapper;
+import com.example.airline.location.region.persistence.model.RegionEntity;
+import com.example.airline.location.region.mapper.RegionDtoMapper;
 import com.example.airline.location.region.persistence.repository.RegionsRepository;
 import com.example.airline.location.region.service.RegionsService;
 import com.example.rest.utility.PageableAssert;
@@ -51,9 +51,9 @@ class RegionControllerRestTest //extends RestControllerTestBase
     @MockitoBean
     protected RegionsRepository repository;
     @Autowired
-    private RegionsService service;
+    private RegionsService  service;
     @Autowired
-    private DtoMapper      mapper;
+    private RegionDtoMapper mapper;
 
 
     @Nested

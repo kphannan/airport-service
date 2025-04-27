@@ -10,14 +10,17 @@ import com.example.airline.location.NewContinentDTO;
 import com.example.airline.location.continent.model.Continent;
 import com.example.airline.location.continent.model.NewContinent;
 import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
 
 /**
  * MapStruct configuration for Continent, ContinentEntity, ContinentDTO.
  */
 @Mapper( componentModel = "spring" )
-public interface DtoMapper
+public interface ContinentDtoMapper
 {
+    ContinentDtoMapper INSTANCE = Mappers.getMapper( ContinentDtoMapper.class );
+
     // ------------------------
     // ----- Domain / API -----
     // --- Domain --> API ---

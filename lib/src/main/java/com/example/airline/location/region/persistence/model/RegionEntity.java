@@ -1,6 +1,6 @@
 /* (C) 2025 */
 
-package com.example.airline.location.persistence.model.location;
+package com.example.airline.location.region.persistence.model;
 
 
 import java.net.URI;

@@ -1,32 +1,31 @@
 /* (C) 2025 */
 
-package com.example.airline.location.airport.mapper;
+package com.example.airline.location.region.mapper;
 
 
 import java.util.List;
 
-import com.example.airline.airport.AirportDTO;
-import com.example.airline.location.airport.model.Airport;
-import com.example.airline.location.persistence.model.airport.AirportEntity;
+import com.example.airline.location.region.persistence.model.RegionEntity;
+import com.example.airline.location.region.model.Region;
 import org.mapstruct.Mapper;
 
 
 /**
- * MapStruct configuration for Airport, AirportEntity.
+ * MapStruct configuration for Region, RegionEntity.
  */
 @Mapper( componentModel = "spring" )
-public interface EntityMapper
+public interface RegionEntityMapper
 {
     // --------------------------------
     // ----- Domain / Persistence -----
     // --- Persistence --> Domain ---
     // --- Instance
     /** Map a single db entity instance to a domain instance. */
-    Airport entityToDomain( AirportEntity entity );
+    Region entityToDomain( RegionEntity dto );
 
     // --- Collection
     /** Map a list of domain instances to a list of db entity instances. */
-    List<Airport> entityToDomain( List<AirportEntity> entities );
+    List<Region> entityToDomain( List<RegionEntity> dtos );
 
     // --- Domain --> Persistence ---
     // --- Instance
