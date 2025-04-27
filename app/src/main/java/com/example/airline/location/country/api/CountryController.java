@@ -5,11 +5,11 @@ package com.example.airline.location.country.api;
 
 import java.util.Optional;
 
-import com.example.airline.location.country.model.Country;
 import com.example.airline.location.CountryDTO;
 import com.example.airline.location.config.GlobalApiResponses;
 import com.example.airline.location.config.GlobalApiSecurityResponses;
-import com.example.airline.location.country.mapper.CountryMapper;
+import com.example.airline.location.country.mapper.CountryDtoMapper;
+import com.example.airline.location.country.model.Country;
 import com.example.airline.location.country.service.CountryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -46,8 +46,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class CountryController
 {
     // Autowired via constructor
-    private final CountryService service;
-    private final CountryMapper  mapper;
+    private final CountryService   service;
+    private final CountryDtoMapper mapper;
 
     /**
      * Constructor for the CountryController.
@@ -55,7 +55,7 @@ public class CountryController
      * @param service The service to use for country operations.
      * @param mapper  The mapper to convert between domain and API objects.
      */
-    public CountryController( final CountryService service, final CountryMapper mapper )
+    public CountryController( final CountryService service, final CountryDtoMapper mapper )
     {
         this.service = service;
         this.mapper  = mapper;
@@ -91,13 +91,19 @@ public class CountryController
             requestBody = @RequestBody( required = false ),
             responses = { @ApiResponse( description = "Success",
                     responseCode = "200",
-                    content = { @Content( mediaType = "application/json", schema = @Schema( implementation = CountryDTO.class ) ),
-                                @Content( mediaType = "application/yaml", schema = @Schema( implementation = CountryDTO.class ) ),
-                                @Content( mediaType = "application/xml", schema = @Schema( implementation = CountryDTO.class ) )
+                    content = { @Content( mediaType = "application/json",
+                                          schema = @Schema( implementation = CountryDTO.class ) ),
+                                @Content( mediaType = "application/yaml",
+                                          schema = @Schema( implementation = CountryDTO.class ) ),
+                                @Content( mediaType = "application/xml",
+                                          schema = @Schema( implementation = CountryDTO.class ) )
                     }
             )
             },
-            parameters = { @Parameter( name = "id", required = true, in = ParameterIn.PATH, description = "Primary Key" ),
+            parameters = { @Parameter( name = "id",
+                                       required = true,
+                                       in = ParameterIn.PATH,
+                                       description = "Primary Key" ),
                            @Parameter( name = "Bearer", required = false,
                                    schema = @Schema( implementation = String.class ),
                                    in = ParameterIn.HEADER,

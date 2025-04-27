@@ -53,7 +53,7 @@ class NumberFormatTest
 
 
     @Nested
-    @DisplayName( "An exception is thrown when")
+    @DisplayName( "An exception is thrown when" )
     class Exceptions
     {
 
@@ -170,7 +170,6 @@ class NumberFormatTest
     }
 
     @DisplayName( "format various length integers" )
-//    @ParameterizedTest( name = "{3} is produced by binaryString( {0}, {1}, {2} )" )
     @ParameterizedTest( name = "{2} bits with grouping {1} is ({3})" )
     @ArgumentsSource( SimpleFormatProvider.class )
     void binaryString_validInput_returnCorrectString( final long number,

@@ -20,7 +20,6 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 
-
 /**
  * Persistence object representing a single Continent.
  */
@@ -32,21 +31,26 @@ import org.jspecify.annotations.Nullable;
 public class ContinentEntity
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  // or GenerationType.SEQUENCE
+    @GeneratedValue( strategy = GenerationType.IDENTITY )  // or GenerationType.SEQUENCE
     @Column( name = "id", nullable = false )
     @SuppressWarnings( "PMD.ShortVariable" )
-    @NonNull private Integer id;
+    @NonNull
+    private Integer id;
 
     @Column( name = "code", length = 2, nullable = false, columnDefinition = "char(2)" )
-    @NonNull private String code;
+    @NonNull
+    private String code;
 
     @Column( name = "name", length = 52, nullable = false )
-    @NonNull private String name;
+    @NonNull
+    private String name;
 
     @Column( name = "wikipedia_link", length = 255 )
     @Convert( converter = UriConverter.class )
-    @Nullable private URI wikiLink;
+    @Nullable
+    private URI wikiLink;
 
     @Column( name = "keywords", length = 255 )
-    @Nullable private String keywords; // May not need to exchange this
+    @Nullable
+    private String keywords; // May not need to exchange this
 }

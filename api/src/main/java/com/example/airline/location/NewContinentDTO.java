@@ -35,7 +35,8 @@ public class NewContinentDTO //implements Serializable
              maxLength = 2,
              pattern = "[A-Z]{2}",
              example = "NA" )
-    @Nullable private String  code;
+    @Nullable
+    private String code;
     @JsonProperty( "name" )
     //    @Length( min = 0, max = 32 )
     @Schema( name = "name",
@@ -44,18 +45,21 @@ public class NewContinentDTO //implements Serializable
              requiredMode = Schema.RequiredMode.REQUIRED,
              minLength = 2,
              maxLength = 52 )
-    @Nullable private String  name;
+    @Nullable
+    private String name;
     @JsonProperty( "wikilink" )
     @Schema( name = "wikiLink",
              description = "Wikipedia information",
              example = "https://en.wikipedia.org/wiki/North_America",
              requiredMode = Schema.RequiredMode.NOT_REQUIRED,
              maxLength = 255 )
-    @Nullable private URI     wikiLink;
+    @Nullable
+    private URI    wikiLink;
     @JsonProperty( "keywords" )
     @Schema( name = "keywords",
              description = "Optional additional search terms",
              requiredMode = Schema.RequiredMode.NOT_REQUIRED,
              maxLength = 255 )
-    @Nullable private String  keywords; // May not need to exchange this
+    @Nullable
+    private String keywords; // May not need to exchange this
 }

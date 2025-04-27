@@ -7,14 +7,14 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 
 
 /**
- * Utilty supporting HttpHeaders.
+ * Utility supporting HttpHeaders.
  */
 public final class HeaderUtility
 {
 
     private HeaderUtility()
     {
-        // Intentional -- needed as a utility class to prevent in stantiation
+        // Intentional -- needed as a utility class to prevent instantiation
     }
 
     /**
@@ -35,7 +35,8 @@ public final class HeaderUtility
      * @param mediaType the media type to add to the header
      * @return chain the builder after adding headers
      */
-    public static  MockHttpServletRequestBuilder withHeaders( final MockHttpServletRequestBuilder builder, final MediaType mediaType )
+    public static  MockHttpServletRequestBuilder withHeaders( final MockHttpServletRequestBuilder builder,
+                                                              final MediaType mediaType )
     {
         return builder
                 .header( HttpHeaders.ACCEPT, mediaType.toString() )

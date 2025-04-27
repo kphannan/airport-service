@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.security.SecuritySchemes;
 import io.swagger.v3.oas.annotations.servers.Server;
-import io.swagger.v3.oas.models.annotations.OpenAPI31;
 
 
 @OpenAPIDefinition( info = @Info( contact = @Contact( name = "Kevin", email = "kphannan@gmail.com" ),

@@ -24,9 +24,6 @@ class ContinentDTOTest
                                                () -> new ContinentDTO( null, null, null, null, null )
                                                );
         assertEquals( "code is marked non-null but is null", thrown.getMessage() );
-//        final ContinentDTO dto = new ContinentDTO( null, null, null, null, null );
-
-//        assertNotNull( dto );
     }
 
     @Test

@@ -9,7 +9,6 @@ import java.util.List;
 import jakarta.annotation.Nullable;
 
 
-
 /**
  * Helper methods for manipulating and testing strings.
  */
@@ -22,13 +21,11 @@ public final class StringUtility
     }
 
 
-
     /**
      * Null safe check if a {@code substring} is found within (@code target}.
      *
-     * @param target    the string to examine.
+     * @param target   the string to examine.
      * @param criteria the possible sub-string.
-     *
      * @return true if the substring is found, false otherwise.
      */
     public static boolean nullSafeContains( @Nullable final String target,
@@ -43,15 +40,13 @@ public final class StringUtility
     }
 
 
-
     /**
      * Iterate over the elements in the collection {@code messages} checking each
      * element for {@code desiredSubstring} as a substring within the element.
      *
-     * @param messages      collection of strings to examine for the
-     *                      {@code desiredString}
-     * @param desiredString the string to look for.
-     *
+     * @param messages collection of strings to examine for the
+     *                 {@code desiredString}
+     * @param criteria the string to look for.
      * @return true if the {@code desiredString} is present.
      */
     public static boolean inAnyOf( final List<String> messages,
@@ -66,16 +61,11 @@ public final class StringUtility
     }
 
 
-
-
-
-
     /**
      * Determine if the string contains any of the specified sub-strings.
      *
      * @param target     the string to examine.
      * @param substrings a list of possible sub-strings.
-     *
      * @return true if one of the substrings is found, false otherwise.
      */
     public static boolean hasAnyOf( @Nullable final String target,
@@ -98,13 +88,11 @@ public final class StringUtility
     }
 
 
-
     /**
      * Determine if the string contains any of the specified sub-strings.
      *
      * @param target     the string to examine.
      * @param substrings a list of possible sub-strings.
-     *
      * @return true if one of the substrings is found, false otherwise.
      */
     public static boolean hasAllOf( @Nullable final String target,

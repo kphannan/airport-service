@@ -5,9 +5,9 @@ package com.example.airline.location.country.service;
 
 import java.util.Optional;
 
+import com.example.airline.location.country.mapper.CountryEntityMapper;
 import com.example.airline.location.country.model.Country;
-import com.example.airline.location.country.mapper.CountryMapper;
-import com.example.airline.location.persistence.model.location.CountryEntity;
+import com.example.airline.location.country.persistence.model.CountryEntity;
 import com.example.airline.location.country.persistence.repository.CountryRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +23,7 @@ public class CountryService
 {
     private final CountryRepository repository;
 
-    private final CountryMapper mapper;
+    private final CountryEntityMapper mapper;
 
     /**
      * Create a CountryService supported by autowire.
@@ -31,7 +31,7 @@ public class CountryService
      * @param repository jpa repository of Countries
      * @param mapper maps entities to/from the domain model
      */
-    public CountryService( final CountryRepository repository, final CountryMapper mapper )
+    public CountryService( final CountryRepository repository, final CountryEntityMapper mapper )
     {
         this.repository = repository;
         this.mapper     = mapper;
@@ -72,7 +72,7 @@ public class CountryService
             return Optional.of( country );
         }
 
-        return Optional.ofNullable( null );
+        return Optional.empty();
     }
 
 
@@ -94,7 +94,7 @@ public class CountryService
             return Optional.of( country );
         }
 
-        return Optional.ofNullable( null );
+        return Optional.empty();
     }
 
 }

@@ -41,11 +41,6 @@ class StopwatchTest
 
 
 
-//    @AfterAll
-//    public static void tearDown()
-//    {
-//        logCaptor.close();
-//    }
 
 
 

@@ -5,10 +5,10 @@ package com.example.airline.location.airport.service;
 
 import java.util.Optional;
 
+import com.example.airline.location.airport.mapper.AirportEntityMapper;
 import com.example.airline.location.airport.model.Airport;
-import com.example.airline.location.airport.mapper.AirportMapper;
-import com.example.airline.location.persistence.model.airport.AirportEntity;
 import com.example.airline.location.airport.persistence.repository.AirportRepository;
+import com.example.airline.location.airport.persistence.model.AirportEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class AirportService
 {
     private final AirportRepository repository;
 
-    private final AirportMapper mapper;
+    private final AirportEntityMapper mapper;
 
     /**
      * Create a AirportService supported by autowire.
@@ -31,7 +31,7 @@ public class AirportService
      * @param repository jpa repository of Airports
      * @param mapper maps entities to/from the domain model
      */
-    public AirportService( final AirportRepository repository, final AirportMapper mapper )
+    public AirportService( final AirportRepository repository, final AirportEntityMapper mapper )
     {
         this.repository = repository;
         this.mapper     = mapper;
@@ -108,7 +108,7 @@ public class AirportService
                                         final Pageable paging )
     {
         final Page<AirportEntity> entities = repository.advancedQuery( iataCode, icaoCode, ident, name, paging );
-
+        // TODO should probably think about handling null here though it shouldn't ever happen.
         return entities.map( mapper::entityToDomain );
     }
 
@@ -121,7 +121,7 @@ public class AirportService
             return Optional.of( mapper.entityToDomain( entity.get() ) );
         }
 
-        return Optional.ofNullable( null );
+        return Optional.empty();
     }
 
 }
