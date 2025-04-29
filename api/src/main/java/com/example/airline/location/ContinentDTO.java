@@ -12,6 +12,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import org.jspecify.annotations.Nullable;
 
 // TODO change code to a 2 character code...
@@ -47,6 +48,7 @@ public class ContinentDTO //implements Serializable
              pattern = "[A-Z]{2}",
              example = "AS" )
     @NotNull
+    @NonNull  // lombok
     @Pattern( regexp = "[A-Z]{2}", message = "Code must be 2 uppercase characters" )
     private           String  code;
 
@@ -58,6 +60,7 @@ public class ContinentDTO //implements Serializable
              minLength = 2,
              maxLength = 52 )
     @NotNull
+    @NonNull  // lombok
     @Size( min = 2, max = 52, message = "Name must be between 2 and 52 characters" )
     private String  name;
 
