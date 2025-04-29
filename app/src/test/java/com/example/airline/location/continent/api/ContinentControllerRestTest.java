@@ -445,7 +445,84 @@ class ContinentControllerRestTest
             assertThat( result.getResponse().getHeader( "Location" ) ).contains( "/location/continent/22" );
         }
 
+        @Nested
+        @DisplayName( "validations" )
+        class Validation
+        {
 
+            @Test
+            void restPut_withNoRequiredParams_returnsValidationError() throws Exception
+            {
+                // --- given
+                final String jsonString =
+                        """
+                        {
+                           "keywords": "will report missing code, name fields"
+                        }
+                        """;
+                final RequestBuilder request = withHeaders( post( "/location/continent" ) )
+                        .content( jsonString );
+
+                // --- when
+                final MvcResult result = mvc
+                        .perform( request )
+                        .andDo( print() )
+                        .andReturn();
+
+                // --- then
+                // final MockHttpServletResponse response = result.getResponse();
+                // TODO verify the JSON is the created entity
+
+                // It is desired to have all 'asserts' as soft asserts.
+                assertAll( () -> assertEquals( HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus() )
+                         );
+
+                // TODO Use a JSON assertion instead of a plain string
+                final String body = result.getResponse().getContentAsString();
+                assertThat( body )
+                        .contains( "Field: 'code', must not be null; provided: [null]" );
+                assertThat( body )
+                        .contains( "Field: 'name', must not be null; provided: [null]" );
+            }
+
+            @Test
+            void restPut_withInvalidWikiLink_returnsValidationError() throws Exception
+            {
+                // --- given
+                final String jsonString =
+                        """
+                        {
+                           "id": 1,
+                           "code": "NA",
+                           "name": "A valid length name",
+                           "wikiLink": "https://wikipedia.com/bad url/not encoded",
+                           "keywords": "will report missing code, name fields"
+                        }
+                        """;
+                final RequestBuilder request = withHeaders( put( "/location/continent" ) )
+                        .content( jsonString );
+
+                // --- when
+                final MvcResult result = mvc
+                        .perform( request )
+                        .andDo( print() )
+                        .andReturn();
+
+                // --- then
+                // final MockHttpServletResponse response = result.getResponse();
+                // TODO verify the JSON is the created entity
+
+                // It is desired to have all 'asserts' as soft asserts.
+                assertAll( () -> assertEquals( HttpStatus.BAD_REQUEST.value(),
+                                               result.getResponse().getStatus() )
+                         );
+
+                assertThat( result.getResponse().getContentAsString() )
+                        .contains( "Cannot deserialize value of type `java.net.URI` from String" );
+            }
+
+
+        }
     }
 
     @Nested

@@ -5,12 +5,13 @@ package com.example.airline.location;
 import java.net.URI;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-//import org.hibernate.validator.constraints.Length;    // TODO use Jakarta / Jackson validations
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 // TODO change code to a 2 character code...
@@ -34,7 +35,9 @@ public class ContinentDTO //implements Serializable
     @Schema( name = "id",
              description = "Unique identifier",
              requiredMode = Schema.RequiredMode.REQUIRED )
-    @Nullable private Integer id;
+    @NotNull
+    private Integer id;
+
     @JsonProperty( "code" )
     @Schema( name = "code",
              description = "Unique abbreviation, which is a 2-character uppercase alphabetic code",
@@ -43,8 +46,10 @@ public class ContinentDTO //implements Serializable
              maxLength = 2,
              pattern = "[A-Z]{2}",
              example = "AS" )
-    @NonNull
+    @NotNull
+    @Pattern( regexp = "[A-Z]{2}", message = "Code must be 2 uppercase characters" )
     private           String  code;
+
     @JsonProperty( "name" )
     @Schema( name = "name",
              description = "Common use name",
@@ -52,18 +57,25 @@ public class ContinentDTO //implements Serializable
              requiredMode = Schema.RequiredMode.REQUIRED,
              minLength = 2,
              maxLength = 52 )
-    @NonNull private String  name;
-    @JsonProperty( "wikilink" )
+    @NotNull
+    @Size( min = 2, max = 52, message = "Name must be between 2 and 52 characters" )
+    private String  name;
+
+    @JsonProperty( "wikiLink" )
     @Schema( name = "wikiLink",
              description = "URI link to Wikipedia information",
              example = "https://en.wikipedia.org/wiki/Asia",
              requiredMode = Schema.RequiredMode.NOT_REQUIRED,
              maxLength = 255 )
-    @Nullable private URI     wikiLink;
+    @Nullable
+    private URI     wikiLink;
+
     @JsonProperty( "keywords" )
     @Schema( name = "keywords",
              description = "Optional additional search terms",
              requiredMode = Schema.RequiredMode.NOT_REQUIRED,
              maxLength = 255 )
-    @Nullable private String  keywords; // May not need to exchange this
+    @Nullable
+    @Size( max = 255, message = "List of keywords may not exceed 255 characters" )
+    private String  keywords; // May not need to exchange this
 }

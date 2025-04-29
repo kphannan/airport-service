@@ -37,11 +37,11 @@ public class ContinentUpdateService
 
 
     // ========== Update ==========
-    public @Nullable Continent update( @NonNull final Continent entity )
+    public @Nullable Continent update( @NonNull final Continent continent )
     {
-        if ( repository.existsById( entity.getId() ) )
+        if ( repository.existsById( continent.getId() ) )
         {
-            return mapper.entityToDomain( repository.save( mapper.domainToEntity( entity ) ) );
+            return mapper.entityToDomain( repository.save( mapper.domainToEntity( continent ) ) );
         }
 
         return null;

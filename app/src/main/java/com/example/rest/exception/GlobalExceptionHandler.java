@@ -20,6 +20,7 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -199,17 +200,21 @@ public class GlobalExceptionHandler
 //     */
 //    @ExceptionHandler( MethodArgumentNotValidException.class )
 //    @ResponseStatus( code = HttpStatus.BAD_REQUEST )
-//    public ResponseEntity<Map<String, String>> handleRestValidationException2( WebRequest request,
+////    public ResponseEntity<Map<String, String>> handleRestValidationException2( WebRequest request,
+//   public ResponseEntity<ProblemDetail> handleRestValidationException2( WebRequest request,
 //                                                                        final MethodArgumentNotValidException exception )
 //    {
-//        Map<String, String> errors = new HashMap<>();
+//    final ProblemDetail details = exception.getBody();
+//        Map<String, Object> errors = new HashMap<>();
 //
 //        exception
 //                .getBindingResult()
 //                .getFieldErrors()
 //                .forEach( error -> errors.put( error.getField(), error.getDefaultMessage() ) );
 //
-//        return ResponseEntity.badRequest().body( errors );
+//        details.setProperties( errors );
+//
+//        return ResponseEntity.badRequest().body( details );
 //    }
 
 
@@ -246,29 +251,67 @@ public class GlobalExceptionHandler
         // more detailed bindingResult
         // return new ResponseEntity(errorMessage, HttpStatus.BAD_REQUEST);
 
+//        props =
+//        fieldErrors
+//                .stream()
+//                .map( //fieldError -> fieldError.getObjectName()
+//                      fieldError -> String.format( "%s %s %s", fieldError.getField(), fieldError.getDefaultMessage(), fieldError.getRejectedValue() )
+//                    )
+//                .collect( Collectors.toMap( fieldError -> fieldError.getObjectName(),
+//                                            fieldError -> String.format( "%s %s %s", fieldError.getField(), fieldError.getDefaultMessage(), fieldError.getRejectedValue() )
+//                                            "Foo"
+//                                          ));
+//        props = binding
+//                .getFieldErrors()
+//                .stream()
+//                .map( fieldError -> fieldError.getObjectName() )
+//                .collect( Collectors.toMap( f -> f.,
+//                                            "Value"
+//                                            ));
+
+
+//        details.setProperties( constraintViolations
+//                                       .stream()
+//                                       .collect( Collectors
+//                                                         .toMap( violation -> violation.getPropertyPath().toString(),
+//                                                                 violation -> violation.getMessage()
+//
+//                                                               ) ) );
+
+
         // Build a formatted string with all the Violations
-        final String detailMessage = exception.getBindingResult().getFieldErrors().stream()
-                // .sorted( (e1, e2) -> e1.getObjectName().compareTo( e2.getObjectName() ) )
-                .map( fieldError -> String.format( "Field: %s.%s, reason: %s, with value: '%s'",
-                                                   fieldError.getObjectName(), fieldError.getField(),
-                                                   fieldError.getDefaultMessage(), fieldError.getRejectedValue() ) )
-                // .getGlobalErrors()
-                // .map( globalError -> String.format( "Field: %s.%s, reason: %s, with value:
-                // '%s'"
-                // , globalError.getObjectName()
-                // , globalError.getDefaultMessage() ) )
-                .collect( Collectors.joining( ".  \n" ) );
+//        final String detailMessage = exception
+//                .getBindingResult()
+//                .getFieldErrors()
+//                .stream()
+//                // .sorted( (e1, e2) -> e1.getObjectName().compareTo( e2.getObjectName() ) )
+//                .map( fieldError -> String.format( "Field: %s.%s, reason: %s, with value: '%s'",
+//                                                   fieldError.getObjectName(), fieldError.getField(),
+//                                                   fieldError.getDefaultMessage(), fieldError.getRejectedValue() ) )
+//                // .getGlobalErrors()
+//                // .map( globalError -> String.format( "Field: %s.%s, reason: %s, with value:
+//                // '%s'"
+//                // , globalError.getObjectName()
+//                // , globalError.getDefaultMessage() ) )
+//                .collect( Collectors.joining( ".  \n" ) );
 
         // exception.getBindingResult() contains fieldErrors ... build a Map of them and add them to
         // ProblemDetails.properties -- Look at FieldError and ObjectError classes....
 
-        final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST, detailMessage );
-        // var y = exception.getBindingResult().getAllErrors().getFirst();
-        // var x = exception.getBindingResult();
-        // x.getAllErrors().getFirst();
-        var globalError = exception.getBindingResult().getGlobalError();
-        final String title = globalError == null ? "" : globalError.getDefaultMessage();
-        details.setTitle( title );
+//        String message = String.format( "Validation filed for '%s' [%s]", exception.getObjectName(), exception.getMessage() );
+
+        final ProblemDetail details = exception.getBody();
+        details.setTitle( String.format( "Validation failed on '%s'", exception.getObjectName() ) );
+
+        for ( FieldError error: exception.getBindingResult().getFieldErrors() )
+        {
+            details.setProperty( error.getField(), //error.getObjectName(),
+                                 String.format( "Field: '%s', %s; provided: [%s]",
+                                                error.getField(),
+                                                error.getDefaultMessage(),
+                                                error.getRejectedValue() )
+                     );
+        }
 
         return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );
     }
@@ -287,12 +330,21 @@ public class GlobalExceptionHandler
     @ResponseStatus( code = HttpStatus.BAD_REQUEST )
     public ResponseEntity<ProblemDetail> handleConstraintViolations( final ConstraintViolationException exception )
     {
+        log.error( "handleConstraintViolations", exception );
         final Set<ConstraintViolation<?>> constraintViolations = exception.getConstraintViolations();
-        final String                      detailMessage        = constraintViolations.stream()
-                .map( ConstraintViolation::getMessage ).collect( Collectors.joining( "; " ) );
 
-        final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST, detailMessage );
-        details.setTitle( "Constraints" );
+        final ProblemDetail details = ProblemDetail
+                .forStatusAndDetail( HttpStatus.BAD_REQUEST, exception.getMessage() );
+
+        details.setProperties( constraintViolations
+                                       .stream()
+                                       .collect( Collectors
+                                                         .toMap( violation -> violation.getPropertyPath().toString(),
+                                                         violation -> violation.getMessage()
+
+                                                                 ) ) );
+
+        details.setTitle( "Constraint Violation" );
 
         return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );
     }
@@ -435,15 +487,21 @@ public class GlobalExceptionHandler
     @ResponseStatus( HttpStatus.INTERNAL_SERVER_ERROR )
     public ResponseEntity<ProblemDetail> handleGenericException( final Exception exception )
     {
+        log.error( "Catch-All", exception );
+        exception.printStackTrace();
         // TODO the MDC should include the traceId (UUID) and log pattern should
         // introduce this.
         // we should not pass our traceId back to the client
         final StringBuilder detailMessage = new StringBuilder( "A problem occurred " )
                 .append( "logref=" )
                 .append( UUID.randomUUID() )
-                .append( '\n' )
+                .append( "\n " )
+                .append( exception.getClass().getTypeName() )
+                .append( "\n " )
                 .append( exception.getMessage() )
-                .append( '\n' )
+                .append( "\n " )
+                .append( exception.getStackTrace() )
+                .append( "\n " )
                 .append( exception.getCause() );
 
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.INTERNAL_SERVER_ERROR,

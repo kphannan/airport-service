@@ -5,6 +5,7 @@
 springBootVersion = '3.4.5'
 springCloudVersion = '2024.0.1'
 #
+hibernateVersion = '9.0.0.CR1'
 lombokVersion = '8.13.1'
 versioningVersion = '3.1.0'
 logcaptorVersion = '2.10.2'
@@ -36,19 +37,16 @@ mapstruct-processor = { group = 'org.mapstruct', name = 'mapstruct-processor', v
 springdoc-openapi-ui = { module = 'org.springdoc:springdoc-openapi-starter-webmvc-ui', version.ref = 'swaggerVersion' }
 # --- Spring Boot ---
 spring-boot-starter = { module = 'org.springframework.boot:spring-boot-starter' }
-spring-boot-actuator = { module = 'org.springframework.boot:spring-boot-starter-actuator' }
-spring-boot-validation = { module = 'org.springframework.boot:spring-boot-starter-validation' }
-spring-boot-web = { module = 'org.springframework.boot:spring-boot-starter-web' }
+spring-boot-starter-actuator = { module = 'org.springframework.boot:spring-boot-starter-actuator', version.ref = 'springBootVersion' }
+spring-boot-starter-validation = { module = 'org.springframework.boot:spring-boot-starter-validation', version.ref = 'springBootVersion' }
+spring-boot-starter-web = { module = 'org.springframework.boot:spring-boot-starter-web', version.ref = 'springBootVersion' }
 spring-boot-logging = { module = 'org.springframework.boot:spring-boot-starter-logging' }
 # Persistence
-spring-boot-jpa = { module = 'org.springframework.boot:spring-boot-starter-data-jpa' }
+spring-boot-starter-jpa = { module = 'org.springframework.boot:spring-boot-starter-data-jpa', version.ref = 'springBootVersion' }
+hibernate-validation = { module = 'org.hibernate.validator:hibernate-validator', version.ref = 'hibernateVersion' }
 
 # spring-boot-starter = { module = 'org.springframework.boot:spring-boot-starter', version.ref = 'springBootVersion' }
-# spring-boot-starter-web = { group = 'org.springframework.boot', name = 'spring-boot-starter-web', version.ref = 'springBootVersion' }
 # spring-boot-starter-test = { group = 'org.springframework.boot', name = 'spring-boot-starter-test', version.ref = 'springBootVersion' }
-# spring-boot-starter-data-jpa = { group = 'org.springframework.boot', name = 'spring-boot-starter-data-jpa', version.ref = 'springBootVersion' }
-# spring-boot-starter-validation = { group = 'org.springframework.boot', name = 'spring-boot-starter-validation', version.ref = 'springBootVersion' }
-# spring-boot-starter-actuator = { group = 'org.springframework.boot', name = 'spring-boot-starter-actuator', version.ref = 'springBootVersion' }
 # # spring-boot-starter-aop = { group = 'org.springframework.boot', name = 'spring-boot-starter-aop', version.ref = 'springBootVersion' }
 # spring-boot-starter-security = { group = 'org.springframework.boot', name = 'spring-boot-starter-security', version.ref = 'springBootVersion' }
 # # spring-boot-starter-cache = { group = 'org.springframework.boot', name = 'spring-boot-starter-cache', version.ref = 'springBootVersion' }
@@ -104,9 +102,9 @@ spring-boot-jpa = { module = 'org.springframework.boot:spring-boot-starter-data-
 spring-boot-base = [
 
     # 'spring-boot-starter',
-    'spring-boot-actuator',
+    'spring-boot-starter-actuator',
     # 'spring-boot-validation',
-    'spring-boot-web',
+    'spring-boot-starter-web',
     'spring-boot-logging',
     'jackson-databind',
     'jackson-dataformat-yaml',
@@ -114,10 +112,11 @@ spring-boot-base = [
 ]
 
 spring-boot-persistence = [
-    'spring-boot-jpa'
+    'spring-boot-starter-jpa'
 ]
 spring-validation = [
-    'spring-boot-validation',
+    'spring-boot-starter-validation',
+    'hibernate-validation',
     'jspecify',
     'jakarta-annotation'
 ]

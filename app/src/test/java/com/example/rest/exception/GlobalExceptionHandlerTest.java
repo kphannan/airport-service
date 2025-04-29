@@ -6,17 +6,21 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
-//import java.lang.reflect.Method;
-//import java.lang.reflect.Parameter;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Path;
+import jakarta.validation.metadata.ConstraintDescriptor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpMethod;
@@ -329,6 +333,121 @@ public class GlobalExceptionHandlerTest
             }
 
         }
+
+
+        @Nested
+        @DisplayName( "with validation violations" )
+        class ValidationViolations
+        {
+            @Test
+            @DisplayName( "constraint violation returns 400" )
+            void exceptionValidation_constraints_formatsProblemDetails()
+            {
+                // --- given
+                Set<ConstraintViolation<?>> constraintViolations = new HashSet<>();
+                constraintViolations.add( buildConstraintViolation() );
+                final ConstraintViolationException exception =
+                        new ConstraintViolationException( "Constraint violation message", constraintViolations );
+
+                // --- when
+                ResponseEntity<ProblemDetail> result =
+                        handler.handleConstraintViolations( exception );
+                ProblemDetail detail = result.getBody();
+
+                // --- then
+                assertAll( () -> assertNotNull( result ),
+                           () -> assertEquals( "Constraint Violation", detail.getTitle() ),
+                           () -> assertEquals( 400, detail.getStatus() ),
+                           () -> assertEquals( "Constraint violation message",
+                                               detail.getDetail() )
+                         );
+            }
+
+        }
+
+
+        ConstraintViolation buildConstraintViolation()
+        {
+            ConstraintViolation v = new ConstraintViolation() {
+                @Override
+                public String getMessage()
+                {
+                    return "constraint message";
+                }
+
+                @Override
+                public String getMessageTemplate()
+                {
+                    return "";
+                }
+
+                @Override
+                public Object getRootBean()
+                {
+                    return null;
+                }
+
+                @Override
+                public Class getRootBeanClass()
+                {
+                    return null;
+                }
+
+                @Override
+                public Object getLeafBean()
+                {
+                    return null;
+                }
+
+                @Override
+                public Object[] getExecutableParameters()
+                {
+                    return new Object[0];
+                }
+
+                @Override
+                public Object getExecutableReturnValue()
+                {
+                    return null;
+                }
+
+                @Override
+                public Path getPropertyPath()
+                {
+                    return new Path(){
+
+                        @Override
+                        public Iterator<Node> iterator()
+                        {
+                            return null;
+                        }
+
+                        public String toString() { return "property path"; }
+                    };
+                }
+
+                @Override
+                public Object getInvalidValue()
+                {
+                    return "Invalid Value";
+                }
+
+                @Override
+                public ConstraintDescriptor<?> getConstraintDescriptor()
+                {
+                    return null;
+                }
+
+                @Override
+                public Object unwrap( Class type )
+                {
+                    return null;
+                }
+            };
+
+            return v;
+        }
+
     }
 
 

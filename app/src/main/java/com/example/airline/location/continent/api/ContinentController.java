@@ -122,7 +122,7 @@ public class ContinentController
 //    }
                 )
     @GetMapping( "" )
-    public ResponseEntity<List<ContinentDTO>> restGetFindAll( @RequestHeader final HttpHeaders requestHeader )
+    public ResponseEntity<List<ContinentDTO>> restGetFindAll( @Valid @RequestHeader final HttpHeaders requestHeader )
     {
         final List<Continent> continents = service.findAll();
 
@@ -347,8 +347,7 @@ public class ContinentController
     )
     @PutMapping( "" )
     @SuppressWarnings( "PMD.ShortVariable" )
-    public ResponseEntity<ContinentDTO> restPutContinentById( //@PathVariable( "id" ) final Integer id,
-                                                              @Valid @org.springframework.web.bind.annotation.RequestBody final ContinentDTO continentDTO,
+    public ResponseEntity<ContinentDTO> restPutContinentById( @Valid @org.springframework.web.bind.annotation.RequestBody final ContinentDTO continentDTO,
                                                               @RequestHeader HttpHeaders requestHeader )
     {
         final Continent continent = updateService.update( mapper.apiToDomain( continentDTO ) );
@@ -361,7 +360,6 @@ public class ContinentController
         // then a POST should have been used.
         return ResponseEntity
                 .status( HttpStatus.CONFLICT )
-//                .body( "Continent does not exist" );
                 .build();
     }
 
