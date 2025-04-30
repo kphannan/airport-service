@@ -377,90 +377,130 @@ public class GlobalExceptionHandlerTest
                          );
             }
 
+
+            ConstraintViolation buildConstraintViolation()
+            {
+                ConstraintViolation v = new ConstraintViolation() {
+                    @Override
+                    public String getMessage()
+                    {
+                        return "constraint message";
+                    }
+
+                    @Override
+                    public String getMessageTemplate()
+                    {
+                        return "";
+                    }
+
+                    @Override
+                    public Object getRootBean()
+                    {
+                        return null;
+                    }
+
+                    @Override
+                    public Class getRootBeanClass()
+                    {
+                        return null;
+                    }
+
+                    @Override
+                    public Object getLeafBean()
+                    {
+                        return null;
+                    }
+
+                    @Override
+                    public Object[] getExecutableParameters()
+                    {
+                        return new Object[0];
+                    }
+
+                    @Override
+                    public Object getExecutableReturnValue()
+                    {
+                        return null;
+                    }
+
+                    @Override
+                    public Path getPropertyPath()
+                    {
+                        return new Path(){
+
+                            @Override
+                            public Iterator<Node> iterator()
+                            {
+                                return null;
+                            }
+
+                            public String toString() { return "property path"; }
+                        };
+                    }
+
+                    @Override
+                    public Object getInvalidValue()
+                    {
+                        return "Invalid Value";
+                    }
+
+                    @Override
+                    public ConstraintDescriptor<?> getConstraintDescriptor()
+                    {
+                        return null;
+                    }
+
+                    @Override
+                    public Object unwrap( Class type )
+                    {
+                        return null;
+                    }
+                };
+
+                return v;
+            }
         }
 
 
-        ConstraintViolation buildConstraintViolation()
+
+        @Nested
+        @DisplayName( "with validation violations" )
+        class CatchAll
         {
-            ConstraintViolation v = new ConstraintViolation() {
-                @Override
-                public String getMessage()
-                {
-                    return "constraint message";
-                }
 
-                @Override
-                public String getMessageTemplate()
-                {
-                    return "";
-                }
+            @Test
+            @DisplayName( "constraint violation returns 400" )
+            void exceptionValidation_constraints_formatsProblemDetails()
+            {
+                // --- given
+//                Set<ConstraintViolation<?>> constraintViolations = new HashSet<>();
+//                constraintViolations.add( buildConstraintViolation() );
+                final Exception exception =
+                        new Exception( "Catch all test", new Exception( "Test Cause" ) );
 
-                @Override
-                public Object getRootBean()
-                {
-                    return null;
-                }
+                // --- when
+                ResponseEntity<ProblemDetail> result =
+                        handler.handleGenericException( exception );
+                ProblemDetail detail = result.getBody();
 
-                @Override
-                public Class getRootBeanClass()
-                {
-                    return null;
-                }
+                // --- then
+                Exception cause = (Exception)detail.getProperties().get( "Cause" );
+                assertAll( () -> assertNotNull( result ),
+                           () -> assertEquals( "Internal Server Error", detail.getTitle() ),
+                           () -> assertEquals( 500, detail.getStatus() ),
+                           () -> assertEquals( "Catch all test",
+                                               detail.getDetail() ),
+                           () -> assertNotNull( detail.getProperties().get( "logref" ) ),
+                           () -> assertEquals( "java.lang.Exception",
+                                               detail.getProperties().get( "Exception" ) ),
+                           () -> assertEquals( "Test Cause",
+                                               cause.getMessage() )
+                         );
+            }
 
-                @Override
-                public Object getLeafBean()
-                {
-                    return null;
-                }
-
-                @Override
-                public Object[] getExecutableParameters()
-                {
-                    return new Object[0];
-                }
-
-                @Override
-                public Object getExecutableReturnValue()
-                {
-                    return null;
-                }
-
-                @Override
-                public Path getPropertyPath()
-                {
-                    return new Path(){
-
-                        @Override
-                        public Iterator<Node> iterator()
-                        {
-                            return null;
-                        }
-
-                        public String toString() { return "property path"; }
-                    };
-                }
-
-                @Override
-                public Object getInvalidValue()
-                {
-                    return "Invalid Value";
-                }
-
-                @Override
-                public ConstraintDescriptor<?> getConstraintDescriptor()
-                {
-                    return null;
-                }
-
-                @Override
-                public Object unwrap( Class type )
-                {
-                    return null;
-                }
-            };
-
-            return v;
         }
+
+
 
     }
 

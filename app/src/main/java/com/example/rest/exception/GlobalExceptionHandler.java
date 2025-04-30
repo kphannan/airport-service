@@ -192,32 +192,6 @@ public class GlobalExceptionHandler
 
 
     // ========== Validation ==========
-//    /**
-//     * Create a standard error message when the input request body contains invalid or
-//     * missing attributes.
-//     *
-//     * @param exception the intercepted exception
-//     *
-//     * @return a formatted {@code ProblemDetail}.
-//     */
-//    @ExceptionHandler( MethodArgumentNotValidException.class )
-//    @ResponseStatus( code = HttpStatus.BAD_REQUEST )
-////    public ResponseEntity<Map<String, String>> handleRestValidationException2( WebRequest request,
-//   public ResponseEntity<ProblemDetail> handleRestValidationException2( WebRequest request,
-//                                                                        final MethodArgumentNotValidException exception )
-//    {
-//    final ProblemDetail details = exception.getBody();
-//        Map<String, Object> errors = new HashMap<>();
-//
-//        exception
-//                .getBindingResult()
-//                .getFieldErrors()
-//                .forEach( error -> errors.put( error.getField(), error.getDefaultMessage() ) );
-//
-//        details.setProperties( errors );
-//
-//        return ResponseEntity.badRequest().body( details );
-//    }
 
 
     /**
@@ -434,22 +408,13 @@ public class GlobalExceptionHandler
         log.error( "Catch-All", exception );
         exception.printStackTrace();
         // TODO the MDC should include the traceId (UUID) and log pattern should
-        // introduce this.
-        // we should not pass our traceId back to the client
-        final StringBuilder detailMessage = new StringBuilder( "A problem occurred " )
-                .append( "logref=" )
-                .append( UUID.randomUUID() )
-                .append( "\n " )
-                .append( exception.getClass().getTypeName() )
-                .append( "\n " )
-                .append( exception.getMessage() )
-                .append( "\n " )
-                .append( exception.getStackTrace() )
-                .append( "\n " )
-                .append( exception.getCause() );
 
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.INTERNAL_SERVER_ERROR,
-                                                                        detailMessage.toString() );
+                                                                        exception.getMessage() );
+
+        details.setProperty( "logref", UUID.randomUUID() );
+        details.setProperty( "Exception", exception.getClass().getTypeName() );
+        details.setProperty( "Cause", exception.getCause() );
 
         log.error( "Generic catch-all: ", exception );
         return new ResponseEntity<>( details, HttpStatus.INTERNAL_SERVER_ERROR );
