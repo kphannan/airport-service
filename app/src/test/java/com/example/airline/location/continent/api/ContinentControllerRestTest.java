@@ -481,9 +481,9 @@ class ContinentControllerRestTest
                 // TODO Use a JSON assertion instead of a plain string
                 final String body = result.getResponse().getContentAsString();
                 assertThat( body )
-                        .contains( "Field: 'code', A 2-character code is required; provided: [null]" );
+                        .contains( "A 2-character code is required; provided: [null]" );
                 assertThat( body )
-                        .contains( "Field: 'name', Name is required; provided: [null]" );
+                        .contains( "Name is required; provided: [null]" );
             }
 
             @Test
@@ -518,14 +518,10 @@ class ContinentControllerRestTest
                 // TODO Use a JSON assertion instead of a plain string
                 final String body = result.getResponse().getContentAsString();
                 assertThat( body )
-                        .contains( "Field: 'code', A 2-character code is required; provided: [  ]" );
+                        .contains( "A 2-character code is required; provided: [  ]" )
+                        .contains( "Code must be 2 uppercase characters; provided: [  ]" );
                 assertThat( body )
-                        .contains( "Field: 'name', Name is required; provided: [     ]" );
-//                "code" : "Field: 'code', Code must be 2 uppercase characters; provided: [  ]",
-//                "name" : "Field: 'name', Name is required; provided: [     ]"
-
-//                        .contains( "Field: 'code', A 2-character code is required; provided: [null]" );
-//                        .contains( "Field: 'name', Name is required; provided: [null]" );
+                        .contains( "Name is required; provided: [     ]" );
             }
 
             @Test

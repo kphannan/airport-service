@@ -7,19 +7,19 @@ Feature: Country CRUD operations
   @PostDeployment
   Scenario: Retrieve a default paged list of Countries
     Given path '/country'
-    When method GET
-    Then status 200
-    And match $.pageable contains { "offset": 0, "pageNumber": 0, "pageSize": 20 }
-    And match $ contains { "totalElements": 249, "size": 20, "number": 0 }
+     When method GET
+     Then status 200
+      And match $.pageable contains { "offset": 0, "pageNumber": 0, "pageSize": 20 }
+      And match $ contains { "totalElements": 249, "size": 20, "number": 0 }
 
   # And match $.content contains {"iataAirportCode":"MSP"}
   # ----- (GET) Lookup existing airport -----
   @PostDeployment
   Scenario Outline: Spot check that Country with code "<id>" exits with name "<name>"
     Given path '/country/<id>'
-    When method GET
-    Then status 200
-    And match $ contains { "id": <id>, "name": "<name>" }
+     When method GET
+     Then status 200
+      And match $ contains { "id": <id>, "name": "<name>" }
 
     Examples:
       | id     | name       |

@@ -107,6 +107,5 @@ Feature: Continent constraint validation
      And match $ contains { "Possibility 4": "Serialization errors" }
      And match $.detail contains( "JSON parse error" )
      And match $.detail contains( "type `java.net.URI` from String" )
-#    And match $.name == "Field: 'name', Name must be between 2 and 52 characters; provided: [abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ]"
 
 

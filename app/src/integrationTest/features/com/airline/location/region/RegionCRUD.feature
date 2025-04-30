@@ -1,4 +1,4 @@
-Feature: Region CRUD operations
+Feature: Region read page, read individual
 
   Background:
     * url baseUrl + '/location'
@@ -7,19 +7,21 @@ Feature: Region CRUD operations
   @PostDeployment
   Scenario: Retrieve a default paged list of Regions
     Given path '/region'
-    When method GET
-    Then status 200
-    And match $.pageable contains { "offset": 0, "pageNumber": 0, "pageSize": 20 }
-    And match $ contains { "totalElements": 3928, "size": 20, "number": 0 }
+     When method GET
+        * print response
+     Then status 200
+      And match $.pageable contains { "offset": 0, "pageNumber": 0, "pageSize": 20 }
+      And match $ contains { "totalElements": 3928, "size": 20, "number": 0 }
 
   # And match $.content contains {"iataAirportCode":"MSP"}
   # ----- (GET) Lookup known region -----
   @PostDeployment
   Scenario Outline: Spot check that Region with code "<id>" exits with name "<name>"
     Given path '/region/<id>'
-    When method GET
-    Then status 200
-    And match $ contains { "id": <id>, "name": "<name>" }
+     When method GET
+        * print response
+     Then status 200
+      And match $ contains { "id": <id>, "name": "<name>" }
 
     Examples:
       | id     | name         |
