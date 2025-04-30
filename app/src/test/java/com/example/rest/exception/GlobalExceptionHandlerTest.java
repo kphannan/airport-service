@@ -17,6 +17,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Path;
 import jakarta.validation.metadata.ConstraintDescriptor;
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -39,6 +40,8 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+
+@Log4j2
 public class GlobalExceptionHandlerTest
 {
     private GlobalExceptionHandler handler;
@@ -302,11 +305,22 @@ public class GlobalExceptionHandlerTest
                         handler.handleMissingServletRequestParameterException( exception );
                 ProblemDetail detail = result.getBody();
 
+//                var props = detail.getProperties();
+//                for ( Object o : props.values() )
+//                    log.error( o );
+
                 // --- then
                 assertAll( () -> assertNotNull( result ),
                            () -> assertEquals( "Missing Parameter", detail.getTitle() ),
                            () -> assertEquals( 400, detail.getStatus() ),
-                           () -> assertEquals( "Required parameter 'Param1' is not present.", detail.getDetail() )
+                           () -> assertEquals( "Required parameter 'Param1' is not present.",
+                                               detail.getDetail() ),
+                           () -> assertEquals( "Missing Path Variables",
+                                               detail.getProperties().get( "Possibility 1" ) ),
+                           () -> assertEquals( "Missing Query Parameter",
+                                               detail.getProperties().get( "Possibility 2" ) ),
+                           () -> assertEquals( "Missing Form Data",
+                                               detail.getProperties().get( "Possibility 3" ) )
                          );
             }
 
@@ -356,7 +370,7 @@ public class GlobalExceptionHandlerTest
 
                 // --- then
                 assertAll( () -> assertNotNull( result ),
-                           () -> assertEquals( "Constraint Violation", detail.getTitle() ),
+                           () -> assertEquals( "Constraint violation message", detail.getTitle() ),
                            () -> assertEquals( 400, detail.getStatus() ),
                            () -> assertEquals( "Constraint violation message",
                                                detail.getDetail() )

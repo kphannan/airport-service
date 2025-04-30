@@ -276,11 +276,11 @@ public class GlobalExceptionHandler
     @ResponseStatus( code = HttpStatus.BAD_REQUEST )
     public ResponseEntity<ProblemDetail> handleConstraintViolations( final ConstraintViolationException exception )
     {
-        log.error( "handleConstraintViolations", exception );
         final Set<ConstraintViolation<?>> constraintViolations = exception.getConstraintViolations();
 
         final ProblemDetail details = ProblemDetail
                 .forStatusAndDetail( HttpStatus.BAD_REQUEST, exception.getMessage() );
+        details.setTitle( exception.getMessage() );
 
         details.setProperties( constraintViolations
                                        .stream()
@@ -289,8 +289,6 @@ public class GlobalExceptionHandler
                                                          violation -> violation.getMessage()
 
                                                                  ) ) );
-
-        details.setTitle( "Constraint Violation" );
 
         return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );
     }
