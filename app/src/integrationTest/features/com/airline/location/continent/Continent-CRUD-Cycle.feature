@@ -44,15 +44,16 @@ Feature: Continent Read Operations
             """
 #        And print request
        When method PUT
-        And print response
-       Then status 209
+          * print response
+       Then status 200
         And match $.wikiLink == "https://en.wikipedia.org/wiki/North_America"
 
              # Read back the updated name
        Given path id
         When method GET
+           * print response
         Then status 200
-         And match $.name == "Bogus continent name changed"
+         And match $.name == "name to foo"
          And match $.wikiLink == "https://en.wikipedia.org/wiki/North_America"
 
              # Delete the test only continent

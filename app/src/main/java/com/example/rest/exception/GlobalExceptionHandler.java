@@ -10,6 +10,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -231,86 +233,30 @@ public class GlobalExceptionHandler
     public ResponseEntity<ProblemDetail> handleRestValidationException( WebRequest request,
                                                                         final MethodArgumentNotValidException exception )
     {
-        // getBindingResult()
-        // List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
-        // List<ObjectError> globalErrors = ex.getBindingResult().getGlobalErrors();
-        // List<String> errors = new ArrayList<>(fieldErrors.size() +
-        // globalErrors.size());
-        // String error;
-        // for (FieldError fieldError : fieldErrors) {
-        // error = fieldError.getField() + ", " + fieldError.getDefaultMessage();
-        // errors.add(error);
-        // }
-        // for (ObjectError objectError : globalErrors) {
-        // error = objectError.getObjectName() + ", " + objectError.getDefaultMessage();
-        // errors.add(error);
-        // }
-        // ErrorMessage errorMessage = new ErrorMessage(errors);
-
-        // Object result=ex.getBindingResult();//instead of above can allso pass the
-        // more detailed bindingResult
-        // return new ResponseEntity(errorMessage, HttpStatus.BAD_REQUEST);
-
-//        props =
-//        fieldErrors
-//                .stream()
-//                .map( //fieldError -> fieldError.getObjectName()
-//                      fieldError -> String.format( "%s %s %s", fieldError.getField(), fieldError.getDefaultMessage(), fieldError.getRejectedValue() )
-//                    )
-//                .collect( Collectors.toMap( fieldError -> fieldError.getObjectName(),
-//                                            fieldError -> String.format( "%s %s %s", fieldError.getField(), fieldError.getDefaultMessage(), fieldError.getRejectedValue() )
-//                                            "Foo"
-//                                          ));
-//        props = binding
-//                .getFieldErrors()
-//                .stream()
-//                .map( fieldError -> fieldError.getObjectName() )
-//                .collect( Collectors.toMap( f -> f.,
-//                                            "Value"
-//                                            ));
-
-
-//        details.setProperties( constraintViolations
-//                                       .stream()
-//                                       .collect( Collectors
-//                                                         .toMap( violation -> violation.getPropertyPath().toString(),
-//                                                                 violation -> violation.getMessage()
-//
-//                                                               ) ) );
-
-
-        // Build a formatted string with all the Violations
-//        final String detailMessage = exception
-//                .getBindingResult()
-//                .getFieldErrors()
-//                .stream()
-//                // .sorted( (e1, e2) -> e1.getObjectName().compareTo( e2.getObjectName() ) )
-//                .map( fieldError -> String.format( "Field: %s.%s, reason: %s, with value: '%s'",
-//                                                   fieldError.getObjectName(), fieldError.getField(),
-//                                                   fieldError.getDefaultMessage(), fieldError.getRejectedValue() ) )
-//                // .getGlobalErrors()
-//                // .map( globalError -> String.format( "Field: %s.%s, reason: %s, with value:
-//                // '%s'"
-//                // , globalError.getObjectName()
-//                // , globalError.getDefaultMessage() ) )
-//                .collect( Collectors.joining( ".  \n" ) );
-
-        // exception.getBindingResult() contains fieldErrors ... build a Map of them and add them to
-        // ProblemDetails.properties -- Look at FieldError and ObjectError classes....
-
-//        String message = String.format( "Validation filed for '%s' [%s]", exception.getObjectName(), exception.getMessage() );
-
         final ProblemDetail details = exception.getBody();
         details.setTitle( String.format( "Validation failed on '%s'", exception.getObjectName() ) );
 
+        Multimap<String, String> validations =  ArrayListMultimap.create();
+        int                      x           = 0;
         for ( FieldError error: exception.getBindingResult().getFieldErrors() )
         {
-            details.setProperty( error.getField(), //error.getObjectName(),
-                                 String.format( "Field: '%s', %s; provided: [%s]",
-                                                error.getField(),
-                                                error.getDefaultMessage(),
-                                                error.getRejectedValue() )
-                     );
+            // Need to use a multimap here since a single field may have multiple
+            // violations
+            // Apache Commons or Google Guava
+            validations.put( error.getField(),
+                             String.format( "%s; provided: [%s]",
+                                            error.getDefaultMessage(),
+                                            error.getRejectedValue() ) );
+        }
+
+        for ( String key : validations.keySet() )
+        {
+            String desc = validations
+                    .get( key )
+                    .stream()
+                    .collect( Collectors.joining( "; " ) );
+
+            details.setProperty( key, desc );
         }
 
         return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );

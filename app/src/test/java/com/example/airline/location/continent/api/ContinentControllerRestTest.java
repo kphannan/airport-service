@@ -451,6 +451,7 @@ class ContinentControllerRestTest
         {
 
             @Test
+            @DisplayName( "report missing name & code are required" )
             void restPut_withNoRequiredParams_returnsValidationError() throws Exception
             {
                 // --- given
@@ -480,9 +481,51 @@ class ContinentControllerRestTest
                 // TODO Use a JSON assertion instead of a plain string
                 final String body = result.getResponse().getContentAsString();
                 assertThat( body )
-                        .contains( "Field: 'code', must not be null; provided: [null]" );
+                        .contains( "Field: 'code', A 2-character code is required; provided: [null]" );
                 assertThat( body )
-                        .contains( "Field: 'name', must not be null; provided: [null]" );
+                        .contains( "Field: 'name', Name is required; provided: [null]" );
+            }
+
+            @Test
+            @DisplayName( "report blank name & code are required" )
+            void restPut_withBlankRequiredParams_returnsValidationError() throws Exception
+            {
+                // --- given
+                final String jsonString =
+                        """
+                        {
+                           "code": "  ",
+                           "name": "     "
+                        }
+                        """;
+                final RequestBuilder request = withHeaders( post( "/location/continent" ) )
+                        .content( jsonString );
+
+                // --- when
+                final MvcResult result = mvc
+                        .perform( request )
+                        .andDo( print() )
+                        .andReturn();
+
+                // --- then
+                // final MockHttpServletResponse response = result.getResponse();
+                // TODO verify the JSON is the created entity
+
+                // It is desired to have all 'asserts' as soft asserts.
+                assertAll( () -> assertEquals( HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus() )
+                         );
+
+                // TODO Use a JSON assertion instead of a plain string
+                final String body = result.getResponse().getContentAsString();
+                assertThat( body )
+                        .contains( "Field: 'code', A 2-character code is required; provided: [  ]" );
+                assertThat( body )
+                        .contains( "Field: 'name', Name is required; provided: [     ]" );
+//                "code" : "Field: 'code', Code must be 2 uppercase characters; provided: [  ]",
+//                "name" : "Field: 'name', Name is required; provided: [     ]"
+
+//                        .contains( "Field: 'code', A 2-character code is required; provided: [null]" );
+//                        .contains( "Field: 'name', Name is required; provided: [null]" );
             }
 
             @Test
