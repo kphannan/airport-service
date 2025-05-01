@@ -8,6 +8,7 @@ datasource:
     classname: org.h2.Driver
 
 
+
 spring:
   # Specify behavior of Serialization
   # and Deserialization of JSON
@@ -25,6 +26,17 @@ spring:
     hibernate:
       # none, validate, update, create, create-drop
       ddl-auto: none
+      generate_statistics: true
+    properties:
+      hibernate:
+        format_sql: true
+        generate_statistics: true
+        session:
+          events:
+            log:
+              LOG_QUERIES_SLOWER_THAN_MS: 100
+        use_sql_comments: true
+    show-sql: true
 
   # Enable H2 console
   h2:
@@ -78,6 +90,9 @@ logging:
 
       hibernate:
         boot: INFO
+        engine:
+          internal:
+            StatisticalLoggingSessionEventListener: INFO
         integrator:
           internal: INFO
         internal: INFO
@@ -86,11 +101,15 @@ logging:
         orm:
           idgen:
             factory: WARN
+          jdbc:
+            bind: TRACE
         query:
           sqm:
             function:
               SqmFunctionRegistry: INFO
         SQL: DEBUG
+        # performance stats for SQL
+        stat: DEBUG
         tool:
           schema:
             spi: DEBUG
