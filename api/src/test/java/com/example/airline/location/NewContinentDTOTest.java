@@ -44,7 +44,7 @@ public class NewContinentDTOTest
         @DisplayName( "throw an exception when the continent code is null" )
         void newContinent_nullArgs_throwsNullPointer()
         {
-            Throwable thrown = assertThrows( NullPointerException.class,
+            Throwable thrown = assertThrows( IllegalArgumentException.class,
                                              () -> new NewContinentDTO( null, null, null, null )
                                            );
             assertThat( thrown.getMessage() )
@@ -55,7 +55,7 @@ public class NewContinentDTOTest
         @DisplayName( "throw an exception when the continent name is null" )
         void newContinent_nullName_throwsNullPointer()
         {
-            Throwable thrown = assertThrows( NullPointerException.class,
+            Throwable thrown = assertThrows( IllegalArgumentException.class,
                                              () -> new NewContinentDTO( "", null, null, null )
                                            );
             assertThat( thrown.getMessage() )
