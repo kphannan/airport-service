@@ -12,9 +12,9 @@ Feature: Continent constraint validation
         When method PUT
            * print response
         Then status 400
-         And match $.id contains( "must not be null; provided: [null]" )
-         And match $.code contains( "must not be null; provided: [null]" )
-         And match $.name contains( "must not be null; provided: [null]" )
+         And match $.id contains( "A continent id is required; provided: [null]" )
+         And match $.code contains( "A 2-character code is required; provided: [null]" )
+         And match $.name contains( "Name is required; provided: [null]" )
 
 
 
@@ -52,7 +52,7 @@ Feature: Continent constraint validation
     When method PUT
        * print response
     Then status 400
-     And match $.code contains( "must not be null; provided: [null]" )
+     And match $.code contains( "A 2-character code is required; provided: [null]" )
 
   @Validation
   Scenario: Name is blank
