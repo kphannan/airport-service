@@ -37,6 +37,7 @@ import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
@@ -45,11 +46,13 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 public class GlobalExceptionHandlerTest
 {
     private GlobalExceptionHandler handler;
+    private ServletWebRequest request;
 
     @BeforeEach
     void setup()
     {
         handler = new GlobalExceptionHandler();
+        request = null;  // TODO build out a reasonable request object
     }
 
 
@@ -77,7 +80,7 @@ public class GlobalExceptionHandlerTest
 
                 // --- when
                 ResponseEntity<ProblemDetail> result =
-                    handler.handleUnsupportedMediaTypeException( exception );
+                    handler.handleUnsupportedMediaTypeException( request, exception );
                 ProblemDetail detail = result.getBody();
 
                 // --- then
@@ -107,7 +110,7 @@ public class GlobalExceptionHandlerTest
 
                 // --- when
                 ResponseEntity<ProblemDetail> result =
-                        handler.handleUnacceptableMediaTypeException( exception );
+                        handler.handleUnacceptableMediaTypeException( request, exception );
                 ProblemDetail detail = result.getBody();
 
                 // --- then
@@ -139,7 +142,7 @@ public class GlobalExceptionHandlerTest
 
                 // --- when
                 ResponseEntity<ProblemDetail> result =
-                        handler.handleMediaTypeException( exception );
+                        handler.handleMediaTypeException( request, exception );
                 ProblemDetail detail = result.getBody();
 
                 // --- then
@@ -170,7 +173,7 @@ public class GlobalExceptionHandlerTest
 
                 // --- when
                 ResponseEntity<ProblemDetail> result =
-                        handler.handleResourceNotFoundException( exception );
+                        handler.handleResourceNotFoundException( request, exception );
                 ProblemDetail detail = result.getBody();
 
                 // --- then
@@ -197,7 +200,7 @@ public class GlobalExceptionHandlerTest
 
                 // --- when
                 ResponseEntity<ProblemDetail> result =
-                        handler.handleMethodNotSupportedException( exception );
+                        handler.handleMethodNotSupportedException( request, exception );
                 ProblemDetail detail = result.getBody();
 
                 // --- then
@@ -239,7 +242,7 @@ public class GlobalExceptionHandlerTest
 
                 // --- when
                 ResponseEntity<ProblemDetail> result =
-                        handler.handleMessageNotReadableException( exception );
+                        handler.handleMessageNotReadableException( request, exception );
                 ProblemDetail detail = result.getBody();
 
                 // --- then
@@ -275,7 +278,7 @@ public class GlobalExceptionHandlerTest
 
                 // --- when
                 ResponseEntity<ProblemDetail> result =
-                        handler.handleMessageNotWritableException( exception );
+                        handler.handleMessageNotWritableException( request, exception );
                 ProblemDetail detail = result.getBody();
 
                 // --- then
@@ -302,7 +305,7 @@ public class GlobalExceptionHandlerTest
 
                 // --- when
                 ResponseEntity<ProblemDetail> result =
-                        handler.handleMissingServletRequestParameterException( exception );
+                        handler.handleMissingServletRequestParameterException( request, exception );
                 ProblemDetail detail = result.getBody();
 
 //                var props = detail.getProperties();
@@ -334,7 +337,7 @@ public class GlobalExceptionHandlerTest
 
                 // --- when
                 ResponseEntity<ProblemDetail> result =
-                        handler.handleMethodArgumentTypeMismatchException( exception );
+                        handler.handleMethodArgumentTypeMismatchException( request, exception );
                 ProblemDetail detail = result.getBody();
 
                 // --- then
@@ -365,7 +368,7 @@ public class GlobalExceptionHandlerTest
 
                 // --- when
                 ResponseEntity<ProblemDetail> result =
-                        handler.handleConstraintViolations( exception );
+                        handler.handleConstraintViolations( request, exception );
                 ProblemDetail detail = result.getBody();
 
                 // --- then
@@ -480,7 +483,7 @@ public class GlobalExceptionHandlerTest
 
                 // --- when
                 ResponseEntity<ProblemDetail> result =
-                        handler.handleGenericException( exception );
+                        handler.handleGenericException( request, exception );
                 ProblemDetail detail = result.getBody();
 
                 // --- then
@@ -522,7 +525,7 @@ public class GlobalExceptionHandlerTest
 
             // --- when
             ResponseEntity<ProblemDetail> result =
-                    handler.handleEntityNotFoundException( exception );
+                    handler.handleEntityNotFoundException( request, exception );
             ProblemDetail detail = result.getBody();
 
             // --- then

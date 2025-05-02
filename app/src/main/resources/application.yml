@@ -4,6 +4,8 @@ server:
   port: ${port:8100}
   servlet:
     context-path: /api/v1
+  error:
+    include-binding-errors: always
 
 
 
@@ -20,6 +22,11 @@ spring:
 
   main:
     lazy-initialization: true
+
+#  mvc:
+     # hides validation errors
+#    problemdetails:
+#      enabled: true
 
   config:
     import: "optional:configserver:http://localhost:8888"

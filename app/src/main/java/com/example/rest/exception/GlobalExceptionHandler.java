@@ -32,8 +32,10 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 
@@ -45,7 +47,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 @ControllerAdvice
 // @RestContollerAdvice
 @Log4j2
-public class GlobalExceptionHandler
+public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
 {
 
     // ========== Type / Argument Mismatch ==========
@@ -59,7 +61,7 @@ public class GlobalExceptionHandler
     @ExceptionHandler( MethodArgumentTypeMismatchException.class )
     @ResponseStatus( code = HttpStatus.BAD_REQUEST )
     public ResponseEntity<ProblemDetail>
-    handleMethodArgumentTypeMismatchException( final MethodArgumentTypeMismatchException exception )
+    handleMethodArgumentTypeMismatchException( final ServletWebRequest request, final MethodArgumentTypeMismatchException exception )
     {
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST,
                                                                         exception.getMessage() );
@@ -79,7 +81,7 @@ public class GlobalExceptionHandler
     @ExceptionHandler( MissingServletRequestParameterException.class )
     @ResponseStatus( code = HttpStatus.BAD_REQUEST )
     public ResponseEntity<ProblemDetail>
-    handleMissingServletRequestParameterException( final MissingServletRequestParameterException exception )
+    handleMissingServletRequestParameterException( final ServletWebRequest request, final MissingServletRequestParameterException exception )
     {
         // TODO potentially a problem with the content-type or lack of mapping to/from the
         // requested format and the internal POJO.
@@ -108,7 +110,7 @@ public class GlobalExceptionHandler
     @ExceptionHandler( HttpMediaTypeNotSupportedException.class )
     @ResponseStatus( HttpStatus.UNSUPPORTED_MEDIA_TYPE )
     public ResponseEntity<ProblemDetail>
-    handleUnsupportedMediaTypeException( final HttpMediaTypeNotSupportedException exception )
+    handleUnsupportedMediaTypeException( final ServletWebRequest request, final HttpMediaTypeNotSupportedException exception )
     {
         final ProblemDetail details = ProblemDetail.forStatus( HttpStatus.UNSUPPORTED_MEDIA_TYPE );
         details.setTitle( "Unsupported Media Type" );
@@ -134,7 +136,7 @@ public class GlobalExceptionHandler
     @ExceptionHandler( HttpMediaTypeNotAcceptableException.class )
     @ResponseStatus( HttpStatus.UNSUPPORTED_MEDIA_TYPE )
     public ResponseEntity<ProblemDetail>
-    handleUnacceptableMediaTypeException( final HttpMediaTypeNotAcceptableException exception )
+    handleUnacceptableMediaTypeException( final ServletWebRequest request, final HttpMediaTypeNotAcceptableException exception )
     {
         final ProblemDetail details = ProblemDetail.forStatus( HttpStatus.UNSUPPORTED_MEDIA_TYPE );
         details.setTitle( "Unacceptable Media Type" );
@@ -158,7 +160,7 @@ public class GlobalExceptionHandler
      */
     @ExceptionHandler( HttpMediaTypeException.class )
     @ResponseStatus( HttpStatus.UNSUPPORTED_MEDIA_TYPE )
-    public ResponseEntity<ProblemDetail> handleMediaTypeException( final HttpMediaTypeException exception )
+    public ResponseEntity<ProblemDetail> handleMediaTypeException( final ServletWebRequest request, final HttpMediaTypeException exception )
     {
 
 //        final ProblemDetail details = ProblemDetail.forStatus( HttpStatus.UNSUPPORTED_MEDIA_TYPE );
@@ -248,7 +250,7 @@ public class GlobalExceptionHandler
      */
     @ExceptionHandler( ConstraintViolationException.class )
     @ResponseStatus( code = HttpStatus.BAD_REQUEST )
-    public ResponseEntity<ProblemDetail> handleConstraintViolations( final ConstraintViolationException exception )
+    public ResponseEntity<ProblemDetail> handleConstraintViolations( final ServletWebRequest request, final ConstraintViolationException exception )
     {
         final Set<ConstraintViolation<?>> constraintViolations = exception.getConstraintViolations();
 
@@ -280,7 +282,7 @@ public class GlobalExceptionHandler
      */
     @ExceptionHandler( HttpMessageNotReadableException.class )
     @ResponseStatus( code = HttpStatus.BAD_REQUEST )
-    public ResponseEntity<ProblemDetail> handleMessageNotReadableException( final HttpMessageNotReadableException exception )
+    public ResponseEntity<ProblemDetail> handleMessageNotReadableException( final ServletWebRequest request, final HttpMessageNotReadableException exception )
     {
         // TODO potentially a problem with the content-type or lack of mapping to/from the
         // requested format and the internal POJO.
@@ -305,7 +307,7 @@ public class GlobalExceptionHandler
      */
     @ExceptionHandler( HttpMessageNotWritableException.class )
     @ResponseStatus( code = HttpStatus.BAD_REQUEST )
-    public ResponseEntity<ProblemDetail> handleMessageNotWritableException( final HttpMessageNotWritableException exception )
+    public ResponseEntity<ProblemDetail> handleMessageNotWritableException( final ServletWebRequest request, final HttpMessageNotWritableException exception )
     {
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.NOT_IMPLEMENTED,
                                                                         exception.getMessage() );
@@ -327,7 +329,7 @@ public class GlobalExceptionHandler
      */
     @ExceptionHandler( HttpRequestMethodNotSupportedException.class )
     @ResponseStatus( HttpStatus.METHOD_NOT_ALLOWED )
-    public ResponseEntity<ProblemDetail> handleMethodNotSupportedException( final HttpRequestMethodNotSupportedException exception )
+    public ResponseEntity<ProblemDetail> handleMethodNotSupportedException( final ServletWebRequest request, final HttpRequestMethodNotSupportedException exception )
     {
         final ProblemDetail details = exception.getBody();
 
@@ -353,7 +355,7 @@ public class GlobalExceptionHandler
      */
     @ExceptionHandler( NoResourceFoundException.class )
     @ResponseStatus( HttpStatus.NOT_FOUND )
-    public ResponseEntity<ProblemDetail> handleResourceNotFoundException( final NoResourceFoundException exception )
+    public ResponseEntity<ProblemDetail> handleResourceNotFoundException( final ServletWebRequest request, final NoResourceFoundException exception )
     {
         // TODO the MDC should include the traceId (UUID) and log pattern should
 
@@ -377,7 +379,7 @@ public class GlobalExceptionHandler
     @ExceptionHandler( EntityNotFoundException.class )
     @ResponseStatus( code = HttpStatus.BAD_REQUEST )
     public ResponseEntity<ProblemDetail>
-    handleEntityNotFoundException( final EntityNotFoundException exception )
+    handleEntityNotFoundException( final ServletWebRequest request, final EntityNotFoundException exception )
     {
         final StringBuilder detailMessage =
                 new StringBuilder()
@@ -403,7 +405,7 @@ public class GlobalExceptionHandler
      */
     @ExceptionHandler( Exception.class )
     @ResponseStatus( HttpStatus.INTERNAL_SERVER_ERROR )
-    public ResponseEntity<ProblemDetail> handleGenericException( final Exception exception )
+    public ResponseEntity<ProblemDetail> handleGenericException( final ServletWebRequest request, final Exception exception )
     {
         log.error( "Catch-All", exception );
         exception.printStackTrace();
