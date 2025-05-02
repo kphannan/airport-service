@@ -145,7 +145,8 @@ public class NewContinentDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple("name", "Name is required" ) );
+                                             tuple("name", "Name is required" ),
+                                             tuple( "name", "Continent name must be 2 to 52 characters" ) );
         }
     }
 

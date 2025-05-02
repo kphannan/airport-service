@@ -186,7 +186,8 @@ class ContinentDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "name", "Name is required" ) );
+                                             tuple( "name", "Name is required" ),
+                                             tuple( "name", "Continent name must be 2 to 52 characters" ) );
         }
 
         @Test
@@ -205,7 +206,8 @@ class ContinentDTOTest
                                              tuple( "id", "A continent id is required" ),
                                              tuple( "code", "A 2-character code is required" ),
                                              tuple( "code", "Code must be 2 uppercase characters" ),
-                                             tuple( "name", "Name is required" )
+                                             tuple( "name", "Name is required" ),
+                                             tuple( "name", "Continent name must be 2 to 52 characters" )
                                            );
         }
 

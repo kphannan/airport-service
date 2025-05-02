@@ -22,7 +22,11 @@ dependencies {
 
 	// ---  TODO this is for validation tests...
 	implementation libs.bundles.spring.boot.base
-//	testImplementation( "org.springframework.boot:spring-boot-starter-test" )
+	//	testImplementation( "org.springframework.boot:spring-boot-starter-test" )
 	testImplementation libs.bundles.spring.validation
-// https://mvnrepository.com/artifact/org.assertj/assertj-core
-	testImplementation 'org.assertj:assertj-core:4.0.0-M1'}
+	// https://mvnrepository.com/artifact/org.assertj/assertj-core
+	testImplementation 'org.assertj:assertj-core:4.0.0-M1'
+	// https://mvnrepository.com/artifact/org.skyscreamer/jsonassert
+	testImplementation 'org.skyscreamer:jsonassert:2.0-rc1'
+
+}
