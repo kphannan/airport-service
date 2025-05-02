@@ -8,7 +8,9 @@ Feature: Continent Read Operations
   Scenario: Create, Read, Update and Delete a test-only continent
              # Create a test continent
        Given request
-              """ { code: "BB", name: "Bogus continent name" } """
+              """
+              { code: "BB", name: "Bogus continent name" }
+              """
         When method POST
         Then status 201
            * def id = $.id

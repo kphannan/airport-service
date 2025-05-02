@@ -8,7 +8,9 @@ Feature: Continent constraint validation
   @Validation
   Scenario: ID, Code and Name are null
        Given request
-             """ { keywords: "will report missing code, name fields" } """
+             """
+             { keywords: "will report missing code, name fields" }
+             """
         When method PUT
            * print response
         Then status 400
@@ -21,7 +23,9 @@ Feature: Continent constraint validation
   @Validation
   Scenario: Code is empty string
     Given request
-              """  { id: 1, code: "", name: "Some Name" } """
+              """
+              { id: 1, code: "", name: "Some Name" }
+              """
     When method PUT
        * print response
     Then status 400
@@ -30,7 +34,9 @@ Feature: Continent constraint validation
   @Validation
   Scenario: Code is blank
     Given request
-              """ { id: 1, code: "  ", name: "Some Name" } """
+              """
+              { id: 1, code: "  ", name: "Some Name" }
+              """
     When method PUT
        * print response
     Then status 400
@@ -39,7 +45,9 @@ Feature: Continent constraint validation
   @Validation
   Scenario: Code is numeric
     Given request
-              """ { id: 1, code: "42", name: "Some Name" } """
+              """
+              { id: 1, code: "42", name: "Some Name" }
+              """
     When method PUT
        * print response
     Then status 400
@@ -48,7 +56,9 @@ Feature: Continent constraint validation
   @Validation
   Scenario: Code is null
     Given request
-              """ { id: 1, name: "Some Name" } """
+              """
+              { id: 1, name: "Some Name" }
+              """
     When method PUT
        * print response
     Then status 400
@@ -57,7 +67,9 @@ Feature: Continent constraint validation
   @Validation
   Scenario: Name is blank
     Given request
-              """ { id: 1, code: "ZZ", name: "" } """
+              """
+              { id: 1, code: "ZZ", name: "" }
+              """
     When method PUT
        * print response
     Then status 400
@@ -66,7 +78,9 @@ Feature: Continent constraint validation
   @Validation
   Scenario: Name is a single character
     Given request
-              """ { id: 1, code: "ZZ", name: "A" } """
+              """
+              { id: 1, code: "ZZ", name: "A" }
+              """
     When method PUT
        * print response
     Then status 400

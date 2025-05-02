@@ -8,7 +8,9 @@ Feature: NewContinent constraint validation
   @Validation
   Scenario: Code and Name are null
        Given request
-             """ { keywords: "will report missing code, name fields" } """
+             """
+             { keywords: "will report missing code, name fields" }
+             """
         When method POST
            * print response
         Then status 400
@@ -18,7 +20,9 @@ Feature: NewContinent constraint validation
   @Validation
   Scenario: Code is empty string
     Given request
-              """  { code: "", name: "Some Name" } """
+              """
+              { code: "", name: "Some Name" }
+              """
     When method POST
        * print response
     Then status 400
@@ -29,7 +33,9 @@ Feature: NewContinent constraint validation
   @Validation
   Scenario: Code is blank
     Given request
-              """ { code: "  ", name: "Some Name" } """
+              """
+              { code: "  ", name: "Some Name" }
+              """
     When method POST
        * print response
     Then status 400
@@ -40,7 +46,9 @@ Feature: NewContinent constraint validation
   @Validation
   Scenario: Code is numeric
     Given request
-              """ { code: "42", name: "Some Name" } """
+              """
+              { code: "42", name: "Some Name" }
+              """
     When method POST
        * print response
     Then status 400
@@ -49,7 +57,9 @@ Feature: NewContinent constraint validation
   @Validation
   Scenario: Code is null
     Given request
-              """ { name: "Some Name" } """
+              """
+              { name: "Some Name" }
+              """
     When method POST
        * print response
     Then status 400
@@ -58,7 +68,9 @@ Feature: NewContinent constraint validation
   @Validation
   Scenario: Name is blank
     Given request
-              """ { code: "ZZ", name: "" } """
+              """
+              { code: "ZZ", name: "" }
+              """
     When method POST
        * print response
     Then status 400
@@ -68,7 +80,9 @@ Feature: NewContinent constraint validation
   @Validation
   Scenario: Name is a single character
     Given request
-              """ { code: "ZZ", name: "A" } """
+              """
+              { code: "ZZ", name: "A" }
+              """
     When method POST
        * print response
     Then status 400
