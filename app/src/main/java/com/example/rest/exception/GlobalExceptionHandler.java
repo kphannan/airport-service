@@ -35,7 +35,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 
@@ -213,7 +212,6 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
         details.setTitle( String.format( "Validation failed on '%s'", exception.getObjectName() ) );
 
         Multimap<String, String> validations =  ArrayListMultimap.create();
-        int                      x           = 0;
         for ( FieldError error: exception.getBindingResult().getFieldErrors() )
         {
             // Need to use a multimap here since a single field may have multiple
@@ -262,9 +260,8 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
                                        .stream()
                                        .collect( Collectors
                                                          .toMap( violation -> violation.getPropertyPath().toString(),
-                                                         violation -> violation.getMessage()
-
-                                                                 ) ) );
+                                                                 ConstraintViolation::getMessage
+                                                               ) ) );
 
         return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );
     }
@@ -381,12 +378,8 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     public ResponseEntity<ProblemDetail>
     handleEntityNotFoundException( final ServletWebRequest request, final EntityNotFoundException exception )
     {
-        final StringBuilder detailMessage =
-                new StringBuilder()
-                        .append( exception.getMessage() );
-
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.GONE,
-                                                                        detailMessage.toString() );
+                                                                        exception.getMessage() );
         details.setTitle( "Not Found" );
 
         return new ResponseEntity<>( details, HttpStatus.GONE );
@@ -407,8 +400,6 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     @ResponseStatus( HttpStatus.INTERNAL_SERVER_ERROR )
     public ResponseEntity<ProblemDetail> handleGenericException( final ServletWebRequest request, final Exception exception )
     {
-        log.error( "Catch-All", exception );
-        exception.printStackTrace();
         // TODO the MDC should include the traceId (UUID) and log pattern should
 
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.INTERNAL_SERVER_ERROR,
@@ -418,7 +409,6 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
         details.setProperty( "Exception", exception.getClass().getTypeName() );
         details.setProperty( "Cause", exception.getCause() );
 
-        log.error( "Generic catch-all: ", exception );
         return new ResponseEntity<>( details, HttpStatus.INTERNAL_SERVER_ERROR );
     }
 

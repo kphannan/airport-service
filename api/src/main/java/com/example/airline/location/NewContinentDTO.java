@@ -52,6 +52,7 @@ public class NewContinentDTO //implements Serializable
              maxLength = 52 )
     @NotBlank( message = "Name is required" )
     @Size( min = 2, max = 52, message = "Name must be between 2 and 52 characters" )
+    @Pattern( regexp = "[a-zA-Z][a-zA-Z ]{1,51}", message = "continent name must be 2 to 52 characters" )
     @NonNull
     private String name;
 

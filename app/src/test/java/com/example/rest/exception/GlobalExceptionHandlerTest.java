@@ -84,6 +84,8 @@ public class GlobalExceptionHandlerTest
                 ProblemDetail detail = result.getBody();
 
                 // --- then
+                // NullPointerExceptions are a form of test failure.
+                // detail should always exist
                 assertAll( () -> assertNotNull( result ),
                            () -> assertEquals( "Unsupported Media Type", detail.getTitle() ),
                            () -> assertEquals( 415, detail.getStatus() ),
@@ -383,7 +385,7 @@ public class GlobalExceptionHandlerTest
 
             ConstraintViolation buildConstraintViolation()
             {
-                ConstraintViolation v = new ConstraintViolation() {
+                return new ConstraintViolation() {
                     @Override
                     public String getMessage()
                     {
@@ -459,8 +461,6 @@ public class GlobalExceptionHandlerTest
                         return null;
                     }
                 };
-
-                return v;
             }
         }
 

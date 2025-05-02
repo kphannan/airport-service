@@ -9,6 +9,8 @@ import java.net.URI;
 import java.util.Set;
 
 import com.example.rest.validation.ConstraintValidationUtility;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -61,8 +63,6 @@ public class NewContinentDTOTest
             assertThat( thrown.getMessage() )
                     .contains( "name is marked non-null but is null" );
         }
-
-
 
         @Test
         void newContinent_null_returnsViolation()
@@ -153,5 +153,43 @@ public class NewContinentDTOTest
     @DisplayName( "JSON mapping" )
     class JsonMapping
     {
+        private ObjectMapper objectMapper;
+
+        @BeforeEach
+        void setUp()
+        {
+//            objectMapper = Jackson2ObjectMapperBuilder.json().build();
+            objectMapper = new ObjectMapper();
+        }
+
+//        final String json =
+//                """
+//                { "code": "AB", "name": "::NAME::", "wikiLink": "http://some.domain/path, " }
+//                """;
+
+        @Test
+        void newContinentDTO_fromJson_instantiatesObject() throws JsonProcessingException
+        {
+            // --- given
+            final String json =
+                    """
+                    {
+                        "code": "AB",
+                        "name": "::NAME::",
+                        "wikiLink": "http://some.domain/path",
+                        "keywords": "k1, k2, k3"
+                    }
+                    """;
+
+            // --- when
+            final NewContinentDTO object = objectMapper.readValue( json, NewContinentDTO.class );
+
+            // --- then
+            assertThat( object ).isNotNull();
+            assertThat( object.getCode() ).isEqualTo( "AB" );
+            assertThat( object.getName() ).isEqualTo( "::NAME::" );
+            assertThat( object.getWikiLink() ).isEqualTo( URI.create( "http://some.domain/path" ) );
+            assertThat( object.getKeywords() ).isEqualTo( "k1, k2, k3" );
+        }
     }
 }
