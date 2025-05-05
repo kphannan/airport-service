@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.example.airline.location.ContinentDTO;
-import com.example.airline.location.NewContinentDTO;
+import com.example.airline.location.continent.ContinentDTO;
+import com.example.airline.location.continent.NewContinentDTO;
 import com.example.airline.location.config.GlobalApiResponses;
 import com.example.airline.location.config.GlobalApiSecurityResponses;
 import com.example.airline.location.continent.mapper.ContinentDtoMapper;

@@ -1,6 +1,6 @@
 /* (C) 2025 */
 
-package com.example.airline.location;
+package com.example.airline.location.region;
 
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;

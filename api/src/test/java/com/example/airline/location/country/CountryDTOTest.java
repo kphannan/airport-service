@@ -1,6 +1,6 @@
 /* (C) 2025 */
 
-package com.example.airline.location;
+package com.example.airline.location.country;
 
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -130,11 +130,11 @@ class CountryDTOTest
         void continent_blankCode_returnsViolation()
         {
             CountryDTO itemUnderTest = new CountryDTO( 1,
-                                                           "  ",
-                                                           "Name",
-                                                           "NA",
-                                                           testURI,
-                                                           "Key1, key2" );
+                                                       "  ",
+                                                       "Name",
+                                                       "NA",
+                                                       testURI,
+                                                       "Key1, key2" );
             Set<ConstraintViolation<CountryDTO>> constraintViolations = validator.validate( itemUnderTest );
 
             ConstraintValidationUtility

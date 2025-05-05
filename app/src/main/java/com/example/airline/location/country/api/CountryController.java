@@ -5,7 +5,7 @@ package com.example.airline.location.country.api;
 
 import java.util.Optional;
 
-import com.example.airline.location.CountryDTO;
+import com.example.airline.location.country.CountryDTO;
 import com.example.airline.location.config.GlobalApiResponses;
 import com.example.airline.location.config.GlobalApiSecurityResponses;
 import com.example.airline.location.country.mapper.CountryDtoMapper;

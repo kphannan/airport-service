@@ -108,7 +108,7 @@ databaseChangeLog:
               - column:
                   name: wikipedia_link
                   type: varchar(255)
-                  remarks: URL of the page on Wikipedia for thhe airport, if one exists.
+                  remarks: URL of the page on Wikipedia for the airport, if one exists.
               - column:
                   name: keywords
                   type: varchar(512)

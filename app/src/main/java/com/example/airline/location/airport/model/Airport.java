@@ -122,7 +122,7 @@ public class Airport
     /**
      * URL of the airport''s official home page on the web, if one exists.
      */
-    @Nullable private String homeLink; // URI
+    @Nullable private URI homeLink; // URI
 
     /**
      * URL of the airport''s page on Wikipedia, if one exists.

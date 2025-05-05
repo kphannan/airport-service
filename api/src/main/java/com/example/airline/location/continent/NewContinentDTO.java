@@ -1,6 +1,6 @@
 /* (C) 2025 */
 
-package com.example.airline.location;
+package com.example.airline.location.continent;
 
 import java.net.URI;
 

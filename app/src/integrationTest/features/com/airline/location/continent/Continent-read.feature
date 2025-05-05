@@ -5,6 +5,6 @@ Feature: Continent Read Operations
 
   @PostDeployment
   Scenario: Retrieve full list of Continents
-    Given path ''
+#    Given path ''
      When method GET
      Then status 200

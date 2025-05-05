@@ -5,7 +5,7 @@ package com.example.airline.location.country.mapper;
 
 import java.util.List;
 
-import com.example.airline.location.CountryDTO;
+import com.example.airline.location.country.CountryDTO;
 import com.example.airline.location.country.model.Country;
 import com.example.airline.location.country.persistence.model.CountryEntity;
 import org.mapstruct.Mapper;

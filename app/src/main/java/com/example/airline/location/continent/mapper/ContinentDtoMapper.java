@@ -5,8 +5,8 @@ package com.example.airline.location.continent.mapper;
 
 import java.util.List;
 
-import com.example.airline.location.ContinentDTO;
-import com.example.airline.location.NewContinentDTO;
+import com.example.airline.location.continent.ContinentDTO;
+import com.example.airline.location.continent.NewContinentDTO;
 import com.example.airline.location.continent.model.Continent;
 import com.example.airline.location.continent.model.NewContinent;
 import org.mapstruct.Mapper;

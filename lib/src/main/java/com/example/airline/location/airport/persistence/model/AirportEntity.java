@@ -161,8 +161,9 @@ public class AirportEntity // extends Auditable<String>
     /**
      * URL of the airport''s official home page on the web, if one exists.
      */
+    @Convert( converter = UriConverter.class )
     @Column( name = "home_link", length = 255 )
-    @Nullable private String homeLink; // URI
+    @Nullable private URI homeLink; // URI
 
     /**
      * URL of the airport''s page on Wikipedia, if one exists.

@@ -1,4 +1,4 @@
-package com.example.airline.location;
+package com.example.airline.location.continent;
 
 
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;

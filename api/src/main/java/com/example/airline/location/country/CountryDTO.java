@@ -1,6 +1,6 @@
 /* (C) 2025 */
 
-package com.example.airline.location;
+package com.example.airline.location.country;
 
 
 import java.io.Serializable;
