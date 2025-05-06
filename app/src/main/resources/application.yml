@@ -3,9 +3,9 @@
 server:
   port: ${port:8100}
   servlet:
-    context-path: /api/v1
+    contextPath: /api/v1
   error:
-    include-binding-errors: always
+    includeBindingErrors: always
 
 
 
@@ -15,13 +15,16 @@ spring:
     name: airport-service
 
   jackson:
-    default-property-inclusion: NON_NULL
+    defaultPropertyInclusion: NON_NULL
+
+  jpa:
+    openInView: false
 
   profiles:
     active:  ${active_profiles:local}
 
   main:
-    lazy-initialization: true
+    lazyInitialization: true
 
 #  mvc:
      # hides validation errors
@@ -33,11 +36,11 @@ spring:
 
   ## --- DataSource ---
   liquibase:
-    change-log: classpath:db/changelog/db.changelog-master.yaml
+    changeLog: classpath:db/changelog/db.changelog-master.yaml
 
   # Datasource is defined in a profile specific application-<profile>.yaml
   datasource:
-    driver-class-name: ${datasource.driver.classname}
+    driverClassName: ${datasource.driver.classname}
     url: ${datasource.url}
     username: ${datasource.username}
     password: ${datasource.password}
@@ -48,7 +51,7 @@ spring:
     # none, validate, update, create, create-drop
 #      ddl-auto: validate
 
-    show-sql: true
+    showSql: true
     properties:
       hibernate:
         format_sql: true
@@ -71,7 +74,7 @@ logging:
 
 #################
 
-partner-services:
+partnerServices:
   services:
     - name: service1
       hostname: host1.some.domain

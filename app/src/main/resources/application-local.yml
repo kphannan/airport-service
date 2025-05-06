@@ -16,7 +16,7 @@ spring:
   # for Spring Boot
   # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html#application-properties.jackson
   jackson:
-    default-property-inclusion: non-null
+    defaultPropertyInclusion: non-null
     serialization:
       indent-output: true
       # false means write as ISO-8601
@@ -26,17 +26,22 @@ spring:
     hibernate:
       # none, validate, update, create, create-drop
       ddl-auto: none
-      generate_statistics: true
+      generateStatistics: true
+
+    open-in-view: false
+
     properties:
       hibernate:
-        format_sql: true
-        generate_statistics: true
+        formatSql: true
+        generateStatistics: true
         session:
           events:
             log:
-              LOG_QUERIES_SLOWER_THAN_MS: 100
-        use_sql_comments: true
-    show-sql: true
+              logQueriesSlowerThanMs: 100
+              # LOG_QUERIES_SLOWER_THAN_MS: 100
+        useSqlComments: true
+
+    showSql: true
 
   # Enable H2 console
   h2:
@@ -45,7 +50,7 @@ spring:
       path: /h2-console
       settings:
         trace: true
-        web-allow-others: false
+        webAllowOthers: false
 
   #  Console output
   output:
@@ -97,7 +102,8 @@ logging:
           internal: INFO
         internal: INFO
           # SessionFactoryImpl: INFO
-        HQL_FUNCTIONS: INFO
+        hqlFunctions: INFO
+        # HQL_FUNCTIONS: INFO
         orm:
           idgen:
             factory: WARN

@@ -38,7 +38,11 @@
     <rule ref="category/java/bestpractices.xml/UnitTestShouldIncludeAssert" />
     <!-- <rule ref="category/java/bestpractices.xml/JUnitUseExpected" /> -->
     <rule ref="category/java/bestpractices.xml/LiteralsFirstInComparisons" />
-    <rule ref="category/java/bestpractices.xml/LooseCoupling"/>
+    <rule ref="category/java/bestpractices.xml/LooseCoupling">
+        <properties>
+            <property name="allowedTypes" value="org.springframework.http.HttpHeaders" />
+        </properties>
+    </rule>
     <rule ref="category/java/bestpractices.xml/MethodReturnsInternalArray" />
     <rule ref="category/java/bestpractices.xml/MissingOverride"/>
     <rule ref="category/java/bestpractices.xml/OneDeclarationPerLine"/>
@@ -118,7 +122,13 @@
     <rule ref="category/java/codestyle.xml/AvoidUsingNativeCode"/>
     <rule ref="category/java/codestyle.xml/BooleanGetMethodName" />
     <rule ref="category/java/codestyle.xml/CallSuperInConstructor" />
-    <rule ref="category/java/codestyle.xml/CommentDefaultAccessModifier" />
+    <rule ref="category/java/codestyle.xml/CommentDefaultAccessModifier">
+        <properties>
+            <property name="ignoredAnnotations" value="android.support.annotation.VisibleForTesting,co.elastic.clients.util.VisibleForTesting,com.google.common.annotations.VisibleForTesting,org.junit.jupiter.api.AfterAll,org.junit.jupiter.api.AfterEach,org.junit.jupiter.api.BeforeAll,org.junit.jupiter.api.BeforeEach,org.junit.jupiter.api.Nested,org.junit.jupiter.api.RepeatedTest,org.junit.jupiter.api.Test,org.junit.jupiter.api.TestFactory,org.junit.jupiter.api.TestTemplate,org.junit.jupiter.api.extension.RegisterExtension,org.junit.jupiter.params.ParameterizedTest,org.testng.annotations.AfterClass,org.testng.annotations.AfterGroups,org.testng.annotations.AfterMethod,org.testng.annotations.AfterSuite,org.testng.annotations.AfterTest,org.testng.annotations.BeforeClass,org.testng.annotations.BeforeGroups,org.testng.annotations.BeforeMethod,org.testng.annotations.BeforeSuite,org.testng.annotations.BeforeTest,org.testng.annotations.Test" />
+            <property name="regex" value="\/\*\s*(default|package)\s*\*\/" />
+            <property name="checkTopLevelTypes" value="false" />
+        </properties>
+    </rule>
     <rule ref="category/java/codestyle.xml/ConfusingTernary" />
     <rule ref="category/java/codestyle.xml/ControlStatementBraces"/>
     <rule ref="category/java/codestyle.xml/EmptyMethodInAbstractClassShouldBeAbstract" />
