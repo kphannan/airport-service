@@ -63,7 +63,7 @@ public class NewContinentDTO //implements Serializable
              requiredMode = Schema.RequiredMode.NOT_REQUIRED,
              maxLength = 255 )
     @Nullable
-//    @Size( max = 255, message = "List of keywords may not exceed 255 characters" )
+    // @Size( max = 255, message = "List of keywords may not exceed 255 characters" )
     private URI    wikiLink;
 
     @JsonProperty( "keywords" )

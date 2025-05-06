@@ -24,7 +24,7 @@ public interface ContinentRepository extends JpaRepository<ContinentEntity, Inte
     /**
      * Determine if an element exists in the DB.
      *
-     * @param id must not be {@literal null}.
+     * @param continentId must not be {@literal null}.
      * @return true if the continent is found, false otherwise.
      */
     @Override

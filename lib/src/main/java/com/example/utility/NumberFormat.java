@@ -6,10 +6,9 @@ package com.example.utility;
 /**
  * Utility for formating numbers.
  *
+ * <p>
  * For readabilty the bit string may group bits together with an intervening
  * space.
- *
- * <p>
  * <table border="1" style="border-collapse:collapse;">
  * <caption>Bit strings for the hexadecimal value <b>0xFACE</b></caption>
  * <thead>
