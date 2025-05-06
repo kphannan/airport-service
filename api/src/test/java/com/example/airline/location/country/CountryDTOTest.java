@@ -18,7 +18,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -33,18 +32,9 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 @SuppressWarnings( "PMD.AvoidDuplicateLiterals" )
 class CountryDTOTest
 {
-    private Validator validator;
-    private URI       testURI;
+    private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+    private final URI       testURI   = URI.create( "http://test.domain/with/a/path" );
 
-    @BeforeEach
-    void setUp()
-    {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-
-        validator = factory.getValidator();
-
-        testURI = URI.create( "http://test.domain/with/a/path" );
-    }
 
     @Nested
     @DisplayName( "constructor will" )
@@ -55,16 +45,16 @@ class CountryDTOTest
         @DisplayName( "throw an exception when the continent primary id is null" )
         void continent_nullArgs_throwsNullPointer()
         {
-            Throwable thrown = assertThrows( IllegalArgumentException.class,
-                                             () -> new CountryDTO( null, null, null, null, null, null )
-                                           );
+            final Throwable thrown = assertThrows( IllegalArgumentException.class,
+                                                   () -> new CountryDTO( null, null, null, null, null, null )
+                                                 );
             assertThat( thrown.getMessage() )
                     .contains( "code is marked non-null but is null" );
         }
 
         @Test
         @DisplayName( "reject null for the continent code" )
-        void constructor_NullArgs_throwsNullPointer()   // TODO change lombok config to throw IllegalArgument instead of default NPE
+        void constructor_NullArgs_throwsNullPointer()
         {
             final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                    () -> new CountryDTO( null, null, null, null, null, null )
@@ -83,7 +73,7 @@ class CountryDTOTest
 
         @Test
         @DisplayName( "reject null for the continent code" )
-        void constructor_CodeNull_throwsNullPointer()   // TODO change lombok config to throw IllegalArgument instead of default NPE
+        void constructor_CodeNull_throwsNullPointer()
         {
             final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                    () -> new CountryDTO( null, null, ";;NAME;;", null, null, null )
@@ -111,13 +101,13 @@ class CountryDTOTest
         @DisplayName( "reject a blank continent code" )
         void continent_blankid_returnsViolation()
         {
-            CountryDTO itemUnderTest = new CountryDTO( null,
-                                                           "CC",
-                                                           "Name",
-                                                           "NA",
-                                                           testURI,
-                                                           "Key1, key2" );
-            Set<ConstraintViolation<CountryDTO>> constraintViolations = validator.validate( itemUnderTest );
+            final CountryDTO itemUnderTest = new CountryDTO( null,
+                                                             "CC",
+                                                             "Name",
+                                                             "NA",
+                                                             testURI,
+                                                             "Key1, key2" );
+            final Set<ConstraintViolation<CountryDTO>> constraintViolations = validator.validate( itemUnderTest );
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
@@ -129,13 +119,13 @@ class CountryDTOTest
         @DisplayName( "reject a blank continent code" )
         void continent_blankCode_returnsViolation()
         {
-            CountryDTO itemUnderTest = new CountryDTO( 1,
-                                                       "  ",
-                                                       "Name",
-                                                       "NA",
-                                                       testURI,
-                                                       "Key1, key2" );
-            Set<ConstraintViolation<CountryDTO>> constraintViolations = validator.validate( itemUnderTest );
+            final CountryDTO itemUnderTest = new CountryDTO( 1,
+                                                             "  ",
+                                                             "Name",
+                                                             "NA",
+                                                             testURI,
+                                                             "Key1, key2" );
+            final Set<ConstraintViolation<CountryDTO>> constraintViolations = validator.validate( itemUnderTest );
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
@@ -148,13 +138,13 @@ class CountryDTOTest
         @DisplayName( "reject single character code" )
         void continent_singleCharCode_returnsViolation()
         {
-            CountryDTO itemUnderTest = new CountryDTO( 1,
-                                                           "A",
-                                                           "Name",
-                                                           "AS",
-                                                           null,
-                                                           null );
-            Set<ConstraintViolation<CountryDTO>> constraintViolations = validator.validate( itemUnderTest );
+            final CountryDTO itemUnderTest = new CountryDTO( 1,
+                                                             "A",
+                                                             "Name",
+                                                             "AS",
+                                                             null,
+                                                             null );
+            final Set<ConstraintViolation<CountryDTO>> constraintViolations = validator.validate( itemUnderTest );
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
@@ -166,13 +156,13 @@ class CountryDTOTest
         @DisplayName( "reject numeric code" )
         void continent_digitCode_returnsViolation()
         {
-            CountryDTO itemUnderTest = new CountryDTO( 1,
-                                                           "42",
-                                                           "Name",
-                                                           "NA",
-                                                           null,
-                                                           null );
-            Set<ConstraintViolation<CountryDTO>> constraintViolations = validator.validate( itemUnderTest );
+            final CountryDTO itemUnderTest = new CountryDTO( 1,
+                                                             "42",
+                                                             "Name",
+                                                             "NA",
+                                                             null,
+                                                             null );
+            final Set<ConstraintViolation<CountryDTO>> constraintViolations = validator.validate( itemUnderTest );
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
@@ -184,14 +174,14 @@ class CountryDTOTest
         @DisplayName( "reject a blank continent name" )
         void continent_nullName_returnsViolation()
         {
-            CountryDTO itemUnderTest = new CountryDTO( 1,
-                                                           "AA",
-                                                           "   ",
-                                                           "NA",
-                                                           null,
-                                                           null );
+            final CountryDTO itemUnderTest = new CountryDTO( 1,
+                                                             "AA",
+                                                             "   ",
+                                                             "NA",
+                                                             null,
+                                                             null );
 
-            Set<ConstraintViolation<CountryDTO>> constraintViolations = validator.validate( itemUnderTest );
+            final Set<ConstraintViolation<CountryDTO>> constraintViolations = validator.validate( itemUnderTest );
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
@@ -203,13 +193,13 @@ class CountryDTOTest
         @DisplayName( "reject a blank continent code" )
         void continent_missingAllRequired_returnsViolation()
         {
-            CountryDTO itemUnderTest = new CountryDTO( null,
-                                                           "  ",
-                                                           "   ",
-                                                           "  ",
-                                                           testURI,
-                                                           "Key1, key2" );
-            Set<ConstraintViolation<CountryDTO>> constraintViolations = validator.validate( itemUnderTest );
+            final CountryDTO itemUnderTest = new CountryDTO( null,
+                                                             "  ",
+                                                             "   ",
+                                                             "  ",
+                                                             testURI,
+                                                             "Key1, key2" );
+            final Set<ConstraintViolation<CountryDTO>> constraintViolations = validator.validate( itemUnderTest );
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
@@ -248,15 +238,15 @@ class CountryDTOTest
                 // --- given
                 final String json =
                         """
-                                {
-                                    "id": 42,
-                                    "code": "AB",
-                                    "name": "::NAME::",
-                                    "continent": "AS",
-                                    "wikiLink": "http://some.domain/path",
-                                    "keywords": "k1, k2, k3"
-                                }
-                                """;
+                        {
+                            "id": 42,
+                            "code": "AB",
+                            "name": "::NAME::",
+                            "continent": "AS",
+                            "wikiLink": "http://some.domain/path",
+                            "keywords": "k1, k2, k3"
+                        }
+                        """;
 
                 // --- when
                 final CountryDTO object = objectMapper.readValue( json, CountryDTO.class );
@@ -279,7 +269,6 @@ class CountryDTOTest
             void continentDTO_fromObject_producesJSON() throws JsonProcessingException
             {
                 // --- given
-//                final CountryDTO dto = new CountryDTO();
                 final CountryDTO dto = new CountryDTO( 42,
                                                        "AA",
                                                        "::NAME::",
@@ -288,15 +277,15 @@ class CountryDTOTest
                                                        "k1, k2, k3" );
                 final String json =
                         """
-                                {
-                                    "id": 42,
-                                    "code": "AA",
-                                    "name": "::NAME::",
-                                    "continent": "AS",
-                                    "wikiLink": "http://some.domain/path",
-                                    "keywords": "k1, k2, k3"
-                                }
-                                """;
+                        {
+                            "id": 42,
+                            "code": "AA",
+                            "name": "::NAME::",
+                            "continent": "AS",
+                            "wikiLink": "http://some.domain/path",
+                            "keywords": "k1, k2, k3"
+                        }
+                        """;
 
                 // --- when
                 final String result = objectMapper.writeValueAsString( dto );

@@ -16,8 +16,6 @@ import com.example.rest.validation.ConstraintValidationUtility;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -29,18 +27,9 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings( "PMD.AvoidDuplicateLiterals" )
 class RegionDTOTest
 {
-    private Validator validator;
-    private URI       testURI;
+    private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+    private final URI       testURI   = URI.create( "http://test.domain/with/a/path" );
 
-    @BeforeEach
-    void setUp()
-    {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-
-        validator = factory.getValidator();
-
-        testURI = URI.create( "http://test.domain/with/a/path" );
-    }
 
     @Nested
     @DisplayName( "constructor will" )
@@ -50,16 +39,16 @@ class RegionDTOTest
         @DisplayName( "throw an exception when the region primary id is null" )
         void region_nullArgs_throwsNullPointer()
         {
-            Throwable thrown = assertThrows( IllegalArgumentException.class,
-                                             () -> new RegionDTO( null, null, null, null, null, null, null, null )
-                                           );
+            final Throwable thrown = assertThrows( IllegalArgumentException.class,
+                                                   () -> new RegionDTO( null, null, null, null, null, null, null, null )
+                                                 );
             assertThat( thrown.getMessage() )
                     .contains( "code is marked non-null but is null" );
         }
 
         @Test
         @DisplayName( "reject null for the continent code" )
-        void constructor_NullArgs_throwsNullPointer()   // TODO change lombok config to throw IllegalArgument instead of default NPE
+        void constructor_NullArgs_throwsNullPointer()
         {
             final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                    () -> new RegionDTO( 1, null, null, null, null, null, null, null )
@@ -78,7 +67,7 @@ class RegionDTOTest
 
         @Test
         @DisplayName( "reject null for the continent code" )
-        void constructor_CodeNull_throwsNullPointer()   // TODO change lombok config to throw IllegalArgument instead of default NPE
+        void constructor_CodeNull_throwsNullPointer()
         {
             final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                    () -> new RegionDTO( null, null, "D", "County Dublin", "IE", "EU", null, null )
@@ -106,15 +95,15 @@ class RegionDTOTest
         @DisplayName( "reject a blank continent code" )
         void region_blankId_returnsViolation()
         {
-            RegionDTO itemUnderTest = new RegionDTO( null,
-                                                     "CC",
-                                                     "LOCAL",
-                                                     "Name",
-                                                     "IE",
-                                                     "EU",
-                                                     testURI,
-                                                     "Key1, key2" );
-            Set<ConstraintViolation<RegionDTO>> constraintViolations = validator.validate( itemUnderTest );
+            final RegionDTO itemUnderTest = new RegionDTO( null,
+                                                           "CC",
+                                                           "LOCAL",
+                                                           "Name",
+                                                           "IE",
+                                                           "EU",
+                                                           testURI,
+                                                           "Key1, key2" );
+            final Set<ConstraintViolation<RegionDTO>> constraintViolations = validator.validate( itemUnderTest );
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
@@ -127,15 +116,15 @@ class RegionDTOTest
         @DisplayName( "reject a blank continent code" )
         void region_blankCode_returnsViolation()
         {
-            RegionDTO itemUnderTest = new RegionDTO( 1,
-                                                     "  ",
-                                                     "LOCAL",
-                                                     "Name",
-                                                     "IE",
-                                                     "EU",
-                                                     testURI,
-                                                     "Key1, key2" );
-            Set<ConstraintViolation<RegionDTO>> constraintViolations = validator.validate( itemUnderTest );
+            final RegionDTO itemUnderTest = new RegionDTO( 1,
+                                                           "  ",
+                                                           "LOCAL",
+                                                           "Name",
+                                                           "IE",
+                                                           "EU",
+                                                           testURI,
+                                                           "Key1, key2" );
+            final Set<ConstraintViolation<RegionDTO>> constraintViolations = validator.validate( itemUnderTest );
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
@@ -148,7 +137,7 @@ class RegionDTOTest
         @DisplayName( "reject single character code" )
         void region_singleCharCode_returnsViolation()
         {
-            RegionDTO itemUnderTest = new RegionDTO( 1,
+            final RegionDTO itemUnderTest = new RegionDTO( 1,
                                                      "A",
                                                      "LOCAL",
                                                      "Name",
@@ -156,7 +145,7 @@ class RegionDTOTest
                                                      "EU",
                                                      null,
                                                      null );
-            Set<ConstraintViolation<RegionDTO>> constraintViolations = validator.validate( itemUnderTest );
+            final Set<ConstraintViolation<RegionDTO>> constraintViolations = validator.validate( itemUnderTest );
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
@@ -168,15 +157,15 @@ class RegionDTOTest
         @DisplayName( "reject numeric code" )
         void region_digitCode_returnsViolation()
         {
-            RegionDTO itemUnderTest = new RegionDTO( 1,
-                                                     "42",
-                                                     "LOCAL",
-                                                     "Name",
-                                                     "IE",
-                                                     "EU",
-                                                     null,
-                                                     null );
-            Set<ConstraintViolation<RegionDTO>> constraintViolations = validator.validate( itemUnderTest );
+            final RegionDTO itemUnderTest = new RegionDTO( 1,
+                                                           "42",
+                                                           "LOCAL",
+                                                           "Name",
+                                                           "IE",
+                                                           "EU",
+                                                           null,
+                                                           null );
+            final Set<ConstraintViolation<RegionDTO>> constraintViolations = validator.validate( itemUnderTest );
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
@@ -188,16 +177,16 @@ class RegionDTOTest
         @DisplayName( "reject a blank continent name" )
         void region_nullName_returnsViolation()
         {
-            RegionDTO itemUnderTest = new RegionDTO( 1,
-                                                     "AA",
-                                                     "LOCAL",
-                                                     "   ",
-                                                     "IE",
-                                                     "EU",
-                                                     null,
-                                                     null );
+            final RegionDTO itemUnderTest = new RegionDTO( 1,
+                                                           "AA",
+                                                           "LOCAL",
+                                                           "   ",
+                                                           "IE",
+                                                           "EU",
+                                                           null,
+                                                           null );
 
-            Set<ConstraintViolation<RegionDTO>> constraintViolations = validator.validate( itemUnderTest );
+            final Set<ConstraintViolation<RegionDTO>> constraintViolations = validator.validate( itemUnderTest );
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
@@ -210,15 +199,15 @@ class RegionDTOTest
         @DisplayName( "reject a blank continent code" )
         void region_missingAllRequired_returnsViolation()
         {
-            RegionDTO itemUnderTest = new RegionDTO( null,
-                                                     "  ",
-                                                     "  ",
-                                                     "   ",
-                                                     "IE",
-                                                     "EU",
-                                                     testURI,
-                                                     "Key1, key2" );
-            Set<ConstraintViolation<RegionDTO>> constraintViolations = validator.validate( itemUnderTest );
+            final RegionDTO itemUnderTest = new RegionDTO( null,
+                                                           "  ",
+                                                           "  ",
+                                                           "   ",
+                                                           "IE",
+                                                           "EU",
+                                                           testURI,
+                                                           "Key1, key2" );
+            final Set<ConstraintViolation<RegionDTO>> constraintViolations = validator.validate( itemUnderTest );
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,

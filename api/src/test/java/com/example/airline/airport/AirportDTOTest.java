@@ -5,7 +5,6 @@ package com.example.airline.airport;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -18,8 +17,6 @@ import com.example.rest.validation.ConstraintValidationUtility;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -31,20 +28,9 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings( "PMD.AvoidDuplicateLiterals" )
 class AirportDTOTest
 {
-    private Validator validator;
-    private URI       testURI1;
-    private URI       testURI2;
-
-    @BeforeEach
-    void setUp()
-    {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-
-        validator = factory.getValidator();
-
-        testURI1 = URI.create( "http://www.atlanta-airport.com" );
-        testURI2 = URI.create( "https://en.wikipedia.org/wiki/Hartsfield–Jackson_Atlanta_International_Airport" );
-    }
+    private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+    private final URI       testURI1  = URI.create( "http://www.atlanta-airport.com" );
+    private final URI       testURI2  = URI.create( "https://en.wikipedia.org/wiki/Hartsfield–Jackson_Atlanta_International_Airport" );
 
     @Nested
     @DisplayName( "constructor will" )
@@ -54,16 +40,16 @@ class AirportDTOTest
         @DisplayName( "throw an exception when all arguments are null" )
         void constructor_allArgsNull_throwsIllegalArgument()
         {
-            Throwable thrown = assertThrows( IllegalArgumentException.class,
-                                             () -> new AirportDTO( null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null )
-                                           );
+            final Throwable thrown = assertThrows( IllegalArgumentException.class,
+                                                   () -> new AirportDTO( null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null )
+                                                 );
             assertThat( thrown.getMessage() )
                     .contains( "ident is marked non-null but is null" );
         }
 
         @Test
         @DisplayName( "throw an exception when all but first argument is null" )
-        void constructor_OneArgNotNullAllOtherArgsNull_throwsIllegalArgument()   // TODO change lombok config to throw IllegalArgument instead of default NPE
+        void constructor_OneArgNotNullAllOtherArgsNull_throwsIllegalArgument()
         {
             final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                    () -> new AirportDTO( null, "KATL", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null )
@@ -73,7 +59,7 @@ class AirportDTOTest
 
         @Test
         @DisplayName( "throw an exception when all but first two arguments are null" )
-        void constructor_TwoArgsNotNullAllOtherArgsNull_throwsIllegalArgument()   // TODO change lombok config to throw IllegalArgument instead of default NPE
+        void constructor_TwoArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
         {
             final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                    () -> new AirportDTO( null, "KATL", "::TT::", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null )
@@ -83,7 +69,7 @@ class AirportDTOTest
 
         @Test
         @DisplayName( "throw an exception when all but first two arguments are null" )
-        void constructor_ThreeArgsNotNullAllOtherArgsNull_throwsIllegalArgument()   // TODO change lombok config to throw IllegalArgument instead of default NPE
+        void constructor_ThreeArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
         {
             final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                    () -> new AirportDTO( null, "KATL", "::TT::", "::NAME::", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null )
@@ -93,7 +79,7 @@ class AirportDTOTest
 
         @Test
         @DisplayName( "throw an exception when all but first two arguments are null" )
-        void constructor_FourArgsNotNullAllOtherArgsNull_throwsIllegalArgument()   // TODO change lombok config to throw IllegalArgument instead of default NPE
+        void constructor_FourArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
         {
             final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                    () -> new AirportDTO( null, "KATL", "::TT::", "::NAME::", BigDecimal.ONE, null, null, null, null, null, null, null, null, null, null, null, null, null, null )
@@ -103,7 +89,7 @@ class AirportDTOTest
 
         @Test
         @DisplayName( "throw an exception when all but first two arguments are null" )
-        void constructor_FiveArgsNotNullAllOtherArgsNull_throwsIllegalArgument()   // TODO change lombok config to throw IllegalArgument instead of default NPE
+        void constructor_FiveArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
         {
             final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                    () -> new AirportDTO( null,
@@ -131,7 +117,7 @@ class AirportDTOTest
 
         @Test
         @DisplayName( "throw an exception when all but first two arguments are null" )
-        void constructor_SixArgsNotNullAllOtherArgsNull_throwsIllegalArgument()   // TODO change lombok config to throw IllegalArgument instead of default NPE
+        void constructor_SixArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
         {
             final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                    () -> new AirportDTO( null,
@@ -159,7 +145,7 @@ class AirportDTOTest
 
         @Test
         @DisplayName( "throw an exception when all but first two arguments are null" )
-        void constructor_SevenArgsNotNullAllOtherArgsNull_throwsIllegalArgument()   // TODO change lombok config to throw IllegalArgument instead of default NPE
+        void constructor_SevenArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
         {
             final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                    () -> new AirportDTO( null,
@@ -187,7 +173,7 @@ class AirportDTOTest
 
         @Test
         @DisplayName( "throw an exception when all but first two arguments are null" )
-        void constructor_EightArgsNotNullAllOtherArgsNull_throwsIllegalArgument()   // TODO change lombok config to throw IllegalArgument instead of default NPE
+        void constructor_EightArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
         {
             final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                    () -> new AirportDTO( null,
@@ -215,7 +201,7 @@ class AirportDTOTest
 
         @Test
         @DisplayName( "throw an exception when all but first two arguments are null" )
-        void constructor_NineArgsNotNullAllOtherArgsNull_throwsIllegalArgument()   // TODO change lombok config to throw IllegalArgument instead of default NPE
+        void constructor_NineArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
         {
             final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                    () -> new AirportDTO( null,
@@ -243,7 +229,7 @@ class AirportDTOTest
 
         @Test
         @DisplayName( "throw an exception when all but first two arguments are null" )
-        void constructor_withRequiredArgs_returnsInstance()   // TODO change lombok config to throw IllegalArgument instead of default NPE
+        void constructor_withRequiredArgs_returnsInstance()
         {
             final AirportDTO dto = new AirportDTO( null,
                                                    "KATL",
@@ -279,27 +265,27 @@ class AirportDTOTest
         @DisplayName( "reject a blank Airport ID" )
         void airport_blankId_returnsViolation()
         {
-            AirportDTO itemUnderTest = new AirportDTO( null,
-                                                       "KATL",
-                                                       "::TT::",
-                                                       "::NAME::",
-                                                       BigDecimal.ONE,
-                                                       BigDecimal.TWO,
-                                                       null,
-                                                       "NA",
-                                                       "PH",
-                                                       "PH-CB",
-                                                       "Some city",
-                                                       "no",
-                                                       null,
-                                                       null,
-                                                       null,
-                                                       null,
-                                                       null,
-                                                       null,
-                                                       null
+            final AirportDTO itemUnderTest = new AirportDTO( null,
+                                                             "KATL",
+                                                             "::TT::",
+                                                             "::NAME::",
+                                                             BigDecimal.ONE,
+                                                             BigDecimal.TWO,
+                                                             null,
+                                                             "NA",
+                                                             "PH",
+                                                             "PH-CB",
+                                                             "Some city",
+                                                             "no",
+                                                             null,
+                                                             null,
+                                                             null,
+                                                             null,
+                                                             null,
+                                                             null,
+                                                             null
             );
-            Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+            final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
@@ -315,26 +301,26 @@ class AirportDTOTest
             @DisplayName( "not blank" )
             void airport_blankIdent_returnsViolation()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "   ",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "NA",
-                                                           "US",
-                                                           "US-GA",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "KATL",
-                                                           "ATL",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "   ",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428101 ),
+                                                                 1026,
+                                                                 "NA",
+                                                                 "US",
+                                                                 "US-GA",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "KATL",
+                                                                 "ATL",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
@@ -348,26 +334,26 @@ class AirportDTOTest
             @DisplayName( "not too short" )
             void airport_tooFewCharactersForIdent_returnsViolation()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "KA",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "NA",
-                                                           "US",
-                                                           "US-GA",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "KATL",
-                                                           "ATL",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "KA",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428101 ),
+                                                                 1026,
+                                                                 "NA",
+                                                                 "US",
+                                                                 "US-GA",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "KATL",
+                                                                 "ATL",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
@@ -379,26 +365,26 @@ class AirportDTOTest
             @DisplayName( "not numeric" )
             void airport_numericIdent_returnsViolation()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "12345",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "NA",
-                                                           "US",
-                                                           "US-GA",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "KATL",
-                                                           "ATL",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "12345",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428101 ),
+                                                                 1026,
+                                                                 "NA",
+                                                                 "US",
+                                                                 "US-GA",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "KATL",
+                                                                 "ATL",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
@@ -410,26 +396,26 @@ class AirportDTOTest
             @DisplayName( "<aa><nn> is accepted" )
             void airport_aann_isAccepted()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "AB12",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "NA",
-                                                           "US",
-                                                           "US-GA",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "KATL",
-                                                           "ATL",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "AB12",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428101 ),
+                                                                 1026,
+                                                                 "NA",
+                                                                 "US",
+                                                                 "US-GA",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "KATL",
+                                                                 "ATL",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 assertThat( constraintViolations.size() )
                         .isEqualTo( 0 );
@@ -439,26 +425,26 @@ class AirportDTOTest
             @DisplayName( "<aa><nnn> is rejected" )
             void airport_aannn_isRejected()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "AB123",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "NA",
-                                                           "US",
-                                                           "US-GA",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "KATL",
-                                                           "ATL",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "AB123",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428101 ),
+                                                                 1026,
+                                                                 "NA",
+                                                                 "US",
+                                                                 "US-GA",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "KATL",
+                                                                 "ATL",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
@@ -470,26 +456,26 @@ class AirportDTOTest
             @DisplayName( "<aa>-<nnnn> is accepted" )
             void airport_aannnn_isAccepted()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "AB-1223",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "NA",
-                                                           "US",
-                                                           "US-GA",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "KATL",
-                                                           "ATL",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "AB-1223",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428101 ),
+                                                                 1026,
+                                                                 "NA",
+                                                                 "US",
+                                                                 "US-GA",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "KATL",
+                                                                 "ATL",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 assertThat( constraintViolations.size() )
                         .isEqualTo( 0 );
@@ -499,26 +485,26 @@ class AirportDTOTest
             @DisplayName( "<aaaa> is accepted" )
             void airport_aaaa_isAccepted()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "ABCD",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "NA",
-                                                           "US",
-                                                           "US-GA",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "KATL",
-                                                           "ATL",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "ABCD",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428101 ),
+                                                                 1026,
+                                                                 "NA",
+                                                                 "US",
+                                                                 "US-GA",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "KATL",
+                                                                 "ATL",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
 //                ConstraintValidationUtility
 //                        .assertConstraintErrors( constraintViolations,
@@ -542,26 +528,26 @@ class AirportDTOTest
             @DisplayName( "blank is rejected" )
             void airportContinent_blank_isRejected()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "ABCD",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "  ",
-                                                           "US",
-                                                           "US-GA",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "KATL",
-                                                           "ATL",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "ABCD",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428101 ),
+                                                                 1026,
+                                                                 "  ",
+                                                                 "US",
+                                                                 "US-GA",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "KATL",
+                                                                 "ATL",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
@@ -575,26 +561,26 @@ class AirportDTOTest
             @DisplayName( "<a> is rejected" )
             void airportContinent_a_isRejected()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "ABCD",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "A",
-                                                           "US",
-                                                           "US-GA",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "KATL",
-                                                           "ATL",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "ABCD",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428101 ),
+                                                                 1026,
+                                                                 "A",
+                                                                 "US",
+                                                                 "US-GA",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "KATL",
+                                                                 "ATL",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
@@ -606,26 +592,26 @@ class AirportDTOTest
             @DisplayName( "<aaa> is rejected" )
             void airportContinent_aaa_isRejected()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "ABCD",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "ABC",
-                                                           "US",
-                                                           "US-GA",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "KATL",
-                                                           "ATL",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "ABCD",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428_101 ),
+                                                                 1026,
+                                                                 "ABC",
+                                                                 "US",
+                                                                 "US-GA",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "KATL",
+                                                                 "ATL",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
@@ -637,26 +623,26 @@ class AirportDTOTest
             @DisplayName( "<aa> is accepted" )
             void airportContinent_aas_isAccepted()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "ABCD",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "AA",
-                                                           "US",
-                                                           "US-GA",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "KATL",
-                                                           "ATL",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "ABCD",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428101 ),
+                                                                 1026,
+                                                                 "AA",
+                                                                 "US",
+                                                                 "US-GA",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "KATL",
+                                                                 "ATL",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 assertThat( constraintViolations.size() )
                         .isEqualTo( 0 );
@@ -666,26 +652,26 @@ class AirportDTOTest
             @DisplayName( "numeric is rejected" )
             void airportContinent_numeric_isRejected()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "ABCD",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "12",
-                                                           "US",
-                                                           "US-GA",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "KATL",
-                                                           "ATL",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "ABCD",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428101 ),
+                                                                 1026,
+                                                                 "12",
+                                                                 "US",
+                                                                 "US-GA",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "KATL",
+                                                                 "ATL",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
@@ -703,7 +689,7 @@ class AirportDTOTest
             @DisplayName( "blank is rejected" )
             void airportCountry_blank_isRejected()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
                                                            "ABCD",
                                                            "large_airport",
                                                            "Hartsfield Jackson Atlanta International Airport",
@@ -722,7 +708,7 @@ class AirportDTOTest
                                                            testURI1,
                                                            testURI2,
                                                            "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
@@ -735,26 +721,26 @@ class AirportDTOTest
             @DisplayName( "<a> is rejected" )
             void airportCountry_a_isRejected()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "ABCD",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "NA",
-                                                           "A",
-                                                           "US-GA",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "KATL",
-                                                           "ATL",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "ABCD",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428101 ),
+                                                                 1026,
+                                                                 "NA",
+                                                                 "A",
+                                                                 "US-GA",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "KATL",
+                                                                 "ATL",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
@@ -766,26 +752,26 @@ class AirportDTOTest
             @DisplayName( "<aaa> is rejected" )
             void airportCountry_aaa_isRejected()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "ABCD",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "NA",
-                                                           "ABC",
-                                                           "US-GA",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "KATL",
-                                                           "ATL",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "ABCD",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428101 ),
+                                                                 1026,
+                                                                 "NA",
+                                                                 "ABC",
+                                                                 "US-GA",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "KATL",
+                                                                 "ATL",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
@@ -798,26 +784,26 @@ class AirportDTOTest
             @DisplayName( "<aa> is accepted" )
             void airportCountry_aa_isAccepted()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "ABCD",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "NA",
-                                                           "QQ",
-                                                           "US-GA",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "KATL",
-                                                           "ATL",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "ABCD",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428101 ),
+                                                                 1026,
+                                                                 "NA",
+                                                                 "QQ",
+                                                                 "US-GA",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "KATL",
+                                                                 "ATL",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 assertThat( constraintViolations.size() )
                         .isEqualTo( 0 );
@@ -827,26 +813,26 @@ class AirportDTOTest
             @DisplayName( "numeric is rejected" )
             void airportCountry_numeric_isRejected()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "ABCD",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "NA",
-                                                           "12",
-                                                           "US-GA",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "KATL",
-                                                           "ATL",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "ABCD",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428101 ),
+                                                                 1026,
+                                                                 "NA",
+                                                                 "12",
+                                                                 "US-GA",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "KATL",
+                                                                 "ATL",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
@@ -865,26 +851,26 @@ class AirportDTOTest
             @DisplayName( "blank is rejected" )
             void airportRegion_blank_isRejected()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "ABCD",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "NA",
-                                                           "US",
-                                                           "     ",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "KATL",
-                                                           "ATL",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "ABCD",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428101 ),
+                                                                 1026,
+                                                                 "NA",
+                                                                 "US",
+                                                                 "     ",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "KATL",
+                                                                 "ATL",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
@@ -897,7 +883,7 @@ class AirportDTOTest
             @DisplayName( "numeric is rejected" )
             void airportRegion_numeric_isRejected()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
                                                            "ABCD",
                                                            "large_airport",
                                                            "Hartsfield Jackson Atlanta International Airport",
@@ -916,7 +902,7 @@ class AirportDTOTest
                                                            testURI1,
                                                            testURI2,
                                                            "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
@@ -928,26 +914,26 @@ class AirportDTOTest
             @DisplayName( "<aa> is rejected" )
             void airportRegion_aa_isRejected()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "ABCD",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "NA",
-                                                           "US",
-                                                           "AB",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "KATL",
-                                                           "ATL",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "ABCD",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428101 ),
+                                                                 1026,
+                                                                 "NA",
+                                                                 "US",
+                                                                 "AB",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "KATL",
+                                                                 "ATL",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
@@ -959,26 +945,26 @@ class AirportDTOTest
             @DisplayName( "<aa>-<aa> is accepted" )
             void airportRegion_aa_aa_isAccepted()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "ABCD",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "NA",
-                                                           "US",
-                                                           "AA-BB",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "KATL",
-                                                           "ATL",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "ABCD",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428101 ),
+                                                                 1026,
+                                                                 "NA",
+                                                                 "US",
+                                                                 "AA-BB",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "KATL",
+                                                                 "ATL",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 assertThat( constraintViolations.size() )
                         .isEqualTo( 0 );
@@ -994,26 +980,26 @@ class AirportDTOTest
             @DisplayName( "blank is rejected" )
             void airportIcao_blank_isRejected()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "ABCD",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "NA",
-                                                           "US",
-                                                           "US-GA",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "    ",
-                                                           "ATL",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "ABCD",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428101 ),
+                                                                 1026,
+                                                                 "NA",
+                                                                 "US",
+                                                                 "US-GA",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "    ",
+                                                                 "ATL",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
@@ -1025,26 +1011,26 @@ class AirportDTOTest
             @DisplayName( "<aaaa> is accepted" )
             void airportIcao_aaa_isAccpeted()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "ABCD",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "NA",
-                                                           "US",
-                                                           "US-GA",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "ABCD",
-                                                           "ABC",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "ABCD",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428101 ),
+                                                                 1026,
+                                                                 "NA",
+                                                                 "US",
+                                                                 "US-GA",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "ABCD",
+                                                                 "ABC",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 assertThat( constraintViolations.size() )
                         .isEqualTo( 0 );
@@ -1054,26 +1040,26 @@ class AirportDTOTest
             @DisplayName( "<aaa> is rejected" )
             void airportIcao_aa_isRejected()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "ABCD",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "NA",
-                                                           "US",
-                                                           "US-GA",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "ABC",
-                                                           "ABC",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "ABCD",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428101 ),
+                                                                 1026,
+                                                                 "NA",
+                                                                 "US",
+                                                                 "US-GA",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "ABC",
+                                                                 "ABC",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
@@ -1085,26 +1071,26 @@ class AirportDTOTest
             @DisplayName( "numeric is rejected" )
             void airportIcao_numeric_isRejected()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "ABCD",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "NA",
-                                                           "US",
-                                                           "US-GA",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "1234",
-                                                           "ABC",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "ABCD",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428101 ),
+                                                                 1026,
+                                                                 "NA",
+                                                                 "US",
+                                                                 "US-GA",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "1234",
+                                                                 "ABC",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
@@ -1122,26 +1108,26 @@ class AirportDTOTest
             @DisplayName( "blank is rejected" )
             void airportIata_blank_isRejected()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "ABCD",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "NA",
-                                                           "US",
-                                                           "US-GA",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "KATL",
-                                                           "   ",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "ABCD",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428101 ),
+                                                                 1026,
+                                                                 "NA",
+                                                                 "US",
+                                                                 "US-GA",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "KATL",
+                                                                 "   ",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
@@ -1153,26 +1139,26 @@ class AirportDTOTest
             @DisplayName( "<aaa> is accepted" )
             void airportIata_aaa_isAccpeted()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "ABCD",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "NA",
-                                                           "US",
-                                                           "US-GA",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "KATL",
-                                                           "ABC",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "ABCD",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428101 ),
+                                                                 1026,
+                                                                 "NA",
+                                                                 "US",
+                                                                 "US-GA",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "KATL",
+                                                                 "ABC",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 assertThat( constraintViolations.size() )
                         .isEqualTo( 0 );
@@ -1182,26 +1168,26 @@ class AirportDTOTest
             @DisplayName( "<aa> is rejected" )
             void airportIata_aa_isRejected()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "ABCD",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "NA",
-                                                           "US",
-                                                           "US-GA",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "KATL",
-                                                           "AB",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "ABCD",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428101 ),
+                                                                 1026,
+                                                                 "NA",
+                                                                 "US",
+                                                                 "US-GA",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "KATL",
+                                                                 "AB",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
@@ -1213,26 +1199,26 @@ class AirportDTOTest
             @DisplayName( "numeric is rejected" )
             void airportIata_numeric_isRejected()
             {
-                AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "ABCD",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428101 ),
-                                                           1026,
-                                                           "NA",
-                                                           "US",
-                                                           "US-GA",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "KATL",
-                                                           "123",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
-                Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
+                final AirportDTO itemUnderTest = new AirportDTO( 1L,
+                                                                 "ABCD",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428101 ),
+                                                                 1026,
+                                                                 "NA",
+                                                                 "US",
+                                                                 "US-GA",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "KATL",
+                                                                 "123",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
+                final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,

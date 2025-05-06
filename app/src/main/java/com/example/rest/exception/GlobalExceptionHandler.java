@@ -60,7 +60,8 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     @ExceptionHandler( MethodArgumentTypeMismatchException.class )
     @ResponseStatus( code = HttpStatus.BAD_REQUEST )
     public ResponseEntity<ProblemDetail>
-    handleMethodArgumentTypeMismatchException( final ServletWebRequest request, final MethodArgumentTypeMismatchException exception )
+    handleMethodArgumentTypeMismatchException( final ServletWebRequest request,
+                                               final MethodArgumentTypeMismatchException exception )
     {
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST,
                                                                         exception.getMessage() );
@@ -80,7 +81,8 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     @ExceptionHandler( MissingServletRequestParameterException.class )
     @ResponseStatus( code = HttpStatus.BAD_REQUEST )
     public ResponseEntity<ProblemDetail>
-    handleMissingServletRequestParameterException( final ServletWebRequest request, final MissingServletRequestParameterException exception )
+    handleMissingServletRequestParameterException( final ServletWebRequest request,
+                                                   final MissingServletRequestParameterException exception )
     {
         // TODO potentially a problem with the content-type or lack of mapping to/from the
         // requested format and the internal POJO.
@@ -109,7 +111,8 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     @ExceptionHandler( HttpMediaTypeNotSupportedException.class )
     @ResponseStatus( HttpStatus.UNSUPPORTED_MEDIA_TYPE )
     public ResponseEntity<ProblemDetail>
-    handleUnsupportedMediaTypeException( final ServletWebRequest request, final HttpMediaTypeNotSupportedException exception )
+    handleUnsupportedMediaTypeException( final ServletWebRequest request,
+                                         final HttpMediaTypeNotSupportedException exception )
     {
         final ProblemDetail details = ProblemDetail.forStatus( HttpStatus.UNSUPPORTED_MEDIA_TYPE );
         details.setTitle( "Unsupported Media Type" );
@@ -119,7 +122,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
                              exception.getSupportedMediaTypes()
                                       .stream()
                                       .map( MediaType::toString )
-                                      .collect( Collectors.joining(", ") ) );
+                                      .collect( Collectors.joining(", " ) ) );
 
         return new ResponseEntity<>( details, HttpStatus.UNSUPPORTED_MEDIA_TYPE );
     }
@@ -135,7 +138,8 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     @ExceptionHandler( HttpMediaTypeNotAcceptableException.class )
     @ResponseStatus( HttpStatus.UNSUPPORTED_MEDIA_TYPE )
     public ResponseEntity<ProblemDetail>
-    handleUnacceptableMediaTypeException( final ServletWebRequest request, final HttpMediaTypeNotAcceptableException exception )
+    handleUnacceptableMediaTypeException( final ServletWebRequest request,
+                                          final HttpMediaTypeNotAcceptableException exception )
     {
         final ProblemDetail details = ProblemDetail.forStatus( HttpStatus.UNSUPPORTED_MEDIA_TYPE );
         details.setTitle( "Unacceptable Media Type" );
@@ -144,7 +148,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
                              exception.getSupportedMediaTypes()
                                       .stream()
                                       .map( MediaType::toString )
-                                      .collect( Collectors.joining(", ") ) );
+                                      .collect( Collectors.joining(", " ) ) );
 
         return new ResponseEntity<>( details, HttpStatus.UNSUPPORTED_MEDIA_TYPE );
     }
@@ -159,26 +163,21 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
      */
     @ExceptionHandler( HttpMediaTypeException.class )
     @ResponseStatus( HttpStatus.UNSUPPORTED_MEDIA_TYPE )
-    public ResponseEntity<ProblemDetail> handleMediaTypeException( final ServletWebRequest request, final HttpMediaTypeException exception )
+    public ResponseEntity<ProblemDetail>
+    handleMediaTypeException( final ServletWebRequest request,
+                              final HttpMediaTypeException exception )
     {
 
-//        final ProblemDetail details = ProblemDetail.forStatus( HttpStatus.UNSUPPORTED_MEDIA_TYPE );
         final ProblemDetail details = ProblemDetail.forStatus( exception.getStatusCode() );
         details.setTitle( "Bad Media Type" );
-//        details.setTitle( "Bad Media Type" );
         details.setDetail( exception.getMessage() );
         details.setProperty( "Supported content:",
                              exception.getSupportedMediaTypes()
                                       .stream()
                                       .map( MediaType::toString )
-                                      .collect( Collectors.joining(", ") ) );
+                                      .collect( Collectors.joining(", " ) ) );
 
         return new ResponseEntity<>( details, exception.getStatusCode() );
-
-
-
-
-
 
         // TODO Message should indicate the bad media type as well as the acceptable types
 //        final StringBuilder detailMessage = new StringBuilder( "Unsupported content type: " )
@@ -205,14 +204,15 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
      */
     @ExceptionHandler( MethodArgumentNotValidException.class )
     @ResponseStatus( code = HttpStatus.BAD_REQUEST )
-    public ResponseEntity<ProblemDetail> handleRestValidationException( WebRequest request,
-                                                                        final MethodArgumentNotValidException exception )
+    public ResponseEntity<ProblemDetail>
+    handleRestValidationException( WebRequest request,
+                                   final MethodArgumentNotValidException exception )
     {
         final ProblemDetail details = exception.getBody();
         details.setTitle( String.format( "Validation failed on '%s'", exception.getObjectName() ) );
 
-        Multimap<String, String> validations =  ArrayListMultimap.create();
-        for ( FieldError error: exception.getBindingResult().getFieldErrors() )
+        final Multimap<String, String> validations =  ArrayListMultimap.create();
+        for ( final FieldError error : exception.getBindingResult().getFieldErrors() )
         {
             // Need to use a multimap here since a single field may have multiple
             // violations
@@ -223,12 +223,13 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
                                             error.getRejectedValue() ) );
         }
 
-        for ( String key : validations.keySet() )
+        for ( final String key : validations.keySet() )
         {
-            String desc = validations
-                    .get( key )
-                    .stream()
-                    .collect( Collectors.joining( "; " ) );
+            final String desc =
+                    validations
+                            .get( key )
+                            .stream()
+                            .collect( Collectors.joining( "; " ) );
 
             details.setProperty( key, desc );
         }
@@ -248,7 +249,9 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
      */
     @ExceptionHandler( ConstraintViolationException.class )
     @ResponseStatus( code = HttpStatus.BAD_REQUEST )
-    public ResponseEntity<ProblemDetail> handleConstraintViolations( final ServletWebRequest request, final ConstraintViolationException exception )
+    public ResponseEntity<ProblemDetail>
+    handleConstraintViolations( final ServletWebRequest request,
+                                final ConstraintViolationException exception )
     {
         final Set<ConstraintViolation<?>> constraintViolations = exception.getConstraintViolations();
 
@@ -279,7 +282,9 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
      */
     @ExceptionHandler( HttpMessageNotReadableException.class )
     @ResponseStatus( code = HttpStatus.BAD_REQUEST )
-    public ResponseEntity<ProblemDetail> handleMessageNotReadableException( final ServletWebRequest request, final HttpMessageNotReadableException exception )
+    public ResponseEntity<ProblemDetail>
+    handleMessageNotReadableException( final ServletWebRequest request,
+                                       final HttpMessageNotReadableException exception )
     {
         // TODO potentially a problem with the content-type or lack of mapping to/from the
         // requested format and the internal POJO.
@@ -304,7 +309,9 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
      */
     @ExceptionHandler( HttpMessageNotWritableException.class )
     @ResponseStatus( code = HttpStatus.BAD_REQUEST )
-    public ResponseEntity<ProblemDetail> handleMessageNotWritableException( final ServletWebRequest request, final HttpMessageNotWritableException exception )
+    public ResponseEntity<ProblemDetail>
+    handleMessageNotWritableException( final ServletWebRequest request,
+                                       final HttpMessageNotWritableException exception )
     {
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.NOT_IMPLEMENTED,
                                                                         exception.getMessage() );
@@ -326,7 +333,9 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
      */
     @ExceptionHandler( HttpRequestMethodNotSupportedException.class )
     @ResponseStatus( HttpStatus.METHOD_NOT_ALLOWED )
-    public ResponseEntity<ProblemDetail> handleMethodNotSupportedException( final ServletWebRequest request, final HttpRequestMethodNotSupportedException exception )
+    public ResponseEntity<ProblemDetail>
+    handleMethodNotSupportedException( final ServletWebRequest request,
+                                       final HttpRequestMethodNotSupportedException exception )
     {
         final ProblemDetail details = exception.getBody();
 
@@ -352,7 +361,9 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
      */
     @ExceptionHandler( NoResourceFoundException.class )
     @ResponseStatus( HttpStatus.NOT_FOUND )
-    public ResponseEntity<ProblemDetail> handleResourceNotFoundException( final ServletWebRequest request, final NoResourceFoundException exception )
+    public ResponseEntity<ProblemDetail>
+    handleResourceNotFoundException( final ServletWebRequest request,
+                                     final NoResourceFoundException exception )
     {
         // TODO the MDC should include the traceId (UUID) and log pattern should
 
@@ -376,7 +387,8 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     @ExceptionHandler( EntityNotFoundException.class )
     @ResponseStatus( code = HttpStatus.BAD_REQUEST )
     public ResponseEntity<ProblemDetail>
-    handleEntityNotFoundException( final ServletWebRequest request, final EntityNotFoundException exception )
+    handleEntityNotFoundException( final ServletWebRequest request,
+                                   final EntityNotFoundException exception )
     {
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.GONE,
                                                                         exception.getMessage() );
@@ -398,7 +410,9 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
      */
     @ExceptionHandler( Exception.class )
     @ResponseStatus( HttpStatus.INTERNAL_SERVER_ERROR )
-    public ResponseEntity<ProblemDetail> handleGenericException( final ServletWebRequest request, final Exception exception )
+    public ResponseEntity<ProblemDetail>
+    handleGenericException( final ServletWebRequest request,
+                            final Exception exception )
     {
         // TODO the MDC should include the traceId (UUID) and log pattern should
 

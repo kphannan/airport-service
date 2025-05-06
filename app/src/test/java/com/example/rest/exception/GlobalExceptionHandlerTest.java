@@ -383,9 +383,10 @@ public class GlobalExceptionHandlerTest
             }
 
 
-            ConstraintViolation buildConstraintViolation()
+            <T> ConstraintViolation<T> buildConstraintViolation()
             {
-                return new ConstraintViolation() {
+                return new ConstraintViolation<T>()
+                {
                     @Override
                     public String getMessage()
                     {
@@ -399,13 +400,13 @@ public class GlobalExceptionHandlerTest
                     }
 
                     @Override
-                    public Object getRootBean()
+                    public T getRootBean()
                     {
                         return null;
                     }
 
                     @Override
-                    public Class getRootBeanClass()
+                    public Class<T> getRootBeanClass()
                     {
                         return null;
                     }
@@ -431,7 +432,7 @@ public class GlobalExceptionHandlerTest
                     @Override
                     public Path getPropertyPath()
                     {
-                        return new Path(){
+                        return new Path() {
 
                             @Override
                             public Iterator<Node> iterator()
@@ -456,7 +457,7 @@ public class GlobalExceptionHandlerTest
                     }
 
                     @Override
-                    public Object unwrap( Class type )
+                    public <U> U unwrap( Class<U> type )
                     {
                         return null;
                     }

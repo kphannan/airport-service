@@ -31,12 +31,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * API controller for managing regions.
- * <p>
+ *
  * This controller provides endpoints to retrieve region information.
- * </p>
- * <p>
+ *
  * The API supports pagination and returns data in JSON, YAML, and XML formats.
- * </p>
+ *
  */
 @RestController
 @RequestMapping( "/location/region" )
@@ -91,25 +90,34 @@ public class RegionsController
             requestBody = @RequestBody( required = false ),
             responses = { @ApiResponse( description = "Success",
                     responseCode = "200",
-                    content = { @Content( mediaType = "application/json", schema = @Schema( implementation = RegionDTO.class ) ),
-                                @Content( mediaType = "application/yaml", schema = @Schema( implementation = RegionDTO.class ) ),
-                                @Content( mediaType = "application/xml", schema = @Schema( implementation = RegionDTO.class ) )
+                    content = { @Content( mediaType = "application/json",
+                                          schema = @Schema( implementation = RegionDTO.class ) ),
+                                @Content( mediaType = "application/yaml",
+                                          schema = @Schema( implementation = RegionDTO.class ) ),
+                                @Content( mediaType = "application/xml",
+                                          schema = @Schema( implementation = RegionDTO.class ) )
                     }
-            )
+                )
             },
-            parameters = { @Parameter( name = "id", required = true, in = ParameterIn.PATH, description = "Primary Key" ),
-                           @Parameter( name = "Bearer", required = false,
-                                   schema = @Schema( implementation = String.class ),
-                                   in = ParameterIn.HEADER,
-                                   description = "Authentication / Authorization token" ),
-                           @Parameter( name = "TRACEPARENT", required = false,
-                                   schema = @Schema( implementation = String.class ),
-                                   in = ParameterIn.HEADER,
-                                   description = "Distributed tracing identifier" ),
-                           @Parameter( name = "TRACESTATE", required = false,
-                                   schema = @Schema( implementation = String.class ),
-                                   in = ParameterIn.HEADER,
-                                   description = "Vendor specific trace identification" )
+            parameters = { @Parameter( name = "id",
+                                       required = true,
+                                       in = ParameterIn.PATH,
+                                       description = "Primary Key" ),
+                           @Parameter( name = "Bearer",
+                                       required = false,
+                                       schema = @Schema( implementation = String.class ),
+                                       in = ParameterIn.HEADER,
+                                       description = "Authentication / Authorization token" ),
+                           @Parameter( name = "TRACEPARENT",
+                                       required = false,
+                                       schema = @Schema( implementation = String.class ),
+                                       in = ParameterIn.HEADER,
+                                       description = "Distributed tracing identifier" ),
+                           @Parameter( name = "TRACESTATE",
+                                       required = false,
+                                       schema = @Schema( implementation = String.class ),
+                                       in = ParameterIn.HEADER,
+                                       description = "Vendor specific trace identification" )
             }
     )
     @GetMapping( "/{id}" )

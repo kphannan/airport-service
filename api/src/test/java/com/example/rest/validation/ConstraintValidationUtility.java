@@ -9,26 +9,40 @@ import lombok.extern.log4j.Log4j2;
 import org.assertj.core.groups.Tuple;
 
 
-// TODO add verification this is a valid utility class.
+/**
+ * Utility class for validating constraint violations.
+ *
+ * <p> This class is not intended to be instantiated. It contains static methods for
+ * validating constraint violations and asserting that they match expected values.
+ */
 @Log4j2
 public final class ConstraintValidationUtility
 {
+    // TODO add verification this is a valid utility class.
+
     private ConstraintValidationUtility() throws IllegalAccessException
     {
         throw new IllegalAccessException();
     }
 
-    public static <T> void showViolations( Set<ConstraintViolation<T>> constraints )
+    /**
+     * Prints the constraint violations to the log.
+     * @param <T> the type of the object being validated
+     * @param constraints the set of constraint violations
+     */
+    public static <T> void showViolations( final Set<ConstraintViolation<T>> constraints )
     {
         constraints.forEach( cv -> log.info( cv ) );
     }
 
     /**
-     * Asserts that the constraint errors match the expected informed tuples
+     * Asserts that the constraint errors match the expected informed tuples.
      */
-    public static <T> void assertConstraintErrors(Set<ConstraintViolation<T>> constraints, Tuple...tuples ) {
+    public static <T> void assertConstraintErrors( final Set<ConstraintViolation<T>> constraints, final Tuple...tuples )
+    {
         showViolations( constraints );
-        assertThat(constraints)
+
+        assertThat( constraints )
                 .hasSize( tuples.length )
                 .extracting(
                         t -> t.getPropertyPath().toString(),

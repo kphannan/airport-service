@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.airline.location.airport.mapper.AirportDtoMapper;
+import com.example.airline.location.airport.persistence.model.AirportEntity;
 import com.example.airline.location.airport.persistence.repository.AirportRepository;
 import com.example.airline.location.airport.service.AirportService;
-import com.example.airline.location.airport.persistence.model.AirportEntity;
 import com.example.rest.utility.PageableAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -59,15 +59,17 @@ class AirportControllerRestTest //extends RestControllerTestBase
     private AirportDtoMapper mapper;
 
 
-//    @BeforeEach
-//    void setup()
-//    {
-//        mvc = MockMvcBuilders.standaloneSetup( service )
-//                             .setCustomArgumentResolvers( new PageableHandlerMethodArgumentResolver() )
-//                             // .setControllerAdvice(new SuperHeroExceptionHandler())
-//                             // .addFilters(new SuperHeroFilter())
-//                             .build();
-//    }
+    /*
+    @BeforeEach
+    void setup()
+    {
+        mvc = MockMvcBuilders.standaloneSetup( service )
+                             .setCustomArgumentResolvers( new PageableHandlerMethodArgumentResolver() )
+                             // .setControllerAdvice(new SuperHeroExceptionHandler())
+                             // .addFilters(new SuperHeroFilter())
+                             .build();
+    }
+    */
 
 
     private AirportEntity buildEntity()
@@ -95,12 +97,12 @@ class AirportControllerRestTest //extends RestControllerTestBase
 
     @Nested
     @DisplayName( "/airport - HTTP GET" )
-    class Get
+    class GetTest
     {
 
         @Nested
         @DisplayName( "by Key" )
-        class ById
+        class ByIdTest
         {
 
             @Test
@@ -164,7 +166,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
 
         @Nested
         @DisplayName( "by Identifier" )
-        class ByIdentifier
+        class ByIdentifierTest
         {
             @Test
             void restGetByIdent_withValidIdent_returnsItem() throws Exception
@@ -206,7 +208,8 @@ class AirportControllerRestTest //extends RestControllerTestBase
             void restGetByIdent_withBadIdent_returnsNoContent() throws Exception
             {
                 // --- given
-                final RequestBuilder request = withHeaders( get( "/location/airport/code/{code}", "ZZ" ) );
+                final RequestBuilder request = withHeaders( get( "/location/airport/code/{code}",
+                                                                 "ZZ" ) );
 
                 when( repository.findByIdent( anyString() ) )
                         .thenReturn( Optional.empty() );
@@ -215,7 +218,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
                 final MvcResult result = mvc
                         .perform( request )
                         .andExpect( status().isNoContent() )
-                        //                .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ))
+                        // .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ))
                         .andReturn();
                 MockHttpServletResponse response = result.getResponse();
 
@@ -229,7 +232,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
 
         @Nested
         @DisplayName( " all" )
-        class All
+        class AllTest
         {
             @Test
             void restGetAll_returnsSuccess() throws Exception
@@ -288,13 +291,16 @@ class AirportControllerRestTest //extends RestControllerTestBase
             }
         }
 
+        /**
+         * Tests for search endpoints.
+         */
         @Nested
         @DisplayName( "by Query (search)" )
-        class Search
+        class SearchTest
         {
-            List<AirportEntity>           entities;
-            MockHttpServletRequestBuilder request;
-            Page<AirportEntity>           page;
+            private List<AirportEntity>           entities;
+            private MockHttpServletRequestBuilder request;
+            private Page<AirportEntity>           page;
 
             @BeforeEach
             void setUp()
@@ -440,43 +446,43 @@ class AirportControllerRestTest //extends RestControllerTestBase
 
     @Nested
     @DisplayName( "/airport - HTTP POST" )
-    class Post
+    class PostTest
     {
     }
 
     @Nested
     @DisplayName( "/airport - HTTP PUT" )
-    class Put
+    class PutTest
     {
     }
 
     @Nested
     @DisplayName( "/airport - HTTP DELETE" )
-    class Delete
+    class DeleteTest
     {
     }
 
     @Nested
     @DisplayName( "/airport - HTTP PATCH" )
-    class Patch
+    class PatchTest
     {
     }
 
     @Nested
     @DisplayName( "/airport - HTTP INFO" )
-    class Info
+    class InfoTest
     {
     }
 
     @Nested
     @DisplayName( "/airport - HTTP HEAD" )
-    class Head
+    class HeadTest
     {
     }
 
     @Nested
     @DisplayName( "/airport - HTTP OPT" )
-    class Opt
+    class OptTest
     {
     }
 

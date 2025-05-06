@@ -17,9 +17,19 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @Retention( RetentionPolicy.RUNTIME )
 @Target( ElementType.TYPE )
-@ApiResponses( value = { @ApiResponse( description = "Unauthorized", responseCode = "403", content = {
-        @Content( mediaType = "application/json", schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ) } ) } )
+@ApiResponses( value =
+    {
+        @ApiResponse( description = "Unauthorized",
+                      responseCode = "403",
+                      content =
+                      {
+                          @Content( mediaType = "application/json",
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
+                          )
+                      }
+        )
+    }
+)
 public @interface GlobalApiSecurityResponses
 {
-
 }

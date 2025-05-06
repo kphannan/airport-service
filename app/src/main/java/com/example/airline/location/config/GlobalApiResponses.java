@@ -17,7 +17,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @Retention( RetentionPolicy.RUNTIME )
 @Target( ElementType.TYPE )
-@ApiResponses( value = {
+@ApiResponses(
+    value = {
         @ApiResponse( description = "No Content", responseCode = "204" ),
         @ApiResponse( description = "Bad Request",
                       responseCode = "400",
@@ -89,7 +90,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
                                     schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) )
                       }
         )
-}
+    }
 )
 public @interface GlobalApiResponses
 {

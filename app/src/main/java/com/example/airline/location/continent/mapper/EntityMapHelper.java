@@ -9,9 +9,9 @@ import com.example.airline.location.continent.persistence.model.ContinentEntity;
 /**
  * Utility methods related to mapping objects between domains.
  */
-public class EntityMapHelper
+public final class EntityMapHelper
 {
-    private static final ContinentEntityMapper mapper = ContinentEntityMapper.INSTANCE;
+    private static final ContinentEntityMapper MAPPER = ContinentEntityMapper.INSTANCE;
 
 
     private EntityMapHelper()
@@ -29,7 +29,7 @@ public class EntityMapHelper
     {
         if ( from.isPresent() )
         {
-            final Continent continent = mapper.entityToDomain( from.get() );
+            final Continent continent = MAPPER.entityToDomain( from.get() );
 
             return Optional.ofNullable( continent );
         }

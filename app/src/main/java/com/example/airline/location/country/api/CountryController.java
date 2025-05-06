@@ -5,9 +5,9 @@ package com.example.airline.location.country.api;
 
 import java.util.Optional;
 
-import com.example.airline.location.country.CountryDTO;
 import com.example.airline.location.config.GlobalApiResponses;
 import com.example.airline.location.config.GlobalApiSecurityResponses;
+import com.example.airline.location.country.CountryDTO;
 import com.example.airline.location.country.mapper.CountryDtoMapper;
 import com.example.airline.location.country.model.Country;
 import com.example.airline.location.country.service.CountryService;
@@ -31,12 +31,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * API controller for managing countries.
- * <p>
+ *
  * This controller provides endpoints to retrieve country information.
- * </p>
- * <p>
+ *
  * The API supports pagination and returns data in JSON, YAML, and XML formats.
- * </p>
  */
 @RestController
 @RequestMapping( "/location/country" )

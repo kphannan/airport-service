@@ -6,6 +6,7 @@ package com.example.airline.location.continent.service;
 import com.example.airline.location.continent.mapper.ContinentEntityMapper;
 import com.example.airline.location.continent.model.Continent;
 import com.example.airline.location.continent.model.NewContinent;
+import com.example.airline.location.continent.persistence.model.ContinentEntity;
 import com.example.airline.location.continent.persistence.repository.ContinentRepository;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +45,7 @@ public class ContinentCreateService
             return null;
         }
 
-        final var result = repository.save( mapper.domainToEntity( entity ) );
+        final ContinentEntity result = repository.save( mapper.domainToEntity( entity ) );
 
         return mapper.entityToDomain( result );
     }

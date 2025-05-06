@@ -93,17 +93,18 @@ public class RegionsService
         return Optional.empty();
     }
 
+    /*
+    private <T,S> Optional<T> mapOptional( final Optional<S> from )
+    {
+        if ( from.isPresent() )
+        {
+            final T item = mapper.entityToDomain( from.get() );
 
-//    private <T,S> Optional<T> mapOptional( final Optional<S> from )
-//    {
-//        if ( from.isPresent() )
-//        {
-//            final T item = mapper.entityToDomain( from.get() );
-//
-//            return Optional.of( item );
-//        }
-//
-//        return Optional.ofNullable( null );
-//    }
+            return Optional.of( item );
+        }
+
+        return Optional.ofNullable( null );
+    }
+    */
 
 }
