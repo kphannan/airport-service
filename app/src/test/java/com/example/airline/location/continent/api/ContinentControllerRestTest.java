@@ -56,49 +56,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 //@ExtendWith( SpringExtension.class )
 //@WebMvcTest( value = ContinentController.class, excludeFilters = @ComponentScan.Filter( type = FilterType.ANNOTATION, classes = Repository.class ) )
 @WebMvcTest( controllers = ContinentController.class )
-//@ComponentScan( basePackages = "com.example.airline.location.mapper" )
-//@ComponentScan( basePackages = {"com.example.airline.location.continent", "com.example.airline.location.service", "com.example.airline.location.api"} )
 @ComponentScan( basePackages = { "com.example.airline.location.continent" } )
-//@WebMvcTest( controllers = ContinentController.class,
-//             excludeFilters = @ComponentScan.Filter( type = FilterType.REGEX, pattern = ".*Controller" )
-//)
-//@WebMvcTest( controllers = ContinentController.class,
-//             excludeFilters = @ComponentScan.Filter( type = FilterType.ASSIGNABLE_TYPE,
-//                                                     classes = { AirportController.class,
-//                                                                 AirportCodeIataRepository.class,
-//                                                                 AirportCodeIcaoRepository.class
-//             } )
-//)
-//@WebMvcTest( controllers = ContinentController.class,
-//             excludeFilters = { @ComponentScan.Filter( type = FilterType.ANNOTATION, classes = RestController.class ),
-//                                @ComponentScan.Filter( type = FilterType.ANNOTATION, classes = Service.class ),
-//                                @ComponentScan.Filter( type = FilterType.ANNOTATION, classes = Repository.class )
-//             }
-//           )
-/*
-@WebMvcTest(controllers = ContinentController.class,
-            useDefaultFilters = true,
-            excludeFilters = {
-//                               @ComponentScan.Filter(
-//                                type = FilterType.ASSIGNABLE_TYPE,
-//                                classes = { //JpaRepositoriesAutoConfiguration.class,
-//                                            //DataSourceAutoConfiguration.class,
-//                                            //HibernateJpaAutoConfiguration.class,
-//                                            AirportRepository.class,
-//                                            CountryRepository.class,
-//                                            RegionsRepository.class,
-//                                            AirportCodeIataRepository.class,
-//                                            AirportCodeIcaoRepository.class
-//                                } ),
-                               @ComponentScan.Filter(
-                                       type = FilterType.REGEX, pattern = ".*[Repository]" )
-//                               @ComponentScan.Filter(
-//                                       type = FilterType.REGEX, pattern = "com.example.airline.location.persistence.repository.location.*Repository" )
-
-////                               @ComponentScan.Filter( type = FilterType.ANNOTATION, classes = Repository.class )
-                             }
-        )
- */
 class ContinentControllerRestTest
 {
     @Autowired
@@ -126,18 +84,10 @@ class ContinentControllerRestTest
         void restGetById_withId_returnsItem() throws Exception
         {
             final ContinentEntity continentEntity = new ContinentEntity( 1, "NA", "North", null, null );
-//            final Continent continent = new Continent( 1, "NA", "North", null, null );
-//        RequestBuilder request = withHeaders( get("/api/v1/location/continent/{id}", 123 ) );
             final RequestBuilder request = withHeaders( get( "/location/continent/{id}", 1 ) );
 
-//        when(repository.findById( any() ))
-//                .thenReturn( Optional.ofNullable( null ) );
             when( repository.getReferenceById( eq( 1 ) ) )
                     .thenReturn( continentEntity );
-//        when(service.findContinentById( any() ))
-//                .thenReturn( Optional.of( continent ) );
-//        when(mapper.continentDomainToApi( any(Continent.class) ))
-//                .thenCallRealMethod();
 
 
             final MvcResult result = mvc
@@ -151,14 +101,7 @@ class ContinentControllerRestTest
             // TODO need to assert the resulting JSON....
             assertAll( () -> assertEquals( HttpStatus.OK.value(), result.getResponse().getStatus() ),
                        () -> assertEquals( MediaType.APPLICATION_JSON_VALUE, response.getContentType() )
-//                   () -> assertEquals( "Bar", response.getContentAsString() )
                      );
-
-//        JsonPath jsonPath
-            // Use of AssertJ
-//        assertThat( result.getResponse() )
-//                .startsWith( "Foo" )
-//                .isEqualToIgnoreCase( "foo" );
         }
 
 
@@ -315,48 +258,38 @@ class ContinentControllerRestTest
                     //      don't complain about lack of assertions in tests
                     .andDo( print() )
                     .andExpect( jsonPath( "$[0].id" ).value( 1 ) )
-//                .andExpect( jsonPath( "$.code" ).value( "ZZ" ) )
-//                .andExpect( jsonPath( "$.name" ).value( "::NAME::" ) )
-//                .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
-//                .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
+                    // .andExpect( jsonPath( "$.code" ).value( "ZZ" ) )
+                    // .andExpect( jsonPath( "$.name" ).value( "::NAME::" ) )
+                    // .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
+                    // .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
                     .andReturn();
             final MockHttpServletResponse response = result.getResponse();
-            final String jsonString =
-                    """
-                            [
-                                {
-                                   "id": 1,
-                                   "code: "XX",
-                                   "name": "::XNAMEX::"
-                                },
-                                {
-                                   "id": 2,
-                                   "code: "YY",
-                                   "name": "::YNAMEY::"
-                                },
-                                {
-                                   "id": 3,
-                                   "code: "ZZ",
-                                   "name": "::ZNAMEZ::"
-                                }
-                            ]
-                            """;
+            // final String jsonString =
+            //         """
+            //                 [
+            //                     {
+            //                        "id": 1,
+            //                        "code: "XX",
+            //                        "name": "::XNAMEX::"
+            //                     },
+            //                     {
+            //                        "id": 2,
+            //                        "code: "YY",
+            //                        "name": "::YNAMEY::"
+            //                     },
+            //                     {
+            //                        "id": 3,
+            //                        "code: "ZZ",
+            //                        "name": "::ZNAMEZ::"
+            //                     }
+            //                 ]
+            //                 """;
 
             // --- then
             // TODO need to assert the resulting JSON....
 
             assertThat( response.getContentType() )
                     .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
-
-            //        assertThat( result.getResponse() )
-//                .startsWith( "Foo" )
-//                .isEqualToIgnoreCase( "foo" );
-//        assertThat( response )
-//                .isNotNull()
-//                .returns( "RP" );
-
-//        JSONAssert.assertEquals
-
         }
     }
 
@@ -682,8 +615,6 @@ class ContinentControllerRestTest
             assertAll( () -> assertEquals( HttpStatus.GONE.value(), result.getResponse().getStatus() ),
                        () -> verify( repository ).deleteById( anyInt() )
                      );
-//
-//            verify(repository).delete( any( ContinentEntity.class ) );
         }
 
         @Test
@@ -726,25 +657,25 @@ class ContinentControllerRestTest
     @DisplayName( "/continent - HTTP INFO" )
     class Info
     {
-//        @Test
-//        void restTrace_returnsNoContent() throws Exception
-//        {
-//            // --- given
-//            final RequestBuilder request = withHeaders( MockMvcRequestBuilders.request( HttpMethod.INFO,
-//                                                                                        "/location/continent" ) );
-//
-//            // --- when
-//            final MvcResult result = mvc
-//                    .perform( request )
-//                    .andDo( print() )
-//                    .andReturn();
-//
-//            // --- then
-//            final MockHttpServletResponse response = result.getResponse();
-//
-//            assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() )
-//                     );
-//        }
+       // @Test
+       // void restTrace_returnsNoContent() throws Exception
+       // {
+       //     // --- given
+       //     final RequestBuilder request = withHeaders( MockMvcRequestBuilders.request( HttpMethod.INFO,
+       //                                                                                 "/location/continent" ) );
+       //
+       //     // --- when
+       //     final MvcResult result = mvc
+       //             .perform( request )
+       //             .andDo( print() )
+       //             .andReturn();
+       //
+       //     // --- then
+       //     final MockHttpServletResponse response = result.getResponse();
+       //
+       //     assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() )
+       //              );
+       // }
     }
 
     @Nested
@@ -765,8 +696,6 @@ class ContinentControllerRestTest
                     .andReturn();
 
             // --- then
-//            final MockHttpServletResponse response = result.getResponse();
-
             assertAll( () -> assertEquals( HttpStatus.OK.value(), result.getResponse().getStatus() )
                      );
         }
@@ -820,7 +749,7 @@ class ContinentControllerRestTest
                                            response.getHeader( HttpHeaders.ALLOW ) ),
                        () -> assertEquals( "application/json,application/yaml,application/xml",
                                            response.getHeader( HttpHeaders.ACCEPT ) )
-                     );
+            );
         }
     }
 }

@@ -21,13 +21,15 @@ import org.jspecify.annotations.Nullable;
 public class NewContinent
 {
     @SuppressWarnings( "PMD.ShortVariable" )
-//    @NonNull private Integer   id;
     @NonNull
     private String code;     // TODO change code to a 2 character code...
+
     @NonNull
     private String name;
+
     @Nullable
     private URI    wikiLink;
+
     @Nullable
     private String keywords; // May not need to exchange this
 }

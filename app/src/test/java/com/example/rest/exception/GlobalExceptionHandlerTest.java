@@ -476,8 +476,6 @@ public class GlobalExceptionHandlerTest
             void exceptionValidation_constraints_formatsProblemDetails()
             {
                 // --- given
-//                Set<ConstraintViolation<?>> constraintViolations = new HashSet<>();
-//                constraintViolations.add( buildConstraintViolation() );
                 final Exception exception =
                         new Exception( "Catch all test", new Exception( "Test Cause" ) );
 
@@ -498,12 +496,9 @@ public class GlobalExceptionHandlerTest
                                                detail.getProperties().get( "Exception" ) ),
                            () -> assertEquals( "Test Cause",
                                                cause.getMessage() )
-                         );
+                );
             }
-
         }
-
-
 
     }
 
@@ -533,7 +528,7 @@ public class GlobalExceptionHandlerTest
                        () -> assertEquals( "Not Found", detail.getTitle() ),
                        () -> assertEquals( 410, detail.getStatus() ),
                        () -> assertEquals( "Dummy message", detail.getDetail() )
-                     );
+            );
         }
     }
 }

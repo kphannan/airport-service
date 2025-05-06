@@ -22,34 +22,34 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
         @ApiResponse( description = "Bad Request",
                       responseCode = "400",
                       content = {
-                        @Content( mediaType = "application/json",
-                                  schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
-                        @Content( mediaType = "application/yaml",
-                                  schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
-                        @Content( mediaType = "application/xml",
-                                  schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) )
+                          @Content( mediaType = "application/json",
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
+                          @Content( mediaType = "application/yaml",
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
+                          @Content( mediaType = "application/xml",
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) )
                       }
         ),
         @ApiResponse( description = "Resource Not Found",
                       responseCode = "404",
                       content = {
-                        @Content( mediaType = "application/json",
-                                  schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
-                        @Content( mediaType = "application/yaml",
-                                  schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
-                        @Content( mediaType = "application/xml",
-                                  schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) )
+                          @Content( mediaType = "application/json",
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
+                          @Content( mediaType = "application/yaml",
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
+                          @Content( mediaType = "application/xml",
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) )
                         }
         ),
         @ApiResponse( description = "Method Not Allowed",
                       responseCode = "405",
                       content = {
-                              @Content( mediaType = "application/json",
-                                        schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
-                              @Content( mediaType = "application/yaml",
-                                        schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
-                              @Content( mediaType = "application/xml",
-                                        schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) )
+                          @Content( mediaType = "application/json",
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
+                          @Content( mediaType = "application/yaml",
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
+                          @Content( mediaType = "application/xml",
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) )
                       }
         ),
         @ApiResponse( description = """
@@ -59,34 +59,34 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
                                     """,
                       responseCode = "410",
                       content = {
-                              @Content( mediaType = "application/json",
-                                        schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
-                              @Content( mediaType = "application/yaml",
-                                        schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
-                              @Content( mediaType = "application/xml",
-                                        schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) )
+                          @Content( mediaType = "application/json",
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
+                          @Content( mediaType = "application/yaml",
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
+                          @Content( mediaType = "application/xml",
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) )
                       }
         ),
         @ApiResponse( description = "Unsupported Media Type",
                       responseCode = "415",
                       content = {
-                        @Content( mediaType = "application/json",
-                                  schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
-                        @Content( mediaType = "application/yaml",
-                                  schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
-                        @Content( mediaType = "application/xml",
-                                  schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) )
+                          @Content( mediaType = "application/json",
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
+                          @Content( mediaType = "application/yaml",
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
+                          @Content( mediaType = "application/xml",
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) )
                       }
         ),
         @ApiResponse( description = "Internal Server Error",
                       responseCode = "500",
                       content = {
-                        @Content( mediaType = "application/json",
-                                  schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
-                        @Content( mediaType = "application/yaml",
-                                  schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
-                        @Content( mediaType = "application/xml",
-                                  schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) )
+                          @Content( mediaType = "application/json",
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
+                          @Content( mediaType = "application/yaml",
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
+                          @Content( mediaType = "application/xml",
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) )
                       }
         )
 }

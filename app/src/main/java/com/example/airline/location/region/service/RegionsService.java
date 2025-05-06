@@ -5,9 +5,9 @@ package com.example.airline.location.region.service;
 
 import java.util.Optional;
 
-import com.example.airline.location.region.persistence.model.RegionEntity;
 import com.example.airline.location.region.mapper.RegionEntityMapper;
 import com.example.airline.location.region.model.Region;
+import com.example.airline.location.region.persistence.model.RegionEntity;
 import com.example.airline.location.region.persistence.repository.RegionsRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

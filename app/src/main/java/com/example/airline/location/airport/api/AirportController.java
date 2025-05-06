@@ -63,20 +63,19 @@ public class AirportController
     @Operation( method = "GET",
             summary = "Find a Airport by Id",
             description = "Find a Airport by Id",
-            requestBody = @RequestBody( required = false
-//                                            content = { @Content( mediaType = "application/json",
-//                                                                  schema = @Schema( implementation = AirportDTO.class ) )
-//                                                      }
-            ),
+            requestBody = @RequestBody( required = false ),
             responses = { @ApiResponse( description = "Success",
                     responseCode = "200",
-                    content = { @Content( mediaType = "application/json", schema = @Schema( implementation = AirportDTO.class ) ),
-                                @Content( mediaType = "application/yaml", schema = @Schema( implementation = AirportDTO.class ) ),
-                                @Content( mediaType = "application/xml", schema = @Schema( implementation = AirportDTO.class ) )
+                    content = { @Content( mediaType = "application/json",
+                                          schema = @Schema( implementation = AirportDTO.class ) ),
+                                @Content( mediaType = "application/yaml",
+                                          schema = @Schema( implementation = AirportDTO.class ) ),
+                                @Content( mediaType = "application/xml",
+                                          schema = @Schema( implementation = AirportDTO.class ) )
                     }
-            )
+                )
             },
-            parameters = { @Parameter( name = "id", required = true, in = ParameterIn.PATH, description = "Primary Key"),
+            parameters = { @Parameter( name = "id", required = true, in = ParameterIn.PATH, description = "Primary Key" ),
                            @Parameter( name = "Bearer", required = false,
                                    schema = @Schema( implementation = String.class ),
                                    in = ParameterIn.HEADER,
@@ -141,7 +140,7 @@ public class AirportController
      *         criteria.
      */
     @GetMapping( path = "/search" )
-    public Page<AirportDTO> ßadvancedQuery( @RequestParam( name = "iataCode", required = false ) final String iataCode,
+    public Page<AirportDTO> advancedQuery( @RequestParam( name = "iataCode", required = false ) final String iataCode,
                                            @RequestParam( name = "icaoCode", required = false ) final String icaoCode,
                                            @RequestParam( name = "ident", required = false ) final String ident,
                                            @RequestParam( name = "name", required = false ) final String name,

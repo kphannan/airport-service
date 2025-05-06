@@ -29,7 +29,6 @@ public interface ContinentEntityMapper
      * Map a single db entity instance to a domain instance.
      */
     Continent entityToDomain( ContinentEntity entity );
-//    Continent entityToDomain( NewContinentEntity entity );
 
     // --- Collection
 
@@ -45,27 +44,4 @@ public interface ContinentEntityMapper
     ContinentEntity domainToEntity( NewContinent domain );
     // --- Collection
 
-//    // ------------------------
-//    // ----- Domain / API -----
-//    // --- Domain --> API ---
-//    // --- Instance
-//
-//    /**
-//     * Map a domain instance to an API instance.
-//     */
-//    ContinentDTO domainToApi( Continent continent );
-//
-//    // --- Collection
-//
-//    /**
-//     * Map a list of domain instances to a list of API instances.
-//     */
-//    List<ContinentDTO> domainToApi( List<Continent> continents );
-//
-//    // --- API --> Domain ---
-//    // --- Instance
-//    Continent apiToDomain( ContinentDTO dto );
-//
-//    NewContinent apiToDomain( NewContinentDTO dto );
-//    // --- Collection
 }

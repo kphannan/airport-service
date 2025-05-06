@@ -7,8 +7,8 @@ import java.util.Optional;
 
 import com.example.airline.location.airport.mapper.AirportEntityMapper;
 import com.example.airline.location.airport.model.Airport;
-import com.example.airline.location.airport.persistence.repository.AirportRepository;
 import com.example.airline.location.airport.persistence.model.AirportEntity;
+import com.example.airline.location.airport.persistence.repository.AirportRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

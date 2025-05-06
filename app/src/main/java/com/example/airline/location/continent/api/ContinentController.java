@@ -8,15 +8,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.example.airline.location.continent.ContinentDTO;
-import com.example.airline.location.continent.NewContinentDTO;
 import com.example.airline.location.config.GlobalApiResponses;
 import com.example.airline.location.config.GlobalApiSecurityResponses;
+import com.example.airline.location.continent.ContinentDTO;
+import com.example.airline.location.continent.NewContinentDTO;
 import com.example.airline.location.continent.mapper.ContinentDtoMapper;
 import com.example.airline.location.continent.model.Continent;
+import com.example.airline.location.continent.service.ContinentCreateService;
 import com.example.airline.location.continent.service.ContinentDeleteService;
 import com.example.airline.location.continent.service.ContinentReadService;
-import com.example.airline.location.continent.service.ContinentCreateService;
 import com.example.airline.location.continent.service.ContinentUpdateService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -476,24 +476,24 @@ public class ContinentController
                                                         @Content( mediaType = "application/xml",
                                                                   schema = @Schema( implementation = ContinentDTO.class ) )
                                             }
-                )
+                    )
                 },
                 parameters = {
-                        @Parameter( name = "Bearer",
-                                    required = false,
-                                    schema = @Schema( implementation = String.class ),
-                                    in = ParameterIn.HEADER,
-                                    description = "Authentication / Authorization token" ),
-                        @Parameter( name = "TRACEPARENT",
-                                    required = false,
-                                    schema = @Schema( implementation = String.class ),
-                                    in = ParameterIn.HEADER,
-                                    description = "Distributed tracing identifier" ),
-                        @Parameter( name = "TRACESTATE",
-                                    required = false,
-                                    schema = @Schema( implementation = String.class ),
-                                    in = ParameterIn.HEADER,
-                                    description = "Vendor specific trace identification" )
+                    @Parameter( name = "Bearer",
+                                required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Authentication / Authorization token" ),
+                    @Parameter( name = "TRACEPARENT",
+                                required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Distributed tracing identifier" ),
+                    @Parameter( name = "TRACESTATE",
+                                required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Vendor specific trace identification" )
                 }
     )
     @PatchMapping( "" )
@@ -538,8 +538,8 @@ public class ContinentController
         final List<MediaType> mediaType = List.of( MediaType.APPLICATION_JSON,
                                              MediaType.APPLICATION_YAML,
                                              MediaType.APPLICATION_XML );
-        final String allowsString = allows.stream().map( HttpMethod::name ).collect( Collectors.joining( ","));
-        final String mediaTypeString = mediaType.stream().map( MediaType::toString ).collect( Collectors.joining( ",") );
+        final String allowsString = allows.stream().map( HttpMethod::name ).collect( Collectors.joining( "," ) );
+        final String mediaTypeString = mediaType.stream().map( MediaType::toString ).collect( Collectors.joining( "," ) );
 
         headers.add( HttpHeaders.ALLOW, allowsString );
         headers.add( HttpHeaders.ACCEPT, mediaTypeString );
@@ -555,8 +555,8 @@ public class ContinentController
         // Headers are set for Content-Type and Content length, and the same status code.
         // "detail": "Request method 'DELETE' is not supported; Supported methods: HEAD, TRACE, POST, GET, OPTIONS",
 
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.add( HttpHeaders.CONTENT_TYPE, requestHeader.getAccept().toString() );
+        // HttpHeaders headers = new HttpHeaders();
+        // headers.add( HttpHeaders.CONTENT_TYPE, requestHeader.getAccept().toString() );
 
         return ResponseEntity.noContent().build();
     }
