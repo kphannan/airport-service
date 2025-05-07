@@ -15,8 +15,8 @@ import java.lang.annotation.Target;
 
 /**
  * Custom annotation which can be applied to a class or method to ignore the
- * annotated element from code coverage analysis. Use only when absolutely
- * necessary. For example on Application.main()
+ * annotated element from code coverage analysis. Use only when necessary.
+ * For example on Application.main()
  */
 @Documented
 @Retention( RUNTIME )

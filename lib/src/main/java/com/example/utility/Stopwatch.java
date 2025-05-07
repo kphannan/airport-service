@@ -40,7 +40,7 @@ public class Stopwatch implements AutoCloseable
      * @param service   typically it is the name of the REST/SOAP service.
      * @param method    the method/function that is being timed.
      * @param context   a unique
-     * @param autoStart true it will start the timer on instantiation.
+     * @param autoStart true, it will start the timer on instantiation.
      */
     public Stopwatch( final String service, final String method, final String context, final boolean autoStart )
     {

@@ -96,7 +96,7 @@ class ValidateUtilityClassTest
 
 
 
-        /** condition the test is looking for as a cause of failure. */
+        /** The condition the test is looking for as a cause of failure. */
         @SuppressWarnings( { "PMD.UnusedFormalParameter" } )
         private MultipleConstructors( int dummy )
         {
@@ -175,7 +175,7 @@ class ValidateUtilityClassTest
     }
 
     /**
-     * Input class to generate InstantationException when validating behavior of
+     * Input class to generate InstantationException when validating the behavior of
      * constructor check.
      */
     @SuppressWarnings( "PMD.ClassWithOnlyPrivateConstructorsShouldBeFinal" )

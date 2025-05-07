@@ -25,7 +25,7 @@ public final class StringUtility
      * Null safe check if a {@code substring} is found within (@code target}.
      *
      * @param target   the string to examine.
-     * @param criteria the possible sub-string.
+     * @param criteria the possible substring.
      * @return true if the substring is found, false otherwise.
      */
     public static boolean nullSafeContains( @Nullable final String target,

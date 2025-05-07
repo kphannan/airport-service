@@ -3,6 +3,11 @@ databaseChangeLog:
       id: "00008"
       author: kevin
       changes:
+        - createSequence:
+            sequenceName: airport_id_seq
+            startValue: 1
+            incrementBy: 1
+
         - createTable:
             tableName: airports
             remarks: Each row in this dataset represents the record for a single airport. The primary key for interoperability purposes with other datasets is ident, but the actual internal OurAirports primary key is id. iso_region is a foreign key into the regions.csv download file.
@@ -29,7 +34,7 @@ databaseChangeLog:
                   remarks: The type of the airport. Allowed values are "closed_airport", "heliport", "large_airport", "medium_airport", "seaplane_base", and "small_airport". See the map legend for a definition of each type.
               - column:
                   name: name
-                  # current max length is 108
+                  # the current max length is 108
                   type: varchar(128)
                   constraints:
                     nullable: false
@@ -70,10 +75,10 @@ databaseChangeLog:
                   remarks: The two-character ISO 3166:1-alpha2 code for the country where the airport is (primarily) located. A handful of unofficial, non-ISO codes are also in use, such as "XK" for Kosovo. Points to the code column in countries.csv.
               - column:
                   name: municipality
-                  # current max length is 61
+                  # the current max length is 61
                   type: varchar(80)
                   constraints:
-                    # There really should be municipality for every airport....
+                    # There really should be municipality for every airport
                     nullable: true
                   remarks: The primary municipality that the airport serves (when available). Note that this is not necessarily the municipality where the airport is physically located.
               # Actually a boolean

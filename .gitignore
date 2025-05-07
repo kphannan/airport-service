@@ -51,6 +51,12 @@ hs_err_pid*
 **/bin/
 build-logic/bin/**
 
+# Multi-project layout
+/app/build/
+/api/build/
+/lib/build/
+/build-logic/build/
+
 # Ignore Gradle GUI config
 gradle-app.setting
 
@@ -76,10 +82,3 @@ mysql-connector-*
 # PMD
 .pmdCache
 
-# Gradle project layout
-
-/app/build/
-/api/build/
-/lib/build/
-/build-logic/build/
-/build/

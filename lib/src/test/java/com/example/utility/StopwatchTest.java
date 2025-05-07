@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 
 
 /**
- * Unit tests fro the {@code Stopwatch} timer.
+ * Unit tests for the {@code Stopwatch} timer.
  */
 // intentional practice to use literals in tests for clarity instead of chasing
 // down constant symbols

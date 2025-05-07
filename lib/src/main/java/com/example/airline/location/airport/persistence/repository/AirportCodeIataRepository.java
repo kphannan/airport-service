@@ -23,7 +23,7 @@ import org.springframework.stereotype.Repository;
 public interface AirportCodeIataRepository extends PagingAndSortingRepository<AirportCodeIataEntity, String>
 {
     /**
-     * Lookup a IATA airport reference code by its code.
+     * Lookup an IATA airport reference code by its code.
      *
      * @param iataCode the code to locate.
      *

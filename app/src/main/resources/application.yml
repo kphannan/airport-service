@@ -38,7 +38,7 @@ spring:
   liquibase:
     changeLog: classpath:db/changelog/db.changelog-master.yaml
 
-  # Datasource is defined in a profile specific application-<profile>.yaml
+  # Datasource is defined in a profile-specific application-<profile>.yaml
   datasource:
     driverClassName: ${datasource.driver.classname}
     url: ${datasource.url}

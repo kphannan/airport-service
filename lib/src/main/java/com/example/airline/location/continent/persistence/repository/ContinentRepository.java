@@ -52,7 +52,7 @@ public interface ContinentRepository extends JpaRepository<ContinentEntity, Inte
     @NonNull ContinentEntity getReferenceById( @NonNull Integer id );
 
     /**
-     * Find a single {@code Continent} by its 2 character code.
+     * Find a single {@code Continent} by its 2-character code.
      *
      * @param continentCode the 2-character continent code.
      *

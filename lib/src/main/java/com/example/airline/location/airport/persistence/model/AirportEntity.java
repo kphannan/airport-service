@@ -14,6 +14,7 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,7 +46,14 @@ public class AirportEntity // extends Auditable<String>
      * persistent, even if the airport code changes.
      */
     @Id
-    @GeneratedValue( strategy = GenerationType.AUTO )
+    // @GeneratedValue( strategy = GenerationType.AUTO )
+    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "airport_id_seq" )
+    @SequenceGenerator( name = "airport_id_seq",
+                        sequenceName = "airport_id_seq",
+                        allocationSize = 1,
+                        initialValue = 1 )
+    // @GeneratedValue( strategy = GenerationType.IDENTITY )
+    // airport_id_seq
     @SuppressWarnings( "PMD.ShortVariable" )
     @Column( name = "id", nullable = false )
     @NonNull private Long id;

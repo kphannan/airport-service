@@ -1,4 +1,4 @@
-# Dev profile utilizes a DB server which could be local or on a dev server
+# Dev profile uses a DB server which could be local or on a dev server
 
 # TODO this should be in a local profile
 datasource:

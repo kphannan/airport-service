@@ -26,7 +26,7 @@ public class AirportService
     private final AirportEntityMapper mapper;
 
     /**
-     * Create a AirportService supported by autowire.
+     * Create an AirportService supported by autowire.
      *
      * @param repository jpa repository of Airports
      * @param mapper maps entities to/from the domain model

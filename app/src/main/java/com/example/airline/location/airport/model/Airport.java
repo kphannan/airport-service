@@ -28,7 +28,7 @@ public class Airport
     /**
      * The text identifier used in the OurAirports URL. This will be the ICAO code
      * if available. Otherwise, it will be a local airport code (if no conflict), or
-     * if nothing else is available, an internally-generated code starting with the
+     * if nothing else is available, an internally generated code starting with the
      * ISO2 country code, followed by a dash and a four-digit number.
      */
     @NonNull private String ident;
@@ -76,7 +76,7 @@ public class Airport
 
     /**
      * 'An alphanumeric code for the high-level administrative subdivision of a
-     * country where the airport is primarily located (e.g. province, governorate),
+     * country where the airport is primarily located (e.g., province, governorate),
      * prefixed by the ISO2 country code and a hyphen. OurAirports uses ISO 3166:2
      * codes whenever possible, preferring higher administrative levels, but also
      * includes some custom codes. See the documentation for regions.csv.'
@@ -91,7 +91,7 @@ public class Airport
     @Nullable private String municipality;
 
     /**
-     * "yes" if the airport currently has scheduled airline service; "no" otherwise.
+     * "yes" if the airport currently has scheduled airline service, "no" otherwise.
      */
     @NonNull private String scheduledService; // boolean...
 
@@ -130,7 +130,7 @@ public class Airport
     @Nullable private URI wikipediaLink; // URI
 
     /**
-     * Extra keywords/phrases to assist with search, comma-separated. May include
+     * Extra keywords/phrases to help with search, comma-separated. May include
      * former names for the airport, alternate codes, names in other languages,
      * nearby tourist destinations, etc.
      */
