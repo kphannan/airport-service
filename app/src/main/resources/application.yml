@@ -49,6 +49,8 @@ spring:
     url: ${datasource.url}
     username: ${datasource.username}
     password: ${datasource.password}
+    hikari:
+      autoCommit: false
 
 
 
@@ -92,6 +94,15 @@ datasource:
   url: jdbc:h3:mem:testdb;
   driver:
     classname: org.h2.Driver
+
+# Configuration for Flexy Pool
+decorator:
+ datasource:
+   flexyPool:
+     threshold:
+       connection:
+         acquire: 1
+         lease: 0
 
 
 management:

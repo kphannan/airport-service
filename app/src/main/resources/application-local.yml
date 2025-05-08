@@ -284,10 +284,10 @@ management:
 
 
 # Configuration for Flexy Pool
-#decorator:
-#  datasource:
-#    flexyPool:
-#      threshold:
-#        connection:
-#          acquire: 1
-#          lease: 0
+decorator:
+ datasource:
+   flexyPool:
+     threshold:
+       connection:
+         acquire: 1
+         lease: 0
