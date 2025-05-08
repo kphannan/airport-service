@@ -3,6 +3,13 @@ databaseChangeLog:
       id: "00011"
       author: kevin
       changes:
+        - createSequence:
+            sequenceName: seq_runways_id
+            #  Initial load of the table has 7 rows
+            startValue: 596178
+            incrementBy: 1
+
+
         - createTable:
             tableName: runways
             remarks: Each row in this dataset represents a single airport landing surface (runway, helipad, or waterway). The initial fields apply to the entire surface, in both directions. Fields beginning with le_* apply only to the low-numbered end of the runway (e.g. 09), while fields beginning with he_* apply only to the high-numbered end of the runway (e.g. 27).
@@ -10,6 +17,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: integer
+                  defaultValueSequenceNext: seq_runways_id
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -118,6 +126,12 @@ databaseChangeLog:
                   type: integer
                   remarks: Length of the displaced threshold (if any) for the high-numbered end of the runway, in feet.
 
+        - createSequence:
+            sequenceName: seq_runway_surface_kind_id
+            #  Initial load of the table has 7 rows
+            startValue: 100
+            incrementBy: 1
+
         - createTable:
             tableName: runway_surface_kind
             remarks: Each row represents a classifier for runway_surface_kind. The surface column in runways.csv refers to the kind column here.
@@ -126,7 +140,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: integer
-                  autoIncrement: true
+                  defaultValueSequenceNext: seq_runway_surface_kind_id
                   constraints:
                     primaryKey: true
                     nullable: false

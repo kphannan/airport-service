@@ -3,12 +3,20 @@ databaseChangeLog:
       id: "00009"
       author: kevin
       changes:
+        - createSequence:
+            sequenceName: seq_navaids_id
+            #  Initial load of the table has 7 rows
+            startValue: 100
+            incrementBy: 1
+
+
         - createTable:
             tableName: navaids
             columns:
               - column:
                   name: id
                   type: integer
+                  defaultValueSequenceNext: seq_navaids_id
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -116,6 +124,12 @@ databaseChangeLog:
                     nullable: true
                   remarks: The OurAirports text identifier (usually the ICAO code) for an airport associated with the navaid. Links to the ident column in airports.csv.
 
+        - createSequence:
+            sequenceName: seq_navaids_kind_id
+            #  Initial load of the table has 7 rows
+            startValue: 100
+            incrementBy: 1
+
         - createTable:
             tableName: navaid_kind
             remarks: Each row represents a classifier for navaids. The kind column in navaids.csv refers to the code column here.
@@ -124,7 +138,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: integer
-                  autoIncrement: true
+                  defaultValueSequenceNext: seq_navaids_kind_id
                   constraints:
                     primaryKey: true
                     nullable: false

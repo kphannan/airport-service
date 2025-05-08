@@ -3,6 +3,12 @@ databaseChangeLog:
       id: "00005"
       author: kevin
       changes:
+        - createSequence:
+            sequenceName: seq_continent_id
+            #  Initial load of the table has 7 rows
+            startValue: 100
+            incrementBy: 1
+
         - createTable:
             tableName: continents
             remarks: Each row represents a country or country-like entity (e.g. Hong Kong). The iso_country column in airports.csv, navaids.csv, and regions.csv refer to the code column here.
@@ -11,7 +17,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: integer
-                  autoIncrement: true
+                  defaultValueSequenceNext: seq_continent_id
                   constraints:
                     primaryKey: true
                     nullable: false

@@ -4,8 +4,9 @@ databaseChangeLog:
       author: kevin
       changes:
         - createSequence:
-            sequenceName: airport_id_seq
-            startValue: 1
+            sequenceName: seq_airport_id
+            #  Initial load of the table has about 82,866 rows
+            startValue: 596214
             incrementBy: 1
 
         - createTable:
@@ -16,10 +17,12 @@ databaseChangeLog:
               - column:
                   name: id
                   type: bigint
+                  defaultValueSequenceNext: seq_airport_id
                   constraints:
                     primaryKey: true
                     nullable: false
                   remarks: Internal OurAirports integer identifier for the airport. This will stay persistent, even if the airport code changes.
+
               - column:
                   name: ident
                   type: varchar(8)
@@ -119,6 +122,15 @@ databaseChangeLog:
                   type: varchar(512)
                   remarks: Extra keywords/phrases to assist with search, comma-separated. May include former names for the airport, alternate codes, names in other languages, nearby tourist destinations, etc.
 
+
+        # ----- Airport_Kind -----
+        - createSequence:
+            sequenceName: seq_airport_kind_id
+            #  Initial load of the table has about 82,866 rows
+            startValue: 100
+            incrementBy: 5
+
+
         - createTable:
             tableName: airport_kind
             remarks: Each row represents a country or country-like entity (e.g. Hong Kong). The iso_country column in airports.csv, navaids.csv, and regions.csv refer to the code column here.
@@ -127,7 +139,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: integer
-                  autoIncrement: true
+                  defaultValueSequenceNext: seq_airport_kind_id
                   constraints:
                     primaryKey: true
                     nullable: false

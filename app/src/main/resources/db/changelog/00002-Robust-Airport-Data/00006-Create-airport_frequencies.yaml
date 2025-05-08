@@ -3,6 +3,12 @@ databaseChangeLog:
       id: "00010"
       author: kevin
       changes:
+        - createSequence:
+            sequenceName: seq_airport_frequencies_id
+            #  Initial load of the table has 7 rows
+            startValue: 596056
+            incrementBy: 1
+
         - createTable:
             tableName: airport_frequencies
             remarks: Each row in this dataset represents a single airport radio frequency for voice communication (radio navigation aids appear in navaids.csv). The column airport_ident is a foreign key referencing the ident column in airports.csv for the associated airport.
@@ -11,6 +17,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: integer
+                  defaultValueSequenceNext: seq_airport_frequencies_id
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -52,6 +59,15 @@ databaseChangeLog:
                     nullable: false
                   remarks: Radio voice frequency in megahertz. Note that the same frequency may appear multiple times for an airport, serving different functions.
 
+
+
+        - createSequence:
+            sequenceName: seq_airport_frequency_kind_id
+            #  Initial load of the table has 7 rows
+            startValue: 596056
+            incrementBy: 1
+
+
         - createTable:
             tableName: airport_frequency_kind
             remarks: Each row represents a classifier for an aiport radio frequency.
@@ -60,7 +76,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: integer
-                  autoIncrement: true
+                  defaultValueSequenceNext: seq_airport_frequency_kind_id
                   constraints:
                     primaryKey: true
                     nullable: false

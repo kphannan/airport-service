@@ -47,13 +47,12 @@ public class AirportEntity // extends Auditable<String>
      */
     @Id
     // @GeneratedValue( strategy = GenerationType.AUTO )
-    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "airport_id_seq" )
-    @SequenceGenerator( name = "airport_id_seq",
-                        sequenceName = "airport_id_seq",
+    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "seq_airport_id" )
+    @SequenceGenerator( name = "seq_airport_id",
+                        sequenceName = "seq_airport_id",
                         allocationSize = 1,
-                        initialValue = 1 )
+                        initialValue = 596_214 )
     // @GeneratedValue( strategy = GenerationType.IDENTITY )
-    // airport_id_seq
     @SuppressWarnings( "PMD.ShortVariable" )
     @Column( name = "id", nullable = false )
     @NonNull private Long id;

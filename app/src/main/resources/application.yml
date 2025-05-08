@@ -18,6 +18,11 @@ spring:
     defaultPropertyInclusion: NON_NULL
 
   jpa:
+    hibernate:
+      # none, validate, update, create, create-drop
+      ddlAuto: validate
+      generateStatistics: true
+
     openInView: false
 
   profiles:
@@ -46,10 +51,6 @@ spring:
     password: ${datasource.password}
 
 
-#  jpa:
-#    hibernate:
-    # none, validate, update, create, create-drop
-#      ddl-auto: validate
 
     showSql: true
     properties:
