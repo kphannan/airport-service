@@ -506,15 +506,6 @@ class AirportDTOTest
                                                                  "Key1, key2" );
                 final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
-//                ConstraintValidationUtility
-//                        .assertConstraintErrors( constraintViolations,
-////                                             tuple( "code", "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" ),
-////                                             tuple( "iataCode", "A unique region code is required" ),
-////                                             tuple( "icaoCode", "IACO code has four alpha-numeric characters" ),
-////                                             tuple( "isoCountry", "An ISO 3166:1-alpha2 country code is required" ),
-////                                                 tuple( "ident", "A 4 to 7 character airport ident code is required" ),
-//                                                 tuple( "ident", "ZAirport ident must a unique 4 to 7 character code following a specific pattern" )
-//                                               );
                 assertThat( constraintViolations.size() )
                         .isEqualTo( 0 );
             }
@@ -1222,15 +1213,8 @@ class AirportDTOTest
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
-//                                             tuple( "code", "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" ),
                                                  tuple( "iataCode", "IATA code has three alphabetic characters" )
-//                                             tuple( "icaoCode", "IACO code has four alpha-numeric characters" ),
-//                                             tuple( "isoCountry", "An ISO 3166:1-alpha2 country code is required" ),
-//                                                 tuple( "ident", "A 4 to 7 character airport ident code is required" ),
-//                                                 tuple( "ident", "ZAirport ident must a unique 4 to 7 character code following a specific pattern" )
                                                );
-//                assertThat( constraintViolations.size() )
-//                        .isEqualTo( 0 );
             }
 
         }

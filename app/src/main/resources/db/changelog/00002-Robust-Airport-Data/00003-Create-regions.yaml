@@ -3,6 +3,12 @@ databaseChangeLog:
       id: "00007"
       author: kevin
       changes:
+        - createSequence:
+            sequenceName: seq_regions_id
+            #  Initial load of the table has 7 rows
+            startValue: 595550
+            incrementBy: 1
+
         - createTable:
             tableName: regions
             remarks: Each row represents a high-level administrative subdivision of a country. The iso_region column in airports.csv links to the code column in this dataset.
@@ -11,10 +17,12 @@ databaseChangeLog:
               - column:
                   name: id
                   type: integer
+                  defaultValueSequenceNext: seq_regions_id
                   constraints:
                     primaryKey: true
                     nullable: false
                   remarks: Internal OurAirports integer identifier for the region. This will stay persistent, even if the region code changes.
+
               - column:
                   name: code
                   type: varchar(7)

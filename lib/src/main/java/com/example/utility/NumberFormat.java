@@ -6,10 +6,9 @@ package com.example.utility;
 /**
  * Utility for formating numbers.
  *
- * For readabilty the bit string may group bits together with an intervening
- * space.
- *
  * <p>
+ * For readabilty, the bit string may group bits together with an intervening
+ * space.
  * <table border="1" style="border-collapse:collapse;">
  * <caption>Bit strings for the hexadecimal value <b>0xFACE</b></caption>
  * <thead>
@@ -115,7 +114,7 @@ public final class NumberFormat
 
         final StringBuilder result = new StringBuilder();
 
-        // build the formatted string 1 bit at a time.
+        // Build the formatted string 1 bit at a time.
         // Test LSB and shift right for next iteration
         long value = number;
         for ( int i = bits - 1; i >= 0; i-- )

@@ -12,6 +12,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,7 +32,12 @@ import org.jspecify.annotations.Nullable;
 public class ContinentEntity
 {
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY )  // or GenerationType.SEQUENCE
+    // @GeneratedValue( strategy = GenerationType.IDENTITY )  // or GenerationType.SEQUENCE
+    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "seq_continent_id" )
+    @SequenceGenerator( name = "seq_continent_id",
+                        sequenceName = "seq_continent_id",
+                        allocationSize = 1,
+                        initialValue = 1 )
     @Column( name = "id", nullable = false )
     @SuppressWarnings( "PMD.ShortVariable" )
     @NonNull

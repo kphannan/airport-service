@@ -131,7 +131,7 @@ public class RegionDTO
     @NotBlank( message = "An ISO 3166:1-alpha2 country code is required" )
     @NonNull
     @Pattern( regexp = "[A-Z]{2}", message = "Code must a valid ISO 3166:1-alpha2" )
-    private String country; // ! Create domain-object for the country code
+    private String country; // ! Create a domain-object for the country code
 
     /**
      * A code for the continent to which the region belongs. See the continent field
@@ -148,7 +148,7 @@ public class RegionDTO
     @NotBlank( message = "A 2-character continent code is required" )
     @NonNull
     @Pattern( regexp = "[A-Z]{2}", message = "Continent code must be 2 uppercase characters" )
-    private String continent; // ! Create domain-object for continent code
+    private String continent; // ! Create a domain-object for continent code
 
     /**
      * A link to the Wikipedia article describing the subdivision.

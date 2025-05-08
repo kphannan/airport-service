@@ -194,19 +194,24 @@ public class ContinentController
     @Operation( method = "GET",
                 summary = "Find a Continent by its abbreviation",
                 description = "Find a Continent by its 2 letter code",
-                responses = { @ApiResponse( description = "Continent found and returned",
-                                            responseCode = "200",
-                                            content = { @Content( mediaType = "application/json",
-                                                                  schema = @Schema( implementation = ContinentDTO.class ) ),
-                                                        @Content( mediaType = "application/yaml",
-                                                                  schema = @Schema( implementation = ContinentDTO.class ) ),
-                                                        @Content( mediaType = "application/xml",
-                                                                  schema = @Schema( implementation = ContinentDTO.class ) )
-                                            }
-                                        )
-                            },
+                responses = {
+                    @ApiResponse( description = "Continent found and returned",
+                                  responseCode = "200",
+                                  content = {
+                                      @Content( mediaType = "application/json",
+                                                schema = @Schema( implementation = ContinentDTO.class ) ),
+                                      @Content( mediaType = "application/yaml",
+                                                schema = @Schema( implementation = ContinentDTO.class ) ),
+                                      @Content( mediaType = "application/xml",
+                                                schema = @Schema( implementation = ContinentDTO.class ) )
+                                  }
+                    )
+                },
                 parameters = {
-                        @Parameter( name = "code", required = true, in = ParameterIn.PATH, description = "2 character code" ),
+                        @Parameter( name = "code",
+                                    required = true,
+                                    in = ParameterIn.PATH,
+                                    description = "2 character code" ),
                         @Parameter( name = "TRACEPARENT",
                                     required = false,
                                     schema = @Schema( implementation = String.class ),
@@ -289,7 +294,7 @@ public class ContinentController
             // Build the resource id (path) of the newly created item
             final URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
-                    .path("/{continentId}")
+                    .path( "/{continentId}" )
                     .buildAndExpand( continent.getId() )
                     .toUri();
             return ResponseEntity
@@ -462,20 +467,25 @@ public class ContinentController
     @Operation( method = "PATCH",
                 summary = "Update a Continent",
                 description = "Update a Continent only if it exists.  All non-null attributes are updated.",
-                requestBody = @RequestBody( required = true,
-                                            content = { @Content( mediaType = "application/json",
-                                                                  schema = @Schema( implementation = ContinentDTO.class ) )
-                                            }
+                requestBody =
+                    @RequestBody( required = true,
+                                  content = { @Content( mediaType = "application/json",
+                                                        schema = @Schema( implementation = ContinentDTO.class ) )
+                                  }
                 ),
-                responses = { @ApiResponse( description = "Continent updated and returned",
-                                            responseCode = "200",
-                                            content = { @Content( mediaType = "application/json",
-                                                                  schema = @Schema( implementation = ContinentDTO.class ) ),
-                                                        @Content( mediaType = "application/yaml",
-                                                                  schema = @Schema( implementation = ContinentDTO.class ) ),
-                                                        @Content( mediaType = "application/xml",
-                                                                  schema = @Schema( implementation = ContinentDTO.class ) )
-                                            }
+                responses = {
+                    @ApiResponse(
+                        description = "Continent updated and returned",
+                        responseCode = "200",
+                        content =
+                        {
+                            @Content( mediaType = "application/json",
+                                      schema = @Schema( implementation = ContinentDTO.class ) ),
+                            @Content( mediaType = "application/yaml",
+                                      schema = @Schema( implementation = ContinentDTO.class ) ),
+                            @Content( mediaType = "application/xml",
+                                      schema = @Schema( implementation = ContinentDTO.class ) )
+                        }
                     )
                 },
                 parameters = {

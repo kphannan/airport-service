@@ -25,7 +25,7 @@ spring:
   jpa:
     hibernate:
       # none, validate, update, create, create-drop
-      ddl-auto: none
+      ddlAuto: validate
       generateStatistics: true
 
     open-in-view: false
@@ -280,3 +280,13 @@ management:
   tracing:
     sampling:
       probability: 1.0
+
+
+# Configuration for Flexy Pool
+#decorator:
+#  datasource:
+#    flexyPool:
+#      threshold:
+#        connection:
+#          acquire: 1
+#          lease: 0

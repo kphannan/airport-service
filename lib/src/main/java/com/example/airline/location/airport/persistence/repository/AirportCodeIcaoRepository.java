@@ -24,7 +24,7 @@ public interface AirportCodeIcaoRepository extends PagingAndSortingRepository<Ai
 {
 
     /**
-     * Lookup a ICAO airport reference code by its code.
+     * Lookup an ICAO airport reference code by its code.
      *
      * @param icaoCode the code to locate.
      *

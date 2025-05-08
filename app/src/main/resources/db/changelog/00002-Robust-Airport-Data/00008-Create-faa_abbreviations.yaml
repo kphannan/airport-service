@@ -3,6 +3,12 @@ databaseChangeLog:
       id: "00012"
       author: kevin
       changes:
+        - createSequence:
+            sequenceName: seq_faa_abbreviations_id
+            #  Initial load of the table has 7 rows
+            startValue: 100
+            incrementBy: 1
+
         - createTable:
             tableName: faa_abbreviations
             remarks: Each row represents a classifier for an faa_abbreviation.
@@ -11,7 +17,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: integer
-                  autoIncrement: true
+                  defaultValueSequenceNext: seq_faa_abbreviations_id
                   constraints:
                     primaryKey: true
                     nullable: false

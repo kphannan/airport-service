@@ -18,6 +18,11 @@ spring:
     defaultPropertyInclusion: NON_NULL
 
   jpa:
+    hibernate:
+      # none, validate, update, create, create-drop
+      ddlAuto: validate
+      generateStatistics: true
+
     openInView: false
 
   profiles:
@@ -38,7 +43,7 @@ spring:
   liquibase:
     changeLog: classpath:db/changelog/db.changelog-master.yaml
 
-  # Datasource is defined in a profile specific application-<profile>.yaml
+  # Datasource is defined in a profile-specific application-<profile>.yaml
   datasource:
     driverClassName: ${datasource.driver.classname}
     url: ${datasource.url}
@@ -46,10 +51,6 @@ spring:
     password: ${datasource.password}
 
 
-#  jpa:
-#    hibernate:
-    # none, validate, update, create, create-drop
-#      ddl-auto: validate
 
     showSql: true
     properties:

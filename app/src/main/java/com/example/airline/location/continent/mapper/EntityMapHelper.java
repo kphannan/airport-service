@@ -40,7 +40,7 @@ public final class EntityMapHelper
 
 
     /*
-    public static <F,T> Optional<T> mapOptionalEntityToDomain( final Optional<F> from )
+    public static <F, T> Optional<T> mapOptionalEntityToDomain( final Optional<F> from )
     {
         if ( from.isPresent() )
         {

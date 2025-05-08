@@ -118,12 +118,12 @@ application {
 }
 
 
-task integrationTest(type: Test) {
+tasks.register('integrationTest', Test) {
     group = 'Verification'
     description = 'runs the integration tests with Cucumber/Selenium/Karate'
 
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
-    classpath       = sourceSets.integrationTest.runtimeClasspath
+    classpath = sourceSets.integrationTest.runtimeClasspath
 
     mustRunAfter test
     useJUnitPlatform()

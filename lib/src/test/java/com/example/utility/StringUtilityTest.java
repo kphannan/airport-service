@@ -165,7 +165,7 @@ class StringUtilityTest
             }
         }
 
-        /** Is the target string one of a set of possibilities. */
+        /** Is the target string one of a set of possibilities? */
         @DisplayName( "value not in collection:" )
         @ParameterizedTest( name = "({0}) not in: ({1})" )
         @ArgumentsSource( SubstringNotIncluded.class )

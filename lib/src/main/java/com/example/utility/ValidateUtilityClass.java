@@ -19,7 +19,7 @@ import org.apache.logging.log4j.Logger;
 
 // internal methods would be better as private, but that makes testing them
 // more difficult as they are only accessible via the one public method and
-// can not be exercised sufficiently to survive mutation tests.
+// cannot be exercised sufficiently to survive mutation tests.
 
 
 

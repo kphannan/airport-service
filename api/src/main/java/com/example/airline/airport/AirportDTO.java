@@ -13,6 +13,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -23,6 +24,7 @@ import org.jspecify.annotations.Nullable;
  */
 @Data
 @AllArgsConstructor
+@Builder
 public class AirportDTO
 {
     /**
@@ -54,7 +56,7 @@ public class AirportDTO
              example = "KORD" )
     @NotBlank( message = "A 4 to 7 character airport ident code is required" )
     @lombok.NonNull
-    @Pattern( regexp = "(([A-Z]{3,4})|([A-Z]{2}[0-9]{2})|([A-Z]{2}-[0-9]{4}))",
+    @Pattern( regexp = "(([A-Z]{3,4})|([A-Z]{2}\\d{2})|([A-Z]{2}-\\d{4}))",
               message = "Airport ident must a unique 4 to 7 character code following a specific pattern" )
     private String ident;  // char-8
 
@@ -192,9 +194,9 @@ public class AirportDTO
                      ICAO codes, assigned by the International Civil Aviation
                      Organization, are four-letter codes. They’re used globally
                      in flight operations and Air Traffic Control.
-                     
-                     The International Air Transport Association issues IATA 
-                     codes. These are the three-letter airport codes travelers 
+
+                     The International Air Transport Association issues IATA
+                     codes. These are the three-letter airport codes travelers
                      are most familiar with. Flight ticketing, baggage handling,
                      and cargo shipping primarily use these codes.
                      """,
@@ -213,7 +215,7 @@ public class AirportDTO
              description = """
                            The International Air Transport Association's (IATA)
                            Location Identifier is a unique 3-letter code
-                           (also commonly known as IATA code) used in aviation 
+                           (also commonly known as IATA code) used in aviation
                            and also in logistics to identify an airport.
                            """,
              example = "ATL",
@@ -229,7 +231,11 @@ public class AirportDTO
      */
     @JsonProperty( "localCode" )
     @Schema( name = "localCode",
-             description = "The local country code for the airport, if different from the gps_code and iata_code fields (used mainly for US airports)",
+             description =
+                """
+                The local country code for the airport, if different from the gps_code
+                and iata_code fields (used mainly for US airports)
+                """,
              example = "ATL",
              requiredMode = Schema.RequiredMode.NOT_REQUIRED,
              maxLength = 7 )

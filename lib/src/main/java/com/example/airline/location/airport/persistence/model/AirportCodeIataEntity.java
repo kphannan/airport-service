@@ -13,7 +13,7 @@ import org.jspecify.annotations.NonNull;
 
 
 /**
- * Definition of operations on he IATA reference table.
+ * Definition of operations on the IATA reference table.
  */
 @Entity
 @Table( name = "iata_airportcode" )

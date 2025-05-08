@@ -3,6 +3,12 @@ databaseChangeLog:
       id: "00006"
       author: kevin
       changes:
+        - createSequence:
+            sequenceName: seq_countries_id
+            #  Initial load of the table has 7 rows
+            startValue: 593723
+            incrementBy: 1
+
         - createTable:
             tableName: countries
             remarks: Each row represents a country or country-like entity (e.g. Hong Kong). The iso_country column in airports.csv, navaids.csv, and regions.csv refer to the code column here.
@@ -11,10 +17,12 @@ databaseChangeLog:
               - column:
                   name: id
                   type: integer
+                  defaultValueSequenceNext: seq_countries_id
                   constraints:
                     primaryKey: true
                     nullable: false
                   remarks: Internal OurAirports integer identifier for the country. This will stay persistent, even if the country name or code changes.
+
               - column:
                   name: code
                   type: char(2)

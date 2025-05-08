@@ -27,13 +27,4 @@ public class AirportCodeIcaoEntity
     @Column( name = "icao_code", length = 4, nullable = false, columnDefinition = "char(4)" )
     @NonNull private String icaoCode;
 
-    // /**
-    //  * Instantiate a ICAO airport code record.
-    //  *
-    //  * @param icaoCode the ICAO code string.
-    //  */
-    // public AirportCodeIcaoEntity( final String icaoCode )
-    // {
-    //     this.icaoCode = icaoCode;
-    // }
 }

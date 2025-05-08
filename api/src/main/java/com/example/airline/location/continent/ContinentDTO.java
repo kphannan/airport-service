@@ -38,7 +38,7 @@ public class ContinentDTO //implements Serializable
              description = "Unique identifier",
              requiredMode = Schema.RequiredMode.REQUIRED )
     @NotNull( message = "A continent id is required" )
-//    @Pattern( regexp = "[0-9]+", message = "'id' must be only digits" )
+    // @Pattern( regexp = "[0-9]+", message = "'id' must be only digits" )
     private Integer id;
 
     // TODO convert to a Java record
@@ -75,7 +75,7 @@ public class ContinentDTO //implements Serializable
              requiredMode = Schema.RequiredMode.NOT_REQUIRED,
              maxLength = 255 )
     @Nullable
-//    @Size( max = 255, message = "List of keywords may not exceed 255 characters" )
+    // @Size( max = 255, message = "List of keywords may not exceed 255 characters" )
     private URI    wikiLink;
 
     @JsonProperty( "keywords" )
