@@ -122,7 +122,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
                              exception.getSupportedMediaTypes()
                                       .stream()
                                       .map( MediaType::toString )
-                                      .collect( Collectors.joining(", " ) ) );
+                                      .collect( Collectors.joining( ", " ) ) );
 
         return new ResponseEntity<>( details, HttpStatus.UNSUPPORTED_MEDIA_TYPE );
     }
@@ -148,7 +148,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
                              exception.getSupportedMediaTypes()
                                       .stream()
                                       .map( MediaType::toString )
-                                      .collect( Collectors.joining(", " ) ) );
+                                      .collect( Collectors.joining( ", " ) ) );
 
         return new ResponseEntity<>( details, HttpStatus.UNSUPPORTED_MEDIA_TYPE );
     }
@@ -175,18 +175,10 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
                              exception.getSupportedMediaTypes()
                                       .stream()
                                       .map( MediaType::toString )
-                                      .collect( Collectors.joining(", " ) ) );
-
-        return new ResponseEntity<>( details, exception.getStatusCode() );
+                                      .collect( Collectors.joining( ", " ) ) );
 
         // TODO Message should indicate the bad media type as well as the acceptable types
-//        final StringBuilder detailMessage = new StringBuilder( "Unsupported content type: " )
-//                .append( MediaType.toString( exception.getSupportedMediaTypes() ) );
-//        final ProblemDetail details       = ProblemDetail.forStatusAndDetail( HttpStatus.UNSUPPORTED_MEDIA_TYPE,
-//                                                                              detailMessage.toString() );
-//        details.setTitle( "Unsupported Media Type" );
-//
-//        return new ResponseEntity<>( details, HttpStatus.UNSUPPORTED_MEDIA_TYPE );
+        return new ResponseEntity<>( details, exception.getStatusCode() );
     }
 
 
@@ -414,6 +406,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     handleGenericException( final ServletWebRequest request,
                             final Exception exception )
     {
+        log.error( "Catch-all", exception );
         // TODO the MDC should include the traceId (UUID) and log pattern should
 
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.INTERNAL_SERVER_ERROR,
