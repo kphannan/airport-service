@@ -11,6 +11,7 @@ import com.example.airline.location.continent.mapper.EntityMapHelper;
 import com.example.airline.location.continent.model.Continent;
 import com.example.airline.location.continent.persistence.model.ContinentEntity;
 import com.example.airline.location.continent.persistence.repository.ContinentRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 
@@ -54,6 +55,7 @@ public class ContinentReadService
      * @param id the id of the desired continent.
      * @return the optional continent if it was found.
      */
+    @Transactional
     @SuppressWarnings( "PMD.ShortVariable" )
     public Optional<Continent> getReferenceById( final Integer id )
     {

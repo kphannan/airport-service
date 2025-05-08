@@ -22,6 +22,8 @@ jspecifyVersion = '1.0.0'
 guavaVersion = '33.4.8-jre'
 # --- Apache Commons ---
 apacheCommonsVersion = '4.5.0'
+# --- FlexyPool - JDBC stats ---
+flexyPoolVersion = '1.11.0'
 
 ## ----- Libraries -----
 [libraries]
@@ -109,6 +111,10 @@ hibernate-validation = { module = 'org.hibernate.validator:hibernate-validator',
 # # spring-boot-starter-data-redis-reactive = { group = 'org.springframework.boot', name = 'spring-boot-starter-data-redis-reactive', version.ref = 'springBootVersion' }
 # # spring-boot-starter-data-elasticsearch-reactive = { group = 'org.springframework.boot', name = 'spring-boot-starter-data-elasticsearch-reactive', version.ref = 'springBootVersion' }
 
+flexy-pool-spring-boot-starter = { module = 'com.github.gavlyukovskiy:flexy-pool-spring-boot-starter', version.ref = 'flexyPoolVersion' }
+datasource-proxy-spring-boot-starter = { module = 'com.github.gavlyukovskiy:datasource-proxy-spring-boot-starter', version.ref = 'flexyPoolVersion' }
+
+
 [bundles]
 spring-boot-base = [
 
@@ -125,7 +131,9 @@ spring-boot-base = [
 ]
 
 spring-boot-persistence = [
-    'spring-boot-starter-jpa'
+    'spring-boot-starter-jpa',
+    'flexy-pool-spring-boot-starter',
+    'datasource-proxy-spring-boot-starter'
 ]
 spring-validation = [
     'spring-boot-starter-validation',

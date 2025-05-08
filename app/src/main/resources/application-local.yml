@@ -28,7 +28,8 @@ spring:
       ddlAuto: validate
       generateStatistics: true
 
-    open-in-view: false
+    # Don't keep the session open while rendering the view
+    openInView: false
 
     properties:
       hibernate:
@@ -283,10 +284,10 @@ management:
 
 
 # Configuration for Flexy Pool
-#decorator:
-#  datasource:
-#    flexyPool:
-#      threshold:
-#        connection:
-#          acquire: 1
-#          lease: 0
+decorator:
+ datasource:
+   flexyPool:
+     threshold:
+       connection:
+         acquire: 1
+         lease: 0
