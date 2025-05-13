@@ -20,7 +20,7 @@ Feature: Continent API Security
       | '/continent'         | OPTIONS | 204      |
       | '/continent'         | HEAD    | 204      |
       | '/continent'         | TRACE   | 405      |
-      | '/continent/1'       | GET     | 200      |
+      | '/continent/100'     | GET     | 200      |
       | '/continent/99'      | PUT     | 405      |
       | '/continent/99'      | POST    | 405      |
       | '/continent/99'      | PATCH   | 405      |

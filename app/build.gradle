@@ -61,7 +61,6 @@ dependencies {
     // --- OpenAPI doc
     implementation libs.springdoc.openapi.ui
     // implementation( "org.springdoc:springdoc-openapi-starter-webmvc-ui:${swaggerVersion}" )
-
     // testImplementation( "org.springdoc:springdoc-openapi-starter-webmvc-api:2.8.6" )
 
     // ===== Persistence =====
