@@ -3,8 +3,12 @@
 package com.example.airline.location.airport.persistence.repository;
 
 
+import java.util.List;
 import java.util.Optional;
 
+import com.example.airline.location.airport.persistence.model.AirportCountInContinentEntity;
+import com.example.airline.location.airport.persistence.model.AirportCountInCountryEntity;
+import com.example.airline.location.airport.persistence.model.AirportCountInRegionEntity;
 import com.example.airline.location.airport.persistence.model.AirportEntity;
 // import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
@@ -74,4 +78,11 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
                                        @Param( "ident" ) String ident,
                                        @Param( "name" ) String name,
                                        Pageable paging );
+
+    // Defined as NamedQueries
+//    List<AirportCountInContnent> findByContinent( final String continent );
+    List<AirportCountInContinentEntity> countAirportsByContinent();
+
+//    List<AirportCountInCountryEntity> countAirportsByCountry();
+//    List<AirportCountInRegionEntity> countAirportsByRegion();
 }

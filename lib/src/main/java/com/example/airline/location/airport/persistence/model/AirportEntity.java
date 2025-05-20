@@ -14,6 +14,7 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,14 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
+/*
+SELECT continent, COUNT(ident) from Airports GROUP BY continent;
+
+SELECT iso_country, COUNT(ident) from Airports GROUP BY iso_country;
+
+SELECT iso_region, COUNT(ident) from Airports GROUP BY iso_region;
+
+ */
 
 /**
  * Entity definition for the {@code Airport} table.
@@ -39,6 +48,20 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Builder
 @EntityListeners( AuditingEntityListener.class )
 @SuppressWarnings( "PMD.TooManyFields" )
+@NamedQuery( name="AirportEntity.countAirportsByContinent",
+             query="""
+                    SELECT a.continent AS continentCode,
+                           c.name AS name,
+                           COUNT(a.id) AS airportCount
+                      FROM AirportEntity a
+                    INNER JOIN ContinentEntity c ON c.code = a.continent
+                    GROUP BY continent
+                    """
+           )
+@NamedQuery( name="AirportEntity.countAirportsByCountry",
+             query="SELECT isoCountry AS countryCode, COUNT(*) AS airportCount FROM AirportEntity GROUP BY isoCountry" )
+@NamedQuery( name="AirportEntity.countAirportsByRegion",
+             query="SELECT isoRegion AS regionCode, COUNT(*) AS airportCount FROM AirportEntity GROUP BY isoRegion" )
 public class AirportEntity // extends Auditable<String>
 {
     /**

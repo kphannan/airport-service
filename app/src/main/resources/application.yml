@@ -12,18 +12,30 @@ server:
 ##### Spring
 spring:
   application:
-    name: airport-service
+    name: pool-airport
 
   jackson:
     defaultPropertyInclusion: NON_NULL
+
 
   jpa:
     hibernate:
       # none, validate, update, create, create-drop
       ddlAuto: validate
       generateStatistics: true
+      properties:
+        hibernate:
+          connection:
+            providerDisablesAutocommit: true
+    # End of what should be in local profile (this is not prod compliant)
+#    hibernate:
+#      connection:
+#        provider_disables_autocommit:
 
     openInView: false
+
+
+
 
   profiles:
     active:  ${active_profiles:local}
@@ -51,6 +63,7 @@ spring:
     password: ${datasource.password}
     hikari:
       autoCommit: false
+      poolName: hikari-airport
 
 
 
@@ -64,7 +77,9 @@ spring:
       enabled: ALWAYS
 
   # End of what should be in local profile (this is not prod compliant)
-
+hibernate:
+  connection:
+    provider_disables_autocommit:
 
 
 

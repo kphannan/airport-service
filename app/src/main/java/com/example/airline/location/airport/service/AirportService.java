@@ -3,12 +3,18 @@
 package com.example.airline.location.airport.service;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import com.example.airline.location.airport.mapper.AirportEntityMapper;
+import com.example.airline.location.airport.model.AirportCountInContinent;
+import com.example.airline.location.airport.model.AirportCountInCountry;
+import com.example.airline.location.airport.model.AirportCountInRegion;
 import com.example.airline.location.airport.model.Airport;
+import com.example.airline.location.airport.persistence.model.AirportCountInContinentEntity;
 import com.example.airline.location.airport.persistence.model.AirportEntity;
 import com.example.airline.location.airport.persistence.repository.AirportRepository;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,6 +25,7 @@ import org.springframework.stereotype.Service;
  * Spring Service (business logic) supporting the {@code Airport} domain object.
  */
 @Service
+@Log4j2
 public class AirportService
 {
     private final AirportRepository repository;
@@ -86,6 +93,33 @@ public class AirportService
 
         return mapEntityToDomain( airportEntity );
     }
+
+
+    public List<AirportCountInContinent> countAirportsByContinent()
+    {
+        List<AirportCountInContinentEntity> entities = repository.countAirportsByContinent();
+
+        for( AirportCountInContinentEntity item : entities )
+        {
+            log.error( String.format( "continent: %s (%s)  count: %d from  [%s]", item.getName(), item.getContinentCode(), item.getAirportCount(), item ) );
+        }
+
+//        entities.forEach( item -> {
+//            log.error( item );
+//        });
+
+        return mapper.entityToDomainAirportsInContinent( entities );
+//        return mapper.entityToDomainAirportsInContinent( repository.countAirportsByContinent() );
+    }
+
+//    public List<AirportCountInCountry> countAirportsByCountry()
+//    {
+//        return mapper.entityToDomain( repository.countAirportsByCountry() );
+//    }
+//    public List<AirportCountInRegion> countAirportsByRegion()
+//    {
+//        return mapper.entityToDomain( repository.countAirportsByRegion() );
+//    }
 
 
 

@@ -19,7 +19,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity( debug = true )
 @Log4j2
 public class SecurityConfig
 {
@@ -45,15 +45,21 @@ public class SecurityConfig
     public SecurityFilterChain securityFilterChain( HttpSecurity http ) throws Exception
     {
         log.error( "SecurityConfig.securityFilterChain...." );
-        http
-                .cors( c ->
+        http.headers( headers ->
+                              headers.frameOptions( options ->
+                                                            options.sameOrigin() ))  // For H2 console access
+//                .headers( headers ->
+//                                  headers.frameOptions( frameOptions ->
+//                                                                frameOptions.mode(SAMEORIGIGN))
+//                        )
+                                                       .cors( c ->
                                c.configurationSource( corsConfigurationSource() ) )
 //                .exceptionHandling( customizer ->
 //                                            customizer.authenticationEntryPoint( new HttpStatusEntryPoint( HttpStatus.UNAUTHORIZED ) ) )
-                .csrf( AbstractHttpConfigurer::disable )
-                .sessionManagement( customizer ->
+                                                       .csrf( AbstractHttpConfigurer::disable )
+                                                       .sessionManagement( customizer ->
                                             customizer.sessionCreationPolicy( SessionCreationPolicy.STATELESS ) )
-                .authorizeHttpRequests( (requests) ->
+                                                       .authorizeHttpRequests( (requests) ->
                                                 requests.anyRequest().permitAll() )
                 ;
 
