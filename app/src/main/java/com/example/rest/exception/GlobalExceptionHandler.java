@@ -38,6 +38,18 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 
+// TODO add support for.... MissingPathVariableException
+/*
+{
+    "type": "about:blank",
+    "title": "Internal Server Error",
+    "status": 500,
+    "detail": "Required URI template variable 'code' for method parameter type String is not present",
+    "instance": "/api/v1/location/airport/summary/continent/code",
+    "logref": "f4562782-074d-4ce7-a354-e0c93f7b5bb5",
+    "Exception": "org.springframework.web.bind.MissingPathVariableException"
+ */
+
 
 /**
  * Exception handler to catch application-specific exceptions and format them consistently.

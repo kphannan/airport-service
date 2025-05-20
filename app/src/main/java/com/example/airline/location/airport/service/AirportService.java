@@ -107,11 +107,12 @@ public class AirportService
         return mapper.entityToDomainAirportsInContinent( entities );
     }
 
-//    public List<AirportCountInCountry> countAirportsByCountry()
-//    {
-//        return mapper.entityToDomain( repository.countAirportsByCountry() );
-//    }
-//    public List<AirportCountInRegion> countAirportsByRegion()
+    public List<AirportCountInCountry> countAirportsByCountry()
+    {
+        return mapper.entityToDomainAirportsInCountry( repository.countAirportsByCountry() );
+    }
+
+    //    public List<AirportCountInRegion> countAirportsByRegion()
 //    {
 //        return mapper.entityToDomain( repository.countAirportsByRegion() );
 //    }

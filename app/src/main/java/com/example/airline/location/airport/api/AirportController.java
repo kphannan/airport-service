@@ -134,12 +134,22 @@ public class AirportController
         // return ResponseEntity.noContent().location().build();
     }
 
-    @GetMapping( "/summary/continent/code/{code}" )
-    public ResponseEntity<List<AirportCountInContinentDTO>> restGetCountAirportsByContinent( @PathVariable final String code )
+    @GetMapping( "/summary/continent/code" )
+    public ResponseEntity<List<AirportCountInContinentDTO>> restGetCountAirportsByContinent()
     {
         final List<AirportCountInContinent> counts = service.countAirportsByContinent();
 
         final List<AirportCountInContinentDTO> dto = mapper.domainToApiAirportsInContinent( counts );
+
+        return ResponseEntity.ok( dto );
+    }
+
+    @GetMapping( "/summary/country/code" )
+    public ResponseEntity<List<AirportCountInCountryDTO>> restGetCountAirportsByCountry()
+    {
+        final List<AirportCountInCountry> counts = service.countAirportsByCountry();
+
+        final List<AirportCountInCountryDTO> dto = mapper.domainToApiAirportsInCountry( counts );
 
         return ResponseEntity.ok( dto );
     }

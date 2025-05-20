@@ -36,6 +36,7 @@ public interface AirportEntityMapper
     /** Map a list of domain instances to a list of db entity instances. */
     List<Airport> entityToDomain( List<AirportEntity> entities );
     List<AirportCountInContinent> entityToDomainAirportsInContinent( List<AirportCountInContinentEntity> entities );
+    List<AirportCountInCountry> entityToDomainAirportsInCountry( List<AirportCountInCountryEntity> entities );
 
     // --- Domain --> Persistence ---
     // --- Instance

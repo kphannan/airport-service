@@ -15,5 +15,6 @@ public class AirportCountInCountry
      */
     @NonNull
     private String countryCode;
+    private String name;
     private long   airportCount;
 }

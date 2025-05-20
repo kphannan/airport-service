@@ -80,9 +80,10 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
                                        Pageable paging );
 
     // Defined as NamedQueries
-//    List<AirportCountInContnent> findByContinent( final String continent );
     List<AirportCountInContinentEntity> countAirportsByContinent();
 
-//    List<AirportCountInCountryEntity> countAirportsByCountry();
+    // TODO pass country code as argument
+    List<AirportCountInCountryEntity> countAirportsByCountry();
+    // TODO pass region code as argument
 //    List<AirportCountInRegionEntity> countAirportsByRegion();
 }

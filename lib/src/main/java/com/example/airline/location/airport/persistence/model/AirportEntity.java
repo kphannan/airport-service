@@ -27,6 +27,7 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 //import com.example.airline.location.airport.persistence.model.AirportCountInContinentEntity;
 
+
 /*
 SELECT continent, COUNT(ident) from Airports GROUP BY continent;
 
@@ -34,35 +35,63 @@ SELECT iso_country, COUNT(ident) from Airports GROUP BY iso_country;
 
 SELECT iso_region, COUNT(ident) from Airports GROUP BY iso_region;
 
- */
+select ae1_0.continent,count(*) from airports ae1_0 group by ae1_0.continent;
 
-/*
-SELECT a.iso_country,
+-- Count of airports by continent
+select a.continent,
+           count(a.id)
+from airports a
+INNER JOIN continents c on c.code = a.continent
+group by a.continent;
+
+-- Count of airports by continent with continent (code, name)
+SELECT a.continent,
+               c.name,
+               count( a.id )
+FROM airports a
+INNER JOIN continents c on c.code = a.continent
+GROUP BY a.continent;
+
+-- Count of airports by country
+SELECT c.code,
                c.name,
                count( a.id )
 FROM airports a
 INNER JOIN countries c on c.code = a.iso_country
-GROUP BY a.iso_country;
+--WHERE a.iso_country = 'US'
+GROUP BY a.iso_country
+;
 
+-- List of airport (ident, name) in a country
 SELECT a.ident,
-       a.name
+               a.name
+--               count( a.id )
 FROM airports a
 INNER JOIN countries c on c.code = a.iso_country
 WHERE a.iso_country = 'US'
+--GROUP BY a.iso_country
 ;
 
-SELECT a.iso_region,
+
+-- Number of airports in a specified region
+SELECT r.code,
                r.name,
                count( a.id )
 FROM airports a
 INNER JOIN regions r on r.code = a.iso_region
-GROUP BY a.iso_region;
+WHERE r.code = 'US-GA'
+GROUP BY a.iso_region
+;
 
+-- List of airports in a specified region
 SELECT a.ident,
-       a.name
+               a.name
+--               count( a.id )
 FROM airports a
 INNER JOIN regions r on r.code = a.iso_region
-WHERE r.code = 'US-GA';
+WHERE r.code = 'US-GA'
+--GROUP BY a.iso_region
+;
 */
 
 
@@ -92,22 +121,24 @@ WHERE r.code = 'US-GA';
 )
 @NamedQuery( name="AirportEntity.countAirportsByCountry",
              query="""
-                    SELECT a.iso_country AS countryCode,
-                           c.name,
+                    SELECT new com.example.airline.location.airport.persistence.model.AirportCountInCountryEntity(
+                           c.code AS countryCode,
+                           c.name AS name,
                            COUNT(a.id) AS airportCount
+                           )
                       FROM AirportEntity a
-                    INNER JOIN CountryEntity c ON c.code = a.iso_country
-                    GROUP BY a.iso_country
+                    INNER JOIN CountryEntity c ON c.code = a.isoCountry
+                    GROUP BY a.isoCountry
                     """
 )
 @NamedQuery( name="AirportEntity.countAirportsByRegion",
              query="""
-                SELECT iso_region AS regionCode,
-                        r.name,
-                       COUNT(*) AS airportCount
+                SELECT a.isoRegion AS regionCode,
+                        r.name AS name,
+                       COUNT(a.id) AS airportCount
                   FROM AirportEntity a
-                INNER JOIN RegionEntity r ON r.code = a.iso_region
-                GROUP BY a.iso_region
+                INNER JOIN RegionEntity r ON r.code = a.isoRegion
+                GROUP BY a.isoRegion
                 """
 )
 public class AirportEntity // extends Auditable<String>
