@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
+//import com.example.airline.location.airport.persistence.model.AirportCountInContinentEntity;
 
 /*
 SELECT continent, COUNT(ident) from Airports GROUP BY continent;
@@ -35,6 +35,36 @@ SELECT iso_country, COUNT(ident) from Airports GROUP BY iso_country;
 SELECT iso_region, COUNT(ident) from Airports GROUP BY iso_region;
 
  */
+
+/*
+SELECT a.iso_country,
+               c.name,
+               count( a.id )
+FROM airports a
+INNER JOIN countries c on c.code = a.iso_country
+GROUP BY a.iso_country;
+
+SELECT a.ident,
+       a.name
+FROM airports a
+INNER JOIN countries c on c.code = a.iso_country
+WHERE a.iso_country = 'US'
+;
+
+SELECT a.iso_region,
+               r.name,
+               count( a.id )
+FROM airports a
+INNER JOIN regions r on r.code = a.iso_region
+GROUP BY a.iso_region;
+
+SELECT a.ident,
+       a.name
+FROM airports a
+INNER JOIN regions r on r.code = a.iso_region
+WHERE r.code = 'US-GA';
+*/
+
 
 /**
  * Entity definition for the {@code Airport} table.
@@ -50,18 +80,36 @@ SELECT iso_region, COUNT(ident) from Airports GROUP BY iso_region;
 @SuppressWarnings( "PMD.TooManyFields" )
 @NamedQuery( name="AirportEntity.countAirportsByContinent",
              query="""
-                    SELECT a.continent AS continentCode,
-                           c.name AS name,
-                           COUNT(a.id) AS airportCount
+                    SELECT new com.example.airline.location.airport.persistence.model.AirportCountInContinentEntity(
+                        a.continent AS continentCode,
+                        c.name AS name,
+                        COUNT(a.id) AS airportCount
+                        )
                       FROM AirportEntity a
                     INNER JOIN ContinentEntity c ON c.code = a.continent
-                    GROUP BY continent
+                    GROUP BY a.continent
                     """
-           )
+)
 @NamedQuery( name="AirportEntity.countAirportsByCountry",
-             query="SELECT isoCountry AS countryCode, COUNT(*) AS airportCount FROM AirportEntity GROUP BY isoCountry" )
+             query="""
+                    SELECT a.iso_country AS countryCode,
+                           c.name,
+                           COUNT(a.id) AS airportCount
+                      FROM AirportEntity a
+                    INNER JOIN CountryEntity c ON c.code = a.iso_country
+                    GROUP BY a.iso_country
+                    """
+)
 @NamedQuery( name="AirportEntity.countAirportsByRegion",
-             query="SELECT isoRegion AS regionCode, COUNT(*) AS airportCount FROM AirportEntity GROUP BY isoRegion" )
+             query="""
+                SELECT iso_region AS regionCode,
+                        r.name,
+                       COUNT(*) AS airportCount
+                  FROM AirportEntity a
+                INNER JOIN RegionEntity r ON r.code = a.iso_region
+                GROUP BY a.iso_region
+                """
+)
 public class AirportEntity // extends Auditable<String>
 {
     /**

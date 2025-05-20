@@ -99,17 +99,12 @@ public class AirportService
     {
         List<AirportCountInContinentEntity> entities = repository.countAirportsByContinent();
 
-        for( AirportCountInContinentEntity item : entities )
-        {
-            log.error( String.format( "continent: %s (%s)  count: %d from  [%s]", item.getName(), item.getContinentCode(), item.getAirportCount(), item ) );
-        }
-
-//        entities.forEach( item -> {
-//            log.error( item );
-//        });
+//        for( AirportCountInContinentEntity item : entities )
+//        {
+//            log.error( String.format( "continent: %s (%s)  count: %d from  [%s]", item.getName(), item.getContinentCode(), item.getAirportCount(), item ) );
+//        }
 
         return mapper.entityToDomainAirportsInContinent( entities );
-//        return mapper.entityToDomainAirportsInContinent( repository.countAirportsByContinent() );
     }
 
 //    public List<AirportCountInCountry> countAirportsByCountry()
