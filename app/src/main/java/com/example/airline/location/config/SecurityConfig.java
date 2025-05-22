@@ -21,7 +21,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @EnableWebSecurity( debug = true )
 @Log4j2
-public class SecurityConfig
+public class SecurityConfig         // TODO create security tests
 {
     public SecurityConfig()
     {

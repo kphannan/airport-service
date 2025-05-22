@@ -418,7 +418,6 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     handleGenericException( final ServletWebRequest request,
                             final Exception exception )
     {
-        log.error( "Catch-all", exception );
         // TODO the MDC should include the traceId (UUID) and log pattern should
 
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.INTERNAL_SERVER_ERROR,
