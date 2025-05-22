@@ -11,6 +11,7 @@ import com.example.airline.location.airport.persistence.model.AirportCountInCoun
 import com.example.airline.location.airport.persistence.model.AirportCountInRegionEntity;
 import com.example.airline.location.airport.persistence.model.AirportEntity;
 // import org.jspecify.annotations.NonNull;
+import com.example.airline.location.airport.persistence.model.AirportSummaryEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -83,7 +84,16 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
     List<AirportCountInContinentEntity> countAirportsByContinent();
 
     // TODO pass country code as argument
-    List<AirportCountInCountryEntity> countAirportsByCountry();
-    // TODO pass region code as argument
-//    List<AirportCountInRegionEntity> countAirportsByRegion();
+    // return list of regions with airport counts by region
+//    List<AirportCountInCountryEntity> countAirportsByCountry( String countryCode );
+
+    List<AirportCountInCountryEntity> countCountryAirportsByContinent( String continentCode );
+
+    List<AirportCountInRegionEntity> countAirportsByRegion( String regionCode );
+
+    List<AirportSummaryEntity> findSummaryByContinent( String continentCode );
+
+    List<AirportSummaryEntity> findSummaryByCountry( String isoCountry );
+
+    List<AirportSummaryEntity> findSummaryByRegion( String isoRegion );
 }

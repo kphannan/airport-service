@@ -16,5 +16,6 @@ public class AirportCountInRegion
      */
     @NonNull
     private String regionCode;
+    private String name;
     private long   airportCount;
 }

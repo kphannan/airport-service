@@ -13,6 +13,7 @@ import com.example.airline.location.airport.model.AirportCountInRegion;
 import com.example.airline.location.airport.model.Airport;
 import com.example.airline.location.airport.persistence.model.AirportCountInContinentEntity;
 import com.example.airline.location.airport.persistence.model.AirportEntity;
+import com.example.airline.location.airport.persistence.model.AirportSummaryEntity;
 import com.example.airline.location.airport.persistence.repository.AirportRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -99,23 +100,40 @@ public class AirportService
     {
         List<AirportCountInContinentEntity> entities = repository.countAirportsByContinent();
 
-//        for( AirportCountInContinentEntity item : entities )
-//        {
-//            log.error( String.format( "continent: %s (%s)  count: %d from  [%s]", item.getName(), item.getContinentCode(), item.getAirportCount(), item ) );
-//        }
-
         return mapper.entityToDomainAirportsInContinent( entities );
     }
 
-    public List<AirportCountInCountry> countAirportsByCountry()
+
+    public List<AirportCountInCountry> countCountryAirportsByContinent( final String countryCode )
     {
-        return mapper.entityToDomainAirportsInCountry( repository.countAirportsByCountry() );
+        return mapper.entityToDomainAirportsInCountry( repository.countCountryAirportsByContinent( countryCode ) );
     }
 
-    //    public List<AirportCountInRegion> countAirportsByRegion()
+//    public List<AirportCountInCountry> countAirportsByCountry( final String countryCode )
 //    {
-//        return mapper.entityToDomain( repository.countAirportsByRegion() );
+//        return mapper.entityToDomainAirportsInCountry( repository.countAirportsByCountry( countryCode ) );
 //    }
+
+    public List<AirportCountInRegion> countAirportsByRegion( final String regionCode )
+    {
+        return mapper.entityToDomainAirportsInRegion( repository.countAirportsByRegion( regionCode ) );
+    }
+
+    public List<AirportSummaryEntity> findSummaryByContinent( String continent )
+    {
+        return List.of();
+    }
+
+    public List<AirportSummaryEntity> findSummaryByCountry( String isoCountry )
+    {
+        return List.of();
+    }
+
+    public List<AirportSummaryEntity> findSummaryByRegion( String isoRegion )
+    {
+        return List.of();
+    }
+
 
 
 
@@ -141,6 +159,9 @@ public class AirportService
         // TODO should probably think about handling null here though it shouldn't ever happen.
         return entities.map( mapper::entityToDomain );
     }
+
+
+
 
 
 

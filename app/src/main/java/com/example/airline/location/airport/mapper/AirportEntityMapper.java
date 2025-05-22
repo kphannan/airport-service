@@ -37,6 +37,7 @@ public interface AirportEntityMapper
     List<Airport> entityToDomain( List<AirportEntity> entities );
     List<AirportCountInContinent> entityToDomainAirportsInContinent( List<AirportCountInContinentEntity> entities );
     List<AirportCountInCountry> entityToDomainAirportsInCountry( List<AirportCountInCountryEntity> entities );
+    List<AirportCountInRegion> entityToDomainAirportsInRegion( List<AirportCountInRegionEntity> entities );
 
     // --- Domain --> Persistence ---
     // --- Instance
