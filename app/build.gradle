@@ -31,7 +31,7 @@ configurations {
         extendsFrom annotationProcessor
     }
 
-    integrationTestImplementation.extendsFrom testImplementation
+    // integrationTestImplementation.extendsFrom testImplementation
 }
 
 
@@ -79,7 +79,7 @@ dependencies {
 
     testImplementation( "org.springframework.boot:spring-boot-starter-test" )
     // --- BDD
-    testImplementation( "io.karatelabs:karate-junit5:${karateVersion}" )
+    // testImplementation( "io.karatelabs:karate-junit5:${karateVersion}" )
 }
 
 
