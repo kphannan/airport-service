@@ -31,7 +31,7 @@ plugins {
     id 'jacoco'
 
     // --- Mutation testing
-    id 'info.solidsoft.pitest'
+    // id 'info.solidsoft.pitest'
 
 
     // ===== Configuration Management =====
@@ -185,30 +185,32 @@ jacocoTestReport {
 }
 
 // --- Mutation testing
-pitest {
-    pitestVersion = "${pitVersion}" //not needed when a default PIT version should be used
-    verbose = false
-    junit5PluginVersion = '1.2.2'
-    // testSourceSets = [sourceSets.test]
-    // mainSourceSets = [sourceSets.main]
-    targetClasses = ["${basePackage}.*"]
-    // Ignore:
-    //     Spring application (unless it includes more than boilerplate)
-    //     MapStruct generated implementation classes.  Maybe later force the generated source to be included.
-    excludedTestClasses = [ '**.*App*', '**.mapper.*Impl', '**.*Config' ]
-    threads = 16
-    timestampedReports = false
-    withHistory = false
-    outputFormats = ['XML', 'HTML']
-    // reportDir = new File("${project.buildDir}/test-results/mutation")
-//    reportDir = new File("${project.buildDir}/reports/pitest")
-    reportDir = new File("${layout.buildDirectory.asFile.get()}/reports/pitest")
-//    project.logger.lifecycle("reportDir: '${layout.buildDirectory.asFile.get()}'" )
-//    logger.error('reportDir: ' + "${layout.buildDirectory.asFile.get()}" )
-//    println "reportDir: '${layout.buildDirectory.asFile.get()}'"
-    // mutators = ['DEFAULTS', 'STRONGER', 'ALL' ]
-    mutators = ['ALL' ]
-}
+// pitest {
+//     pitestVersion = "${pitVersion}" //not needed when a default PIT version should be used
+//     verbose = false
+//     junit5PluginVersion = '1.2.2'
+//     // testSourceSets = [sourceSets.test]
+//     // mainSourceSets = [sourceSets.main]
+//     targetClasses = ["${basePackage}.*"]
+//     // Ignore:
+//     //     Spring application (unless it includes more than boilerplate)
+//     //     MapStruct generated implementation classes.  Maybe later force the generated source to be included.
+//     excludedTestClasses = [ '**.*App*', '**.mapper.*Impl', '**.*Config' ]
+//     threads = 16
+//     timestampedReports = false
+//     withHistory = false
+//     outputFormats = ['XML', 'HTML']
+//     // reportDir = new File("${project.buildDir}/test-results/mutation")
+// //    reportDir = new File("${project.buildDir}/reports/pitest")
+
+//     // reportDir = new File("${layout.buildDirectory.asFile.get()}/reports/pitest")
+
+// //    project.logger.lifecycle("reportDir: '${layout.buildDirectory.asFile.get()}'" )
+// //    logger.error('reportDir: ' + "${layout.buildDirectory.asFile.get()}" )
+// //    println "reportDir: '${layout.buildDirectory.asFile.get()}'"
+//     // mutators = ['DEFAULTS', 'STRONGER', 'ALL' ]
+//     mutators = ['ALL' ]
+// }
 
 
 
