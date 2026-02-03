@@ -25,6 +25,7 @@ import org.jspecify.annotations.Nullable;
 @Data
 @AllArgsConstructor
 @Builder
+@SuppressWarnings( "PMD.TooManyFields" )
 public class AirportDTO
 {
     /**

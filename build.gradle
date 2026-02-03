@@ -29,7 +29,7 @@ buildscript {
         checkstyleVersion           = '13.1.0'
 
         // --- Common Coding flaws
-        pmdVersion                  = '7.12.0'
+        pmdVersion                  = '7.21.0'
 
         spotbugsVersion             = '6.0.26'
 
