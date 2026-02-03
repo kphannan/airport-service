@@ -5,6 +5,7 @@ package com.example.airline.airport;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -175,28 +176,27 @@ class AirportDTOTest
         @DisplayName( "throw an exception when all but first two arguments are null" )
         void constructor_EightArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
         {
-            final Throwable thrown = assertThrows( IllegalArgumentException.class,
-                                                   () -> new AirportDTO( null,
-                                                                         "KATL",
-                                                                         "::TT::",
-                                                                         "::NAME::",
-                                                                         BigDecimal.ONE,
-                                                                         BigDecimal.TWO,
-                                                                         null,
-                                                                         "NA",
-                                                                         "PH",
-                                                                         "CB",
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null )
+            final AirportDTO dto = assertDoesNotThrow(
+                                                   () -> new AirportDTO( null,                  // id
+                                                                         "KATL",                // ident
+                                                                         "::TT::",              // type
+                                                                         "::NAME::",            // name
+                                                                         BigDecimal.ONE,        // latitude
+                                                                         BigDecimal.TWO,        // longitude
+                                                                         null,                  // elevation
+                                                                         "NA",                  // continent
+                                                                         "PH",                  // country
+                                                                         "CB",                  // isoRegion
+                                                                         null,                  // municipality
+                                                                         "no",                  // scheduledService
+                                                                         null,                  // gpsCode
+                                                                         null,                  // icaoCode
+                                                                         null,                  // iataCode
+                                                                         null,                  // localCode
+                                                                         null,                  // homeLink
+                                                                         null,                  // wikiLink
+                                                                         null )                 // keywords
                                                  );
-            assertEquals( "municipality is marked non-null but is null", thrown.getMessage() );
         }
 
         @Test

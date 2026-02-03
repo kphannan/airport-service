@@ -36,7 +36,7 @@ public class UriConverter implements AttributeConverter<URI, String>
         catch ( Exception ex )
         {
             log.error( String.format( "Error creating URI for '%s'", dbData ), ex );
-            return null;
+            throw ex;
         }
     }
 }
