@@ -57,11 +57,13 @@ spring-boot-logging = { module = 'org.springframework.boot:spring-boot-starter-l
 # Persistence
 spring-boot-starter-jpa = { module = 'org.springframework.boot:spring-boot-starter-data-jpa', version.ref = 'springBootVersion' }
 hibernate-validation = { module = 'org.hibernate.validator:hibernate-validator', version.ref = 'hibernateVersion' }
+# Security
+spring-boot-starter-security = { group = 'org.springframework.boot', name = 'spring-boot-starter-security', version.ref = 'springBootVersion' }
+
 
 # spring-boot-starter = { module = 'org.springframework.boot:spring-boot-starter', version.ref = 'springBootVersion' }
 # spring-boot-starter-test = { group = 'org.springframework.boot', name = 'spring-boot-starter-test', version.ref = 'springBootVersion' }
 # # spring-boot-starter-aop = { group = 'org.springframework.boot', name = 'spring-boot-starter-aop', version.ref = 'springBootVersion' }
-# spring-boot-starter-security = { group = 'org.springframework.boot', name = 'spring-boot-starter-security', version.ref = 'springBootVersion' }
 # # spring-boot-starter-cache = { group = 'org.springframework.boot', name = 'spring-boot-starter-cache', version.ref = 'springBootVersion' }
 # # spring-boot-starter-mail = { group = 'org.springframework.boot', name = 'spring-boot-starter-mail', version.ref = 'springBootVersion' }
 # spring-boot-starter-data-rest = { group = 'org.springframework.boot', name = 'spring-boot-starter-data-rest', version.ref = 'springBootVersion' }
@@ -118,10 +120,11 @@ datasource-proxy-spring-boot-starter = { module = 'com.github.gavlyukovskiy:data
 [bundles]
 spring-boot-base = [
 
-    # 'spring-boot-starter',
+    'spring-boot-starter',
     'spring-boot-starter-actuator',
     # 'spring-boot-validation',
     'spring-boot-starter-web',
+    'spring-boot-starter-security',
     'spring-boot-logging',
     'jackson-databind',
     'jackson-dataformat-yaml',

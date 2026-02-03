@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: "00037"
+      author: kevin
+      changes:
+
+        # Fix missing municipality in Airports table
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql:
+              UPDATE airports set municipality = 'Dunkirk' WHERE ident = 'US-12492';
+              UPDATE airports set municipality = 'Sargent''s Purchase', wikipedia_link = 'https://en.wikipedia.org/wiki/Mount_Washington_Observatory', home_link = 'https://mountwashington.org' WHERE ident = 'KMWN';
+              UPDATE airports set municipality = 'Dunkirk' WHERE ident = 'US-12492';
+              UPDATE airports set municipality = 'Klickitat County' WHERE ident = 'US-8785';
+              UPDATE airports set home_link = 'https://osceolaaero.com' WHERE ident = 'KOEO';
+              UPDATE airports set home_link = 'https://ci.merrill.wi.us/airport' WHERE ident = 'KRRL';
+
+

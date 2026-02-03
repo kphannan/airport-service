@@ -12,7 +12,12 @@ import org.jspecify.annotations.Nullable;
 
 // TODO change code to a 2 character code...
 
-
+// Dataset download https://www.ip2location.com/free/iso3166-2
+// https://pypi.org/project/iso3166-2/
+// https://github.com/stefangabos/world_countries/blob/master/data/subdivisions/subdivisions.csv
+// https://www.geonames.org/countries/
+// https://www.statoids.com
+// https://unstats.un.org/unsd/methodology/m49/overview/
 
 /**
  * Domain model object representing a single geographic Region.

@@ -69,7 +69,7 @@ public class GlobalExceptionHandlerTest
             void exceptionMediaType_notSupported_formatsProblemDetails()
             {
                 // --- given
-                List<MediaType> supported = List.of( MediaType.APPLICATION_JSON, MediaType.APPLICATION_YAML );
+                final List<MediaType> supported = List.of( MediaType.APPLICATION_JSON, MediaType.APPLICATION_YAML );
                 final HttpMediaTypeNotSupportedException exception =
                         new HttpMediaTypeNotSupportedException( MediaType.APPLICATION_RSS_XML,
                                                                 supported,
@@ -79,9 +79,9 @@ public class GlobalExceptionHandlerTest
 
 
                 // --- when
-                ResponseEntity<ProblemDetail> result =
+                final ResponseEntity<ProblemDetail> result =
                     handler.handleUnsupportedMediaTypeException( request, exception );
-                ProblemDetail detail = result.getBody();
+                final ProblemDetail detail = result.getBody();
 
                 // --- then
                 // NullPointerExceptions are a form of test failure.
@@ -106,14 +106,14 @@ public class GlobalExceptionHandlerTest
             void exceptionMediaType_notAcceptable_formatsProblemDetails()
             {
                 // --- given
-                List<MediaType> supported = List.of( MediaType.APPLICATION_JSON, MediaType.APPLICATION_YAML );
+                final List<MediaType> supported = List.of( MediaType.APPLICATION_JSON, MediaType.APPLICATION_YAML );
                 final HttpMediaTypeNotAcceptableException exception =
                         new HttpMediaTypeNotAcceptableException( supported );
 
                 // --- when
-                ResponseEntity<ProblemDetail> result =
+                final ResponseEntity<ProblemDetail> result =
                         handler.handleUnacceptableMediaTypeException( request, exception );
-                ProblemDetail detail = result.getBody();
+                final ProblemDetail detail = result.getBody();
 
                 // --- then
                 assertAll( () -> assertNotNull( result ),
@@ -132,7 +132,7 @@ public class GlobalExceptionHandlerTest
             void exceptionMediaType_notMediaTypeException_formatsProblemDetails()
             {
                 // --- given
-                List<MediaType> supported = List.of( MediaType.APPLICATION_JSON, MediaType.APPLICATION_YAML );
+                final List<MediaType> supported = List.of( MediaType.APPLICATION_JSON, MediaType.APPLICATION_YAML );
                 final HttpMediaTypeException exception =
                         new HttpMediaTypeException( "Kilroy was here", supported, "detail code", null ) {
                             @Override
@@ -143,9 +143,9 @@ public class GlobalExceptionHandlerTest
                         };
 
                 // --- when
-                ResponseEntity<ProblemDetail> result =
+                final ResponseEntity<ProblemDetail> result =
                         handler.handleMediaTypeException( request, exception );
-                ProblemDetail detail = result.getBody();
+                final ProblemDetail detail = result.getBody();
 
                 // --- then
                 assertAll( () -> assertNotNull( result ),
@@ -174,9 +174,9 @@ public class GlobalExceptionHandlerTest
                         new NoResourceFoundException( HttpMethod.GET, "/some/resource/path" );
 
                 // --- when
-                ResponseEntity<ProblemDetail> result =
+                final ResponseEntity<ProblemDetail> result =
                         handler.handleResourceNotFoundException( request, exception );
-                ProblemDetail detail = result.getBody();
+                final ProblemDetail detail = result.getBody();
 
                 // --- then
                 assertAll( () -> assertNotNull( result ),
@@ -201,9 +201,9 @@ public class GlobalExceptionHandlerTest
                         new HttpRequestMethodNotSupportedException( "GET", List.of( "PUT", "POST", "DELETE") );
 
                 // --- when
-                ResponseEntity<ProblemDetail> result =
+                final ResponseEntity<ProblemDetail> result =
                         handler.handleMethodNotSupportedException( request, exception );
-                ProblemDetail detail = result.getBody();
+                final ProblemDetail detail = result.getBody();
 
                 // --- then
                 assertAll( () -> assertNotNull( result ),
@@ -243,9 +243,9 @@ public class GlobalExceptionHandlerTest
                         new HttpMessageNotReadableException( "Test exception", input );
 
                 // --- when
-                ResponseEntity<ProblemDetail> result =
+                final ResponseEntity<ProblemDetail> result =
                         handler.handleMessageNotReadableException( request, exception );
-                ProblemDetail detail = result.getBody();
+                final ProblemDetail detail = result.getBody();
 
                 // --- then
                 assertAll( () -> assertNotNull( result ),
@@ -279,9 +279,9 @@ public class GlobalExceptionHandlerTest
                         new HttpMessageNotWritableException( "Test writable exception" );
 
                 // --- when
-                ResponseEntity<ProblemDetail> result =
+                final ResponseEntity<ProblemDetail> result =
                         handler.handleMessageNotWritableException( request, exception );
-                ProblemDetail detail = result.getBody();
+                final ProblemDetail detail = result.getBody();
 
                 // --- then
                 assertAll( () -> assertNotNull( result ),
@@ -306,9 +306,9 @@ public class GlobalExceptionHandlerTest
                         new MissingServletRequestParameterException( "Param1", "String" );
 
                 // --- when
-                ResponseEntity<ProblemDetail> result =
+                final ResponseEntity<ProblemDetail> result =
                         handler.handleMissingServletRequestParameterException( request, exception );
-                ProblemDetail detail = result.getBody();
+                final ProblemDetail detail = result.getBody();
 
 //                var props = detail.getProperties();
 //                for ( Object o : props.values() )
@@ -338,9 +338,9 @@ public class GlobalExceptionHandlerTest
                         new MethodArgumentTypeMismatchException( "value", ArrayList.class, "name", null, null );
 
                 // --- when
-                ResponseEntity<ProblemDetail> result =
+                final ResponseEntity<ProblemDetail> result =
                         handler.handleMethodArgumentTypeMismatchException( request, exception );
-                ProblemDetail detail = result.getBody();
+                final ProblemDetail detail = result.getBody();
 
                 // --- then
                 assertAll( () -> assertNotNull( result ),
@@ -363,15 +363,15 @@ public class GlobalExceptionHandlerTest
             void exceptionValidation_constraints_formatsProblemDetails()
             {
                 // --- given
-                Set<ConstraintViolation<?>> constraintViolations = new HashSet<>();
+                final Set<ConstraintViolation<?>> constraintViolations = new HashSet<>();
                 constraintViolations.add( buildConstraintViolation() );
                 final ConstraintViolationException exception =
                         new ConstraintViolationException( "Constraint violation message", constraintViolations );
 
                 // --- when
-                ResponseEntity<ProblemDetail> result =
+                final ResponseEntity<ProblemDetail> result =
                         handler.handleConstraintViolations( request, exception );
-                ProblemDetail detail = result.getBody();
+                final ProblemDetail detail = result.getBody();
 
                 // --- then
                 assertAll( () -> assertNotNull( result ),
@@ -481,12 +481,12 @@ public class GlobalExceptionHandlerTest
                         new Exception( "Catch all test", new Exception( "Test Cause" ) );
 
                 // --- when
-                ResponseEntity<ProblemDetail> result =
+                final ResponseEntity<ProblemDetail> result =
                         handler.handleGenericException( request, exception );
-                ProblemDetail detail = result.getBody();
+                final ProblemDetail detail = result.getBody();
 
                 // --- then
-                Exception cause = (Exception)detail.getProperties().get( "Cause" );
+                final Exception cause = (Exception)detail.getProperties().get( "Cause" );
                 assertAll( () -> assertNotNull( result ),
                            () -> assertEquals( "Internal Server Error", detail.getTitle() ),
                            () -> assertEquals( 500, detail.getStatus() ),
@@ -515,14 +515,14 @@ public class GlobalExceptionHandlerTest
         void exceptionPersistence_notFound_formatsProblemDetails()
         {
             // --- given
-            Exception except = new Exception( "Test cause" );
+            final Exception except = new Exception( "Test cause" );
             final EntityNotFoundException exception =
                     new EntityNotFoundException( "Dummy message", except );
 
             // --- when
-            ResponseEntity<ProblemDetail> result =
+            final ResponseEntity<ProblemDetail> result =
                     handler.handleEntityNotFoundException( request, exception );
-            ProblemDetail detail = result.getBody();
+            final ProblemDetail detail = result.getBody();
 
             // --- then
             assertAll( () -> assertNotNull( result ),

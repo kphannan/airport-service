@@ -3,12 +3,19 @@
 package com.example.airline.location.airport.api;
 
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
+import com.example.airline.airport.AirportCountInContinentDTO;
+import com.example.airline.airport.AirportCountInCountryDTO;
+import com.example.airline.airport.AirportCountInRegionDTO;
 import com.example.airline.airport.AirportDTO;
 import com.example.airline.location.airport.mapper.AirportDtoMapper;
 import com.example.airline.location.airport.model.Airport;
+import com.example.airline.location.airport.model.AirportCountInContinent;
+import com.example.airline.location.airport.model.AirportCountInCountry;
+import com.example.airline.location.airport.model.AirportCountInRegion;
 import com.example.airline.location.airport.service.AirportService;
 import com.example.airline.location.config.GlobalApiResponses;
 import com.example.airline.location.config.GlobalApiSecurityResponses;
@@ -75,19 +82,21 @@ public class AirportController
                     }
                 )
             },
-            parameters = { @Parameter( name = "id", required = true, in = ParameterIn.PATH, description = "Primary Key" ),
+            parameters = { @Parameter( name = "id", required = true,
+                                       in = ParameterIn.PATH,
+                                       description = "Primary Key" ),
                            @Parameter( name = "Bearer", required = false,
-                                   schema = @Schema( implementation = String.class ),
-                                   in = ParameterIn.HEADER,
-                                   description = "Authentication / Authorization token" ),
+                                       schema = @Schema( implementation = String.class ),
+                                       in = ParameterIn.HEADER,
+                                       description = "Authentication / Authorization token" ),
                            @Parameter( name = "TRACEPARENT", required = false,
-                                   schema = @Schema( implementation = String.class ),
-                                   in = ParameterIn.HEADER,
-                                   description = "Distributed tracing identifier" ),
+                                       schema = @Schema( implementation = String.class ),
+                                       in = ParameterIn.HEADER,
+                                       description = "Distributed tracing identifier" ),
                            @Parameter( name = "TRACESTATE", required = false,
-                                   schema = @Schema( implementation = String.class ),
-                                   in = ParameterIn.HEADER,
-                                   description = "Vendor specific trace identification" )
+                                       schema = @Schema( implementation = String.class ),
+                                       in = ParameterIn.HEADER,
+                                       description = "Vendor specific trace identification" )
             }
     )
     @GetMapping( "/{id}" )
@@ -123,6 +132,101 @@ public class AirportController
         // may include instance in header.....
         return ResponseEntity.noContent().build();
         // return ResponseEntity.noContent().location().build();
+    }
+
+    @GetMapping( "/summary/continent/code" )
+    public ResponseEntity<List<AirportCountInContinentDTO>> restGetCountAirportsInAllContinents()
+    {
+        final List<AirportCountInContinent> counts = service.countAirportsByContinent();
+
+        final List<AirportCountInContinentDTO> dto = mapper.domainToApiAirportsInContinent( counts );
+
+        return ResponseEntity.ok( dto );
+    }
+
+    // get a list of countries in the continent, with counts of airports in each country
+    @GetMapping( "/summary/continent/code/{continentCode}" )
+    public ResponseEntity<List<AirportCountInCountryDTO>>
+    restGetCountCountryAirportsByContinent( @PathVariable final String continentCode )
+    {
+        final List<AirportCountInCountry> counts = service.countCountryAirportsByContinent( continentCode );
+
+        final List<AirportCountInCountryDTO> dto = mapper.domainToApiAirportsInCountry( counts );
+
+        return ResponseEntity.ok( dto );
+    }
+
+//    @GetMapping( "/summary/country/code/{countryCode}" )
+//    public ResponseEntity<List<AirportCountInCountryDTO>>
+//    restGetCountAirportsByCountry( @PathVariable final String countryCode )
+//    {
+//        final List<AirportCountInCountry> counts = service.countAirportsByCountry( countryCode );
+//
+//        final List<AirportCountInCountryDTO> dto = mapper.domainToApiAirportsInCountry( counts );
+//
+//        return ResponseEntity.ok( dto );
+//    }
+
+//    @GetMapping( "/summary/country/code/{code}" )
+//    public ResponseEntity<AirportCountInCountryDTO>
+//    restGetCountAirportsByCountry( @PathVariable final String code )
+//    {
+//        List<AirportCountInCountryDTO> foo = service.countAirportsByCountry();
+////        final Optional<Airport> optionalEntity = service.findAirportByIdent( code );
+////
+////        if ( optionalEntity.isPresent() )
+////        {
+////            final AirportDTO dto = mapper.domainToApi( optionalEntity.get() );
+////
+////            return ResponseEntity.ok( dto );
+////        }
+//
+//        // may include instance in header.....
+//        return ResponseEntity.noContent().build();
+//        // return ResponseEntity.noContent().location().build();
+//    }
+
+//    @GetMapping( "/summary/region/code/{code}" )
+//    public ResponseEntity<List<AirportCountInRegionDTO>> restGetCountAirportsByRegion( @PathVariable final String code )
+//    {
+//        final List<AirportCountInRegion> counts = service.countAirportsByRegion();
+//
+//        final List<AirportCountInRegionDTO> dto = mapper.domainToApiAirportsInRegion( counts );
+//
+//        return ResponseEntity.ok( dto );
+//    }
+
+    @GetMapping( "/summary/country/code/{countryCode}" )
+    public ResponseEntity<List<AirportCountInRegionDTO>>
+    restGetCountAirportsByRegion( @PathVariable final String countryCode )
+    {
+        final List<AirportCountInRegion> counts = service.countRegionAirportsByCountry( countryCode );
+
+        final List<AirportCountInRegionDTO> dto = mapper.domainToApiAirportsInRegion( counts );
+
+        return ResponseEntity.ok( dto );
+    }
+
+//    @GetMapping( "/summary/region/code/{regionCode}" )
+//    public ResponseEntity<List<AirportSummaryDTO>>
+//    restGetAirportsSummariesByRegion( @PathVariable final String regionCode )
+//    {
+//        final List<AirportSummary> counts = service.countRegionAirportsByCountry( regionCode );
+//
+//        final List<AirportSummaryDTO> dto = mapper.domainToApiAirportsInRegion( counts );
+//
+//        return ResponseEntity.ok( dto );
+//    }
+
+    @GetMapping( "/summary/region/code/{regionCode}" )
+    public ResponseEntity<List<AirportDTO>>
+    restGetAirportsByRegion( @PathVariable final String regionCode )
+    {
+        final List<Airport> counts = service.findAirportsByRegion( regionCode );
+
+        final List<AirportDTO> dto = mapper.domainToApi( counts );
+
+        return ResponseEntity.ok( dto );
     }
 
 

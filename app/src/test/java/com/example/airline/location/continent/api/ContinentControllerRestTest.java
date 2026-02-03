@@ -36,6 +36,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpHeaders;
@@ -48,15 +49,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+//import org.springframework.transaction.support.TransactionTemplate;
 
 
 /**
  * Tests for the REST endpoints only, no underlying Service or Repository.
  */
 //@ExtendWith( SpringExtension.class )
-//@WebMvcTest( value = ContinentController.class, excludeFilters = @ComponentScan.Filter( type = FilterType.ANNOTATION, classes = Repository.class ) )
 @WebMvcTest( controllers = ContinentController.class )
 @ComponentScan( basePackages = { "com.example.airline.location.continent" } )
+@AutoConfigureMockMvc( addFilters = false /*, secure = false */ )
 class ContinentControllerRestTest
 {
     @Autowired
@@ -73,12 +75,17 @@ class ContinentControllerRestTest
     @MockitoBean
     private ContinentRepository repository;
 
-    // TODO Excludes don't seem to work either as a REGEX, or @Repository annotation or explicitly listed
+//    @Autowired
+//    private TransactionTemplate transactionTemplate;
 
 
+
+    /**
+     * Tests for the GET http method.
+     */
     @Nested
     @DisplayName( "/continent - HTTP GET" )
-    class Get
+    class GetMethod
     {
         @Test
         void restGetById_withId_returnsItem() throws Exception
@@ -293,9 +300,13 @@ class ContinentControllerRestTest
         }
     }
 
+
+    /**
+     * Tests for the POST http method.
+     */
     @Nested
     @DisplayName( "/continent - HTTP POST" )
-    class Post
+    class PostMethod
     {
         @Test
         void restPut_withExisting_returnsConflict() throws Exception
@@ -337,7 +348,7 @@ class ContinentControllerRestTest
         void restPut_withNew_returnsCreated() throws Exception
         {
             // --- given
-            ContinentEntity entity = new ContinentEntity( 22, "CC", "::ZNAMEZ::", null, null );
+            final ContinentEntity entity = new ContinentEntity( 22, "CC", "::ZNAMEZ::", null, null );
             final String jsonString =
                     """
                             {
@@ -497,16 +508,21 @@ class ContinentControllerRestTest
         }
     }
 
+
+
+    /**
+     * Tests for the PUT http method.
+     */
     @Nested
     @DisplayName( "/continent - HTTP PUT" )
-    class Put
+    class PutMethod
     {
         @Test
         @DisplayName( "can't create a new instance" )
         void restPut_withNewEntity_returnsConflict() throws Exception
         {
             // --- given
-            ContinentEntity entity = new ContinentEntity( 22, "ZZ", "::ZNAMEZ::", null, null );
+            final ContinentEntity entity = new ContinentEntity( 22, "ZZ", "::ZNAMEZ::", null, null );
             final String jsonString =
                     """
                             {
@@ -543,7 +559,7 @@ class ContinentControllerRestTest
         void restPut_withExistingEntity_returnsOK() throws Exception
         {
             // --- given
-            ContinentEntity entity = new ContinentEntity( 22, "ZZ", "::ZNAMEZ::", null, null );
+            final ContinentEntity entity = new ContinentEntity( 22, "ZZ", "::ZNAMEZ::", null, null );
             final String jsonString =
                     """
                             {
@@ -593,9 +609,14 @@ class ContinentControllerRestTest
 //        }
 //    }
 
+
+
+    /**
+     * Tests for the DELETE http method.
+     */
     @Nested
     @DisplayName( "/continent - HTTP DELETE" )
-    class Delete
+    class DeleteMethod
     {
         @Test
         void restDeleteById_withId_returnsGone() throws Exception
@@ -647,15 +668,25 @@ class ContinentControllerRestTest
         }
     }
 
+
+
+    /**
+     * Tests for the PATCH http method.
+     */
     @Nested
     @DisplayName( "/continent - HTTP PATCH" )
-    class Patch
+    class PatchMethod
     {
     }
 
+
+
+    /**
+     * Tests for the INFO http method.
+     */
     @Nested
     @DisplayName( "/continent - HTTP INFO" )
-    class Info
+    class InfoMethod
     {
        // @Test
        // void restTrace_returnsNoContent() throws Exception
@@ -678,9 +709,14 @@ class ContinentControllerRestTest
        // }
     }
 
+
+
+    /**
+     * Tests for the TRACE http method.
+     */
     @Nested
     @DisplayName( "/continent - HTTP TRACE" )
-    class Trace
+    class TraceMethod
     {
         @Test
         void restTrace_returnsOk() throws Exception
@@ -701,9 +737,12 @@ class ContinentControllerRestTest
         }
     }
 
+    /**
+     * Tests for the HEAD http method.
+     */
     @Nested
     @DisplayName( "/continent - HTTP HEAD" )
-    class Head
+    class HeadMethod
     {
         @Test
         void restHead_returnsNoContent() throws Exception
@@ -725,9 +764,12 @@ class ContinentControllerRestTest
         }
     }
 
+    /**
+     * Tests for the OPTIONS http method.
+     */
     @Nested
     @DisplayName( "/continent - HTTP OPT" )
-    class Opt
+    class OptionsMethod
     {
         @Test
         void restOptions_returnsHeaders() throws Exception

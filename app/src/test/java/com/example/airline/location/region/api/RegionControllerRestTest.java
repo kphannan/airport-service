@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.Page;
@@ -44,6 +45,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 
 @WebMvcTest( controllers = RegionsController.class )
 @ComponentScan( basePackages = { "com.example.airline.location.region" } )
+@AutoConfigureMockMvc( addFilters = false )
 class RegionControllerRestTest //extends RestControllerTestBase
 {
     @Autowired
@@ -58,7 +60,7 @@ class RegionControllerRestTest //extends RestControllerTestBase
 
     @Nested
     @DisplayName( "/region - HTTP GET" )
-    class Get
+    class GetMethod
     {
         @Test
         void restGetById_withValidId_returnsItem() throws Exception
@@ -235,43 +237,43 @@ class RegionControllerRestTest //extends RestControllerTestBase
 
     @Nested
     @DisplayName( "/region - HTTP POST" )
-    class Post
+    class PostMethod
     {
     }
 
     @Nested
     @DisplayName( "/region - HTTP PUT" )
-    class Put
+    class PutMethod
     {
     }
 
     @Nested
     @DisplayName( "/region - HTTP DELETE" )
-    class Delete
+    class DeleteMethod
     {
     }
 
     @Nested
     @DisplayName( "/region - HTTP PATCH" )
-    class Patch
+    class PatchMethod
     {
     }
 
     @Nested
     @DisplayName( "/region - HTTP INFO" )
-    class Info
+    class InfoMethod
     {
     }
 
     @Nested
     @DisplayName( "/region - HTTP HEAD" )
-    class Head
+    class HeadMethod
     {
     }
 
     @Nested
     @DisplayName( "/region - HTTP OPT" )
-    class Opt
+    class OptionsMethod
     {
     }
 

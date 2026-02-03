@@ -28,9 +28,9 @@ public interface ContinentRepository extends JpaRepository<ContinentEntity, Inte
      * @return true if the continent is found, false otherwise.
      */
     @Override
-    boolean existsById( final Integer continentId );
+    boolean existsById( Integer continentId );
 
-    boolean existsByCode( final String continentCode );
+    boolean existsByCode( String continentCode );
 
     /**
      * Retrieve all {@code Continent} records.
@@ -93,7 +93,18 @@ public interface ContinentRepository extends JpaRepository<ContinentEntity, Inte
 
     // ========== Update ==========
     // ========== Delete ==========
+
+    /**
+     * Delete a specific Continent row.
+     *
+     * @param entity must not be {@literal null}.
+     */
     void delete( ContinentEntity entity );
 
+    /**
+     * Delete a Continent row by its primary key.
+     *
+     * @param continentId must not be {@literal null}.
+     */
     void deleteById( Integer continentId );
 }

@@ -14,6 +14,7 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,72 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+
+/*
+SELECT continent, COUNT(ident) from Airports GROUP BY continent;
+
+SELECT iso_country, COUNT(ident) from Airports GROUP BY iso_country;
+
+SELECT iso_region, COUNT(ident) from Airports GROUP BY iso_region;
+
+select ae1_0.continent,count(*) from airports ae1_0 group by ae1_0.continent;
+
+-- Count of airports by continent
+select a.continent,
+           count(a.id)
+from airports a
+INNER JOIN continents c on c.code = a.continent
+group by a.continent;
+
+-- Count of airports by continent with continent (code, name)
+SELECT a.continent,
+               c.name,
+               count( a.id )
+FROM airports a
+INNER JOIN continents c on c.code = a.continent
+GROUP BY a.continent;
+
+-- Count of airports by country
+SELECT c.code,
+               c.name,
+               count( a.id )
+FROM airports a
+INNER JOIN countries c on c.code = a.iso_country
+--WHERE a.iso_country = 'US'
+GROUP BY a.iso_country
+;
+
+-- List of airport (ident, name) in a country
+SELECT a.ident,
+               a.name
+--               count( a.id )
+FROM airports a
+INNER JOIN countries c on c.code = a.iso_country
+WHERE a.iso_country = 'US'
+--GROUP BY a.iso_country
+;
+
+
+-- Number of airports in a specified region
+SELECT r.code,
+               r.name,
+               count( a.id )
+FROM airports a
+INNER JOIN regions r on r.code = a.iso_region
+WHERE r.code = 'US-GA'
+GROUP BY a.iso_region
+;
+
+-- List of airports in a specified region
+SELECT a.ident,
+               a.name
+--               count( a.id )
+FROM airports a
+INNER JOIN regions r on r.code = a.iso_region
+WHERE r.code = 'US-GA'
+--GROUP BY a.iso_region
+;
+*/
 
 
 /**
@@ -39,6 +106,142 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Builder
 @EntityListeners( AuditingEntityListener.class )
 @SuppressWarnings( "PMD.TooManyFields" )
+@NamedQuery( name = "AirportEntity.countAirportsByContinent",
+             query = """
+                    SELECT new com.example.airline.location.airport.persistence.model.AirportCountInContinentEntity(
+                        a.continent AS continentCode,
+                        c.name AS name,
+                        COUNT(a.id) AS airportCount
+                        )
+                      FROM AirportEntity a
+                    INNER JOIN ContinentEntity c ON c.code = a.continent
+                    GROUP BY a.continent
+                    """
+)
+
+@NamedQuery( name = "AirportEntity.countCountryAirportsByContinent",
+             query = """
+                    SELECT new com.example.airline.location.airport.persistence.model.AirportCountInCountryEntity(
+                        ce.code AS countryCode,
+                        ce.name AS name,
+                        COUNT(a.id) AS airportCount
+                        )
+                      FROM AirportEntity a
+                    INNER JOIN CountryEntity ce ON ce.code = a.isoCountry
+                    WHERE a.continent = :continentCode
+                    GROUP BY a.isoCountry
+                    """
+)
+
+
+//@NamedQuery( name = "AirportEntity.countAirportsByCountry",
+//             query = """
+//                    SELECT new com.example.airline.location.airport.persistence.model.AirportCountInCountryEntity(
+//                           c.code AS countryCode,
+//                           c.name AS name,
+//                           COUNT(a.id) AS airportCount
+//                           )
+//                      FROM AirportEntity a
+//                    INNER JOIN CountryEntity c ON c.code = a.isoCountry
+//                    WHERE c.code  = :countryCode
+//                    GROUP BY a.isoCountry
+//                    """
+//)
+@NamedQuery( name = "AirportEntity.countRegionAirportsByCountry",
+             query = """
+                SELECT new com.example.airline.location.airport.persistence.model.AirportCountInRegionEntity(
+                           a.isoRegion AS regionCode,
+                           r.name AS name,
+                           COUNT(a.id) AS airportCount
+                       )
+                  FROM AirportEntity a
+                INNER JOIN RegionEntity r ON r.code = a.isoRegion
+                    WHERE a.isoCountry = :countryCode
+                GROUP BY a.isoRegion
+                """
+)
+@NamedQuery( name = "AirportEntity.countAirportsByRegion",
+             query = """
+                SELECT new com.example.airline.location.airport.persistence.model.AirportCountInRegionEntity(
+                           a.isoRegion AS regionCode,
+                           r.name AS name,
+                           COUNT(a.id) AS airportCount
+                       )
+                  FROM AirportEntity a
+                INNER JOIN RegionEntity r ON r.code = a.isoRegion
+                    WHERE a.continent = :continentCode
+                GROUP BY a.isoRegion
+                """
+)
+@NamedQuery( name = "AirportEntity.findSummaryByContinent",
+             query = """
+                     SELECT new com.example.airline.location.airport.persistence.model.AirportSummaryEntity(
+                              a.ident,
+                              a.name,
+                              cn.code,
+                              cn.name,
+                              ce.code,
+                              ce.name,
+                              re.code,
+                              re.name,
+                              a.municipality,
+                              a.type,
+                              a.scheduledService
+                            )
+                       FROM AirportEntity a
+                     INNER JOIN ContinentEntity cn ON cn.code = a.continent
+                     INNER JOIN CountryEntity ce ON ce.code = a.isoCountry
+                     INNER JOIN RegionEntity re ON re.code = a.isoRegion
+                     WHERE cn.code = :continentCode
+                     """
+)
+//List<AirportSummaryEntity> findSummaryByContinent( String continentCode );
+@NamedQuery( name = "AirportEntity.findSummaryByCountry",
+             query = """
+                     SELECT new com.example.airline.location.airport.persistence.model.AirportSummaryEntity(
+                              a.ident,
+                              a.name,
+                              cn.code,
+                              cn.name,
+                              ce.code,
+                              ce.name,
+                              re.code,
+                              re.name,
+                              a.municipality,
+                              a.type,
+                              a.scheduledService
+                            )
+                       FROM AirportEntity a
+                     INNER JOIN ContinentEntity cn ON cn.code = a.continent
+                     INNER JOIN CountryEntity ce ON ce.code = a.isoCountry
+                     INNER JOIN RegionEntity re ON re.code = a.isoRegion
+                     WHERE ce.code = :countryCode
+                     """
+)
+//List<AirportSummaryEntity> findSummaryByCountry( String isoCountry );
+@NamedQuery( name = "AirportEntity.findSummaryByRegion",
+             query = """
+                     SELECT new com.example.airline.location.airport.persistence.model.AirportSummaryEntity(
+                              a.ident,
+                              a.name,
+                              cn.code,
+                              cn.name,
+                              ce.code,
+                              ce.name,
+                              re.code,
+                              re.name,
+                              a.municipality,
+                              a.type,
+                              a.scheduledService
+                            )
+                       FROM AirportEntity a
+                     INNER JOIN ContinentEntity cn ON cn.code = a.continent
+                     INNER JOIN CountryEntity ce ON ce.code = a.isoCountry
+                     INNER JOIN RegionEntity re ON re.code = a.isoRegion
+                     WHERE re.code = :regionCode
+                     """
+)
+//List<AirportSummaryEntity> findSummaryByRegion( String isoRegion );
 public class AirportEntity // extends Auditable<String>
 {
     /**
@@ -129,7 +332,8 @@ public class AirportEntity // extends Auditable<String>
      * located.
      */
     @Column( name = "municipality", length = 128 )
-    @Nullable private String municipality;
+    @Nullable
+    private String municipality;
 
     /**
      * "yes" if the airport currently has scheduled airline service; "no" otherwise.

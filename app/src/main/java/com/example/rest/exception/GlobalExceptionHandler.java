@@ -22,6 +22,7 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
@@ -37,6 +38,18 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+
+// TODO add support for.... MissingPathVariableException
+/*
+{
+    "type": "about:blank",
+    "title": "Internal Server Error",
+    "status": 500,
+    "detail": "Required URI template variable 'code' for method parameter type String is not present",
+    "instance": "/api/v1/location/airport/summary/continent/code",
+    "logref": "f4562782-074d-4ce7-a354-e0c93f7b5bb5",
+    "Exception": "org.springframework.web.bind.MissingPathVariableException"
+ */
 
 
 /**
@@ -390,6 +403,33 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     }
 
 
+    // ========== General JPA Exception ==========
+    /**
+     * Create a standard error message as a catch-all for any unanticipated JPA exception.
+     *
+     * @param exception the intercepted exception
+     *
+     * @return a formatted {@code ProblemDetail}.
+     */
+    @ExceptionHandler( JpaSystemException.class )
+    @ResponseStatus( HttpStatus.INTERNAL_SERVER_ERROR )
+    public ResponseEntity<ProblemDetail>
+    handleJpaSystemException( final ServletWebRequest request,
+                              final JpaSystemException exception )
+    {
+        // TODO the MDC should include the traceId (UUID) and log pattern should
+
+        final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.INTERNAL_SERVER_ERROR,
+                                                                        exception.getMessage() );
+
+        details.setProperty( "logref", UUID.randomUUID() );
+        details.setProperty( "Exception", exception.getClass().getTypeName() );
+        details.setProperty( "Cause", exception.getCause() );
+
+        return new ResponseEntity<>( details, HttpStatus.INTERNAL_SERVER_ERROR );
+    }
+
+
 
 
     // ========== Catch-All ==========
@@ -406,7 +446,6 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     handleGenericException( final ServletWebRequest request,
                             final Exception exception )
     {
-        log.error( "Catch-all", exception );
         // TODO the MDC should include the traceId (UUID) and log pattern should
 
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.INTERNAL_SERVER_ERROR,

@@ -87,7 +87,7 @@ Often there are quality gates that must be satisfied prior to promotion.
 
 ## Build
 
-A build will extract source from the repository to a clean environment then compile and link which results in a set of artifacts.
+A build will extract sourcecode from the repository to a clean environment then compile and link which results in a set of artifacts.
 
 The artifacts are subsequently packaged in a deployable artifact.  Artifacts are typically published to an artifact repository.  This may trigger the next stage, `Test`.
 

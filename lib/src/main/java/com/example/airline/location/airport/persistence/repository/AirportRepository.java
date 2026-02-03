@@ -3,10 +3,15 @@
 package com.example.airline.location.airport.persistence.repository;
 
 
+import java.util.List;
 import java.util.Optional;
 
+import com.example.airline.location.airport.persistence.model.AirportCountInContinentEntity;
+import com.example.airline.location.airport.persistence.model.AirportCountInCountryEntity;
+import com.example.airline.location.airport.persistence.model.AirportCountInRegionEntity;
 import com.example.airline.location.airport.persistence.model.AirportEntity;
 // import org.jspecify.annotations.NonNull;
+import com.example.airline.location.airport.persistence.model.AirportSummaryEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -54,6 +59,16 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
     Optional<AirportEntity> findByIdent( String ident );
 
     /**
+     * Find an airport from its commonly used identifier, often this is the iata
+     * airport code.
+     *
+     * @param regionCode a geographic region of interest.
+     *
+     * @return list of airports in the region, empty list if none ore found.
+     */
+    List<AirportEntity> findByIsoRegion( String regionCode );
+
+    /**
      * Search for {@code Airport} records that contain any of the query parameters.
      *
      * @param iataCode optional IATA code to search on.
@@ -74,4 +89,21 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
                                        @Param( "ident" ) String ident,
                                        @Param( "name" ) String name,
                                        Pageable paging );
+
+    // Defined as NamedQueries
+    List<AirportCountInContinentEntity> countAirportsByContinent();
+
+    // TODO pass country code as argument
+    // return list of regions with airport counts by region
+//    List<AirportCountInCountryEntity> countAirportsByCountry( String countryCode );
+
+    List<AirportCountInCountryEntity> countCountryAirportsByContinent( String continentCode );
+
+    List<AirportCountInRegionEntity> countRegionAirportsByCountry( String countryCode );
+
+    List<AirportSummaryEntity> findSummaryByContinent( String continentCode );
+
+    List<AirportSummaryEntity> findSummaryByCountry( String isoCountry );
+
+    List<AirportSummaryEntity> findSummaryByRegion( String isoRegion );
 }

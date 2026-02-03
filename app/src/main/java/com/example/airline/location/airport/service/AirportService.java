@@ -3,12 +3,19 @@
 package com.example.airline.location.airport.service;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import com.example.airline.location.airport.mapper.AirportEntityMapper;
+import com.example.airline.location.airport.model.AirportCountInContinent;
+import com.example.airline.location.airport.model.AirportCountInCountry;
+import com.example.airline.location.airport.model.AirportCountInRegion;
 import com.example.airline.location.airport.model.Airport;
+import com.example.airline.location.airport.persistence.model.AirportCountInContinentEntity;
 import com.example.airline.location.airport.persistence.model.AirportEntity;
+import com.example.airline.location.airport.persistence.model.AirportSummaryEntity;
 import com.example.airline.location.airport.persistence.repository.AirportRepository;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,6 +26,7 @@ import org.springframework.stereotype.Service;
  * Spring Service (business logic) supporting the {@code Airport} domain object.
  */
 @Service
+@Log4j2
 public class AirportService
 {
     private final AirportRepository repository;
@@ -87,6 +95,53 @@ public class AirportService
         return mapEntityToDomain( airportEntity );
     }
 
+    public List<Airport> findAirportsByRegion( final String code )
+    {
+        final List<AirportEntity> airportEntity = repository.findByIsoRegion( code );
+
+        return mapEntityToDomain( airportEntity );
+    }
+
+
+    public List<AirportCountInContinent> countAirportsByContinent()
+    {
+        List<AirportCountInContinentEntity> entities = repository.countAirportsByContinent();
+
+        return mapper.entityToDomainAirportsInContinent( entities );
+    }
+
+
+    public List<AirportCountInCountry> countCountryAirportsByContinent( final String countryCode )
+    {
+        return mapper.entityToDomainAirportsInCountry( repository.countCountryAirportsByContinent( countryCode ) );
+    }
+
+//    public List<AirportCountInCountry> countAirportsByCountry( final String countryCode )
+//    {
+//        return mapper.entityToDomainAirportsInCountry( repository.countAirportsByCountry( countryCode ) );
+//    }
+
+    public List<AirportCountInRegion> countRegionAirportsByCountry( final String countryCode )
+    {
+        return mapper.entityToDomainAirportsInRegion( repository.countRegionAirportsByCountry( countryCode ) );
+    }
+
+    public List<AirportSummaryEntity> findSummaryByContinent( String continent )
+    {
+        return List.of();
+    }
+
+    public List<AirportSummaryEntity> findSummaryByCountry( String isoCountry )
+    {
+        return List.of();
+    }
+
+    public List<AirportSummaryEntity> findSummaryByRegion( String isoRegion )
+    {
+        return List.of();
+    }
+
+
 
 
     /**
@@ -114,6 +169,9 @@ public class AirportService
 
 
 
+
+
+
     private Optional<Airport> mapEntityToDomain( final Optional<AirportEntity> entity )
     {
         if ( entity.isPresent() )
@@ -124,4 +182,8 @@ public class AirportService
         return Optional.empty();
     }
 
+    private List<Airport> mapEntityToDomain( final List<AirportEntity> entity )
+    {
+        return mapper.entityToDomain( entity );
+    }
 }

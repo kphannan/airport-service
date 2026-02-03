@@ -154,7 +154,8 @@ public class AirportDTO
      * this is not necessarily the municipality where the airport is physically
      * located.
      */
-    @NonNull
+    //@NonNull
+    @Nullable
     private String municipality;  // char-80
 
     /**
