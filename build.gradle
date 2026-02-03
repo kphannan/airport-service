@@ -26,7 +26,7 @@ buildscript {
 
         // --- Coding practices (static analysis) ---
         // --- Coding style
-        checkstyleVersion           = '10.21.4'
+        checkstyleVersion           = '13.1.0'
 
         // --- Common Coding flaws
         pmdVersion                  = '7.12.0'
@@ -43,7 +43,7 @@ buildscript {
         pitVersion                  = '1.19.1'
 
         // --- BDD / REST Testing
-        karateVersion               = '1.5.1'
+        karateVersion               = '1.5.2'
 
         // ===== Configuration Management =====
 
@@ -94,7 +94,7 @@ plugins {
     // id 'org.checkerframework' version "${checkerFrameworkVersion}" apply false
 
     // // --- Mutation testing
-    id 'info.solidsoft.pitest' version "${pitPluginVersion}" apply false
+    // id 'info.solidsoft.pitest' version "${pitPluginVersion}" apply false
 
     // // ===== Configuration Management =====
     // // --- Artifact Versioning
