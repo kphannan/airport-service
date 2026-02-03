@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cruise xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="cruise-config.xsd" schemaVersion="139">
+    <server agentAutoRegisterKey="d2cc3c7f-ac59-4c71-aef4-a760b57e15e1" webhookSecret="799fe5b1-6da7-456a-a15f-249ac78bb531" serverId="2651a22b-cd72-48d7-bb3a-92e6a52fc74d" tokenGenerationKey="ef74c37f-4c9e-475d-8735-4bdd24215818">
+        <artifacts>
+            <artifactsDir>artifacts</artifactsDir>
+        </artifacts>
+    </server>
+    <pipelines group="defaultGroup" />
+    <pipelines group="Playground">
+        <pipeline name="Multi-Project">
+            <params>
+                <param name="ARTIFACT_DIR">ProjectRoot</param>
+                <param name="BUILD_DIR">./</param>
+            </params>
+            <materials>
+                <git url="https://github.com/kphannan/airport-service.git" branch="develop" />
+            </materials>
+            <stage name="Clean-workspace" cleanWorkingDir="true">
+                <jobs>
+                    <job name="clean">
+                        <tasks>
+                            <exec command="./gradlew">
+                                <arg>clean</arg>
+                            </exec>
+                        </tasks>
+                        <artifacts>
+                            <artifact type="build" src="*" dest="#{ARTIFACT_DIR}" />
+                        </artifacts>
+                    </job>
+                    <job name="show-task-options">
+                        <tasks>
+                            <exec command="./gradlew">
+                                <arg>tasks</arg>
+                                <arg>--all</arg>
+                                <runif status="passed" />
+                            </exec>
+                        </tasks>
+                    </job>
+                    <job name="ShowFiles">
+                        <tasks>
+                            <exec command="ls">
+                                <arg>-lRah</arg>
+                            </exec>
+                            <exec command="pwd">
+                                <runif status="passed" />
+                            </exec>
+                        </tasks>
+                    </job>
+                </jobs>
+            </stage>
+        </pipeline>
+        <pipeline name="Compile-only-main">
+            <params>
+                <param name="ARTIFACT_DIR">ProjectRoot</param>
+                <param name="BUILD_DIR">./</param>
+            </params>
+            <materials>
+                <pipeline pipelineName="Multi-Project" stageName="Clean-workspace" />
+            </materials>
+            <stage name="stage-compile">
+                <jobs>
+                    <job name="compileJava">
+                        <tasks>
+                            <fetchartifact artifactOrigin="gocd" srcdir="#{ARTIFACT_DIR}" dest="./" pipeline="Multi-Project" stage="Clean-workspace" job="clean">
+                                <runif status="passed" />
+                            </fetchartifact>
+                            <exec command="ls">
+                                <arg>-lRah</arg>
+                            </exec>
+                            <exec command="pwd" />
+                            <exec command="sh" workingdir="#{ARTIFACT_DIR}">
+                                <arg>./gradlew</arg>
+                                <arg>compileJava</arg>
+                                <runif status="passed" />
+                            </exec>
+                        </tasks>
+                        <artifacts>
+                            <artifact type="build" src="#{ARTIFACT_DIR}/*" dest="#{ARTIFACT_DIR}" />
+                        </artifacts>
+                    </job>
+                </jobs>
+            </stage>
+        </pipeline>
+        <pipeline name="Compile-Test">
+            <params>
+                <param name="ARTIFACT_DIR">ProjectRoot</param>
+                <param name="BUILD_DIR">./</param>
+            </params>
+            <materials>
+                <pipeline pipelineName="Compile-only-main" stageName="stage-compile" />
+            </materials>
+            <stage name="stage-compile">
+                <jobs>
+                    <job name="compileTestJava">
+                        <tasks>
+                            <fetchartifact artifactOrigin="gocd" srcdir="#{ARTIFACT_DIR}" dest="./" pipeline="Compile-only-main" stage="stage-compile" job="compileJava">
+                                <runif status="passed" />
+                            </fetchartifact>
+                            <exec command="ls" workingdir="#{ARTIFACT_DIR}" />
+                            <exec command="sh" workingdir="#{ARTIFACT_DIR}">
+                                <arg>./gradlew</arg>
+                                <arg>compileTestJava</arg>
+                                <runif status="passed" />
+                            </exec>
+                        </tasks>
+                        <artifacts>
+                            <artifact type="build" src="#{ARTIFACT_DIR}/*" dest="#{ARTIFACT_DIR}" />
+                        </artifacts>
+                    </job>
+                </jobs>
+            </stage>
+        </pipeline>
+        <pipeline name="SAST">
+            <params>
+                <param name="ARTIFACT_DIR">ProjectRoot</param>
+                <param name="BUILD_DIR">./</param>
+            </params>
+            <materials>
+                <pipeline pipelineName="Multi-Project" stageName="Clean-workspace" />
+                <pipeline pipelineName="Compile-only-main" stageName="stage-compile" />
+                <pipeline pipelineName="Compile-Test" stageName="stage-compile" />
+            </materials>
+            <stage name="style-and-flaws-main" fetchMaterials="false">
+                <jobs>
+                    <job name="checkstyle">
+                        <tasks>
+                            <fetchartifact artifactOrigin="gocd" srcdir="#{ARTIFACT_DIR}" dest="./" pipeline="Multi-Project" stage="Clean-workspace" job="clean">
+                                <runif status="passed" />
+                            </fetchartifact>
+                            <exec command="ls">
+                                <arg>-lRah</arg>
+                                <runif status="passed" />
+                            </exec>
+                            <exec command="ls" workingdir="#{ARTIFACT_DIR}" />
+                            <exec command="sh" workingdir="#{ARTIFACT_DIR}">
+                                <arg>./gradlew</arg>
+                                <arg>checkstyleMain</arg>
+                                <runif status="passed" />
+                            </exec>
+                        </tasks>
+                        <tabs>
+                            <tab name="app" path="#{ARTIFACT_DIR}/app/build/reports/checkstyle/main.html" />
+                            <tab name="api" path="./ProjectRoot/api/build/reports/checkstyle/main.html" />
+                            <tab name="lib" path="./ProjectRoot/lib/build/reports/checkstyle/main.html" />
+                        </tabs>
+                        <artifacts>
+                            <artifact type="build" src="**/checkstyle/main.html" />
+                        </artifacts>
+                    </job>
+                    <job name="pmd">
+                        <tasks>
+                            <fetchartifact artifactOrigin="gocd" srcdir="#{ARTIFACT_DIR}" dest="./" pipeline="Multi-Project" stage="Clean-workspace" job="clean">
+                                <runif status="passed" />
+                            </fetchartifact>
+                            <exec command="sh" workingdir="#{ARTIFACT_DIR}">
+                                <arg>./gradlew</arg>
+                                <arg>pmdMain</arg>
+                                <runif status="passed" />
+                            </exec>
+                            <exec command="ls">
+                                <arg>-lRah</arg>
+                                <runif status="passed" />
+                            </exec>
+                        </tasks>
+                        <tabs>
+                            <tab name="api" path="./ProjectRoot/api/build/reports/pmd/main.html" />
+                            <tab name="app" path="./ProjectRoot/app/build/reports/pmd/main.html" />
+                            <tab name="lib" path="./ProjectRoot/lib/build/reports/pmd/main.html" />
+                        </tabs>
+                        <artifacts>
+                            <artifact type="build" src="**/pmd/main.html" />
+                        </artifacts>
+                    </job>
+                </jobs>
+            </stage>
+            <stage name="style-and-flaws-test" fetchMaterials="false">
+                <jobs>
+                    <job name="checkstyle">
+                        <tasks>
+                            <fetchartifact artifactOrigin="gocd" srcdir="#{ARTIFACT_DIR}" dest="./" pipeline="Compile-Test" stage="stage-compile" job="compileTestJava">
+                                <runif status="passed" />
+                            </fetchartifact>
+                            <exec command="ls">
+                                <arg>-lRah</arg>
+                                <runif status="passed" />
+                            </exec>
+                            <exec command="sh" workingdir="#{ARTIFACT_DIR}">
+                                <arg>./gradlew</arg>
+                                <arg>checkstyleTest</arg>
+                            </exec>
+                        </tasks>
+                        <tabs>
+                            <tab name="api" path="#{ARTIFACT_DIR}/api/build/reports/checkstyle/test.html" />
+                            <tab name="app" path="#{ARTIFACT_DIR}/app/build/reports/checkstyle/test.html" />
+                            <tab name="lib" path="#{ARTIFACT_DIR}/lib/build/reports/checkstyle/test.html" />
+                        </tabs>
+                        <artifacts>
+                            <artifact type="build" src="**/checkstyle/test.html" />
+                        </artifacts>
+                    </job>
+                    <job name="pmd">
+                        <tasks>
+                            <fetchartifact artifactOrigin="gocd" srcdir="#{ARTIFACT_DIR}" dest="./" pipeline="Compile-Test" stage="stage-compile" job="compileTestJava">
+                                <runif status="passed" />
+                            </fetchartifact>
+                            <exec command="ls">
+                                <arg>-lRah</arg>
+                                <runif status="passed" />
+                            </exec>
+                            <exec command="sh" workingdir="#{ARTIFACT_DIR}">
+                                <arg>./gradlew</arg>
+                                <arg>pmdTest</arg>
+                            </exec>
+                        </tasks>
+                        <tabs>
+                            <tab name="api" path="#{ARTIFACT_DIR}/api/build/reports/pmd/test.html" />
+                            <tab name="app" path="#{ARTIFACT_DIR}/app/build/reports/lib/test.html" />
+                            <tab name="lib" path="#{ARTIFACT_DIR}/lib/build/reports/pmd/test.html" />
+                        </tabs>
+                        <artifacts>
+                            <artifact type="build" src="**/pmd/test.html" />
+                        </artifacts>
+                    </job>
+                </jobs>
+            </stage>
+        </pipeline>
+        <pipeline name="unit-test">
+            <params>
+                <param name="ARTIFACT_DIR">ProjectRoot</param>
+                <param name="REPORT_BASE">build/reports</param>
+                <param name="LIB_REPORT_BASE">#{ARTIFACT_DIR}/lib/#{REPORT_BASE}</param>
+                <param name="API_REPORT_BASE">#{ARTIFACT_DIR}/api/#{REPORT_BASE}</param>
+                <param name="APP_REPORT_BASE">#{ARTIFACT_DIR}/app/#{REPORT_BASE}</param>
+            </params>
+            <materials>
+                <pipeline pipelineName="Compile-Test" stageName="stage-compile" />
+            </materials>
+            <stage name="test-execution">
+                <jobs>
+                    <job name="run-tests">
+                        <tasks>
+                            <fetchartifact artifactOrigin="gocd" srcdir="#{ARTIFACT_DIR}" dest="./" pipeline="Compile-Test" stage="stage-compile" job="compileTestJava">
+                                <runif status="passed" />
+                            </fetchartifact>
+                            <exec command="ls">
+                                <arg>-lRah</arg>
+                                <runif status="passed" />
+                            </exec>
+                            <exec command="sh" workingdir="#{ARTIFACT_DIR}">
+                                <arg>./gradlew</arg>
+                                <arg>test</arg>
+                                <runif status="passed" />
+                            </exec>
+                            <exec command="sh" workingdir="#{ARTIFACT_DIR}">
+                                <arg>./gradlew</arg>
+                                <arg>jacocoTestReport</arg>
+                                <runif status="passed" />
+                            </exec>
+                            <exec command="sh" workingdir="#{ARTIFACT_DIR}">
+                                <arg>./gradlew</arg>
+                                <arg>jacocoTestCoverageVerification</arg>
+                                <runif status="passed" />
+                            </exec>
+                        </tasks>
+                        <tabs>
+                            <tab name="api-status" path="#{ARTIFACT_DIR}/api/build/reports/tests/test/index.html" />
+                            <tab name="app-status" path="#{ARTIFACT_DIR}/app/build/reports/tests/test/index.html" />
+                            <tab name="lib-status" path="#{ARTIFACT_DIR}/lib/build/reports/tests/test/index.html" />
+                            <tab name="api-coverage" path="#{ARTIFACT_DIR}/api/build/reports/jacoco/test/html/index.html" />
+                            <tab name="app-coverage" path="#{ARTIFACT_DIR}/app/build/reports/jacoco/test/html/index.html" />
+                            <tab name="lib-coverage" path="#{ARTIFACT_DIR}/lib/build/reports/jacoco/test/html/index.html" />
+                        </tabs>
+                        <artifacts>
+                            <artifact type="build" src="**/tests/test/*" />
+                            <artifact type="build" src="**/reports/jacoco/test/html/*" />
+                            <artifact type="build" src="**/reports/jacoco/test/jacocoTestReport.xml" />
+                        </artifacts>
+                    </job>
+                </jobs>
+            </stage>
+        </pipeline>
+        <pipeline name="mutation-test">
+            <params>
+                <param name="ARTIFACT_DIR">ProjectRoot</param>
+            </params>
+            <materials>
+                <pipeline pipelineName="Compile-Test" stageName="stage-compile" />
+            </materials>
+            <stage name="test-execution">
+                <jobs>
+                    <job name="run-test">
+                        <tasks>
+                            <fetchartifact artifactOrigin="gocd" srcdir="#{ARTIFACT_DIR}" dest="./" pipeline="Compile-Test" stage="stage-compile" job="compileTestJava">
+                                <runif status="passed" />
+                            </fetchartifact>
+                            <exec command="ls">
+                                <arg>-lRah</arg>
+                                <runif status="passed" />
+                            </exec>
+                            <exec command="sh" workingdir="#{ARTIFACT_DIR}">
+                                <arg>./gradlew</arg>
+                                <arg>pitest</arg>
+                                <runif status="passed" />
+                            </exec>
+                        </tasks>
+                        <tabs>
+                            <tab name="api" path="#{ARTIFACT_DIR}/api/build/reports/pitest/index.html" />
+                            <tab name="app" path="#{ARTIFACT_DIR}/app/build/reports/pitest/index.html" />
+                            <tab name="lib" path="#{ARTIFACT_DIR}/lib/build/reports/pitest/index.html" />
+                        </tabs>
+                        <artifacts>
+                            <artifact type="build" src="**/pitest/*" />
+                        </artifacts>
+                    </job>
+                </jobs>
+            </stage>
+        </pipeline>
+    </pipelines>
+</cruise>
