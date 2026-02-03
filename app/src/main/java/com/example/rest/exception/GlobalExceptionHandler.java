@@ -22,6 +22,7 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
@@ -399,6 +400,33 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
         details.setTitle( "Not Found" );
 
         return new ResponseEntity<>( details, HttpStatus.GONE );
+    }
+
+
+    // ========== General JPA Exception ==========
+    /**
+     * Create a standard error message as a catch-all for any unanticipated JPA exception.
+     *
+     * @param exception the intercepted exception
+     *
+     * @return a formatted {@code ProblemDetail}.
+     */
+    @ExceptionHandler( JpaSystemException.class )
+    @ResponseStatus( HttpStatus.INTERNAL_SERVER_ERROR )
+    public ResponseEntity<ProblemDetail>
+    handleJpaSystemException( final ServletWebRequest request,
+                              final JpaSystemException exception )
+    {
+        // TODO the MDC should include the traceId (UUID) and log pattern should
+
+        final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.INTERNAL_SERVER_ERROR,
+                                                                        exception.getMessage() );
+
+        details.setProperty( "logref", UUID.randomUUID() );
+        details.setProperty( "Exception", exception.getClass().getTypeName() );
+        details.setProperty( "Cause", exception.getCause() );
+
+        return new ResponseEntity<>( details, HttpStatus.INTERNAL_SERVER_ERROR );
     }
 
 

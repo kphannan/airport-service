@@ -144,7 +144,7 @@ public class AirportController
         return ResponseEntity.ok( dto );
     }
 
-    // get list of countries in the continent, with counts of airports in each country
+    // get a list of countries in the continent, with counts of airports in each country
     @GetMapping( "/summary/continent/code/{continentCode}" )
     public ResponseEntity<List<AirportCountInCountryDTO>>
     restGetCountCountryAirportsByContinent( @PathVariable final String continentCode )
@@ -196,13 +196,35 @@ public class AirportController
 //        return ResponseEntity.ok( dto );
 //    }
 
-    @GetMapping( "/summary/region/code/{regionCode}" )
+    @GetMapping( "/summary/country/code/{countryCode}" )
     public ResponseEntity<List<AirportCountInRegionDTO>>
-    restGetCountAirportsByRegion( @PathVariable final String regionCode )
+    restGetCountAirportsByRegion( @PathVariable final String countryCode )
     {
-        final List<AirportCountInRegion> counts = service.countAirportsByRegion( regionCode );
+        final List<AirportCountInRegion> counts = service.countRegionAirportsByCountry( countryCode );
 
         final List<AirportCountInRegionDTO> dto = mapper.domainToApiAirportsInRegion( counts );
+
+        return ResponseEntity.ok( dto );
+    }
+
+//    @GetMapping( "/summary/region/code/{regionCode}" )
+//    public ResponseEntity<List<AirportSummaryDTO>>
+//    restGetAirportsSummariesByRegion( @PathVariable final String regionCode )
+//    {
+//        final List<AirportSummary> counts = service.countRegionAirportsByCountry( regionCode );
+//
+//        final List<AirportSummaryDTO> dto = mapper.domainToApiAirportsInRegion( counts );
+//
+//        return ResponseEntity.ok( dto );
+//    }
+
+    @GetMapping( "/summary/region/code/{regionCode}" )
+    public ResponseEntity<List<AirportDTO>>
+    restGetAirportsByRegion( @PathVariable final String regionCode )
+    {
+        final List<Airport> counts = service.findAirportsByRegion( regionCode );
+
+        final List<AirportDTO> dto = mapper.domainToApi( counts );
 
         return ResponseEntity.ok( dto );
     }

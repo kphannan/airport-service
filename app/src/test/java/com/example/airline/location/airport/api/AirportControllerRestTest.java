@@ -513,7 +513,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
                                  new AirportCountInRegionEntity( "ZZ", "::ZZNAME::", 21L )
                                );
 
-                when( repository.countAirportsByRegion( eq( "RE" ) ) )
+                when( repository.countRegionAirportsByCountry( eq( "RE" ) ) )
                         .thenReturn( entities );
 
                 final RequestBuilder request       = withHeaders( get( "/location/airport/summary/region/code/{regionCode}", "RE" ) );

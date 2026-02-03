@@ -95,6 +95,13 @@ public class AirportService
         return mapEntityToDomain( airportEntity );
     }
 
+    public List<Airport> findAirportsByRegion( final String code )
+    {
+        final List<AirportEntity> airportEntity = repository.findByIsoRegion( code );
+
+        return mapEntityToDomain( airportEntity );
+    }
+
 
     public List<AirportCountInContinent> countAirportsByContinent()
     {
@@ -114,9 +121,9 @@ public class AirportService
 //        return mapper.entityToDomainAirportsInCountry( repository.countAirportsByCountry( countryCode ) );
 //    }
 
-    public List<AirportCountInRegion> countAirportsByRegion( final String regionCode )
+    public List<AirportCountInRegion> countRegionAirportsByCountry( final String countryCode )
     {
-        return mapper.entityToDomainAirportsInRegion( repository.countAirportsByRegion( regionCode ) );
+        return mapper.entityToDomainAirportsInRegion( repository.countRegionAirportsByCountry( countryCode ) );
     }
 
     public List<AirportSummaryEntity> findSummaryByContinent( String continent )
@@ -175,4 +182,8 @@ public class AirportService
         return Optional.empty();
     }
 
+    private List<Airport> mapEntityToDomain( final List<AirportEntity> entity )
+    {
+        return mapper.entityToDomain( entity );
+    }
 }

@@ -59,6 +59,16 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
     Optional<AirportEntity> findByIdent( String ident );
 
     /**
+     * Find an airport from its commonly used identifier, often this is the iata
+     * airport code.
+     *
+     * @param regionCode a geographic region of interest.
+     *
+     * @return list of airports in the region, empty list if none ore found.
+     */
+    List<AirportEntity> findByIsoRegion( String regionCode );
+
+    /**
      * Search for {@code Airport} records that contain any of the query parameters.
      *
      * @param iataCode optional IATA code to search on.
@@ -89,7 +99,7 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
 
     List<AirportCountInCountryEntity> countCountryAirportsByContinent( String continentCode );
 
-    List<AirportCountInRegionEntity> countAirportsByRegion( String regionCode );
+    List<AirportCountInRegionEntity> countRegionAirportsByCountry( String countryCode );
 
     List<AirportSummaryEntity> findSummaryByContinent( String continentCode );
 

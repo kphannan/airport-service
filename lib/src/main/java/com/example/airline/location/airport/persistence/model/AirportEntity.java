@@ -147,6 +147,19 @@ WHERE r.code = 'US-GA'
 //                    GROUP BY a.isoCountry
 //                    """
 //)
+@NamedQuery( name = "AirportEntity.countRegionAirportsByCountry",
+             query = """
+                SELECT new com.example.airline.location.airport.persistence.model.AirportCountInRegionEntity(
+                           a.isoRegion AS regionCode,
+                           r.name AS name,
+                           COUNT(a.id) AS airportCount
+                       )
+                  FROM AirportEntity a
+                INNER JOIN RegionEntity r ON r.code = a.isoRegion
+                    WHERE a.isoCountry = :countryCode
+                GROUP BY a.isoRegion
+                """
+)
 @NamedQuery( name = "AirportEntity.countAirportsByRegion",
              query = """
                 SELECT new com.example.airline.location.airport.persistence.model.AirportCountInRegionEntity(
@@ -156,6 +169,7 @@ WHERE r.code = 'US-GA'
                        )
                   FROM AirportEntity a
                 INNER JOIN RegionEntity r ON r.code = a.isoRegion
+                    WHERE a.continent = :continentCode
                 GROUP BY a.isoRegion
                 """
 )
@@ -318,7 +332,8 @@ public class AirportEntity // extends Auditable<String>
      * located.
      */
     @Column( name = "municipality", length = 128 )
-    @Nullable private String municipality;
+    @Nullable
+    private String municipality;
 
     /**
      * "yes" if the airport currently has scheduled airline service; "no" otherwise.

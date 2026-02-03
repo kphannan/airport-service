@@ -88,7 +88,8 @@ public class Airport
      * this is not necessarily the municipality where the airport is physically
      * located.
      */
-    @Nullable private String municipality;
+    @Nullable
+    private String municipality;
 
     /**
      * "yes" if the airport currently has scheduled airline service, "no" otherwise.
