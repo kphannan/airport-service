@@ -149,12 +149,12 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
      * @return a formatted {@code ProblemDetail}.
      */
     @ExceptionHandler( HttpMediaTypeNotAcceptableException.class )
-    @ResponseStatus( HttpStatus.UNSUPPORTED_MEDIA_TYPE )
+    @ResponseStatus( HttpStatus.NOT_ACCEPTABLE )
     public ResponseEntity<ProblemDetail>
     handleUnacceptableMediaTypeException( final ServletWebRequest request,
                                           final HttpMediaTypeNotAcceptableException exception )
     {
-        final ProblemDetail details = ProblemDetail.forStatus( HttpStatus.UNSUPPORTED_MEDIA_TYPE );
+        final ProblemDetail details = ProblemDetail.forStatus( HttpStatus.NOT_ACCEPTABLE );
         details.setTitle( "Unacceptable Media Type" );
         details.setDetail( exception.getMessage() );
         details.setProperty( "Supported content:",
@@ -163,7 +163,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
                                       .map( MediaType::toString )
                                       .collect( Collectors.joining( ", " ) ) );
 
-        return new ResponseEntity<>( details, HttpStatus.UNSUPPORTED_MEDIA_TYPE );
+        return new ResponseEntity<>( details, HttpStatus.NOT_ACCEPTABLE );
     }
 
     /**

@@ -66,6 +66,7 @@ public class GlobalExceptionHandlerTest
         {
             // - HttpMediaTypeNotSupportedException
             @Test
+            @DisplayName( "Unsupported Media Type (415)" )
             void exceptionMediaType_notSupported_formatsProblemDetails()
             {
                 // --- given
@@ -103,6 +104,7 @@ public class GlobalExceptionHandlerTest
 
             // - HttpMediaTypeNotAcceptableException
             @Test
+            @DisplayName( "Not Acceptable (406)" )
             void exceptionMediaType_notAcceptable_formatsProblemDetails()
             {
                 // --- given
@@ -118,17 +120,18 @@ public class GlobalExceptionHandlerTest
                 // --- then
                 assertAll( () -> assertNotNull( result ),
                            () -> assertEquals( "Unacceptable Media Type", detail.getTitle() ),
-                           () -> assertEquals( 415, detail.getStatus() ),
+                           () -> assertEquals( 406, detail.getStatus() ),
                            () -> assertEquals( "No acceptable representation", detail.getDetail() ),
                            () -> assertEquals( "application/json, application/yaml",
                                                detail.getProperties()
                                                      .get( "Supported content:" ) ),
-                           () -> assertEquals( HttpStatus.UNSUPPORTED_MEDIA_TYPE, result.getStatusCode() )
+                           () -> assertEquals( HttpStatus.NOT_ACCEPTABLE, result.getStatusCode() )
                          );
             }
 
             // - HttpMediaTypeException
             @Test
+            @DisplayName( "Already Reported (208)" )
             void exceptionMediaType_notMediaTypeException_formatsProblemDetails()
             {
                 // --- given
@@ -164,7 +167,6 @@ public class GlobalExceptionHandlerTest
         @DisplayName( "Resources" )
         class UriIssues
         {
-
             @Test
             @DisplayName( "404 for resource (URI) not found" )
             void exceptionUri_notFound_formatsProblemDetails()
@@ -188,12 +190,11 @@ public class GlobalExceptionHandlerTest
         }
 
         @Nested
-        @DisplayName( "with bad HttpMethod" )
+        @DisplayName( "Bad HttpMethod" )
         class HttpMethodIssues
         {
-
             @Test
-            @DisplayName( "405 for HttpMethod not implemented" )
+            @DisplayName( "405 - Method not allowed" )
             void exceptionHttpMethod_notSupported_formatsProblemDetails()
             {
                 // --- given
@@ -210,13 +211,14 @@ public class GlobalExceptionHandlerTest
                            () -> assertEquals( "Method Not Allowed", detail.getTitle() ),
                            () -> assertEquals( 405, detail.getStatus() ),
                            () -> assertEquals( "Method 'GET' is not supported.", detail.getDetail() )
+                           // TODO check for accepted methods
                          );
             }
         }
 
 
         @Nested
-        @DisplayName( "with malformed message" )
+        @DisplayName( "Malformed message" )
         class MisunderstoodMessage
         {
             @Test
@@ -355,7 +357,7 @@ public class GlobalExceptionHandlerTest
 
 
         @Nested
-        @DisplayName( "with validation violations" )
+        @DisplayName( "Validation violations" )
         class ValidationViolations
         {
             @Test
@@ -468,7 +470,7 @@ public class GlobalExceptionHandlerTest
 
 
         @Nested
-        @DisplayName( "with validation violations" )
+        @DisplayName( "Catch All" )
         class CatchAll
         {
 
@@ -508,10 +510,11 @@ public class GlobalExceptionHandlerTest
 
 
     @Nested
-    @DisplayName( "When trouble with persistence" )
+    @DisplayName( "Persistence" )
     class Persistence
     {
         @Test
+        @DisplayName( "Resource not present (Gone 410)" )
         void exceptionPersistence_notFound_formatsProblemDetails()
         {
             // --- given
