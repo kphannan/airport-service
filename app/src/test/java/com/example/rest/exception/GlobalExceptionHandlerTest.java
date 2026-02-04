@@ -43,6 +43,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 
 @Log4j2
+@DisplayName( "Exceptions - Global Handling" )
 public class GlobalExceptionHandlerTest
 {
     private GlobalExceptionHandler handler;
