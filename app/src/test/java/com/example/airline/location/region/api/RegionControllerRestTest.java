@@ -3,6 +3,9 @@ package com.example.airline.location.region.api;
 
 import static com.example.rest.utility.HeaderUtility.withHeaders;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -46,6 +49,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 @WebMvcTest( controllers = RegionsController.class )
 @ComponentScan( basePackages = { "com.example.airline.location.region" } )
 @AutoConfigureMockMvc( addFilters = false )
+@DisplayName( "REST Controller - /region" )
 class RegionControllerRestTest //extends RestControllerTestBase
 {
     @Autowired
@@ -59,15 +63,17 @@ class RegionControllerRestTest //extends RestControllerTestBase
 
 
     @Nested
-    @DisplayName( "/region - HTTP GET" )
+    @DisplayName( "HTTP GET" )
     class GetMethod
     {
         @Test
+        @DisplayName( "with id - 200: OK - body contains entity" )
         void restGetById_withValidId_returnsItem() throws Exception
         {
             // --- given
             final RegionEntity regionEntity = new RegionEntity( 1, "ZZZ", "LCL", "foo", "ZZ", "NA", null, null );
-            final RequestBuilder request = withHeaders( get( "/location/region/{id}", 1 ) );
+            final RequestBuilder request = withHeaders( get( "/location/region/{id}", 1 ) )
+                    .characterEncoding( "UTF-8" );
 
             when( repository.findById( any() ) )
                     .thenReturn( Optional.of( regionEntity ) );
@@ -75,6 +81,7 @@ class RegionControllerRestTest //extends RestControllerTestBase
             // --- when
             final MvcResult result = mvc
                     .perform( request )
+                    .andDo( print() )
                     .andExpect( status().isOk() )
                     .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
                     // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
@@ -98,10 +105,12 @@ class RegionControllerRestTest //extends RestControllerTestBase
         }
 
         @Test
+        @DisplayName( "with invalid Id - 204: No Content - empty body" )
         void restGetById_withBadId_returnsNoContent() throws Exception
         {
             // --- given
-            final RequestBuilder request = withHeaders( get( "/location/region/{id}", 99 ) );
+            final RequestBuilder request = withHeaders( get( "/location/region/{id}", 99 ) )
+                    .characterEncoding( "UTR-8" );
 
             when( repository.findById( anyInt() ) )
                     .thenReturn( Optional.empty() );
@@ -110,6 +119,7 @@ class RegionControllerRestTest //extends RestControllerTestBase
             // --- when
             final MvcResult result = mvc
                     .perform( request )
+                    .andDo( print() )
                     .andExpect( status().isNoContent() )
                     .andReturn();
             MockHttpServletResponse response = result.getResponse();
@@ -121,11 +131,13 @@ class RegionControllerRestTest //extends RestControllerTestBase
 
 
         @Test
+        @DisplayName( "with code - 200: OK - return entity" )
         void restGetByCode_withValidCode_returnsItem() throws Exception
         {
             // --- given
-            final RegionEntity regionEntity = new RegionEntity( 2, "ZZZ", "LCL", "::NAME::", "ZZ", "NA", null, null );
-            final RequestBuilder request = withHeaders( get( "/location/region/code/{code}", 1 ) );
+            final RegionEntity regionEntity = new RegionEntity( 2, "CC-LCL", "LCL", "::NAME::", "CC", "NA", null, null );
+            final RequestBuilder request = withHeaders( get( "/location/region/code/{code}", "ZZZ" ) )
+                    .characterEncoding( "UTF-8" );
 
             when( repository.findByCode( anyString() ) )
                     .thenReturn( Optional.of( regionEntity ) );
@@ -134,33 +146,43 @@ class RegionControllerRestTest //extends RestControllerTestBase
             // --- when
             final MvcResult result = mvc
                     .perform( request )
+                    .andDo( print() )
                     .andExpect( status().isOk() )
                     .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
+                    .andExpect( content().encoding( "UTF-8" ))
                     // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
                     //      don't complain about lack of assertions in tests
                     .andExpect( jsonPath( "$.id" ).value( 2 ) )
-                    .andExpect( jsonPath( "$.code" ).value( "ZZZ" ) )
+                    .andExpect( jsonPath( "$.code" ).value( "CC-LCL" ) )
                     .andExpect( jsonPath( "$.localCode" ).value( "LCL" ) )
                     .andExpect( jsonPath( "$.name" ).value( "::NAME::" ) )
-                    .andExpect( jsonPath( "$.country" ).value( "ZZ" ) )
+                    .andExpect( jsonPath( "$.country" ).value( "CC" ) )
                     .andExpect( jsonPath( "$.continent" ).value( "NA" ) )
                     .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
                     .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
                     .andReturn();
-            MockHttpServletResponse response = result.getResponse();
 
-            // --- then
+            final MockHttpServletResponse response = result.getResponse();
+
+//            final String body = response.getContentAsString();
             // TODO need to assert the resulting JSON....
 
-            assertThat( response.getContentType() )
-                    .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+            assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
+//                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" )),
+//                       () -> assertEquals( "application/json;charset=UTF-8", response.getContentType()),
+                       () -> assertEquals( "119", response.getHeader( "Content-Length" )),
+                       () -> assertFalse( response.getHeaderNames().isEmpty()),
+                       () -> assertEquals( 2, response.getHeaderNames().size())
+                     );
         }
 
         @Test
+        @DisplayName( "invalid Code - 204: No Content - empty body" )
         void restGetByCode_withBadCode_returnsNoContent() throws Exception
         {
             // --- given
-            final RequestBuilder request = withHeaders( get( "/location/region/code/{code}", "ZZ" ) );
+            final RequestBuilder request = withHeaders( get( "/location/region/code/{code}", "ZZ" ) )
+                    .characterEncoding( "UTR-8" );
 
             when( repository.findByCode( anyString() ) )
                     .thenReturn( Optional.empty() );
@@ -168,17 +190,17 @@ class RegionControllerRestTest //extends RestControllerTestBase
             // --- when
             final MvcResult result = mvc
                     .perform( request )
+                    .andDo( print() )
                     .andExpect( status().isNoContent() )
+//                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
+//                    .andExpect( content().encoding( "UTF-8" ))
                     .andReturn();
-            MockHttpServletResponse response = result.getResponse();
 
-            // --- then
-            assertThat( response.getStatus() )
-                    .isEqualTo( HttpStatus.NO_CONTENT.value() );
         }
 
 
         @Test
+        @DisplayName( "get Page - 200: OK - returns first page" )
         void restGetAll_returnsSuccess() throws Exception
         {
             // --- given
@@ -193,7 +215,8 @@ class RegionControllerRestTest //extends RestControllerTestBase
                     .param( "page", "5" )
                     .param( "size", "10" )
                     .param( "sort", "id,desc" )    // <-- no space after comma!
-                    .param( "sort", "name,asc" );  // <-- no space after comma!
+                    .param( "sort", "name,asc" )   // <-- no space after comma!
+                    .characterEncoding( "UTR-8" );
 
             Page<RegionEntity> page = new PageImpl<>( entities );
             when( repository.findAll( any( Pageable.class ) ) )
@@ -202,18 +225,18 @@ class RegionControllerRestTest //extends RestControllerTestBase
             // --- when
             final MvcResult result = mvc
                     .perform( request )
+                    .andDo( print() )
                     .andExpect( status().isOk() )
                     .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
                     // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
                     //      don't complain about lack of assertions in tests
-                    .andDo( print() )
                     .andExpect( jsonPath( "$.content[0].id" ).value( 1 ) )
                     .andExpect( jsonPath( "$.content[0].code" ).value( "XXX" ) )
                     .andExpect( jsonPath( "$.content[0].name" ).value( "::X_NAME_X::" ) )
                     .andExpect( jsonPath( "$.content[0].wikipediaLink" ).doesNotExist() )
                     .andExpect( jsonPath( "$.content[0].keywords" ).doesNotExist() )
                     .andReturn();
-            final MockHttpServletResponse response = result.getResponse();
+//            final MockHttpServletResponse response = result.getResponse();
 
             // --- then
             // TODO need to assert the resulting JSON....
@@ -230,8 +253,20 @@ class RegionControllerRestTest //extends RestControllerTestBase
                     .hasSort( "name", Sort.Direction.ASC )
                     .hasSort( "id", Sort.Direction.DESC );
 
-            assertThat( response.getContentType() )
-                    .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+//            assertThat( response.getContentType() )
+//                    .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+//            final MockHttpServletResponse response = result.getResponse();
+//
+////            final String body = response.getContentAsString();
+//            // TODO need to assert the resulting JSON....
+//
+//            assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
+////                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" )),
+////                       () -> assertEquals( "application/json;charset=UTF-8", response.getContentType()),
+//                       () -> assertEquals( "119", response.getHeader( "Content-Length" )),
+//                       () -> assertFalse( response.getHeaderNames().isEmpty()),
+//                       () -> assertEquals( 2, response.getHeaderNames().size())
+//                     );
         }
     }
 

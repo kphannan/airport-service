@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import com.example.airline.location.config.GlobalApiResponses;
 import com.example.airline.location.config.GlobalApiSecurityResponses;
+import com.example.airline.location.continent.ContinentDTO;
 import com.example.airline.location.region.RegionDTO;
 import com.example.airline.location.region.mapper.RegionDtoMapper;
 import com.example.airline.location.region.model.Region;
@@ -19,11 +20,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -73,6 +78,12 @@ public class RegionsController
     {
         final Page<Region> regions = service.findAll( pageable );
 
+        var zzz = regions.map( mapper::domainToApi );
+
+//        ResponseEntity.BodyBuilder bb = ResponseEntity.status( HttpStatusCode.valueOf( 200 ) );
+//        bb.contentLength( zzz.getSize() );
+//        bb.contentType(  )
+//        return bb.body( zzz );
         return regions.map( mapper::domainToApi );
     }
 
@@ -144,8 +155,43 @@ public class RegionsController
      * @param code The code of the region.
      * @return A ResponseEntity containing the RegionDTO object if found, or no content if not found.
      */
+    @Operation( method = "GET",
+                summary = "Find a Region by its abbreviation",
+                description = "Find a Region by its 3-7 letter code",
+                responses = {
+                        @ApiResponse( description = "Continent found and returned",
+                                      responseCode = "200",
+                                      content = {
+                                              @Content( mediaType = "application/json",
+                                                        schema = @Schema( implementation = ContinentDTO.class ) ),
+                                              @Content( mediaType = "application/yaml",
+                                                        schema = @Schema( implementation = ContinentDTO.class ) ),
+                                              @Content( mediaType = "application/xml",
+                                                        schema = @Schema( implementation = ContinentDTO.class ) )
+                                      }
+                        )
+                },
+                parameters = {
+                        @Parameter( name = "code",
+                                    required = true,
+                                    in = ParameterIn.PATH,
+                                    description = "3-7 character code" ),
+                        @Parameter( name = "TRACEPARENT",
+                                    required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Distributed tracing identifier" ),
+                        @Parameter( name = "TRACESTATE",
+                                    required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Vendor specific trace identification" )
+                },
+                security = {}
+    )
     @GetMapping( "/code/{code}" )
-    public ResponseEntity<RegionDTO> restGetFindRegionByCode( @PathVariable final String code )
+    public ResponseEntity<RegionDTO> restGetFindRegionByCode( @Valid @PathVariable final String code,
+                                                              @RequestHeader HttpHeaders requestHeader )
     {
         final Optional<Region> optionalEntity = service.findRegionByCode( code );
 
@@ -153,7 +199,10 @@ public class RegionsController
         {
             final RegionDTO dto = mapper.domainToApi( optionalEntity.get() );
 
-            return ResponseEntity.ok( dto );
+            ResponseEntity.BodyBuilder bb = ResponseEntity.status( HttpStatusCode.valueOf( 200 ) );
+            bb.contentType( requestHeader.getContentType() );
+            bb.contentLength( dto.toString().length() );
+            return bb.body( dto );
         }
 
         // may include instance in header.....
