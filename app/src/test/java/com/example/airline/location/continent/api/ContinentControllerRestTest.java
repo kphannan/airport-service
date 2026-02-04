@@ -5,6 +5,7 @@ import static com.example.rest.utility.HeaderUtility.withHeaders;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -59,6 +60,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @WebMvcTest( controllers = ContinentController.class )
 @ComponentScan( basePackages = { "com.example.airline.location.continent" } )
 @AutoConfigureMockMvc( addFilters = false /*, secure = false */ )
+@DisplayName( "REST Controller - /continent" )
 class ContinentControllerRestTest
 {
     @Autowired
@@ -84,14 +86,16 @@ class ContinentControllerRestTest
      * Tests for the GET http method.
      */
     @Nested
-    @DisplayName( "/continent - HTTP GET" )
+    @DisplayName( "HTTP GET" )
     class GetMethod
     {
         @Test
+        @DisplayName( "with valid ID - 200: Success - entity in response body" )
         void restGetById_withId_returnsItem() throws Exception
         {
             final ContinentEntity continentEntity = new ContinentEntity( 1, "NA", "North", null, null );
-            final RequestBuilder request = withHeaders( get( "/location/continent/{id}", 1 ) );
+            final RequestBuilder request = withHeaders( get( "/location/continent/{id}", 1 ) )
+                    .characterEncoding( "UTF-8" );
 
             when( repository.getReferenceById( eq( 1 ) ) )
                     .thenReturn( continentEntity );
@@ -99,20 +103,43 @@ class ContinentControllerRestTest
 
             final MvcResult result = mvc
                     .perform( request )
-                    //.andExpect( content().contentTypeCompatibleWith( "application/json" ) )
-                    //.andExpect( result().ok() )
+                    .andDo( print() )
+                    .andExpect( content().contentTypeCompatibleWith( "application/json" ) )
+                    .andExpect( content().encoding( "UTF-8" ))
+//                    .andExpect( content.
+                    .andExpect( status().isOk() )
+//                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
+                    // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
+                    //      don't complain about lack of assertions in tests
+                    .andExpect( jsonPath( "$.id" ).value( 1 ) )
+                    .andExpect( jsonPath( "$.code" ).value( "NA" ) )
+                    .andExpect( jsonPath( "$.name" ).value( "North" ) )
                     .andReturn();
 
+
+
+            // --- then
             final MockHttpServletResponse response = result.getResponse();
 
+//            final String body = response.getContentAsString();
             // TODO need to assert the resulting JSON....
-            assertAll( () -> assertEquals( HttpStatus.OK.value(), result.getResponse().getStatus() ),
-                       () -> assertEquals( MediaType.APPLICATION_JSON_VALUE, response.getContentType() )
+//            assertAll( () -> assertEquals( HttpStatus.OK.value(), result.getResponse().getStatus() ),
+//                       () -> assertEquals( MediaType.APPLICATION_JSON_VALUE, response.getContentType() )
+//                     );
+
+            assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
+//                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" )),
+                       () -> assertEquals( "69", response.getHeader( "Content-Length" )),
+                       () -> assertFalse( response.getHeaderNames().isEmpty()),
+                       () -> assertEquals( 2, response.getHeaderNames().size())
                      );
+
+
         }
 
 
         @Test
+        @DisplayName( "with invalid id - 204: No Content - Empty body" )
         void restGetById_withWrongId_returnsNoContent() throws Exception
         {
             // --- given
@@ -136,6 +163,7 @@ class ContinentControllerRestTest
 
 
         @Test
+        @DisplayName( "with non-numeric ID - 400: Bad Request - body with Problem Details" )
         void restGetById_withTextId_returnsBadRequestWithProblemDetail() throws Exception
         {
             // --- given
@@ -161,6 +189,7 @@ class ContinentControllerRestTest
 
 
         @Test
+        @DisplayName( "with code - 200: Success - body with entity" )
         void restGetByCode_withCode_returnsItem() throws Exception
         {
             // --- given
@@ -174,6 +203,7 @@ class ContinentControllerRestTest
             // --- when
             final MvcResult result = mvc
                     .perform( request )
+                    .andDo( print() )
                     .andExpect( status().isOk() )
                     .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
                     // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
@@ -194,6 +224,7 @@ class ContinentControllerRestTest
         }
 
         @Test
+        @DisplayName( "with invalid code - 204: No Content - body is empty" )
         void restGetByCode_withInvalidCode_returnsNoContent() throws Exception
         {
             // --- given
@@ -206,6 +237,7 @@ class ContinentControllerRestTest
             // --- when
             final MvcResult result = mvc
                     .perform( request )
+                    .andDo( print() )
                     .andExpect( status().isNoContent() )
                     .andReturn();
             final MockHttpServletResponse response = result.getResponse();
@@ -216,6 +248,7 @@ class ContinentControllerRestTest
         }
 
         @Test
+        @DisplayName( "with no code - 404: Not Found - body is problem detail" )
         void restGetByCode_withNoCode_returnsNotFoundWithProblemDetail() throws Exception
         {
             // --- given
@@ -241,6 +274,7 @@ class ContinentControllerRestTest
 
 
         @Test
+        @DisplayName( "get all - 200: Success - body is list of entities" )
         void restGetAll_returnsSuccess() throws Exception
         {
             // --- given
@@ -259,11 +293,11 @@ class ContinentControllerRestTest
             // --- when
             final MvcResult result = mvc
                     .perform( request )
+                    .andDo( print() )
                     .andExpect( status().isOk() )
                     .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
                     // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
                     //      don't complain about lack of assertions in tests
-                    .andDo( print() )
                     .andExpect( jsonPath( "$[0].id" ).value( 1 ) )
                     // .andExpect( jsonPath( "$.code" ).value( "ZZ" ) )
                     // .andExpect( jsonPath( "$.name" ).value( "::NAME::" ) )
@@ -305,10 +339,11 @@ class ContinentControllerRestTest
      * Tests for the POST http method.
      */
     @Nested
-    @DisplayName( "/continent - HTTP POST" )
+    @DisplayName( "HTTP POST" )
     class PostMethod
     {
         @Test
+        @DisplayName( "Existing resource - 409: Conflict - body ???" )
         void restPut_withExisting_returnsConflict() throws Exception
         {
             // --- given
@@ -321,6 +356,7 @@ class ContinentControllerRestTest
                             }
                             """;
             final RequestBuilder request = withHeaders( post( "/location/continent" ) )
+                    .characterEncoding( "UTF-8" )
                     .content( jsonString );
             // -- mocks behavior
             when( repository.existsByCode( anyString() ) )
@@ -338,6 +374,7 @@ class ContinentControllerRestTest
             // TODO verify the JSON is the created entity
 
             assertAll( () -> assertEquals( HttpStatus.CONFLICT.value(), result.getResponse().getStatus() )
+                       // TODO should response include problem details indicating existing entity with same ID
                      );
             verify( repository ).existsByCode( anyString() );
             verify( repository, never() ).save( any( ContinentEntity.class ) );
@@ -345,6 +382,7 @@ class ContinentControllerRestTest
 
 
         @Test
+        @DisplayName( "new resource - 200: Success - body is new entity" )
         void restPut_withNew_returnsCreated() throws Exception
         {
             // --- given
@@ -358,6 +396,7 @@ class ContinentControllerRestTest
                             }
                             """;
             final RequestBuilder request = withHeaders( post( "/location/continent" ) )
+                    .characterEncoding( "UTF-8" )
                     .content( jsonString );
 
             when( repository.existsByCode( anyString() ) )
@@ -395,7 +434,7 @@ class ContinentControllerRestTest
         {
 
             @Test
-            @DisplayName( "report missing name & code are required" )
+            @DisplayName( "No name or Code - 400: Bad Request - Problem details with messages" )
             void restPut_withNoRequiredParams_returnsValidationError() throws Exception
             {
                 // --- given
@@ -406,6 +445,7 @@ class ContinentControllerRestTest
                         }
                         """;
                 final RequestBuilder request = withHeaders( post( "/location/continent" ) )
+                        .characterEncoding( "UTF-8" )
                         .content( jsonString );
 
                 // --- when
@@ -431,7 +471,7 @@ class ContinentControllerRestTest
             }
 
             @Test
-            @DisplayName( "report blank name & code are required" )
+            @DisplayName( "blank name and code - 400: Bad Request - problem details indicate blank values" )
             void restPut_withBlankRequiredParams_returnsValidationError() throws Exception
             {
                 // --- given
@@ -443,6 +483,7 @@ class ContinentControllerRestTest
                         }
                         """;
                 final RequestBuilder request = withHeaders( post( "/location/continent" ) )
+                        .characterEncoding( "UTF-8" )
                         .content( jsonString );
 
                 // --- when
@@ -469,6 +510,7 @@ class ContinentControllerRestTest
             }
 
             @Test
+            @DisplayName( "invalid Wiki URI - 400: Bad Request - problem detail shows malformed URI" )
             void restPut_withInvalidWikiLink_returnsValidationError() throws Exception
             {
                 // --- given
@@ -483,6 +525,7 @@ class ContinentControllerRestTest
                         }
                         """;
                 final RequestBuilder request = withHeaders( put( "/location/continent" ) )
+                        .characterEncoding( "UTF-8" )
                         .content( jsonString );
 
                 // --- when
@@ -503,8 +546,6 @@ class ContinentControllerRestTest
                 assertThat( result.getResponse().getContentAsString() )
                         .contains( "Cannot deserialize value of type `java.net.URI` from String" );
             }
-
-
         }
     }
 
@@ -514,11 +555,11 @@ class ContinentControllerRestTest
      * Tests for the PUT http method.
      */
     @Nested
-    @DisplayName( "/continent - HTTP PUT" )
+    @DisplayName( "HTTP PUT" )
     class PutMethod
     {
         @Test
-        @DisplayName( "can't create a new instance" )
+        @DisplayName( "entity does not exist - 409: Conflict - can't create a new instance" )
         void restPut_withNewEntity_returnsConflict() throws Exception
         {
             // --- given
@@ -532,6 +573,7 @@ class ContinentControllerRestTest
                             }
                             """;
             final RequestBuilder request = withHeaders( put( "/location/continent" ) )
+                    .characterEncoding( "UTF-8" )
                     .content( jsonString );
 
             when( repository.existsById( anyInt() ) )
@@ -555,7 +597,7 @@ class ContinentControllerRestTest
         }
 
         @Test
-        @DisplayName( "only updates an existing instance" )
+        @DisplayName( "existing entity - 200: Success  - update/return an existing instance" )
         void restPut_withExistingEntity_returnsOK() throws Exception
         {
             // --- given
@@ -569,6 +611,7 @@ class ContinentControllerRestTest
                             }
                             """;
             final RequestBuilder request = withHeaders( put( "/location/continent" ) )
+                    .characterEncoding( "UTF-8" )
                     .content( jsonString );
 
             when( repository.existsById( anyInt() ) )
@@ -615,14 +658,18 @@ class ContinentControllerRestTest
      * Tests for the DELETE http method.
      */
     @Nested
-    @DisplayName( "/continent - HTTP DELETE" )
+    @DisplayName( "HTTP DELETE" )
     class DeleteMethod
     {
         @Test
+        @DisplayName( "by ID - 204: No Content - empty body" )
         void restDeleteById_withId_returnsGone() throws Exception
         {
             // --- given
             final RequestBuilder request = withHeaders( delete( "/location/continent/{id}", 99 ) );
+
+            when( repository.existsById( anyInt() ) )
+                    .thenReturn( true );
 
             // --- when
             final MvcResult result = mvc
@@ -633,13 +680,59 @@ class ContinentControllerRestTest
             // --- then
             // final MockHttpServletResponse response = result.getResponse();
 
-            assertAll( () -> assertEquals( HttpStatus.GONE.value(), result.getResponse().getStatus() ),
+            assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() ),
                        () -> verify( repository ).deleteById( anyInt() )
                      );
         }
 
         @Test
-        void restDelete_withEntity_returnsGone() throws Exception
+        @DisplayName( "by invalid ID - 404: Not Found - empty body" )
+        void restDeleteByUnknownId_withId_returnsNotFound() throws Exception
+        {
+            // --- given
+            final RequestBuilder request = withHeaders( delete( "/location/continent/{id}", 99 ) );
+
+            when( repository.existsById( anyInt() ) )
+                    .thenReturn( false );
+
+            // --- when
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andDo( print() )
+                    .andReturn();
+
+            // --- then
+            // final MockHttpServletResponse response = result.getResponse();
+
+            assertAll( () -> assertEquals( HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus() ),
+                       () -> verify( repository ).deleteById( anyInt() )
+                     );
+        }
+
+        //        @Test
+//        @DisplayName( "by ID - 204: No Content - empty body" )
+//        void restDeleteById_withId_returnsGone() throws Exception
+//        {
+//            // --- given
+//            final RequestBuilder request = withHeaders( delete( "/location/continent/{id}", 99 ) );
+//
+//            // --- when
+//            final MvcResult result = mvc
+//                    .perform( request )
+//                    .andDo( print() )
+//                    .andReturn();
+//
+//            // --- then
+//            // final MockHttpServletResponse response = result.getResponse();
+//
+//            assertAll( () -> assertEquals( HttpStatus.GONE.value(), result.getResponse().getStatus() ),
+//                       () -> verify( repository ).deleteById( anyInt() )
+//                     );
+//        }
+
+        @Test
+        @DisplayName( "by entity - 204: No Content - empty body" )
+        void restDelete_withEntity_returnsNoContent() throws Exception
         {
             // --- given
             final String jsonString =
@@ -651,7 +744,11 @@ class ContinentControllerRestTest
                             }
                             """;
             final RequestBuilder request = withHeaders( delete( "/location/continent" ) )
+                    .characterEncoding( "UTF-8" )
                     .content( jsonString );
+
+            when( repository.existsById( anyInt() ) )
+                    .thenReturn( true );
 
             // --- when
             final MvcResult result = mvc
@@ -662,7 +759,40 @@ class ContinentControllerRestTest
             // --- then
             // final MockHttpServletResponse response = result.getResponse();
 
-            assertAll( () -> assertEquals( HttpStatus.GONE.value(), result.getResponse().getStatus() ),
+            assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() ),
+                       () -> verify( repository ).delete( any( ContinentEntity.class ) )
+                     );
+        }
+
+        @Test
+        @DisplayName( "by unknown entity - 404: Not Found - empty body" )
+        void restDelete_withUnknownEntity_returnsNotFound() throws Exception
+        {
+            // --- given
+            final String jsonString =
+                    """
+                            {
+                               "id": 77,
+                               "code": "CC",
+                               "name": "foo"
+                            }
+                            """;
+            final RequestBuilder request = withHeaders( delete( "/location/continent" ) )
+                    .characterEncoding( "UTF-8" )
+                    .content( jsonString );
+            when( repository.existsById( anyInt() ) )
+                    .thenReturn( false );
+
+            // --- when
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andDo( print() )
+                    .andReturn();
+
+            // --- then
+            // final MockHttpServletResponse response = result.getResponse();
+
+            assertAll( () -> assertEquals( HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus() ),
                        () -> verify( repository ).delete( any( ContinentEntity.class ) )
                      );
         }
@@ -715,10 +845,11 @@ class ContinentControllerRestTest
      * Tests for the TRACE http method.
      */
     @Nested
-    @DisplayName( "/continent - HTTP TRACE" )
+    @DisplayName( "HTTP TRACE" )
     class TraceMethod
     {
         @Test
+        @DisplayName( "no args - 200: OK - empty body" )
         void restTrace_returnsOk() throws Exception
         {
             // --- given
@@ -741,10 +872,11 @@ class ContinentControllerRestTest
      * Tests for the HEAD http method.
      */
     @Nested
-    @DisplayName( "/continent - HTTP HEAD" )
+    @DisplayName( "HTTP HEAD" )
     class HeadMethod
     {
         @Test
+        @DisplayName( "no parameters - 204: No Content" )
         void restHead_returnsNoContent() throws Exception
         {
             // --- given
@@ -762,16 +894,71 @@ class ContinentControllerRestTest
             assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() )
                      );
         }
+
+        @Test
+        @DisplayName( "with ID - 204: No Content - has headers" )
+        void restHeadWithId_returnsHeaders() throws Exception
+        {
+            // --- given
+            final RequestBuilder request = withHeaders( head( "/location/continent/{continentId}", 123 ) );
+
+            final ContinentEntity entity = new ContinentEntity( 22, "ZZ", "::ZNAMEZ::", null, null );
+            when( repository.getReferenceById( anyInt() ) )
+                    .thenReturn( entity );
+
+            // --- when
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andDo( print() )
+                    .andReturn();
+
+            // --- then
+            final MockHttpServletResponse response = result.getResponse();
+
+            assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), response.getStatus() ),
+                       () -> assertEquals( "application/json", response.getHeader( "Content-Type" )),
+                       () -> assertEquals( "75", response.getHeader( "Content-Length" )),
+                       () -> assertFalse( response.getHeaderNames().isEmpty()),
+                       () -> assertEquals( 2, response.getHeaderNames().size())
+                     );
+        }
+
+
+
+//        final ContinentEntity entity = new ContinentEntity( 22, "ZZ", "::ZNAMEZ::", null, null );
+//        final String jsonString =
+//                """
+//                        {
+//                           "id": 77,
+//                           "code": "CC",
+//                           "name": "foo"
+//                        }
+//                        """;
+//        final RequestBuilder request = withHeaders( put( "/location/continent" ) )
+//                .characterEncoding( "UTF-8" )
+//                .content( jsonString );
+//
+//        when( repository.existsById( anyInt() ) )
+//            .thenReturn( false );
+//        when( repository.getReferenceById( anyInt() ) )
+//            .thenReturn( entity );
+//
+//
+
+
+
+
     }
 
     /**
      * Tests for the OPTIONS http method.
      */
     @Nested
-    @DisplayName( "/continent - HTTP OPT" )
+    @DisplayName( "HTTP OPT" )
     class OptionsMethod
     {
         @Test
+        @DisplayName( "no args - 204: No Content - empty body" )
         void restOptions_returnsHeaders() throws Exception
         {
             // --- given

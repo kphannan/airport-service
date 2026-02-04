@@ -31,6 +31,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -178,7 +179,14 @@ public class ContinentController
         {
             final ContinentDTO dto = mapper.domainToApi( optionalContinent.get() );
 
-            return ResponseEntity.ok( dto );
+            ResponseEntity.BodyBuilder bb = ResponseEntity.status( HttpStatusCode.valueOf( 200 ) );
+
+            // TODO handle Accept:application/json or Accept:application/XML
+
+            bb.contentLength( dto.toString().length() );
+            bb.contentType( requestHeader.getContentType() );
+            return bb.body( dto );
+            // TODO  Last-Modified
         }
 
         return ResponseEntity.noContent().build();
@@ -409,9 +417,17 @@ public class ContinentController
     {
         // Delete is idempotent and will return NO_CONTENT regardless if
         // the item was deleted, or if it didn't exist.
-        deleteService.deleteById( continentId );
+//        deleteService.deleteById( continentId );
 
-        return ResponseEntity.status( HttpStatus.GONE ).build();
+//        return ResponseEntity.status( HttpStatus.GONE ).build();
+
+
+
+        return ResponseEntity
+                .status( deleteService.deleteById( continentId )
+                                        ? HttpStatus.NO_CONTENT
+                                        : HttpStatus.NOT_FOUND )
+                .build();
     }
 
     @DeleteMapping( "" )
@@ -458,9 +474,15 @@ public class ContinentController
     {
         // Delete is idempotent and will return NO_CONTENT regardless if
         // the item was deleted, or if it didn't exist.
-        deleteService.delete( mapper.apiToDomain( continentDTO ) );
+//        deleteService.delete( mapper.apiToDomain( continentDTO ) );
 
-        return ResponseEntity.status( HttpStatus.GONE ).build();
+//        return ResponseEntity.status( HttpStatus.GONE ).build();
+
+        return ResponseEntity
+                .status( deleteService.delete( mapper.apiToDomain( continentDTO ) )
+                         ? HttpStatus.NO_CONTENT
+                         : HttpStatus.NOT_FOUND )
+                .build();
     }
 
     // ===== PATCH =====
@@ -567,8 +589,28 @@ public class ContinentController
 
         // HttpHeaders headers = new HttpHeaders();
         // headers.add( HttpHeaders.CONTENT_TYPE, requestHeader.getAccept().toString() );
+//        ResponseEntity<ContinentDTO> rr = restGetFindContinentById(  continentId, requestHeader );
+
+
 
         return ResponseEntity.noContent().build();
+    }
+
+    @RequestMapping( value = "/{continentId}", method = RequestMethod.HEAD )
+    public ResponseEntity<Void> restHeadContinent_withID( @Valid @PathVariable( name = "continentId" ) final Integer continentId, @RequestHeader HttpHeaders requestHeader )
+    {
+        // This effectively needs to do the same as GET, but with an empty response body.
+        // Headers are set for Content-Type and Content length, and the same status code.
+        // "detail": "Request method 'DELETE' is not supported; Supported methods: HEAD, TRACE, POST, GET, OPTIONS",
+
+        // HttpHeaders headers = new HttpHeaders();
+        // headers.add( HttpHeaders.CONTENT_TYPE, requestHeader.getAccept().toString() );
+        ResponseEntity<ContinentDTO> rr = restGetFindContinentById( continentId, requestHeader );
+
+        return new ResponseEntity<>( rr.getHeaders(),
+                                     rr.getStatusCode() == HttpStatusCode.valueOf( 200 )
+                                        ? HttpStatus.NO_CONTENT : rr.getStatusCode() );
+//        return ResponseEntity.noContent().build();
     }
 
     // ===== INFO =====

@@ -38,14 +38,25 @@ public class ContinentDeleteService
     // ========== Update ==========
 
     // ========== Delete ==========
-    public void delete( final Continent entity )
+    public boolean delete( final Continent entity )
     {
-        repository.delete( mapper.domainToEntity( entity ) );
+        boolean existing = repository.existsById( entity.getId() ) || repository.existsByCode( entity.getCode() );
+//        if ( repository.existsById( entity.getId() ) || repository.existsByCode( entity.getCode() ) )
+//        {
+            repository.delete( mapper.domainToEntity( entity ) );
+//        }
+
+        // TODO return not found (404)
+        return existing;
     }
 
-    public void deleteById( final Integer continentId )
+    public boolean deleteById( final Integer continentId )
     {
+        boolean existing = repository.existsById( continentId );
+
         repository.deleteById( continentId );
+
+        return existing;
     }
 
 }
