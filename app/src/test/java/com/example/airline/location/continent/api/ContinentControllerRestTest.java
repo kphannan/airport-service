@@ -123,18 +123,12 @@ class ContinentControllerRestTest
 
 //            final String body = response.getContentAsString();
             // TODO need to assert the resulting JSON....
-//            assertAll( () -> assertEquals( HttpStatus.OK.value(), result.getResponse().getStatus() ),
-//                       () -> assertEquals( MediaType.APPLICATION_JSON_VALUE, response.getContentType() )
-//                     );
-
             assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
 //                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" )),
                        () -> assertEquals( "69", response.getHeader( "Content-Length" )),
                        () -> assertFalse( response.getHeaderNames().isEmpty()),
                        () -> assertEquals( 2, response.getHeaderNames().size())
                      );
-
-
         }
 
 
