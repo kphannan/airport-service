@@ -39,8 +39,8 @@ buildscript {
         // logcaptorVersion            = '2.10.1'
 
         // --- Mutation Testing
-        pitPluginVersion            = '1.15.0'
-        pitVersion                  = '1.19.1'
+        pitPluginVersion            = '1.19.0-rc.3'
+        pitVersion                  = '1.22.1'
 
         // --- BDD / REST Testing
         karateVersion               = '1.5.2'
@@ -94,7 +94,7 @@ plugins {
     // id 'org.checkerframework' version "${checkerFrameworkVersion}" apply false
 
     // // --- Mutation testing
-    // id 'info.solidsoft.pitest' version "${pitPluginVersion}" apply false
+    id 'info.solidsoft.pitest' version "${pitPluginVersion}" apply false
 
     // // ===== Configuration Management =====
     // // --- Artifact Versioning
