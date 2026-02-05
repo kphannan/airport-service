@@ -17,6 +17,7 @@ plugins {
 
 
 dependencies {
+	implementation project( ':lib' )
 	// --- OpenAPI doc
 	implementation libs.springdoc.openapi.ui
 

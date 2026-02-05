@@ -17,11 +17,13 @@ facility.scheduledService
 */
 
 
+import com.example.utility.IgnoreGeneratedCoverage;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 // TODO add validations @Pattern, @Size, @NonBlank
+@IgnoreGeneratedCoverage
 public record AirportSummaryEntity(
     @NotBlank
     @Size( max = 7 )

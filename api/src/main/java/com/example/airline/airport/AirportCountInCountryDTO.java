@@ -1,6 +1,7 @@
 package com.example.airline.airport;
 
 
+import com.example.utility.IgnoreGeneratedCoverage;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -9,6 +10,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
 
+@IgnoreGeneratedCoverage
 public record AirportCountInCountryDTO(
         @JsonProperty( "isoCountry" )
         @Schema( name = "isoCountry",

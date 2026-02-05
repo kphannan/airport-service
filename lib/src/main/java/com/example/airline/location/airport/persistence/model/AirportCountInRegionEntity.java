@@ -1,11 +1,13 @@
 package com.example.airline.location.airport.persistence.model;
 
+import com.example.utility.IgnoreGeneratedCoverage;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
 
+@IgnoreGeneratedCoverage
 public record AirportCountInRegionEntity(
         @NotBlank( message = "A unique region code is required" )
         @Pattern( regexp = "[A-Z]{2}-[A-Z\\-]{1,4}",
