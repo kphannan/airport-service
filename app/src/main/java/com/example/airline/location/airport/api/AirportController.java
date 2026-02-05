@@ -218,9 +218,14 @@ public class AirportController
 //        return ResponseEntity.ok( dto );
 //    }
 
+    /**
+     * REST method to retrieve a list of {@link AirportDTO} within the specified @see Region.
+     *
+     * @param regionCode the desired {@link AirportDTO#isoRegion}.
+     * @return A list of {@link AirportDTO} entities found withing the desired @see Region.
+     */
     @GetMapping( "/summary/region/code/{regionCode}" )
-    public ResponseEntity<List<AirportDTO>>
-    restGetAirportsByRegion( @PathVariable final String regionCode )
+    public ResponseEntity<List<AirportDTO>> restGetAirportsByRegion( @PathVariable final String regionCode )
     {
         final List<Airport> counts = service.findAirportsByRegion( regionCode );
 

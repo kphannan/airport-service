@@ -34,7 +34,7 @@ public class RegionDTO
 {
     // TODO convert to a Java record
     /**
-     * Internal OurAirports integer identifier for the region. This will stay
+     * Internal integer identifier for the region. This will stay
      * persistent, even if the region code changes.
      */
     @SuppressWarnings( "PMD.ShortVariable" )
@@ -71,7 +71,7 @@ public class RegionDTO
     /**
      * The local code for the administrative subdivision. Whenever possible, these
      * are official ISO 3166:2, at the highest level available, but in some cases
-     * OurAirports has to use unofficial codes. There is also a pseudocode "U-A"
+     * unofficial codes are used. There is also a pseudocode "U-A"
      * for each country, which means that the airport has not yet been assigned to a
      * region (or perhaps can't be, as in the case of a deep-sea oil platform).
      */

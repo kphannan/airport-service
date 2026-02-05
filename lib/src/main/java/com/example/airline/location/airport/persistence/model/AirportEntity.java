@@ -245,7 +245,7 @@ WHERE r.code = 'US-GA'
 public class AirportEntity // extends Auditable<String>
 {
     /**
-     * T Internal OurAirports integer identifier for the airport. This will stay
+     * T Internal integer identifier for the airport. This will stay
      * persistent, even if the airport code changes.
      */
     @Id
@@ -261,7 +261,7 @@ public class AirportEntity // extends Auditable<String>
     @NonNull private Long id;
 
     /**
-     * The text identifier used in the OurAirports URL. This will be the ICAO code
+     * The text identifier used in the URL. This will be the ICAO code
      * if available. Otherwise, it will be a local airport code (if no conflict), or
      * if nothing else is available, an internally-generated code starting with the
      * ISO2 country code, followed by a dash and a four-digit number.
@@ -319,8 +319,8 @@ public class AirportEntity // extends Auditable<String>
     /**
      * 'An alphanumeric code for the high-level administrative subdivision of a
      * country where the airport is primarily located (e.g. province, governorate),
-     * prefixed by the ISO2 country code and a hyphen. OurAirports uses ISO 3166:2
-     * codes whenever possible, preferring higher administrative levels, but also
+     * prefixed by the ISO2 country code and a hyphen. ISO 3166:2 codes are used
+     * whenever possible, preferring higher administrative levels, but also
      * includes some custom codes. See the documentation for regions.csv.'
      */
     @Column( name = "iso_region", length = 7, nullable = false, columnDefinition = "char(2)" )
