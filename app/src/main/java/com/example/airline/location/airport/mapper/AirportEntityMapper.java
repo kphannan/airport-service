@@ -28,15 +28,21 @@ public interface AirportEntityMapper
     // --- Instance
     /** Map a single db entity instance to a domain instance. */
     Airport entityToDomain( AirportEntity entity );
+
     AirportCountInContinent entityToDomain( AirportCountInContinentEntity entity );
+
     AirportCountInCountry entityToDomain( AirportCountInCountryEntity entity );
+
     AirportCountInRegion entityToDomain( AirportCountInRegionEntity entity );
 
     // --- Collection
     /** Map a list of domain instances to a list of db entity instances. */
     List<Airport> entityToDomain( List<AirportEntity> entities );
+
     List<AirportCountInContinent> entityToDomainAirportsInContinent( List<AirportCountInContinentEntity> entities );
+
     List<AirportCountInCountry> entityToDomainAirportsInCountry( List<AirportCountInCountryEntity> entities );
+
     List<AirportCountInRegion> entityToDomainAirportsInRegion( List<AirportCountInRegionEntity> entities );
 
     // --- Domain --> Persistence ---

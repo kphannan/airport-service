@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.airline.location.airport.mapper.AirportEntityMapper;
+import com.example.airline.location.airport.model.Airport;
 import com.example.airline.location.airport.model.AirportCountInContinent;
 import com.example.airline.location.airport.model.AirportCountInCountry;
 import com.example.airline.location.airport.model.AirportCountInRegion;
-import com.example.airline.location.airport.model.Airport;
 import com.example.airline.location.airport.persistence.model.AirportCountInContinentEntity;
 import com.example.airline.location.airport.persistence.model.AirportEntity;
 import com.example.airline.location.airport.persistence.model.AirportSummaryEntity;

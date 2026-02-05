@@ -28,13 +28,17 @@ public interface AirportDtoMapper
     // --- Instance
     /** Map a domain instance to an API instance. */
     AirportDTO domainToApi( Airport airport );
+
     AirportCountInContinentDTO domainToApi( AirportCountInContinent airport );
 
     // --- Collection
     /** Map a list of domain instances to a list of API instances. */
     List<AirportDTO> domainToApi( List<Airport> airports );
+
     List<AirportCountInContinentDTO> domainToApiAirportsInContinent( List<AirportCountInContinent> entities );
+
     List<AirportCountInCountryDTO> domainToApiAirportsInCountry( List<AirportCountInCountry> entities );
+
     List<AirportCountInRegionDTO> domainToApiAirportsInRegion( List<AirportCountInRegion> entities );
 
     // --- API --> Domain ---
