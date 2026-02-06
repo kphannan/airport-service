@@ -13,13 +13,13 @@ import org.mapstruct.Mapper;
 
 /**
  * MapStruct configuration for Country, CountryEntity.
- * <p>
- * Mapstruct will generate the methods.
+ *
+ * <p>Mapstruct will generate the methods.
  */
 @Mapper( componentModel = "spring" )
 public interface CountryEntityMapper
 {
-//    CountryMapper INSTANCE = Mappers.getMapper( CountryMapper.class );
+    // CountryMapper INSTANCE = Mappers.getMapper( CountryMapper.class );
 
     // --------------------------------
     // ----- Domain / Persistence -----

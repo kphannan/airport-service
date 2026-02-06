@@ -32,9 +32,9 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * API controller for managing countries.
  *
- * This controller provides endpoints to retrieve country information.
+ * <p>This controller provides endpoints to retrieve country information.
  *
- * The API supports pagination and returns data in JSON, YAML, and XML formats.
+ * <p>The API supports pagination and returns data in JSON, YAML, and XML formats.
  */
 @RestController
 @RequestMapping( "/location/country" )
@@ -89,31 +89,33 @@ public class CountryController
             requestBody = @RequestBody( required = false ),
             responses = { @ApiResponse( description = "Success",
                     responseCode = "200",
-                    content = { @Content( mediaType = "application/json",
-                                          schema = @Schema( implementation = CountryDTO.class ) ),
-                                @Content( mediaType = "application/yaml",
-                                          schema = @Schema( implementation = CountryDTO.class ) ),
-                                @Content( mediaType = "application/xml",
-                                          schema = @Schema( implementation = CountryDTO.class ) )
+                    content = {
+                        @Content( mediaType = "application/json",
+                                  schema = @Schema( implementation = CountryDTO.class ) ),
+                        @Content( mediaType = "application/yaml",
+                                  schema = @Schema( implementation = CountryDTO.class ) ),
+                        @Content( mediaType = "application/xml",
+                                  schema = @Schema( implementation = CountryDTO.class ) )
                     }
             )
             },
-            parameters = { @Parameter( name = "id",
-                                       required = true,
-                                       in = ParameterIn.PATH,
-                                       description = "Primary Key" ),
-                           @Parameter( name = "Bearer", required = false,
-                                   schema = @Schema( implementation = String.class ),
-                                   in = ParameterIn.HEADER,
-                                   description = "Authentication / Authorization token" ),
-                           @Parameter( name = "TRACEPARENT", required = false,
-                                   schema = @Schema( implementation = String.class ),
-                                   in = ParameterIn.HEADER,
-                                   description = "Distributed tracing identifier" ),
-                           @Parameter( name = "TRACESTATE", required = false,
-                                   schema = @Schema( implementation = String.class ),
-                                   in = ParameterIn.HEADER,
-                                   description = "Vendor specific trace identification" )
+            parameters = {
+                @Parameter( name = "id",
+                            required = true,
+                            in = ParameterIn.PATH,
+                            description = "Primary Key" ),
+                @Parameter( name = "Bearer", required = false,
+                            schema = @Schema( implementation = String.class ),
+                            in = ParameterIn.HEADER,
+                            description = "Authentication / Authorization token" ),
+                @Parameter( name = "TRACEPARENT", required = false,
+                            schema = @Schema( implementation = String.class ),
+                            in = ParameterIn.HEADER,
+                            description = "Distributed tracing identifier" ),
+                @Parameter( name = "TRACESTATE", required = false,
+                            schema = @Schema( implementation = String.class ),
+                            in = ParameterIn.HEADER,
+                            description = "Vendor specific trace identification" )
             }
     )
     @GetMapping( "/{id}" )

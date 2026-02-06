@@ -105,7 +105,7 @@ public class AirportService
 
     public List<AirportCountInContinent> countAirportsByContinent()
     {
-        List<AirportCountInContinentEntity> entities = repository.countAirportsByContinent();
+        final List<AirportCountInContinentEntity> entities = repository.countAirportsByContinent();
 
         return mapper.entityToDomainAirportsInContinent( entities );
     }

@@ -2,7 +2,6 @@
 
 package com.example.airline.location.region.api;
 
-
 import java.util.Optional;
 
 import com.example.airline.location.config.GlobalApiResponses;
@@ -37,9 +36,9 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * API controller for managing regions.
  *
- * This controller provides endpoints to retrieve region information.
+ * <p>This controller provides endpoints to retrieve region information.
  *
- * The API supports pagination and returns data in JSON, YAML, and XML formats.
+ * <p>The API supports pagination and returns data in JSON, YAML, and XML formats.
  *
  */
 @RestController
@@ -78,7 +77,7 @@ public class RegionsController
     {
         final Page<Region> regions = service.findAll( pageable );
 
-        var zzz = regions.map( mapper::domainToApi );
+        // var zzz = regions.map( mapper::domainToApi );
 
 //        ResponseEntity.BodyBuilder bb = ResponseEntity.status( HttpStatusCode.valueOf( 200 ) );
 //        bb.contentLength( zzz.getSize() );
@@ -101,34 +100,36 @@ public class RegionsController
             requestBody = @RequestBody( required = false ),
             responses = { @ApiResponse( description = "Success",
                     responseCode = "200",
-                    content = { @Content( mediaType = "application/json",
-                                          schema = @Schema( implementation = RegionDTO.class ) ),
-                                @Content( mediaType = "application/yaml",
-                                          schema = @Schema( implementation = RegionDTO.class ) ),
-                                @Content( mediaType = "application/xml",
-                                          schema = @Schema( implementation = RegionDTO.class ) )
+                    content = {
+                        @Content( mediaType = "application/json",
+                                  schema = @Schema( implementation = RegionDTO.class ) ),
+                        @Content( mediaType = "application/yaml",
+                                  schema = @Schema( implementation = RegionDTO.class ) ),
+                        @Content( mediaType = "application/xml",
+                                  schema = @Schema( implementation = RegionDTO.class ) )
                     }
                 )
             },
-            parameters = { @Parameter( name = "id",
-                                       required = true,
-                                       in = ParameterIn.PATH,
-                                       description = "Primary Key" ),
-                           @Parameter( name = "Bearer",
-                                       required = false,
-                                       schema = @Schema( implementation = String.class ),
-                                       in = ParameterIn.HEADER,
-                                       description = "Authentication / Authorization token" ),
-                           @Parameter( name = "TRACEPARENT",
-                                       required = false,
-                                       schema = @Schema( implementation = String.class ),
-                                       in = ParameterIn.HEADER,
-                                       description = "Distributed tracing identifier" ),
-                           @Parameter( name = "TRACESTATE",
-                                       required = false,
-                                       schema = @Schema( implementation = String.class ),
-                                       in = ParameterIn.HEADER,
-                                       description = "Vendor specific trace identification" )
+            parameters = {
+                @Parameter( name = "id",
+                            required = true,
+                            in = ParameterIn.PATH,
+                            description = "Primary Key" ),
+                @Parameter( name = "Bearer",
+                            required = false,
+                            schema = @Schema( implementation = String.class ),
+                            in = ParameterIn.HEADER,
+                            description = "Authentication / Authorization token" ),
+                @Parameter( name = "TRACEPARENT",
+                            required = false,
+                            schema = @Schema( implementation = String.class ),
+                            in = ParameterIn.HEADER,
+                            description = "Distributed tracing identifier" ),
+                @Parameter( name = "TRACESTATE",
+                            required = false,
+                            schema = @Schema( implementation = String.class ),
+                            in = ParameterIn.HEADER,
+                            description = "Vendor specific trace identification" )
             }
     )
     @GetMapping( "/{id}" )
@@ -159,39 +160,39 @@ public class RegionsController
                 summary = "Find a Region by its abbreviation",
                 description = "Find a Region by its 3-7 letter code",
                 responses = {
-                        @ApiResponse( description = "Continent found and returned",
-                                      responseCode = "200",
-                                      content = {
-                                              @Content( mediaType = "application/json",
-                                                        schema = @Schema( implementation = ContinentDTO.class ) ),
-                                              @Content( mediaType = "application/yaml",
-                                                        schema = @Schema( implementation = ContinentDTO.class ) ),
-                                              @Content( mediaType = "application/xml",
-                                                        schema = @Schema( implementation = ContinentDTO.class ) )
-                                      }
-                        )
+                    @ApiResponse( description = "Continent found and returned",
+                                  responseCode = "200",
+                                  content = {
+                                      @Content( mediaType = "application/json",
+                                                schema = @Schema( implementation = ContinentDTO.class ) ),
+                                      @Content( mediaType = "application/yaml",
+                                                schema = @Schema( implementation = ContinentDTO.class ) ),
+                                      @Content( mediaType = "application/xml",
+                                                schema = @Schema( implementation = ContinentDTO.class ) )
+                                  }
+                    )
                 },
                 parameters = {
-                        @Parameter( name = "code",
-                                    required = true,
-                                    in = ParameterIn.PATH,
-                                    description = "3-7 character code" ),
-                        @Parameter( name = "TRACEPARENT",
-                                    required = false,
-                                    schema = @Schema( implementation = String.class ),
-                                    in = ParameterIn.HEADER,
-                                    description = "Distributed tracing identifier" ),
-                        @Parameter( name = "TRACESTATE",
-                                    required = false,
-                                    schema = @Schema( implementation = String.class ),
-                                    in = ParameterIn.HEADER,
-                                    description = "Vendor specific trace identification" )
+                    @Parameter( name = "code",
+                                required = true,
+                                in = ParameterIn.PATH,
+                                description = "3-7 character code" ),
+                    @Parameter( name = "TRACEPARENT",
+                                required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Distributed tracing identifier" ),
+                    @Parameter( name = "TRACESTATE",
+                                required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Vendor specific trace identification" )
                 },
                 security = {}
     )
     @GetMapping( "/code/{code}" )
     public ResponseEntity<RegionDTO> restGetFindRegionByCode( @Valid @PathVariable final String code,
-                                                              @RequestHeader HttpHeaders requestHeader )
+                                                              @RequestHeader final HttpHeaders requestHeader )
     {
         final Optional<Region> optionalEntity = service.findRegionByCode( code );
 
@@ -199,14 +200,16 @@ public class RegionsController
         {
             final RegionDTO dto = mapper.domainToApi( optionalEntity.get() );
 
-            ResponseEntity.BodyBuilder bb = ResponseEntity.status( HttpStatusCode.valueOf( 200 ) );
-            bb.contentType( requestHeader.getContentType() );
-            bb.contentLength( dto.toString().length() );
-            return bb.body( dto );
+            ResponseEntity.BodyBuilder bodyBuilder = ResponseEntity.status( HttpStatusCode.valueOf( 200 ) );
+            bodyBuilder.contentType( requestHeader.getContentType() );
+            bodyBuilder.contentLength( dto.toString().length() );
+            return bodyBuilder.body( dto );
         }
 
         // may include instance in header.....
-        return ResponseEntity.noContent().build();
-        // return ResponseEntity.noContent().location().build();
+        return ResponseEntity
+                .noContent()
+                .location( requestHeader.getLocation() )
+                .build();
     }
 }

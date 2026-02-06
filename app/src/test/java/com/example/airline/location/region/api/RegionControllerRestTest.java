@@ -20,8 +20,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 import java.util.Optional;
 
-import com.example.airline.location.region.persistence.model.RegionEntity;
 import com.example.airline.location.region.mapper.RegionDtoMapper;
+import com.example.airline.location.region.persistence.model.RegionEntity;
 import com.example.airline.location.region.persistence.repository.RegionsRepository;
 import com.example.airline.location.region.service.RegionsService;
 import com.example.rest.utility.PageableAssert;
@@ -149,7 +149,7 @@ class RegionControllerRestTest //extends RestControllerTestBase
                     .andDo( print() )
                     .andExpect( status().isOk() )
                     .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
-                    .andExpect( content().encoding( "UTF-8" ))
+                    .andExpect( content().encoding( "UTF-8" ) )
                     // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
                     //      don't complain about lack of assertions in tests
                     .andExpect( jsonPath( "$.id" ).value( 2 ) )
@@ -164,16 +164,16 @@ class RegionControllerRestTest //extends RestControllerTestBase
 
             final MockHttpServletResponse response = result.getResponse();
 
-//            final String body = response.getContentAsString();
+            // final String body = response.getContentAsString();
             // TODO need to assert the resulting JSON....
 
             assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
-//                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" )),
-//                       () -> assertEquals( "application/json;charset=UTF-8", response.getContentType()),
-                       () -> assertEquals( "119", response.getHeader( "Content-Length" )),
-                       () -> assertFalse( response.getHeaderNames().isEmpty()),
-                       () -> assertEquals( 2, response.getHeaderNames().size())
-                     );
+                       // () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" )),
+                       // () -> assertEquals( "application/json;charset=UTF-8", response.getContentType()),
+                       () -> assertEquals( "119", response.getHeader( "Content-Length" ) ),
+                       () -> assertFalse( response.getHeaderNames().isEmpty() ),
+                       () -> assertEquals( 2, response.getHeaderNames().size() )
+            );
         }
 
         @Test
@@ -195,7 +195,6 @@ class RegionControllerRestTest //extends RestControllerTestBase
 //                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
 //                    .andExpect( content().encoding( "UTF-8" ))
                     .andReturn();
-
         }
 
 

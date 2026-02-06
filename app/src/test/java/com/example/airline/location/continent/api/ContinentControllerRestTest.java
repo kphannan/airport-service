@@ -104,11 +104,10 @@ class ContinentControllerRestTest
             final MvcResult result = mvc
                     .perform( request )
                     .andDo( print() )
+                    // .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
                     .andExpect( content().contentTypeCompatibleWith( "application/json" ) )
-                    .andExpect( content().encoding( "UTF-8" ))
-//                    .andExpect( content.
+                    .andExpect( content().encoding( "UTF-8" ) )
                     .andExpect( status().isOk() )
-//                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
                     // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
                     //      don't complain about lack of assertions in tests
                     .andExpect( jsonPath( "$.id" ).value( 1 ) )
@@ -116,19 +115,17 @@ class ContinentControllerRestTest
                     .andExpect( jsonPath( "$.name" ).value( "North" ) )
                     .andReturn();
 
-
-
             // --- then
             final MockHttpServletResponse response = result.getResponse();
 
-//            final String body = response.getContentAsString();
+            // final String body = response.getContentAsString();
             // TODO need to assert the resulting JSON....
             assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
-//                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" )),
-                       () -> assertEquals( "69", response.getHeader( "Content-Length" )),
-                       () -> assertFalse( response.getHeaderNames().isEmpty()),
-                       () -> assertEquals( 2, response.getHeaderNames().size())
-                     );
+                       // () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
+                       () -> assertEquals( "69", response.getHeader( "Content-Length" ) ),
+                       () -> assertFalse( response.getHeaderNames().isEmpty() ),
+                       () -> assertEquals( 2, response.getHeaderNames().size() )
+            );
         }
 
 
@@ -152,7 +149,7 @@ class ContinentControllerRestTest
             // final MockHttpServletResponse response = result.getResponse();
 
             assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() )
-                     );
+            );
         }
 
 
@@ -173,12 +170,12 @@ class ContinentControllerRestTest
                     .andDo( print() )
                     .andExpect( status().isBadRequest() )
                     .andReturn();
-             final MockHttpServletResponse response = result.getResponse();
+            final MockHttpServletResponse response = result.getResponse();
 
             // --- then
             // TODO examine the ProblemDetail
-        assertThat( response.getContentAsString() )
-                .isNotBlank();      // TODO Check for proper ProblemDetails
+            assertThat( response.getContentAsString() )
+                    .isNotBlank();      // TODO Check for proper ProblemDetails
         }
 
 
@@ -258,12 +255,12 @@ class ContinentControllerRestTest
                     .andDo( print() )
                     .andExpect( status().isNotFound() )
                     .andReturn();
-             final MockHttpServletResponse response = result.getResponse();
+            final MockHttpServletResponse response = result.getResponse();
 
             // --- then
             // TODO examine the ProblemDetail
-        assertThat( response.getContentAsString() )
-                .isNotBlank();      // TODO Check for proper ProblemDetails
+            assertThat( response.getContentAsString() )
+                    .isNotBlank();      // TODO Check for proper ProblemDetails
         }
 
 
@@ -369,7 +366,7 @@ class ContinentControllerRestTest
 
             assertAll( () -> assertEquals( HttpStatus.CONFLICT.value(), result.getResponse().getStatus() )
                        // TODO should response include problem details indicating existing entity with same ID
-                     );
+            );
             verify( repository ).existsByCode( anyString() );
             verify( repository, never() ).save( any( ContinentEntity.class ) );
         }
@@ -411,7 +408,7 @@ class ContinentControllerRestTest
             // It is desired to have all 'asserts' as soft asserts.
             assertAll( () -> assertEquals( HttpStatus.CREATED.value(), result.getResponse().getStatus() ),
                        () -> assertTrue( result.getResponse().containsHeader( "Location" ) )
-                     );
+            );
             verify( repository ).existsByCode( anyString() );
             verify( repository ).save( any( ContinentEntity.class ) );
 
@@ -454,7 +451,7 @@ class ContinentControllerRestTest
 
                 // It is desired to have all 'asserts' as soft asserts.
                 assertAll( () -> assertEquals( HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus() )
-                         );
+                );
 
                 // TODO Use a JSON assertion instead of a plain string
                 final String body = result.getResponse().getContentAsString();
@@ -492,7 +489,7 @@ class ContinentControllerRestTest
 
                 // It is desired to have all 'asserts' as soft asserts.
                 assertAll( () -> assertEquals( HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus() )
-                         );
+                );
 
                 // TODO Use a JSON assertion instead of a plain string
                 final String body = result.getResponse().getContentAsString();
@@ -535,7 +532,7 @@ class ContinentControllerRestTest
                 // It is desired to have all 'asserts' as soft asserts.
                 assertAll( () -> assertEquals( HttpStatus.BAD_REQUEST.value(),
                                                result.getResponse().getStatus() )
-                         );
+                );
 
                 assertThat( result.getResponse().getContentAsString() )
                         .contains( "Cannot deserialize value of type `java.net.URI` from String" );
@@ -585,7 +582,7 @@ class ContinentControllerRestTest
             // final MockHttpServletResponse response = result.getResponse();
 
             assertAll( () -> assertEquals( HttpStatus.CONFLICT.value(), result.getResponse().getStatus() )
-                     );
+            );
             verify( repository ).existsById( eq( 77 ) );
             verify( repository, never() ).save( any( ContinentEntity.class ) );
         }
@@ -629,11 +626,11 @@ class ContinentControllerRestTest
             // final MockHttpServletResponse response = result.getResponse();
 
             assertAll( () -> assertEquals( HttpStatus.OK.value(), result.getResponse().getStatus() )
-                     );
+            );
             verify( repository )
                     .existsById( eq( 77 ) );
-            verify( repository, times( 1 ) ).
-                    save( any( ContinentEntity.class ) );
+            verify( repository, times( 1 ) )
+                    .save( any( ContinentEntity.class ) );
         }
     }
 
@@ -676,7 +673,7 @@ class ContinentControllerRestTest
 
             assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() ),
                        () -> verify( repository ).deleteById( anyInt() )
-                     );
+            );
         }
 
         @Test
@@ -700,7 +697,7 @@ class ContinentControllerRestTest
 
             assertAll( () -> assertEquals( HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus() ),
                        () -> verify( repository ).deleteById( anyInt() )
-                     );
+            );
         }
 
         //        @Test
@@ -755,7 +752,7 @@ class ContinentControllerRestTest
 
             assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() ),
                        () -> verify( repository ).delete( any( ContinentEntity.class ) )
-                     );
+            );
         }
 
         @Test
@@ -788,7 +785,7 @@ class ContinentControllerRestTest
 
             assertAll( () -> assertEquals( HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus() ),
                        () -> verify( repository ).delete( any( ContinentEntity.class ) )
-                     );
+            );
         }
     }
 
@@ -858,7 +855,7 @@ class ContinentControllerRestTest
 
             // --- then
             assertAll( () -> assertEquals( HttpStatus.OK.value(), result.getResponse().getStatus() )
-                     );
+            );
         }
     }
 
@@ -886,7 +883,7 @@ class ContinentControllerRestTest
             // final MockHttpServletResponse response = result.getResponse();
 
             assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() )
-                     );
+            );
         }
 
         @Test
@@ -910,11 +907,11 @@ class ContinentControllerRestTest
             final MockHttpServletResponse response = result.getResponse();
 
             assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), response.getStatus() ),
-                       () -> assertEquals( "application/json", response.getHeader( "Content-Type" )),
-                       () -> assertEquals( "75", response.getHeader( "Content-Length" )),
-                       () -> assertFalse( response.getHeaderNames().isEmpty()),
-                       () -> assertEquals( 2, response.getHeaderNames().size())
-                     );
+                       () -> assertEquals( "application/json", response.getHeader( "Content-Type" ) ),
+                       () -> assertEquals( "75", response.getHeader( "Content-Length" ) ),
+                       () -> assertFalse( response.getHeaderNames().isEmpty() ),
+                       () -> assertEquals( 2, response.getHeaderNames().size() )
+            );
         }
 
 

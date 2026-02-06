@@ -99,6 +99,7 @@ public interface ContinentRepository extends JpaRepository<ContinentEntity, Inte
      *
      * @param entity must not be {@literal null}.
      */
+    @Override
     void delete( ContinentEntity entity );
 
     /**
@@ -106,5 +107,6 @@ public interface ContinentRepository extends JpaRepository<ContinentEntity, Inte
      *
      * @param continentId must not be {@literal null}.
      */
+    @Override
     void deleteById( Integer continentId );
 }

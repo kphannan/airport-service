@@ -38,18 +38,28 @@ public class ContinentDeleteService
     // ========== Update ==========
 
     // ========== Delete ==========
+
+    /**
+     * Delete the given entity.
+     *
+     * @param entity the entity to delete.
+     * @return true if the entity existed before delete.
+     */
     public boolean delete( final Continent entity )
     {
         boolean existing = repository.existsById( entity.getId() ) || repository.existsByCode( entity.getCode() );
-//        if ( repository.existsById( entity.getId() ) || repository.existsByCode( entity.getCode() ) )
-//        {
-            repository.delete( mapper.domainToEntity( entity ) );
-//        }
 
-        // TODO return not found (404)
+            repository.delete( mapper.domainToEntity( entity ) );
+
         return existing;
     }
 
+    /**
+     * Delete the given entity.
+     *
+     * @param continentId the Id of the entity to delete.
+     * @return true if the entity existed before delete.
+     */
     public boolean deleteById( final Integer continentId )
     {
         boolean existing = repository.existsById( continentId );

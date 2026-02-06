@@ -26,7 +26,7 @@ public class ContinentReadService
 
     private final ContinentEntityMapper mapper;
 
-//    private final TransactionTemplate transactionTemplate;
+    // private final TransactionTemplate transactionTemplate;
 
     /**
      * Create a ContinentService supported by autowire.
@@ -36,12 +36,12 @@ public class ContinentReadService
      */
     public ContinentReadService( final ContinentRepository repository,
                                  final ContinentEntityMapper mapper
-//                                 final TransactionTemplate transactionTemplate
+                                 // final TransactionTemplate transactionTemplate
                                )
     {
         this.repository          = repository;
         this.mapper              = mapper;
-//        this.transactionTemplate = transactionTemplate;
+        // this.transactionTemplate = transactionTemplate;
     }
 
 

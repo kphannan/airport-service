@@ -12,8 +12,8 @@ import org.mapstruct.Mapper;
 
 /**
  * MapStruct configuration for Country, CountryDTO.
- * <p>
- * Mapstruct will generate the methods.
+ *
+ * <p>Mapstruct will generate the methods.
  */
 @Mapper( componentModel = "spring" )
 public interface CountryDtoMapper

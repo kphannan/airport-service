@@ -29,14 +29,14 @@ public class UriConverter implements AttributeConverter<URI, String>
     @Override
     public URI convertToEntityAttribute( final String dbData )
     {
-        try
-        {
+//        try
+//        {
             return null == dbData ? null : URI.create( dbData );
-        }
-        catch ( Exception ex )
-        {
-            log.error( String.format( "Error creating URI for '%s'", dbData ), ex );
-            throw ex;
-        }
+//        }
+//        catch ( Exception ex )
+//        {
+//            log.error( String.format( "Error creating URI for '%s'", dbData ), ex );
+//            throw ex;
+//        }
     }
 }

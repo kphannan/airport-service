@@ -99,7 +99,7 @@ public class GlobalExceptionHandlerTest
                                                detail.getProperties()
                                                      .get( "Supported content:" ) ),
                            () -> assertEquals( HttpStatus.UNSUPPORTED_MEDIA_TYPE, result.getStatusCode() )
-                         );
+                );
             }
 
 
@@ -127,7 +127,7 @@ public class GlobalExceptionHandlerTest
                                                detail.getProperties()
                                                      .get( "Supported content:" ) ),
                            () -> assertEquals( HttpStatus.NOT_ACCEPTABLE, result.getStatusCode() )
-                         );
+                );
             }
 
             // - HttpMediaTypeException
@@ -138,13 +138,14 @@ public class GlobalExceptionHandlerTest
                 // --- given
                 final List<MediaType> supported = List.of( MediaType.APPLICATION_JSON, MediaType.APPLICATION_YAML );
                 final HttpMediaTypeException exception =
-                        new HttpMediaTypeException( "Kilroy was here", supported, "detail code", null ) {
-                            @Override
-                            public HttpStatusCode getStatusCode()
-                            {
-                                return HttpStatus.ALREADY_REPORTED;
-                            }
-                        };
+                    new HttpMediaTypeException( "Kilroy was here", supported, "detail code", null )
+                    {
+                        @Override
+                        public HttpStatusCode getStatusCode()
+                        {
+                            return HttpStatus.ALREADY_REPORTED;
+                        }
+                    };
 
                 // --- when
                 final ResponseEntity<ProblemDetail> result =
@@ -160,7 +161,7 @@ public class GlobalExceptionHandlerTest
                                                detail.getProperties()
                                                      .get( "Supported content:" ) ),
                            () -> assertEquals( HttpStatus.ALREADY_REPORTED, result.getStatusCode() )
-                         );
+                );
             }
         }
 
@@ -174,7 +175,7 @@ public class GlobalExceptionHandlerTest
             {
                 // --- given
                 final NoResourceFoundException exception =
-                        new NoResourceFoundException( HttpMethod.GET, "/some/resource/path" );
+                    new NoResourceFoundException( HttpMethod.GET, "/some/resource/path" );
 
                 // --- when
                 final ResponseEntity<ProblemDetail> result =
@@ -186,7 +187,7 @@ public class GlobalExceptionHandlerTest
                            () -> assertEquals( "Not Found", detail.getTitle() ),
                            () -> assertEquals( 404, detail.getStatus() ),
                            () -> assertEquals( "No static resource /some/resource/path.", detail.getDetail() )
-                         );
+                );
             }
         }
 
@@ -200,7 +201,7 @@ public class GlobalExceptionHandlerTest
             {
                 // --- given
                 final HttpRequestMethodNotSupportedException exception =
-                        new HttpRequestMethodNotSupportedException( "GET", List.of( "PUT", "POST", "DELETE") );
+                    new HttpRequestMethodNotSupportedException( "GET", List.of( "PUT", "POST", "DELETE" ) );
 
                 // --- when
                 final ResponseEntity<ProblemDetail> result =
@@ -213,7 +214,7 @@ public class GlobalExceptionHandlerTest
                            () -> assertEquals( 405, detail.getStatus() ),
                            () -> assertEquals( "Method 'GET' is not supported.", detail.getDetail() )
                            // TODO check for accepted methods
-                         );
+                );
             }
         }
 
@@ -255,7 +256,7 @@ public class GlobalExceptionHandlerTest
                            () -> assertEquals( "Malformed Request", detail.getTitle() ),
                            () -> assertEquals( 400, detail.getStatus() ),
                            () -> assertEquals( "Test exception", detail.getDetail() )
-                         );
+                );
             }
 
             @Test
@@ -291,7 +292,7 @@ public class GlobalExceptionHandlerTest
                            () -> assertEquals( "Unable to produce requested response format", detail.getTitle() ),
                            () -> assertEquals( 501, detail.getStatus() ),
                            () -> assertEquals( "Test writable exception", detail.getDetail() )
-                         );
+                );
             }
         }
 
@@ -329,7 +330,7 @@ public class GlobalExceptionHandlerTest
                                                detail.getProperties().get( "Possibility 2" ) ),
                            () -> assertEquals( "Missing Form Data",
                                                detail.getProperties().get( "Possibility 3" ) )
-                         );
+                );
             }
 
             @Test
@@ -351,7 +352,7 @@ public class GlobalExceptionHandlerTest
                            () -> assertEquals( 400, detail.getStatus() ),
                            () -> assertEquals( "Method parameter 'name': Failed to convert value of type 'java.lang.String' to required type 'java.util.ArrayList'",
                                                detail.getDetail() )
-                         );
+                );
             }
 
         }
@@ -382,7 +383,7 @@ public class GlobalExceptionHandlerTest
                            () -> assertEquals( 400, detail.getStatus() ),
                            () -> assertEquals( "Constraint violation message",
                                                detail.getDetail() )
-                         );
+                );
             }
 
 
@@ -435,15 +436,18 @@ public class GlobalExceptionHandlerTest
                     @Override
                     public Path getPropertyPath()
                     {
-                        return new Path() {
-
+                        return new Path()
+                        {
                             @Override
                             public Iterator<Node> iterator()
                             {
                                 return null;
                             }
 
-                            public String toString() { return "property path"; }
+                            public String toString()
+                            {
+                                return "property path";
+                            }
                         };
                     }
 

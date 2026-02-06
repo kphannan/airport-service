@@ -38,8 +38,9 @@ public class AirportCodeIataEntity
 
 
 
+
     private boolean hasText( final String value )
     {
-        return null != value && !value.trim().isBlank();
+        return null != value && !value.isBlank();
     }
 }
