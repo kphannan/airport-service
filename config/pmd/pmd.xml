@@ -36,7 +36,6 @@
         </properties>
     </rule>
     <rule ref="category/java/bestpractices.xml/UnitTestShouldIncludeAssert" />
-    <!-- <rule ref="category/java/bestpractices.xml/JUnitUseExpected" /> -->
     <rule ref="category/java/bestpractices.xml/LiteralsFirstInComparisons" />
     <rule ref="category/java/bestpractices.xml/LooseCoupling">
         <properties>
@@ -261,7 +260,7 @@
     <rule ref="category/java/errorprone.xml/AvoidCallingFinalize" />
     <rule ref="category/java/errorprone.xml/AvoidCatchingGenericException" />
     <!-- <rule ref="category/java/errorprone.xml/AvoidCatchingNPE" /> -->    <!-- Deprecated -->
-<!--    <rule ref="category/java/errorprone.xml/AvoidCatchingThrowable"/>--> <!-- Deprecated -->
+    <!--    <rule ref="category/java/errorprone.xml/AvoidCatchingThrowable"/>-->    <!-- Deprecated -->
     <rule ref="category/java/errorprone.xml/AvoidDecimalLiteralsInBigDecimalConstructor"/>
     <rule ref="category/java/errorprone.xml/AvoidDuplicateLiterals">
         <properties>
@@ -276,7 +275,7 @@
     <rule ref="category/java/errorprone.xml/AvoidFieldNameMatchingTypeName" />
     <rule ref="category/java/errorprone.xml/AvoidInstanceofChecksInCatchClause"/>
     <!-- <rule ref="category/java/errorprone.xml/AvoidLiteralsInIfCondition" /> -->
-<!--    <rule ref="category/java/errorprone.xml/AvoidLosingExceptionInformation" />-->  <!-- Deprecated -->
+    <!--    <rule ref="category/java/errorprone.xml/AvoidLosingExceptionInformation" />-->    <!-- Deprecated -->
     <rule ref="category/java/errorprone.xml/AvoidMultipleUnaryOperators"/>
     <rule ref="category/java/errorprone.xml/AvoidUsingOctalValues"/>
     <!-- <rule ref="category/java/errorprone.xml/BeanMembersShouldSerialize" /> -->
@@ -305,7 +304,7 @@
     <rule ref="category/java/errorprone.xml/DoNotExtendJavaLangThrowable"/>
     <rule ref="category/java/errorprone.xml/DoNotHardCodeSDCard" />
     <rule ref="category/java/errorprone.xml/DoNotThrowExceptionInFinally" />
-<!--    <rule ref="category/java/errorprone.xml/DontImportSun" />-->  <!-- Deprecated -->
+    <!--    <rule ref="category/java/errorprone.xml/DontImportSun" />-->    <!-- Deprecated -->
     <rule ref="category/java/errorprone.xml/DontUseFloatTypeForLoopIndices"/>
     <rule ref="category/java/errorprone.xml/EqualsNull"/>
     <!-- <rule ref="category/java/errorprone.xml/FinalizeDoesNotCallSuperFinalize" /> -->
@@ -350,7 +349,7 @@
     <rule ref="category/java/errorprone.xml/UnusedNullCheckInEquals"/>
     <rule ref="category/java/errorprone.xml/UseCorrectExceptionLogging" />
     <rule ref="category/java/errorprone.xml/UseEqualsToCompareStrings"/>
-<!--    <rule ref="category/java/errorprone.xml/UselessOperationOnImmutable"/>-->  <!-- Deprecated -->
+    <!--    <rule ref="category/java/errorprone.xml/UselessOperationOnImmutable"/>-->    <!-- Deprecated -->
     <rule ref="category/java/errorprone.xml/UselessPureMethodCall" />
     <rule ref="category/java/errorprone.xml/UseLocaleWithCaseConversions"/>
     <rule ref="category/java/errorprone.xml/UseProperClassLoader" />
