@@ -83,7 +83,7 @@
         </properties>
     </rule>
     <rule ref="category/java/codestyle.xml/FormalParameterNamingConventions"/>
-    <rule ref="category/java/codestyle.xml/GenericsNaming"/>
+    <!-- <rule ref="category/java/codestyle.xml/GenericsNaming"/> -->    <!-- Deprecated -->
     <rule ref="category/java/codestyle.xml/LambdaCanBeMethodReference"/>
     <rule ref="category/java/codestyle.xml/LinguisticNaming" />
     <rule ref="category/java/codestyle.xml/LocalVariableNamingConventions"/>
@@ -106,6 +106,7 @@
     <rule ref="category/java/codestyle.xml/ShortClassName" />
     <rule ref="category/java/codestyle.xml/ShortMethodName" />
     <rule ref="category/java/codestyle.xml/ShortVariable" />
+    <rule ref="category/java/codestyle.xml/TypeParameterNamingConventions" />
 
     <!-- <rule ref="category/java/codestyle.xml/LocalHomeNamingConvention" /> -->
     <!-- <rule ref="category/java/codestyle.xml/LocalInterfaceSessionNamingConvention" /> -->
@@ -157,17 +158,17 @@
     <rule ref="category/java/codestyle.xml/UnnecessaryConstructor"/>
     <rule ref="category/java/codestyle.xml/UnnecessaryFullyQualifiedName"/>
     <rule ref="category/java/codestyle.xml/UnnecessaryImport" />
-    <rule ref="category/java/codestyle.xml/UnnecessaryLocalBeforeReturn"/>
+    <!-- <rule ref="category/java/codestyle.xml/UnnecessaryLocalBeforeReturn"/> -->    <!-- Deprecated -->
     <rule ref="category/java/codestyle.xml/UnnecessaryModifier"/>
     <rule ref="category/java/codestyle.xml/UnnecessaryReturn"/>
     <rule ref="category/java/codestyle.xml/UseDiamondOperator" />
     <rule ref="category/java/codestyle.xml/UselessParentheses"/>
     <rule ref="category/java/codestyle.xml/UselessQualifiedThis"/>
-
+    <rule ref="category/java/codestyle.xml/VariableCanBeInlined" />
 
     <!-- Design -->
     <rule ref="category/java/design.xml/AbstractClassWithoutAnyMethod"/>
-    <rule ref="category/java/design.xml/AvoidCatchingGenericException" />
+    <!-- <rule ref="category/java/design.xml/AvoidCatchingGenericException" /> -->    <!-- Deprecated -->
     <rule ref="category/java/design.xml/AvoidDeeplyNestedIfStmts" />
     <rule ref="category/java/design.xml/AvoidRethrowingException" />
     <rule ref="category/java/design.xml/AvoidThrowingNewInstanceOfSameException" />
@@ -232,7 +233,7 @@
     <rule ref="category/java/documentation.xml/CommentRequired">
         <properties>
             <!-- Field comments can clutter the code. -->
-            <property name="fieldCommentRequirement" value="Ignored" />
+            <property name="fieldCommentRequirement" value="ignored" />
         </properties>
     </rule>
     <rule ref="category/java/documentation.xml/CommentSize">
@@ -258,8 +259,9 @@
     <rule ref="category/java/errorprone.xml/AvoidAssertAsIdentifier" />
     <rule ref="category/java/errorprone.xml/AvoidBranchingStatementAsLastInLoop"/>
     <rule ref="category/java/errorprone.xml/AvoidCallingFinalize" />
-    <rule ref="category/java/errorprone.xml/AvoidCatchingNPE" />
-    <rule ref="category/java/errorprone.xml/AvoidCatchingThrowable"/>
+    <rule ref="category/java/errorprone.xml/AvoidCatchingGenericException" />
+    <!-- <rule ref="category/java/errorprone.xml/AvoidCatchingNPE" /> -->    <!-- Deprecated -->
+<!--    <rule ref="category/java/errorprone.xml/AvoidCatchingThrowable"/>--> <!-- Deprecated -->
     <rule ref="category/java/errorprone.xml/AvoidDecimalLiteralsInBigDecimalConstructor"/>
     <rule ref="category/java/errorprone.xml/AvoidDuplicateLiterals">
         <properties>
@@ -274,7 +276,7 @@
     <rule ref="category/java/errorprone.xml/AvoidFieldNameMatchingTypeName" />
     <rule ref="category/java/errorprone.xml/AvoidInstanceofChecksInCatchClause"/>
     <!-- <rule ref="category/java/errorprone.xml/AvoidLiteralsInIfCondition" /> -->
-    <rule ref="category/java/errorprone.xml/AvoidLosingExceptionInformation" />
+<!--    <rule ref="category/java/errorprone.xml/AvoidLosingExceptionInformation" />-->  <!-- Deprecated -->
     <rule ref="category/java/errorprone.xml/AvoidMultipleUnaryOperators"/>
     <rule ref="category/java/errorprone.xml/AvoidUsingOctalValues"/>
     <!-- <rule ref="category/java/errorprone.xml/BeanMembersShouldSerialize" /> -->
@@ -303,7 +305,7 @@
     <rule ref="category/java/errorprone.xml/DoNotExtendJavaLangThrowable"/>
     <rule ref="category/java/errorprone.xml/DoNotHardCodeSDCard" />
     <rule ref="category/java/errorprone.xml/DoNotThrowExceptionInFinally" />
-    <rule ref="category/java/errorprone.xml/DontImportSun" />
+<!--    <rule ref="category/java/errorprone.xml/DontImportSun" />-->  <!-- Deprecated -->
     <rule ref="category/java/errorprone.xml/DontUseFloatTypeForLoopIndices"/>
     <rule ref="category/java/errorprone.xml/EqualsNull"/>
     <!-- <rule ref="category/java/errorprone.xml/FinalizeDoesNotCallSuperFinalize" /> -->
@@ -344,10 +346,12 @@
     <rule ref="category/java/errorprone.xml/UnnecessaryBooleanAssertion" />
     <rule ref="category/java/errorprone.xml/UnnecessaryCaseChange" />
     <rule ref="category/java/errorprone.xml/UnnecessaryConversionTemporary"/>
+    <rule ref="category/java/errorprone.xml/UnsupportedJdkApiUsage" />
     <rule ref="category/java/errorprone.xml/UnusedNullCheckInEquals"/>
     <rule ref="category/java/errorprone.xml/UseCorrectExceptionLogging" />
     <rule ref="category/java/errorprone.xml/UseEqualsToCompareStrings"/>
-    <rule ref="category/java/errorprone.xml/UselessOperationOnImmutable"/>
+<!--    <rule ref="category/java/errorprone.xml/UselessOperationOnImmutable"/>-->  <!-- Deprecated -->
+    <rule ref="category/java/errorprone.xml/UselessPureMethodCall" />
     <rule ref="category/java/errorprone.xml/UseLocaleWithCaseConversions"/>
     <rule ref="category/java/errorprone.xml/UseProperClassLoader" />
 
