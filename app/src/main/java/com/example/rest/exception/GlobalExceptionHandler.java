@@ -434,6 +434,43 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
 
 
 
+    // ========== Catch-All ==========
+    /**
+     * Create a standard error message as a catch-all for any unanticipated exception.
+     *
+     * @param exception the intercepted exception
+     *
+     * @return a formatted {@code ProblemDetail}.
+     */
+    @ExceptionHandler( UnsupportedOperationException.class )
+    @ResponseStatus( HttpStatus.INTERNAL_SERVER_ERROR )
+    public ResponseEntity<ProblemDetail>
+        handleUnsupportedOperationException( final ServletWebRequest request,
+                                             final UnsupportedOperationException exception )
+    {
+        // TODO the MDC should include the traceId (UUID) and log pattern should
+
+        log.error( "--UnsupportedOperation--", exception );
+        final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.UNPROCESSABLE_ENTITY,
+                                                                        exception.getMessage() );
+
+        details.setDetail( exception.getLocalizedMessage() );
+        details.setProperty( "x-logref", UUID.randomUUID() );
+        details.setProperty( "x-exception", exception.getClass().getTypeName() );
+        if ( null != request )
+        {
+            details.setProperty( "x-TRACEPARENT", request.getHeader( "TRACEPARENT" ) );
+            details.setProperty( "x-TRACESTATE", request.getHeader( "TRACESTATE" ) );
+        }
+        details.setProperty( "x-Cause", exception.getCause() );
+
+//        var re = new ResponseEntity<>( details, HttpStatus.INTERNAL_SERVER_ERROR );
+
+        return new ResponseEntity<>( details, HttpStatus.INTERNAL_SERVER_ERROR );
+    }
+
+
+
 
     // ========== Catch-All ==========
     /**
@@ -451,13 +488,25 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     {
         // TODO the MDC should include the traceId (UUID) and log pattern should
 
+        log.error( "Catch-All exception for: ", exception );
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.INTERNAL_SERVER_ERROR,
                                                                         exception.getMessage() );
 
         details.setProperty( "logref", UUID.randomUUID() );
         details.setProperty( "Exception", exception.getClass().getTypeName() );
         details.setProperty( "Cause", exception.getCause() );
-
+        if ( null != request )
+        {
+            details.setProperty( "TRACEPARENT", request.getHeader( "TRACEPARENT" ) );
+            details.setProperty( "TRACESTATE", request.getHeader( "TRACESTATE" ) );
+        }
+//        request.getRequest().hea
+//        var zz = new ResponseEntity<>( details, HttpStatus.INTERNAL_SERVER_ERROR );
+//        var zz = new ResponseEntity<>(. details, HttpStatus.INTERNAL_SERVER_ERROR );
+//        zz.
+//        zz.getHeaders().set( "TRACEPARENT", request.getHeader( "TRACEPARENT" ) );
+//        zz.getHeaders().set( "TRACESTATE", request.getHeader( "TRACESTATE" ) );
+//        return zz;
         return new ResponseEntity<>( details, HttpStatus.INTERNAL_SERVER_ERROR );
     }
 

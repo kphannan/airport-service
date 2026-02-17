@@ -176,21 +176,41 @@ public class ContinentController
         restGetFindContinentById( @Valid @PathVariable( name = "continentId" ) final Integer continentId,
                                   @RequestHeader final HttpHeaders requestHeader )
     {
+//        log.error( String.format( "GET /continent/{%s}", continentId  ) );
         final Optional<Continent> optionalContinent = service.getReferenceById( continentId );
 
         if ( optionalContinent.isPresent() )
         {
+//            log.error( "/continent found" );
+//            log.error( String.format("      continent: [%s]", optionalContinent.get() ) );
+//            log.error( String.format("    continent-s: [%s]", optionalContinent.get().toString() ) );
             final ContinentDTO dto = mapper.domainToApi( optionalContinent.get() );
+//            log.error( String.format("      content: [%s]", dto ) );
+//            log.error( String.format("    content-s: [%s]", dto.toString() ) );
 
-            ResponseEntity.BodyBuilder bb = ResponseEntity.status( HttpStatusCode.valueOf( 200 ) );
-
+//            ResponseEntity.BodyBuilder bb = ResponseEntity.status( HttpStatusCode.valueOf( 200 ) );
+            ResponseEntity<ContinentDTO> re = ResponseEntity.ok( dto );
+//            re.getHeaders().setContentType( requestHeader.getContentType() );
+//            re.getHeaders().setContentLength( dto.toString().length() );
             // TODO handle Accept:application/json or Accept:application/XML
 
-            bb.contentLength( dto.toString().length() );
-            bb.contentType( requestHeader.getContentType() );
-            return bb.body( dto );
+//            final String content = dto.toString();
+//            bb.contentLength( dto.toString().length() );
+//            bb.contentType( requestHeader.getContentType() );
+//            var rh = requestHeader
+//                    .headerSet()
+//                    .stream()
+//                    .filter( ff -> ff.getKey().contains( "TRACE" ) )
+//                    .map( hv -> )
+
+            //bb.header( "", requestHeader.headerSet() );
+            //bb.header( "", requestHeader.headerSet() );
+//            return bb.body( dto );
+            return re;
             // TODO  Last-Modified
         }
+
+//        log.error( "/continent not found" );
 
         return ResponseEntity.noContent().build();
     }
@@ -241,15 +261,18 @@ public class ContinentController
         restGetFindContinentByCode( @Valid @PathVariable final String code,
                                     @RequestHeader final HttpHeaders requestHeader )
     {
+//        log.error( String.format( "GET /continent/code/{%s}", code  ) );
         final Optional<Continent> optionalEntity = service.findByCode( code );
 
         if ( optionalEntity.isPresent() )
         {
+//            log.error( "/continent/{code} found" );
             final ContinentDTO dto = mapper.domainToApi( optionalEntity.get() );
 
             return ResponseEntity.ok( dto );
         }
 
+//        log.error( "/continent/{code} not found" );
         // may include instance in header.....
         return ResponseEntity.noContent().build();
         // return ResponseEntity.noContent().location().build();
@@ -320,7 +343,7 @@ public class ContinentController
         // then a PUT should have been used.
         return ResponseEntity
                 .status( HttpStatus.CONFLICT )
-                //.body( "Continent does not exist" );
+//                .body( "Continent does not exist" )
                 .build();
     }
 

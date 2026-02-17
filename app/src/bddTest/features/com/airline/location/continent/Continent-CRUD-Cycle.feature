@@ -61,7 +61,7 @@ Feature: Continent Read Operations
              # Delete the test only continent
        Given path id
         When method DELETE
-        Then status 410
+        Then status 204
 
              # Verify it is gone
        Given path id

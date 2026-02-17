@@ -32,6 +32,7 @@ configurations {
     }
 
     // integrationTestImplementation.extendsFrom testImplementation
+    // integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
 }
 
 
@@ -78,8 +79,11 @@ dependencies {
 	testImplementation libs.logcaptor
 
     testImplementation( "org.springframework.boot:spring-boot-starter-test" )
+//    testImplementation( "io.karatelabs:karate-junit5:${karateVersion}" )
+
     // --- BDD
-    // testImplementation( "io.karatelabs:karate-junit5:${karateVersion}" )
+//    bddTestImplementation( "io.karatelabs:karate-junit5:${karateVersion}" )
+//    implementation( "io.karatelabs:karate-core:${karateVersion}" )
 }
 
 
@@ -89,23 +93,6 @@ processResources {
     }
 }
 
-sourceSets {
-    test {
-        resources {
-            srcDir file('src/test/java')
-            exclude '**/*.java'
-        }
-    }
-
-    integrationTest {
-        compileClasspath += main.output + test.output
-        runtimeClasspath += main.output + test.output
-        resources {
-            srcDir file('src/integrationTest/features')
-            exclude '**/*.java'
-        }
-    }
-}
 
 
 
@@ -117,23 +104,24 @@ application {
 }
 
 
-tasks.register('integrationTest', Test) {
-    group = 'Verification'
-    description = 'runs the integration tests with Cucumber/Selenium/Karate'
 
-    testClassesDirs = sourceSets.integrationTest.output.classesDirs
-    classpath = sourceSets.integrationTest.runtimeClasspath
-
-    mustRunAfter test
-    useJUnitPlatform()
-
-    // pull karate options into the runtime
-    systemProperty "karate.options", System.properties.getProperty("karate.options")
-    // pull karate env into the runtime
-    systemProperty "karate.env", System.properties.getProperty("karate.env")
-    // ensure tests are always run
-    outputs.upToDateWhen { false }
-}
+//tasks.register('bddTest', Test) {
+//    group = 'Verification'
+//    description = 'runs the BDD tests with Cucumber/Selenium/Karate'
+//
+//    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+//    classpath = sourceSets.integrationTest.runtimeClasspath
+//
+//    mustRunAfter test
+//    useJUnitPlatform()
+//
+//    // pull karate options into the runtime
+//    systemProperty "karate.options", System.properties.getProperty("karate.options")
+//    // pull karate env into the runtime
+//    systemProperty "karate.env", System.properties.getProperty("karate.env")
+//    // ensure tests are always run
+//    outputs.upToDateWhen { false }
+//}
 
 
 run {

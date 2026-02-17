@@ -8,6 +8,7 @@ import com.example.airline.location.continent.model.Continent;
 import com.example.airline.location.continent.model.NewContinent;
 import com.example.airline.location.continent.persistence.model.ContinentEntity;
 import com.example.airline.location.continent.persistence.repository.ContinentRepository;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
  * Spring Service (business logic) supporting the Continent domain object.
  */
 @Service
+@Log4j2
 public class ContinentCreateService
 {
     private final ContinentRepository repository;
@@ -42,11 +44,12 @@ public class ContinentCreateService
     {
         if ( repository.existsByCode( entity.getCode() ) )
         {
+            log.debug( "Continent already exists" );
             return null;
         }
 
         final ContinentEntity result = repository.save( mapper.domainToEntity( entity ) );
-
+        log.debug( "created continent " );
         return mapper.entityToDomain( result );
     }
 

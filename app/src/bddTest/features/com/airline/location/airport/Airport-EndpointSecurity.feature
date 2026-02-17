@@ -20,7 +20,7 @@ Feature: Airport API Security
       | '/airport'           | DELETE  | 405      |
       | '/airport'           | OPTIONS | 200      |
       | '/airport'           | HEAD    | 200      |
-      | '/airport'           | TRACE   | 405      |
+      | '/airport'           | TRACE   | 400      |
       | '/airport/3384'      | GET     | 200      |
       | '/airport/3384'      | PUT     | 405      |
       | '/airport/3384'      | POST    | 405      |

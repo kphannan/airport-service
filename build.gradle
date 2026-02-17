@@ -45,6 +45,9 @@ buildscript {
         // --- BDD / REST Testing
         karateVersion               = '1.5.2'
 
+        // --- Performance Testing
+        gatlingVersion              = '3.14.9'
+
         // ===== Configuration Management =====
 
         // --- Artifact Versioning
@@ -95,6 +98,10 @@ plugins {
 
     // // --- Mutation testing
     id 'info.solidsoft.pitest' version "${pitPluginVersion}" apply false
+
+
+    // --- Performance Testing
+    id 'io.gatling.gradle' version "${gatlingVersion}" apply false
 
     // // ===== Configuration Management =====
     // // --- Artifact Versioning

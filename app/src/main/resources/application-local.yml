@@ -68,7 +68,11 @@ logging:
     com:
       example:
         # At INFO, log startup of the service
-        airline: INFO
+        airline: #INFO
+          location:
+            continent: DEBUG
+        rest:
+          exception: DEBUG
       zaxxer:
         hikari:
           pool:
@@ -291,3 +295,7 @@ decorator:
        connection:
          acquire: 1
          lease: 0
+
+
+
+

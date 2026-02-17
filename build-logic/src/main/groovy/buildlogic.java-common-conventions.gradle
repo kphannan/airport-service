@@ -33,6 +33,8 @@ plugins {
     // --- Mutation testing
     id 'info.solidsoft.pitest'
 
+    // --- Performance Testing
+    id 'io.gatling.gradle'
 
     // ===== Configuration Management =====
     // --- Artifact Versioning
@@ -66,6 +68,7 @@ clean {
 
 compileJava {
     options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation" << "-Amapstruct.verbose=false"
+//    options.forkOptions.jvmArgs << "--enable-native-access=ALL-UNNAMED"
 }
 
 test {
@@ -76,10 +79,83 @@ test {
 
 testing {
     suites {
+
+//        configureEach {
+//            useJUnitJupiter()
+//        }
+
         // Configure the built-in test suite
         test {
             // Use JUnit Jupiter test framework
-            useJUnitJupiter('5.12.2')
+            useJUnitJupiter()
+//            useJUnitJupiter('5.12.2')
+        }
+
+        bddTest(JvmTestSuite) {
+            dependencies {
+                // Inherit common test dependencies
+                implementation project()
+
+//                implementation configurations.testImplementation
+//                runtimeOnly configurations.testRuntimeOnly
+                // Add dependencies specific to integration tests here
+                implementation( "io.karatelabs:karate-junit5:${karateVersion}" )
+            }
+
+            sources {
+                java {
+                    srcDirs = ['src/bddTest/java']
+                }
+                resources {
+                    srcDirs = ['src/bddTest/features', 'src/bddTest/resources']
+                }
+            }
+            targets {
+                all {
+                    testTask.configure {
+
+                        // pull karate options into the runtime
+                        systemProperty "karate.options", System.properties.getProperty("karate.options")
+                        // pull karate env into the runtime
+                        systemProperty "karate.env", System.properties.getProperty("karate.env")
+                        // ensure tests are always run
+                        outputs.upToDateWhen { false }
+                        shouldRunAfter( test )
+                    }
+                }
+            }
+        }
+
+        // Smoke    - basic functionality
+        // Baseline - typical load conditions
+        // Stress   - push limits (150-200%)
+        // Spike    - Sudden extreme use (300%)
+        // Soak     - Endurance (24-72 hours)
+        // Capacity - push to breaking point
+        loadTest(JvmTestSuite) {        // Gatling
+            dependencies {
+                // Inherit common test dependencies
+                implementation project()
+
+                // Add dependencies specific to integration tests here
+            }
+        }
+
+        smokeTest(JvmTestSuite) {        // Junit/Karate
+            dependencies {
+                // Inherit common test dependencies
+                implementation project()
+
+                // Add dependencies specific to integration tests here
+            }
+        }
+        baselineTest(JvmTestSuite) {        // Gatling
+            dependencies {
+                // Inherit common test dependencies
+                implementation project()
+
+                // Add dependencies specific to integration tests here
+            }
         }
     }
 }

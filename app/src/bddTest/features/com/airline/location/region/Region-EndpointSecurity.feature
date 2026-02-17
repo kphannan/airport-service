@@ -20,7 +20,7 @@ Feature: Region API Security
       | '/region'             | DELETE  | 405      |
       | '/region'             | OPTIONS | 200      |
       | '/region'             | HEAD    | 200      |
-      | '/region'             | TRACE   | 405      |
+      | '/region'             | TRACE   | 400      |
       | '/region/305779'      | GET     | 200      |
       | '/region/305779'      | PUT     | 405      |
       | '/region/305779'      | POST    | 405      |

@@ -27,6 +27,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +44,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag( name = "Airports" )
 @GlobalApiResponses
 @GlobalApiSecurityResponses
+@Log4j2
 public class AirportController
 {
     // Autowired via constructor
@@ -103,11 +105,15 @@ public class AirportController
     @SuppressWarnings( "PMD.ShortVariable" )
     public ResponseEntity<AirportDTO> restGetFindAirportById( @PathVariable final Long id )
     {
+        log.error( String.format( "enter restGetFindAirportById( %s )", id ));
         final Optional<Airport> optionalAirport = service.findAirportById( id );
+        log.error( String.format( "    fingAirportById( %s ) - [%s]", id, optionalAirport ));
 
         if ( optionalAirport.isPresent() )
         {
+            log.error( String.format( "    found airport( %s ) %s", id, optionalAirport.get() ));
             final AirportDTO dto = mapper.domainToApi( optionalAirport.get() );
+            log.error( String.format( "    DTO airport( %s ), %s", id, dto ));
 
             return ResponseEntity.ok( dto );
         }
