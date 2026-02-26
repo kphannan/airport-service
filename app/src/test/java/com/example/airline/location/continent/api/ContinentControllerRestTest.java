@@ -104,10 +104,10 @@ class ContinentControllerRestTest
             final MvcResult result = mvc
                     .perform( request )
                     .andDo( print() )
-                    // .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
-                    .andExpect( content().contentTypeCompatibleWith( "application/json" ) )
-                    .andExpect( content().encoding( "UTF-8" ) )
                     .andExpect( status().isOk() )
+                    // .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
+                    .andExpect( content().contentTypeCompatibleWith( "application/json;charset=UTF-8" ) )
+                    .andExpect( content().encoding( "UTF-8" ) )
                     // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
                     //      don't complain about lack of assertions in tests
                     .andExpect( jsonPath( "$.id" ).value( 1 ) )

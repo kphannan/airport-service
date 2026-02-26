@@ -9,6 +9,7 @@ import com.example.airline.location.continent.model.Continent;
 import com.example.airline.location.continent.model.NewContinent;
 import com.example.airline.location.continent.persistence.model.ContinentEntity;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 
@@ -41,6 +42,7 @@ public interface ContinentEntityMapper
     // --- Instance
     ContinentEntity domainToEntity( Continent domain );
 
+    @Mapping( target = "id", ignore = true)
     ContinentEntity domainToEntity( NewContinent domain );
     // --- Collection
 

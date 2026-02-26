@@ -132,31 +132,31 @@ testing {
         // Spike    - Sudden extreme use (300%)
         // Soak     - Endurance (24-72 hours)
         // Capacity - push to breaking point
-        loadTest(JvmTestSuite) {        // Gatling
-            dependencies {
-                // Inherit common test dependencies
-                implementation project()
+//        loadTest(JvmTestSuite) {        // Gatling
+//            dependencies {
+//                // Inherit common test dependencies
+//                implementation project()
+//
+//                // Add dependencies specific to integration tests here
+//            }
+//        }
 
-                // Add dependencies specific to integration tests here
-            }
-        }
-
-        smokeTest(JvmTestSuite) {        // Junit/Karate
-            dependencies {
-                // Inherit common test dependencies
-                implementation project()
-
-                // Add dependencies specific to integration tests here
-            }
-        }
-        baselineTest(JvmTestSuite) {        // Gatling
-            dependencies {
-                // Inherit common test dependencies
-                implementation project()
-
-                // Add dependencies specific to integration tests here
-            }
-        }
+//        smokeTest(JvmTestSuite) {        // Junit/Karate
+//            dependencies {
+//                // Inherit common test dependencies
+//                implementation project()
+//
+//                // Add dependencies specific to integration tests here
+//            }
+//        }
+//        baselineTest(JvmTestSuite) {        // Gatling
+//            dependencies {
+//                // Inherit common test dependencies
+//                implementation project()
+//
+//                // Add dependencies specific to integration tests here
+//            }
+//        }
     }
 }
 

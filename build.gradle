@@ -46,7 +46,7 @@ buildscript {
         karateVersion               = '1.5.2'
 
         // --- Performance Testing
-        gatlingVersion              = '3.14.9'
+        gatlingVersion              = '3.14.9.8'
 
         // ===== Configuration Management =====
 

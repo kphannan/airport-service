@@ -188,15 +188,16 @@ public class ContinentController
 //            log.error( String.format("      content: [%s]", dto ) );
 //            log.error( String.format("    content-s: [%s]", dto.toString() ) );
 
-//            ResponseEntity.BodyBuilder bb = ResponseEntity.status( HttpStatusCode.valueOf( 200 ) );
-            ResponseEntity<ContinentDTO> re = ResponseEntity.ok( dto );
+//            ResponseEntity<ContinentDTO> re = ResponseEntity.ok( dto );
 //            re.getHeaders().setContentType( requestHeader.getContentType() );
 //            re.getHeaders().setContentLength( dto.toString().length() );
+//            return re;
             // TODO handle Accept:application/json or Accept:application/XML
 
+            ResponseEntity.BodyBuilder bb = ResponseEntity.status( HttpStatusCode.valueOf( 200 ) );
 //            final String content = dto.toString();
-//            bb.contentLength( dto.toString().length() );
-//            bb.contentType( requestHeader.getContentType() );
+            bb.contentLength( dto.toString().length() );
+            bb.contentType( requestHeader.getContentType() );
 //            var rh = requestHeader
 //                    .headerSet()
 //                    .stream()
@@ -205,8 +206,7 @@ public class ContinentController
 
             //bb.header( "", requestHeader.headerSet() );
             //bb.header( "", requestHeader.headerSet() );
-//            return bb.body( dto );
-            return re;
+            return bb.body( dto );
             // TODO  Last-Modified
         }
 
