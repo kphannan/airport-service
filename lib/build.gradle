@@ -38,7 +38,8 @@ dependencies {
 	// --- Unit Testing
 	testImplementation libs.logcaptor
 
-	testImplementation( "org.springframework.boot:spring-boot-starter-test" )
+//	testImplementation( "org.springframework.boot:spring-boot-starter-test" )
+	testImplementation libs.spring.boot.starter.test
 }
 
 

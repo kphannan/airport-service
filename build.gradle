@@ -86,6 +86,7 @@ plugins {
     // id 'com.github.spotbugs' version "${spotbugsVersion}" apply false
     // id 'net.ltgt.errorprone' version '3.0.1' apply false
     // id 'com.github.ben-manes.versions' version '0.48.0' apply false
+
     // ===== Frameworks =====
     // --- Spring boot
     id 'org.springframework.boot' version '3.4.5' apply false
