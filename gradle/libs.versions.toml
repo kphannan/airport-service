@@ -39,6 +39,17 @@ apacheCommonsVersion = '4.5.0'
 # --- FlexyPool - JDBC stats ---
 flexyPoolVersion = '1.11.0'
 
+# ----- Static Analysis -----
+# --- Mutation Testing (pitest) ---
+pitPluginVersion = '1.19.0-rc.3'
+pitVersion = '1.22.1'
+# --- Coding practices (static analysis) ---
+# --- Coding style
+# --- Checkstyle ---
+checkstyleVersion = '13.1.0'
+# --- Common Coding flaws
+# --- PMD ---
+pmdVersion = '7.21.0'
 
 ## ------------------------------------
 ## ----- Libraries -----
@@ -173,9 +184,10 @@ spring-validation = [
     'jakarta-annotation'
 ]
 
-static-analysis = [
-
-]
+#plugins-static-analysis = [
+#    'checkstyle',
+#    'pmd'
+#]
 
 
 ## ------------------------------------
@@ -184,7 +196,9 @@ static-analysis = [
 versioning = { id = 'net.nemerosa.versioning', version.ref = 'versioningVersion' }
 lombok = { id = 'io.freefair.lombok', version.ref = 'lombokVersion' }
 # jacoco = { id = 'jacoco' }
+#checkstyle = { id = 'checkstyle', version.ref = 'checkstyleVersion' }
 checkstyle = { id = 'checkstyle' }
+#pmd = { id = 'pmd', version.ref = 'pmdVersion' }
 pmd = { id = 'pmd' }
 jacoco = { id = 'jacoco' }
-pitest = { id = 'info.solidsoft.pitest' }
+pitest = { id = 'info.solidsoft.pitest', version.ref = 'pitPluginVersion' }

@@ -12,8 +12,6 @@ plugins {
     id 'org.springframework.boot'
     id 'io.spring.dependency-management'
 
-    // TODO move to java conventions...
-//    id 'io.freefair.lombok'
 
     // id 'com.gorylenko.gradle-git-properties'
 }

@@ -7,9 +7,6 @@ plugins {
 	id 'buildlogic.java-library-conventions'
 	// id 'buildlogic.java-spring-conventions'
 
-	// TODO move to java conventions...
-	id 'io.freefair.lombok'
-
 	// TODO move these to the spring conventions....
 	// id 'org.springframework.boot'
 	// id 'io.spring.dependency-management'
@@ -23,11 +20,10 @@ dependencies {
 
 	// ---  TODO this is for validation tests...
 	implementation libs.bundles.spring.boot.base
-	//	testImplementation( "org.springframework.boot:spring-boot-starter-test" )
+
 	testImplementation libs.bundles.spring.validation
 	// https://mvnrepository.com/artifact/org.assertj/assertj-core
 	testImplementation 'org.assertj:assertj-core:4.0.0-M1'
 	// https://mvnrepository.com/artifact/org.skyscreamer/jsonassert
 	testImplementation 'org.skyscreamer:jsonassert:2.0-rc1'
-
 }
