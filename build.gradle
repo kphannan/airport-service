@@ -6,7 +6,6 @@ buildscript {
 
         // --- Compiler extensions
         checkerFrameworkVersion     = '0.6.52'
-        lombokVersion               = '8.13.1'
         // --- YAML support
         // jacksonDatabindVersion      = '2.18.2'
         // --- Logging (log4j)
@@ -25,8 +24,6 @@ buildscript {
         // ===== Quality checks =====
 
         // --- Coding practices (static analysis) ---
-        // --- Coding style
-        // --- Common Coding flaws
 
         spotbugsVersion             = '6.0.26'
 
@@ -35,14 +32,8 @@ buildscript {
         junitVersion                = '5.12.2'
         // logcaptorVersion            = '2.10.1'
 
-        // --- Mutation Testing
-//        pitVersion                  = '1.22.1'
-
         // --- BDD / REST Testing
         karateVersion               = '1.5.2'
-
-        // --- Performance Testing
-        gatlingVersion              = '3.14.9.8'
 
         // ===== Configuration Management =====
 
@@ -102,7 +93,8 @@ plugins {
 
 
     // --- Performance Testing
-    id 'io.gatling.gradle' version "${gatlingVersion}" apply false
+//    id 'io.gatling.gradle' version "${gatlingVersion}" apply false
+    alias( libs.plugins.gatling ).apply( false )
 
     // // ===== Configuration Management =====
     // // --- Artifact Versioning

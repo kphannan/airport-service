@@ -15,6 +15,7 @@ springCloudVersion = '2024.0.1'
 hibernateVersion = '9.0.0.CR1'
 
 lombokVersion = '8.13.1'
+#lombokVersion = '9.2.0'
 versioningVersion = '3.1.0'
 logcaptorVersion = '2.10.2'
 
@@ -50,6 +51,8 @@ checkstyleVersion = '13.1.0'
 # --- Common Coding flaws
 # --- PMD ---
 pmdVersion = '7.21.0'
+# --- Performance Testing (Gatling) ---
+gatlingVersion = '3.14.9.8'
 
 ## ------------------------------------
 ## ----- Libraries -----
@@ -184,6 +187,7 @@ spring-validation = [
     'jakarta-annotation'
 ]
 
+# --- Plugins can't be part of a bundle
 #plugins-static-analysis = [
 #    'checkstyle',
 #    'pmd'
@@ -195,10 +199,23 @@ spring-validation = [
 [plugins]
 versioning = { id = 'net.nemerosa.versioning', version.ref = 'versioningVersion' }
 lombok = { id = 'io.freefair.lombok', version.ref = 'lombokVersion' }
-# jacoco = { id = 'jacoco' }
+
+# ----- Testing -----
+# --- Unit ---
+# --- BDD ---
+
+# ----- Static Analysis -----
+# --- Code Style ---
 #checkstyle = { id = 'checkstyle', version.ref = 'checkstyleVersion' }
 checkstyle = { id = 'checkstyle' }
+# --- Common Defects ---
 #pmd = { id = 'pmd', version.ref = 'pmdVersion' }
 pmd = { id = 'pmd' }
+# ----- Runtime Analysis -----
+# --- Code Coverage ---
+# jacoco = { id = 'jacoco' }
 jacoco = { id = 'jacoco' }
+# --- Mutation ---
 pitest = { id = 'info.solidsoft.pitest', version.ref = 'pitPluginVersion' }
+# --- Performance ---
+gatling = { id = 'io.gatling.gradle', version.ref = 'gatlingVersion' }
