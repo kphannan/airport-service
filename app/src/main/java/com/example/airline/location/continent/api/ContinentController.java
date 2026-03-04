@@ -59,7 +59,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class ContinentController
 {
     // Autowired via constructor
-    private final ContinentReadService   service;
+    private final ContinentReadService   readService;
     private final ContinentCreateService createService;
     private final ContinentUpdateService updateService;
     private final ContinentDeleteService deleteService;
@@ -78,7 +78,7 @@ public class ContinentController
                                 final ContinentDeleteService deleteService,
                                 final ContinentDtoMapper mapper )
     {
-        this.service       = service;
+        this.readService   = service;
         this.createService = createService;
         this.updateService = updateService;
         this.deleteService = deleteService;
@@ -86,6 +86,8 @@ public class ContinentController
     }
 
 
+    // ===================
+    // ===== GET =====
     /**
      * Find all Continents.
      *
@@ -105,7 +107,8 @@ public class ContinentController
                                                 @Content( mediaType = "application/xml"
                                                           /*, schema = @Schema( implementation = ContinentDTO.class ) */ )
                                             }
-                                         )
+                                         ),
+                               @ApiResponse( description = "Unauthorized", responseCode = "403" )
                 },
                 parameters = {
                     @Parameter( name = "TRACEPARENT", required = false,
@@ -118,15 +121,11 @@ public class ContinentController
                                 description = "Vendor specific trace identification" )
                 },
                 security = {}
-//                responses = {
-//                    @ApiResponse( description = "Success", responseCode = "200" )
-                // @ApiResponse( description = "Unauthorized", responseCode = "403" )
-//    }
                 )
     @GetMapping( "" )
     public ResponseEntity<List<ContinentDTO>> restGetFindAll( @Valid @RequestHeader final HttpHeaders requestHeader )
     {
-        final List<Continent> continents = service.findAll();
+        final List<Continent> continents = readService.findAll();
 
         final List<ContinentDTO> dtos = mapper.domainToApi( continents );
 
@@ -176,41 +175,29 @@ public class ContinentController
         restGetFindContinentById( @Valid @PathVariable( name = "continentId" ) final Integer continentId,
                                   @RequestHeader final HttpHeaders requestHeader )
     {
-//        log.error( String.format( "GET /continent/{%s}", continentId  ) );
-        final Optional<Continent> optionalContinent = service.getReferenceById( continentId );
+        final Optional<Continent> optionalContinent = readService.getReferenceById( continentId );
 
         if ( optionalContinent.isPresent() )
         {
-//            log.error( "/continent found" );
-//            log.error( String.format("      continent: [%s]", optionalContinent.get() ) );
-//            log.error( String.format("    continent-s: [%s]", optionalContinent.get().toString() ) );
             final ContinentDTO dto = mapper.domainToApi( optionalContinent.get() );
-//            log.error( String.format("      content: [%s]", dto ) );
-//            log.error( String.format("    content-s: [%s]", dto.toString() ) );
 
-//            ResponseEntity<ContinentDTO> re = ResponseEntity.ok( dto );
-//            re.getHeaders().setContentType( requestHeader.getContentType() );
-//            re.getHeaders().setContentLength( dto.toString().length() );
-//            return re;
+            HttpHeaders hhh = new HttpHeaders();
+            hhh.setContentType( MediaType.APPLICATION_JSON );
+
+            ResponseEntity<ContinentDTO> response = new ResponseEntity<>( dto, hhh, HttpStatus.OK );
+//            ResponseEntity<ContinentDTO> re = ResponseEntity
+//                    .ok( dto )
+//                    .contentLength()
+//                    .contentType( MediaType.APPLICATION_JSON );
+////            re.getHeaders().setContentType( requestHeader.getContentType() );
+////            re.getHeaders().setContentLength( dto.toString().length() );
             // TODO handle Accept:application/json or Accept:application/XML
-
-            ResponseEntity.BodyBuilder bb = ResponseEntity.status( HttpStatusCode.valueOf( 200 ) );
-//            final String content = dto.toString();
-            bb.contentLength( dto.toString().length() );
-            bb.contentType( requestHeader.getContentType() );
-//            var rh = requestHeader
-//                    .headerSet()
-//                    .stream()
-//                    .filter( ff -> ff.getKey().contains( "TRACE" ) )
-//                    .map( hv -> )
-
-            //bb.header( "", requestHeader.headerSet() );
-            //bb.header( "", requestHeader.headerSet() );
-            return bb.body( dto );
+            return response;
+//            ResponseEntity.BodyBuilder bb = ResponseEntity.status( HttpStatusCode.valueOf( 200 ) );
+//            bb.contentType( requestHeader.getContentType() );
+//            return bb.body( dto );
             // TODO  Last-Modified
         }
-
-//        log.error( "/continent not found" );
 
         return ResponseEntity.noContent().build();
     }
@@ -261,26 +248,23 @@ public class ContinentController
         restGetFindContinentByCode( @Valid @PathVariable final String code,
                                     @RequestHeader final HttpHeaders requestHeader )
     {
-//        log.error( String.format( "GET /continent/code/{%s}", code  ) );
-        final Optional<Continent> optionalEntity = service.findByCode( code );
+        final Optional<Continent> optionalEntity = readService.findByCode( code );
 
         if ( optionalEntity.isPresent() )
         {
-//            log.error( "/continent/{code} found" );
             final ContinentDTO dto = mapper.domainToApi( optionalEntity.get() );
 
             return ResponseEntity.ok( dto );
         }
 
-//        log.error( "/continent/{code} not found" );
         // may include instance in header.....
         return ResponseEntity.noContent().build();
-        // return ResponseEntity.noContent().location().build();
     }
 
 
 
 
+    // ===================
     // ===== POST =====
     @Operation( method = "POST",
                 summary = "Add a Continent",
@@ -349,6 +333,7 @@ public class ContinentController
 
 
 
+    // ===================
     // ===== PUT =====
     @Operation( method = "PUT",
                 summary = "Update a Continent",
@@ -407,6 +392,7 @@ public class ContinentController
                 .build();
     }
 
+    // ===================
     // ===== DELETE =====
     @Operation( method = "DELETE",
                 summary = "Delete a Continent by id",
@@ -516,6 +502,7 @@ public class ContinentController
                 .build();
     }
 
+    // ===================
     // ===== PATCH =====
     @Operation( method = "PATCH",
                 summary = "Update a Continent",
@@ -568,6 +555,7 @@ public class ContinentController
         return ResponseEntity.noContent().build();
     }
 
+    // ===================
     // ===== Options =====
     @RequestMapping( value = "", method = RequestMethod.OPTIONS )
     public ResponseEntity<Void> restOptionsContinent( @Valid @RequestHeader HttpHeaders requestHeader )
@@ -610,6 +598,7 @@ public class ContinentController
         return headers;
     }
 
+    // ===================
     // ===== HEAD =====
     @RequestMapping( value = "", method = RequestMethod.HEAD )
     public ResponseEntity<Void> restHeadContinent( @Valid @RequestHeader HttpHeaders requestHeader )
@@ -651,7 +640,44 @@ public class ContinentController
     //     return ResponseEntity.noContent().build();
     // }
 
+    // ===================
     // ===== TRACE =====
+    @Operation( method = "TRACE",
+                summary = "TRACE Continent",
+                description = "Continent API TRACE.",
+                responses = {
+                    @ApiResponse(
+                        description = "TRACE......",
+                        responseCode = "200",
+                        content =
+                        {
+                            @Content( mediaType = "application/json",
+                                      schema = @Schema( implementation = ContinentDTO.class ) ),
+                            @Content( mediaType = "application/yaml",
+                                      schema = @Schema( implementation = ContinentDTO.class ) ),
+                            @Content( mediaType = "application/xml",
+                                      schema = @Schema( implementation = ContinentDTO.class ) )
+                        }
+                    )
+                },
+                parameters = {
+                    @Parameter( name = "Bearer",
+                                required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Authentication / Authorization token" ),
+                    @Parameter( name = "TRACEPARENT",
+                                required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Distributed tracing identifier" ),
+                    @Parameter( name = "TRACESTATE",
+                                required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Vendor specific trace identification" )
+                }
+    )
     @RequestMapping( value = "", method = RequestMethod.TRACE )
     public ResponseEntity<Void> restTraceContinent( @Valid @RequestHeader HttpHeaders requestHeader )
     {

@@ -105,8 +105,6 @@ class ContinentControllerRestTest
                     .perform( request )
                     .andDo( print() )
                     .andExpect( status().isOk() )
-                    // .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
-                    .andExpect( content().contentTypeCompatibleWith( "application/json;charset=UTF-8" ) )
                     .andExpect( content().encoding( "UTF-8" ) )
                     // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
                     //      don't complain about lack of assertions in tests
@@ -121,10 +119,9 @@ class ContinentControllerRestTest
             // final String body = response.getContentAsString();
             // TODO need to assert the resulting JSON....
             assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
-                       // () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
-                       () -> assertEquals( "69", response.getHeader( "Content-Length" ) ),
+                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
                        () -> assertFalse( response.getHeaderNames().isEmpty() ),
-                       () -> assertEquals( 2, response.getHeaderNames().size() )
+                       () -> assertEquals( 1, response.getHeaderNames().size() )
             );
         }
 
@@ -857,6 +854,29 @@ class ContinentControllerRestTest
             assertAll( () -> assertEquals( HttpStatus.OK.value(), result.getResponse().getStatus() )
             );
         }
+
+
+        @Test
+        @DisplayName( "no args - 200: OK - empty body" )
+        void restTraceWithId_returnsOk() throws Exception
+        {
+            // --- given
+            final RequestBuilder request = withHeaders( MockMvcRequestBuilders.request( HttpMethod.TRACE,
+                                                                                        "/location/continent/{continentId}",
+                                                                                        123
+                                                                                      ) );
+
+            // --- when
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andDo( print() )
+                    .andReturn();
+
+            // --- then
+            assertAll( () -> assertEquals( HttpStatus.OK.value(), result.getResponse().getStatus() )
+                     );
+        }
+
     }
 
     /**
@@ -901,16 +921,17 @@ class ContinentControllerRestTest
             final MvcResult result = mvc
                     .perform( request )
                     .andDo( print() )
+//                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
                     .andReturn();
 
             // --- then
             final MockHttpServletResponse response = result.getResponse();
 
-            assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), response.getStatus() ),
-                       () -> assertEquals( "application/json", response.getHeader( "Content-Type" ) ),
-                       () -> assertEquals( "75", response.getHeader( "Content-Length" ) ),
+            assertAll( () -> assertEquals( 200, response.getStatus() ),
+                       () -> assertEquals( HttpStatus.NO_CONTENT.value(), response.getStatus() ),
                        () -> assertFalse( response.getHeaderNames().isEmpty() ),
-                       () -> assertEquals( 2, response.getHeaderNames().size() )
+                       () -> assertEquals( 1, response.getHeaderNames().size() ),
+                       () -> assertTrue( response.getContentAsString().isEmpty())
             );
         }
 
