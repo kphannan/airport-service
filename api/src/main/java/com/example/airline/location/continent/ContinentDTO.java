@@ -4,6 +4,7 @@ package com.example.airline.location.continent;
 
 import java.net.URI;
 
+import com.example.utility.IgnoreGeneratedCoverage;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -26,22 +27,17 @@ import org.jspecify.annotations.Nullable;
 /**
  * API representation of a Continent.
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class ContinentDTO //implements Serializable
-{
-    // TODO convert to a Java record
+@IgnoreGeneratedCoverage
+public record ContinentDTO
+(
     @SuppressWarnings( "PMD.ShortVariable" )
     @JsonProperty( "id" )
     @Schema( name = "id",
              description = "Unique identifier",
              requiredMode = Schema.RequiredMode.REQUIRED )
     @NotNull( message = "A continent id is required" )
-    // @Pattern( regexp = "[0-9]+", message = "'id' must be only digits" )
-    private Integer id;
+    Integer id,
 
-    // TODO convert to a Java record
     @JsonProperty( "code" )
     @Schema( name = "code",
              description = "Unique abbreviation, which is a 2-character uppercase alphabetic code\"",
@@ -53,7 +49,7 @@ public class ContinentDTO //implements Serializable
     @NotBlank( message = "A 2-character code is required" )
     @NonNull
     @Pattern( regexp = "[A-Z]{2}", message = "Code must be 2 uppercase characters" )
-    private String code;
+    String code,
 
     @JsonProperty( "name" )
     @Schema( name = "name",
@@ -66,7 +62,7 @@ public class ContinentDTO //implements Serializable
     @Size( min = 2, max = 52, message = "Name must be between 2 and 52 characters" )
     @Pattern( regexp = "[a-zA-Z][a-zA-Z ]{1,51}", message = "Continent name must be 2 to 52 characters" )
     @NonNull
-    private String name;
+    String name,
 
     @JsonProperty( "wikiLink" )
     @Schema( name = "wikiLink",
@@ -76,7 +72,7 @@ public class ContinentDTO //implements Serializable
              maxLength = 255 )
     @Nullable
     // @Size( max = 255, message = "List of keywords may not exceed 255 characters" )
-    private URI    wikiLink;
+    URI    wikiLink,
 
     @JsonProperty( "keywords" )
     @Schema( name = "keywords",
@@ -85,5 +81,5 @@ public class ContinentDTO //implements Serializable
              maxLength = 255 )
     @Nullable
     @Size( max = 255, message = "List of keywords may not exceed 255 characters" )
-    private String keywords; // May not need to exchange this
-}
+    String keywords // May not need to exchange this
+){}

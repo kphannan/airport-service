@@ -38,7 +38,7 @@ Feature: Continent Read Operations
             """
             {
             "id" : #(id),
-            "wikiLink" : "https://en.wikipedia.org/wiki/North_America",
+            "wikiLink" : "https://en.wikipedia.org/wiki/Antarctica",
             "code" : "BB",
             "name" : "name to foo",
             "keywords" : "Key1, Key2, Key3, Key4"
@@ -48,7 +48,7 @@ Feature: Continent Read Operations
        When method PUT
           * print response
        Then status 200
-        And match $.wikiLink == "https://en.wikipedia.org/wiki/North_America"
+        And match $.wikiLink == "https://en.wikipedia.org/wiki/Antarctica"
 
              # Read back the updated name
        Given path id
@@ -56,7 +56,7 @@ Feature: Continent Read Operations
            * print response
         Then status 200
          And match $.name == "name to foo"
-         And match $.wikiLink == "https://en.wikipedia.org/wiki/North_America"
+         And match $.wikiLink == "https://en.wikipedia.org/wiki/Antarctica"
 
              # Delete the test only continent
        Given path id
