@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
-import java.net.http.HttpHeaders;
 import java.util.Optional;
 
 import com.example.airline.location.continent.ContinentDTO;
@@ -22,6 +21,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import org.mockito.Mockito;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -32,8 +33,8 @@ class ContinentControllerTest
     private ContinentCreateService createService;
     private ContinentUpdateService updateService;
     private ContinentDeleteService deleteService;
-    private ContinentDtoMapper     dtoMapper;
-    private HttpHeaders            requestHeader;
+    private ContinentDtoMapper dtoMapper;
+    private HttpHeaders        requestHeader;
 
     @BeforeEach
     void setUp()
@@ -46,8 +47,8 @@ class ContinentControllerTest
 
 
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-        headers.set( "Accept", MediaType.APPLICATION_JSON );
-        headers.set( "Content-Type", MediaType.APPLICATION_JSON );
+        headers.set( "Accept", MediaType.APPLICATION_JSON_VALUE );
+        headers.set( "Content-Type", MediaType.APPLICATION_JSON_VALUE );
         headers.set( HttpHeaders.ACCEPT_LANGUAGE, "en-US" );
         headers.set( HttpHeaders.ACCEPT_CHARSET, "utf-8" );
         headers.set( HttpHeaders.ACCEPT_ENCODING, "gzip" );
@@ -72,7 +73,7 @@ class ContinentControllerTest
             HttpHeaders headers = response.getHeaders();
 
             assertAll( () -> assertNotNull( response.getBody() ),
-                       () -> assertEquals( "application/json", headers.getFirst( "Content-Type" )  )
+                       () -> assertEquals( "application/json;charset=UTF-8", headers.getFirst( "Content-Type" )  )
                      );
         }
 

@@ -43,6 +43,8 @@ function setupEnvironment() {
 	karate.configure('readTimeout', 5000);
 	karate.configure('retry', 1);
 	karate.configure('report', { showLog: true, showAllSteps: true, logPrettyRequest: true, logPrettyResponse: true });
+	karate.configure('logPrettyRequest', true );
+	karate.configure('logPrettyResponse', true );
 
 	karate.configure('ssl', true );
 

@@ -2,14 +2,13 @@ Feature: Continent Read Operations
 
   Background:
     * url baseUrl + '/location/continent'
-#    * { showLog: true, showAllSteps: true, logPrettyRequest: true, logPrettyResponse: true }
 
   @Functional
   Scenario: Create, Read, Update and Delete a test-only continent
              # Create a test continent
        Given request
               """
-              { code: "BB", name: "Bogus continent name" }
+              { code: "BB", name: "Bogus continent name", "wikiLink" : "https://en.wikipedia.org/wiki/Antarctica" }
               """
         When method POST
         Then status 201

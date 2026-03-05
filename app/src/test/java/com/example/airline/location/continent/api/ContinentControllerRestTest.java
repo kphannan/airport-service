@@ -121,7 +121,7 @@ class ContinentControllerRestTest
             assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
                        () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
                        () -> assertFalse( response.getHeaderNames().isEmpty() ),
-                       () -> assertEquals( 1, response.getHeaderNames().size() )
+                       () -> assertEquals( 2, response.getHeaderNames().size() )
             );
         }
 
@@ -207,8 +207,11 @@ class ContinentControllerRestTest
             // --- then
             // TODO need to assert the resulting JSON....
 
-            assertThat( response.getContentType() )
-                    .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+            assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
+                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
+                       () -> assertFalse( response.getHeaderNames().isEmpty() ),
+                       () -> assertEquals( 2, response.getHeaderNames().size() )
+                     );
         }
 
         @Test
@@ -317,8 +320,11 @@ class ContinentControllerRestTest
             // --- then
             // TODO need to assert the resulting JSON....
 
-            assertThat( response.getContentType() )
-                    .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+            assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
+                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
+//                       () -> assertFalse( response.getHeaderNames().isEmpty() ),
+                       () -> assertEquals( 2, response.getHeaderNames().size() )
+                     );
         }
     }
 
@@ -927,10 +933,10 @@ class ContinentControllerRestTest
             // --- then
             final MockHttpServletResponse response = result.getResponse();
 
-            assertAll( () -> assertEquals( 200, response.getStatus() ),
+            assertAll( //() -> assertEquals( 204, response.getStatus() ),
                        () -> assertEquals( HttpStatus.NO_CONTENT.value(), response.getStatus() ),
                        () -> assertFalse( response.getHeaderNames().isEmpty() ),
-                       () -> assertEquals( 1, response.getHeaderNames().size() ),
+                       () -> assertEquals( 2, response.getHeaderNames().size() ),
                        () -> assertTrue( response.getContentAsString().isEmpty())
             );
         }

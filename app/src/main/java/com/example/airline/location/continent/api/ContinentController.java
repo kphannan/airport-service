@@ -4,6 +4,7 @@ package com.example.airline.location.continent.api;
 
 
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -64,6 +65,9 @@ public class ContinentController
     private final ContinentUpdateService updateService;
     private final ContinentDeleteService deleteService;
     private final ContinentDtoMapper     mapper;
+
+    private final MediaType desiredContentType = new MediaType( MediaType.APPLICATION_JSON,
+                                                                StandardCharsets.UTF_8 );
 
 
     /**
@@ -129,7 +133,10 @@ public class ContinentController
 
         final List<ContinentDTO> dtos = mapper.domainToApi( continents );
 
-        return ResponseEntity.ok( dtos );
+        return ResponseEntity
+                .status( HttpStatus.OK )
+                .headers( responseHeaders( requestHeader ) )
+                .body( dtos );
     }
 
 
@@ -181,16 +188,9 @@ public class ContinentController
         {
             final ContinentDTO dto = mapper.domainToApi( optionalContinent.get() );
 
-            HttpHeaders hhh = new HttpHeaders();
-            hhh.setContentType( MediaType.APPLICATION_JSON );
-
-            ResponseEntity<ContinentDTO> response = new ResponseEntity<>( dto, hhh, HttpStatus.OK );
-//            ResponseEntity<ContinentDTO> re = ResponseEntity
-//                    .ok( dto )
-//                    .contentLength()
-//                    .contentType( MediaType.APPLICATION_JSON );
-////            re.getHeaders().setContentType( requestHeader.getContentType() );
-////            re.getHeaders().setContentLength( dto.toString().length() );
+            ResponseEntity<ContinentDTO> response = new ResponseEntity<>( dto,
+                                                                          responseHeaders( requestHeader, desiredContentType ),
+                                                                          HttpStatus.OK );
             // TODO handle Accept:application/json or Accept:application/XML
             return response;
 //            ResponseEntity.BodyBuilder bb = ResponseEntity.status( HttpStatusCode.valueOf( 200 ) );
@@ -199,7 +199,10 @@ public class ContinentController
             // TODO  Last-Modified
         }
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity
+                .noContent()
+                .headers( responseHeaders( requestHeader ) )
+                .build();
     }
 
     /**
@@ -254,11 +257,17 @@ public class ContinentController
         {
             final ContinentDTO dto = mapper.domainToApi( optionalEntity.get() );
 
-            return ResponseEntity.ok( dto );
+            return ResponseEntity
+                    .status( HttpStatus.OK )
+                    .headers( responseHeaders( requestHeader ) )
+                    .body( dto );
         }
 
         // may include instance in header.....
-        return ResponseEntity.noContent().build();
+        return ResponseEntity
+                .noContent()
+                .headers( responseHeaders( requestHeader ) )
+                .build();
     }
 
 
@@ -318,9 +327,14 @@ public class ContinentController
                     .path( "/{continentId}" )
                     .buildAndExpand( continent.getId() )
                     .toUri();
-            return ResponseEntity
+            ResponseEntity response = ResponseEntity
                     .created( location )
+                    .headers( responseHeaders( requestHeader ) )
                     .body( mapper.domainToApi( continent ) );
+
+            log.error( response.toString() );
+
+            return response;
         }
 
         // The item is already in the DB.  If the client intention is to update,
@@ -382,13 +396,14 @@ public class ContinentController
         final Continent continent = updateService.update( mapper.apiToDomain( continentDTO ) );
         if ( null != continent )
         {
-            return ResponseEntity.ok( mapper.domainToApi( continent ) );
+            return ResponseEntity.ok( mapper.domainToApi( continent ) );  // TODO
         }
 
         // The item is not in the DB.  If the client intention is to insert,
         // then a POST should have been used.
         return ResponseEntity
                 .status( HttpStatus.CONFLICT )
+                .headers( responseHeaders( requestHeader ) )
                 .build();
     }
 
@@ -443,6 +458,7 @@ public class ContinentController
                 .status( deleteService.deleteById( continentId )
                                         ? HttpStatus.NO_CONTENT
                                         : HttpStatus.NOT_FOUND )
+                .headers( responseHeaders( requestHeader ) )
                 .build();
     }
 
@@ -499,6 +515,7 @@ public class ContinentController
                 .status( deleteService.delete( mapper.apiToDomain( continentDTO ) )
                          ? HttpStatus.NO_CONTENT
                          : HttpStatus.NOT_FOUND )
+                .headers( responseHeaders( requestHeader ) )
                 .build();
     }
 
@@ -552,7 +569,10 @@ public class ContinentController
                                                                 @RequestHeader HttpHeaders requestHeader )
     {
         // TODO implement PATCH
-        return ResponseEntity.noContent().build();
+        return ResponseEntity
+                .noContent()
+                .headers( responseHeaders( requestHeader ) )
+                .build();
     }
 
     // ===================
@@ -567,7 +587,10 @@ public class ContinentController
         // - [ ] Access-Control-Allow-Origin: * or https://somedomain....
         // - [ ] Access-Control-Allow-Headers: Content-Type, Authorization
 
-        return ResponseEntity.noContent().headers( optionsHeaders() ).build();
+        return ResponseEntity
+                .noContent()
+                .headers( optionsHeaders() )
+                .build();
     }
 
 
@@ -611,7 +634,10 @@ public class ContinentController
         // headers.add( HttpHeaders.CONTENT_TYPE, requestHeader.getAccept().toString() );
         // ResponseEntity<ContinentDTO> rr = restGetFindContinentById( continentId, requestHeader );
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity
+                .noContent()
+                .headers( responseHeaders( requestHeader ) )
+                .build();
     }
 
     @RequestMapping( value = "/{continentId}", method = RequestMethod.HEAD )
@@ -681,7 +707,66 @@ public class ContinentController
     @RequestMapping( value = "", method = RequestMethod.TRACE )
     public ResponseEntity<Void> restTraceContinent( @Valid @RequestHeader HttpHeaders requestHeader )
     {
-        return ResponseEntity.noContent().build();
+        return ResponseEntity
+                .noContent()
+                .headers( responseHeaders( requestHeader ) )
+                .build();
+    }
+
+
+
+    private HttpHeaders copyTraceHeaders( HttpHeaders requestHeader )
+    {
+        HttpHeaders headers = new HttpHeaders();
+        if ( null != requestHeader.get( "TRACEPARENT" ) )
+        {
+            headers.put( "TRACEPARENT", requestHeader.get( "TRACEPARENT" ) );
+        }
+        if ( null != requestHeader.get( "TRACESTATE" ) )
+        {
+            headers.put( "TRACESTATE", requestHeader.get( "TRACESTATE" ) );
+        }
+
+        return headers;
+//        requestHeader
+//                .entrySet()
+//                .stream()
+//                .filter( entry -> !entry.getKey().equalsIgnoreCase( "TRACEPARENT" ) )
+//                .collect(  );
+
+        // TODO add method to copy trace headers.
+//        return requestHeader;
+    }
+
+    private HttpHeaders responseHeaders()
+    {
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType( desiredContentType );
+//
+//        return headers;
+        return responseHeaders( desiredContentType );
+    }
+
+
+    private HttpHeaders responseHeaders( HttpHeaders baseHeaders, MediaType desiredContentType )
+    {
+        HttpHeaders headers = new HttpHeaders( copyTraceHeaders(  baseHeaders ) );
+        headers.setContentType( desiredContentType );
+
+        return headers;
+    }
+
+    private HttpHeaders responseHeaders( HttpHeaders baseHeaders )
+    {
+        return responseHeaders( baseHeaders, desiredContentType );
+    }
+
+    private HttpHeaders responseHeaders( MediaType desiredContentType )
+    {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType( desiredContentType );
+
+        return headers;
     }
 
 }
