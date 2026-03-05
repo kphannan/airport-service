@@ -12,21 +12,24 @@ springCloudVersion = '2024.0.1'
 #
 
 # --- Persistence ---
-hibernateVersion = '9.0.0.CR1'
+hibernateValidationVersion = '9.0.0.CR1'
+#hibernateValidationVersion = '9.1.0.Final'
 
-lombokVersion = '8.13.1'
-#lombokVersion = '9.2.0'
+#lombokVersion = '8.13.1'
+lombokVersion = '9.2.0'
 versioningVersion = '3.1.0'
 logcaptorVersion = '2.10.2'
 
 # --- Data binding ---
 jacksonDatabindVersion = '2.18.2'
+#jacksonDatabindVersion = '2.21.1'
 mapstructVersion = '1.6.3'
 jakartaAnnotationVersion = '3.0.0'
 jakartaValidationVersion = '3.0.2'
 
 # --- OpenAPI / Swagger ---
 swaggerVersion = '2.8.6'
+#swaggerVersion = '3.0.2'
 
 # --- JSepcify - tool neutral null checks
 jspecifyVersion = '1.0.0'
@@ -35,10 +38,11 @@ jspecifyVersion = '1.0.0'
 guavaVersion = '33.4.8-jre'
 
 # --- Apache Commons ---
-apacheCommonsVersion = '4.5.0'
+apacheCommonsCollectionsVersion = '4.5.0'
 
 # --- FlexyPool - JDBC stats ---
-flexyPoolVersion = '1.11.0'
+#flexyPoolVersion = '1.11.0'
+flexyPoolVersion = '1.12.1'
 
 # ----- Static Analysis -----
 # --- Mutation Testing (pitest) ---
@@ -78,7 +82,7 @@ mapstruct-processor = { group = 'org.mapstruct', name = 'mapstruct-processor', v
 google-guava = { module = 'com.google.guava:guava', version.ref = 'guavaVersion' }
 
 # --- Apache Commons ---
-apache-commons = { module = 'org.apache.commons:commons-collections4', version.ref = 'apacheCommonsVersion' }
+apache-commons = { module = 'org.apache.commons:commons-collections4', version.ref = 'apacheCommonsCollectionsVersion' }
 
 # --- OpenAPI ---
 # springdoc-openapi = { module = 'org.springdoc:springdoc-openapi-webmvc-core', version.ref = 'swaggerVersion' }
@@ -94,7 +98,7 @@ spring-boot-logging = { module = 'org.springframework.boot:spring-boot-starter-l
 
 # --- Persistence ---
 spring-boot-starter-jpa = { module = 'org.springframework.boot:spring-boot-starter-data-jpa', version.ref = 'springBootVersion' }
-hibernate-validation = { module = 'org.hibernate.validator:hibernate-validator', version.ref = 'hibernateVersion' }
+hibernate-validation = { module = 'org.hibernate.validator:hibernate-validator', version.ref = 'hibernateValidationVersion' }
 
 # --- Security ---
 spring-boot-starter-security = { group = 'org.springframework.boot', name = 'spring-boot-starter-security', version.ref = 'springBootVersion' }
