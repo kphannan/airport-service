@@ -63,8 +63,6 @@ plugins {
     id 'visual-studio'
     // id 'com.diffplug.spotless' version "${spotlessVersion}" apply false
     // id 'com.github.spotbugs' version "${spotbugsVersion}" apply false
-    // id 'checkstyle' version "${checkstyleVersion}" apply false
-    // id 'pmd' version "${pmdVersion}" apply false
     // id 'net.ltgt.errorprone' version '3.0.1' apply false
     // id 'net.nemerosa.versioning' version "${nemerosaVersion}" apply false
     // id 'com.gorylenko.gradle-git-properties' version "${gorylenkoVersion}" apply false
@@ -92,7 +90,6 @@ plugins {
 
 
     // --- Performance Testing
-//    id 'io.gatling.gradle' version "${gatlingVersion}" apply false
     alias( libs.plugins.gatling ).apply( false )
 
     // // ===== Configuration Management =====

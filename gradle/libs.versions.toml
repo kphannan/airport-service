@@ -6,7 +6,11 @@
 ## ----- Versions -----
 [versions]
 
-springBootVersion = '3.4.5'
+#springBootVersion = '3.4.5'
+#springBootVersion = '3.4.13'
+springBootVersion = '3.5.9'
+#springBootVersion = '3.5.11'
+#springBootVersion = '4.0.1'
 #springBootVersion = '4.0.3'
 #springCloudVersion = '2024.0.1'
 #
@@ -253,12 +257,12 @@ lombok = { id = 'io.freefair.lombok', version.ref = 'lombokVersion' }
 # --- BDD ---
 
 # ----- Static Analysis -----
+
 # --- Code Style ---
-#checkstyle = { id = 'checkstyle', version.ref = 'checkstyleVersion' }
 checkstyle = { id = 'checkstyle' }
 # --- Common Defects ---
-#pmd = { id = 'pmd', version.ref = 'pmdVersion' }
 pmd = { id = 'pmd' }
+
 # ----- Runtime Analysis -----
 # --- Code Coverage ---
 # jacoco = { id = 'jacoco' }
