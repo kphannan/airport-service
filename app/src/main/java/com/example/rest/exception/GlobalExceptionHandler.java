@@ -92,7 +92,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
             requestHeaders.set( "TRACESTATE", request.getHeader( "TRACESTATE" ) );
         }
 //        return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );
-        ResponseEntity response = ResponseEntity
+        ResponseEntity<ProblemDetail> response = ResponseEntity
                 .status( HttpStatus.BAD_REQUEST )
                 .headers( responseHeaders( requestHeaders))
                 .body( details );
@@ -131,7 +131,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
             requestHeaders.set( "TRACESTATE", request.getHeader( "TRACESTATE" ) );
         }
 //        return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );
-        ResponseEntity response = ResponseEntity
+        ResponseEntity<ProblemDetail> response = ResponseEntity
                 .status( HttpStatus.BAD_REQUEST )
                 .headers( responseHeaders( requestHeaders))
                 .body( details );
@@ -275,7 +275,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.set( "TRACEPARENT", request.getHeader(  "TRACEPARENT" ) );
         requestHeaders.set( "TRACESTATE", request.getHeader(  "TRACESTATE" ) );
-        ResponseEntity response = ResponseEntity
+        ResponseEntity<ProblemDetail> response = ResponseEntity
                 .status( HttpStatus.BAD_REQUEST )
                 .headers( responseHeaders( requestHeaders))
                 .body( details );
@@ -319,7 +319,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
             requestHeaders.set( "TRACEPARENT", request.getHeader( "TRACEPARENT" ) );
             requestHeaders.set( "TRACESTATE", request.getHeader( "TRACESTATE" ) );
         }
-        ResponseEntity response = ResponseEntity
+        ResponseEntity<ProblemDetail> response = ResponseEntity
                 .status( HttpStatus.BAD_REQUEST )
                 .headers( responseHeaders( requestHeaders))
                 .body( details );
@@ -361,7 +361,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
             requestHeaders.set( "TRACEPARENT", request.getHeader( "TRACEPARENT" ) );
             requestHeaders.set( "TRACESTATE", request.getHeader( "TRACESTATE" ) );
         }
-        ResponseEntity response = ResponseEntity
+        ResponseEntity<ProblemDetail> response = ResponseEntity
                 .status( HttpStatus.BAD_REQUEST )
                 .headers( responseHeaders( requestHeaders))
                 .body( details );
@@ -394,7 +394,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
 
     // ========== Unsupported Method ==========
     /**
-     * Create a standard error message when an unsupported methot (GET, PUT,
+     * Create a standard error message when an unsupported method (GET, PUT,
      * DELETE...) is specified.
      *
      * @param exception the intercepted exception
@@ -453,7 +453,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
             requestHeaders.set( "TRACEPARENT", request.getHeader( "TRACEPARENT" ) );
             requestHeaders.set( "TRACESTATE", request.getHeader( "TRACESTATE" ) );
         }
-        ResponseEntity response = ResponseEntity
+        ResponseEntity<ProblemDetail> response = ResponseEntity
                 .status( details.getStatus() )
                 .location( details.getInstance() )
                 .headers( responseHeaders( requestHeaders))
