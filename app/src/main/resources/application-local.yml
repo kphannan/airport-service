@@ -44,6 +44,10 @@ spring:
 
     showSql: true
 
+  mvc:
+    dispatchTraceRequest: true
+
+
   # Enable H2 console
   h2:
     console:
