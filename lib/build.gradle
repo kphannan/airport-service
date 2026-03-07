@@ -26,8 +26,7 @@ dependencies {
 	// --- Logging
 	// --- Data format / validation
 	//   - needed for yaml configuration of log4j2
-	implementation libs.jackson.databind
-	implementation libs.jackson.dataformat.yaml
+	implementation libs.bundles.bindings
 
 	// ----- Quality Assurance -----
 	// --- Unit Testing

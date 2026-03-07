@@ -45,16 +45,13 @@ dependencies {
     // --- Annotation Processor
 	implementation libs.bundles.spring.validation
 
-	implementation libs.mapstruct
     annotationProcessor libs.mapstruct.processor
 
     // ----- Frameworks -----
     // --- Logging
     // --- Data format / validation
+    implementation libs.bundles.bindings
     //   - needed for yaml configuration of log4j2
-//	implementation libs.jackson.databind
-//	implementation libs.jackson.dataformat.yaml
-//    implementation libs.jackson.dataformat.xml
 
     // --- OpenAPI doc
     implementation libs.springdoc.openapi.ui

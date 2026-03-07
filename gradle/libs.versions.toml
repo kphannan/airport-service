@@ -190,9 +190,6 @@ spring-boot-base = [
     'spring-boot-starter-web',
     'spring-boot-starter-security',
     'spring-boot-logging',
-    'jackson-databind',
-    'jackson-dataformat-yaml',
-    'jackson-dataformat-xml',
     'apache-commons',
     'google-guava'
 ]
@@ -201,6 +198,13 @@ spring-boot-persistence = [
 #    'spring-boot-starter-jpa',
 #    'flexy-pool-spring-boot-starter',
 #    'datasource-proxy-spring-boot-starter'
+]
+
+bindings = [
+    'jackson-databind',
+    'jackson-dataformat-yaml',
+    'jackson-dataformat-xml',
+    'mapstruct'
 ]
 
 persistence = [
