@@ -12,14 +12,14 @@ buildscript {
         log4jVersion                = '2.24.3'
 
         // --- OpenAPI
-        swaggerVersion              = '2.8.6'
+//        swaggerVersion              = '2.8.6'
 
         // ===== Frameworks =====
         // --- model mapping
         // mapstructVersion            = '1.6.3'
 
         // --- Spring  Boot
-    	springCloudVersion          = '2025.1.1'
+//    	springCloudVersion          = '2025.1.1'
 
         // ===== Quality checks =====
 

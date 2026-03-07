@@ -22,8 +22,5 @@ dependencies {
 	implementation libs.bundles.spring.boot.base
 
 	testImplementation libs.bundles.spring.validation
-	// https://mvnrepository.com/artifact/org.assertj/assertj-core
-	testImplementation 'org.assertj:assertj-core:4.0.0-M1'
-	// https://mvnrepository.com/artifact/org.skyscreamer/jsonassert
-	testImplementation 'org.skyscreamer:jsonassert:2.0-rc1'
+	testImplementation libs.bundles.unit.test
 }

@@ -41,7 +41,6 @@ dependencies {
 
 
 	implementation libs.bundles.spring.boot.base
-	implementation libs.bundles.spring.boot.persistence
 
     // --- Annotation Processor
 	implementation libs.bundles.spring.validation
@@ -63,14 +62,11 @@ dependencies {
     // testImplementation( "org.springdoc:springdoc-openapi-starter-webmvc-api:2.8.6" )
 
     // ===== Persistence =====
-    implementation( "org.liquibase:liquibase-core" )
-    // --- Database
-    runtimeOnly( "com.h2database:h2" )
-    // runtimeOnly( "com.ibm.db2:jcc" )
-    runtimeOnly( "com.mysql:mysql-connector-j" )
-    // runtimeOnly( "com.oracle.database.jdbc:ojdbc11" )
-    runtimeOnly( "org.mariadb.jdbc:mariadb-java-client" )
-    runtimeOnly( "org.postgresql:postgresql" )
+    implementation libs.bundles.persistence
+
+    // --- Database connectors ---
+    runtimeOnly libs.bundles.persistence.connector
+
     // ----- Quality Assurance -----
     testAnnotationProcessor libs.mapstruct.processor
     // --- Unit Testing

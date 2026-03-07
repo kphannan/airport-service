@@ -17,7 +17,7 @@ plugins {
 dependencies {
 
 	implementation libs.bundles.spring.boot.base
-	implementation libs.bundles.spring.boot.persistence
+	implementation libs.bundles.persistence
 
 	// --- Annotation Processor
 	implementation libs.bundles.spring.validation

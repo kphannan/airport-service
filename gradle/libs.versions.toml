@@ -8,24 +8,28 @@
 
 springBootVersion = '3.4.5'
 #springBootVersion = '4.0.3'
-springCloudVersion = '2024.0.1'
+#springCloudVersion = '2024.0.1'
 #
 
 # --- Persistence ---
-hibernateValidationVersion = '9.0.0.CR1'
-#hibernateValidationVersion = '9.1.0.Final'
+#hibernateValidationVersion = '9.0.0.CR1'
+hibernateValidationVersion = '9.1.0.Final'
+liquibaseVersion = '5.0.1'
 
-#lombokVersion = '8.13.1'
 lombokVersion = '9.2.0'
 versioningVersion = '3.1.0'
 logcaptorVersion = '2.10.2'
+
+# --- Unit Testing ---
+jsonassertVersion = '2.0-rc1'
+assertjVersion = '4.0.0-M1'
 
 # --- Data binding ---
 jacksonDatabindVersion = '2.18.2'
 #jacksonDatabindVersion = '2.21.1'
 mapstructVersion = '1.6.3'
 jakartaAnnotationVersion = '3.0.0'
-jakartaValidationVersion = '3.0.2'
+#jakartaValidationVersion = '3.0.2'
 
 # --- OpenAPI / Swagger ---
 swaggerVersion = '2.8.6'
@@ -41,7 +45,6 @@ guavaVersion = '33.4.8-jre'
 apacheCommonsCollectionsVersion = '4.5.0'
 
 # --- FlexyPool - JDBC stats ---
-#flexyPoolVersion = '1.11.0'
 flexyPoolVersion = '1.12.1'
 
 # ----- Static Analysis -----
@@ -99,13 +102,27 @@ spring-boot-logging = { module = 'org.springframework.boot:spring-boot-starter-l
 # --- Persistence ---
 spring-boot-starter-jpa = { module = 'org.springframework.boot:spring-boot-starter-data-jpa', version.ref = 'springBootVersion' }
 hibernate-validation = { module = 'org.hibernate.validator:hibernate-validator', version.ref = 'hibernateValidationVersion' }
+liquibase = { module = 'org.liquibase:liquibase-core' }
+#liquibase = { module = 'org.liquibase:liquibase-core', version.ref = 'liquibaseVersion' }
+#liquibase = { module = '', version.ref = '' }
+db2 = { module = 'com.ibm.db2:jcc' }
+h2 = { module = 'com.h2database:h2' }
+mariadb = { module = 'org.mariadb.jdbc:mariadb-java-client' }
+mysql = { module = 'com.mysql:mysql-connector-j' }
+oracle = { module = 'com.oracle.database.jdbc:ojdbc11' }
+postgresql = { module = 'org.postgresql:postgresql'}
+
 
 # --- Security ---
 spring-boot-starter-security = { group = 'org.springframework.boot', name = 'spring-boot-starter-security', version.ref = 'springBootVersion' }
 
 # --- Unit Testing ---
 spring-boot-starter-test = { group = 'org.springframework.boot', name = 'spring-boot-starter-test', version.ref = 'springBootVersion' }
+assertj = { module = 'org.assertj:assertj-core', version.ref = 'assertjVersion' }
+jsonassert = { module = 'org.skyscreamer:jsonassert', version.ref = 'jsonassertVersion' }
 
+
+#{
 # spring-boot-starter = { module = 'org.springframework.boot:spring-boot-starter', version.ref = 'springBootVersion' }
 # # spring-boot-starter-aop = { group = 'org.springframework.boot', name = 'spring-boot-starter-aop', version.ref = 'springBootVersion' }
 # # spring-boot-starter-cache = { group = 'org.springframework.boot', name = 'spring-boot-starter-cache', version.ref = 'springBootVersion' }
@@ -156,6 +173,7 @@ spring-boot-starter-test = { group = 'org.springframework.boot', name = 'spring-
 # # spring-boot-starter-data-mongodb-reactive = { group = 'org.springframework.boot', name = 'spring-boot-starter-data-mongodb-reactive', version.ref = 'springBootVersion' }
 # # spring-boot-starter-data-redis-reactive = { group = 'org.springframework.boot', name = 'spring-boot-starter-data-redis-reactive', version.ref = 'springBootVersion' }
 # # spring-boot-starter-data-elasticsearch-reactive = { group = 'org.springframework.boot', name = 'spring-boot-starter-data-elasticsearch-reactive', version.ref = 'springBootVersion' }
+#}
 
 flexy-pool-spring-boot-starter = { module = 'com.github.gavlyukovskiy:flexy-pool-spring-boot-starter', version.ref = 'flexyPoolVersion' }
 datasource-proxy-spring-boot-starter = { module = 'com.github.gavlyukovskiy:datasource-proxy-spring-boot-starter', version.ref = 'flexyPoolVersion' }
@@ -180,15 +198,37 @@ spring-boot-base = [
 ]
 
 spring-boot-persistence = [
+#    'spring-boot-starter-jpa',
+#    'flexy-pool-spring-boot-starter',
+#    'datasource-proxy-spring-boot-starter'
+]
+
+persistence = [
     'spring-boot-starter-jpa',
     'flexy-pool-spring-boot-starter',
-    'datasource-proxy-spring-boot-starter'
+    'datasource-proxy-spring-boot-starter',
+    'liquibase'
 ]
+
+persistence-connector = [
+    'db2',
+    'h2',
+    'mariadb',
+    'mysql',
+    'oracle',
+    'postgresql'
+]
+
 spring-validation = [
     'spring-boot-starter-validation',
     'hibernate-validation',
     'jspecify',
     'jakarta-annotation'
+]
+
+unit-test = [
+    'assertj',
+    'jsonassert'
 ]
 
 # --- Plugins can't be part of a bundle

@@ -20,13 +20,11 @@ plugins {
 
     // --- Style
     id 'checkstyle'
-//    alias(libs.plugins.checkstyle)
 //    alias( libs.plugins.checkstyle )
 
     // ----- Common Coding flaws
     // --- PMD
     id 'pmd'
-//    alias( libs.plugins.pmd )
 //    alias( libs.plugins.pmd )
     // id 'com.github.spotbugs'
     // id 'org.checkerframework'
@@ -57,6 +55,8 @@ dependencies {
     constraints {
         // Define dependency versions as constraints
     }
+
+//    implementation( plugins( libs.plugins.lombok ))
 
     implementation libs.jspecify
 }
