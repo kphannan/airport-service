@@ -8,8 +8,8 @@
 
 #springBootVersion = '3.4.5'
 #springBootVersion = '3.4.13'
-springBootVersion = '3.5.9'
-#springBootVersion = '3.5.11'
+#springBootVersion = '3.5.9'
+springBootVersion = '3.5.11'
 #springBootVersion = '4.0.1'
 #springBootVersion = '4.0.3'
 #springCloudVersion = '2024.0.1'
@@ -30,6 +30,7 @@ assertjVersion = '4.0.0-M1'
 
 # --- Data binding ---
 jacksonDatabindVersion = '2.18.2'
+#jacksonDatabindVersion = '2.19.4'
 #jacksonDatabindVersion = '2.21.1'
 mapstructVersion = '1.6.3'
 jakartaAnnotationVersion = '3.0.0'
