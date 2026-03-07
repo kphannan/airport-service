@@ -327,7 +327,7 @@ public class ContinentController
                     .path( "/{continentId}" )
                     .buildAndExpand( continent.getId() )
                     .toUri();
-            ResponseEntity response = ResponseEntity
+            ResponseEntity<ContinentDTO> response = ResponseEntity
                     .created( location )
                     .headers( responseHeaders( requestHeader ) )
                     .body( mapper.domainToApi( continent ) );
@@ -341,6 +341,7 @@ public class ContinentController
         // then a PUT should have been used.
         return ResponseEntity
                 .status( HttpStatus.CONFLICT )
+                .headers( responseHeaders( requestHeader ) )
 //                .body( "Continent does not exist" )
                 .build();
     }
@@ -396,7 +397,13 @@ public class ContinentController
         final Continent continent = updateService.update( mapper.apiToDomain( continentDTO ) );
         if ( null != continent )
         {
-            return ResponseEntity.ok( mapper.domainToApi( continent ) );  // TODO
+            ResponseEntity<ContinentDTO> response = new ResponseEntity<>( mapper.domainToApi( continent ),
+                                                                          responseHeaders( requestHeader, desiredContentType ),
+                                                                          HttpStatus.OK );
+            // TODO handle Accept:application/json or Accept:application/XML
+            return response;
+
+//            return ResponseEntity.ok( mapper.domainToApi( continent ) );  // TODO
         }
 
         // The item is not in the DB.  If the client intention is to insert,
@@ -587,9 +594,12 @@ public class ContinentController
         // - [ ] Access-Control-Allow-Origin: * or https://somedomain....
         // - [ ] Access-Control-Allow-Headers: Content-Type, Authorization
 
+        HttpHeaders responseHeaders = optionsHeaders();
+        responseHeaders.set( "TRACEPARENT", requestHeader.getFirst(  "TRACEPARENT" ) );
+        responseHeaders.set( "TRACESTATE", requestHeader.getFirst(  "TRACESTATE" ) );
         return ResponseEntity
                 .noContent()
-                .headers( optionsHeaders() )
+                .headers( responseHeaders( responseHeaders ) )
                 .build();
     }
 
@@ -612,8 +622,16 @@ public class ContinentController
         final List<MediaType> mediaType = List.of( MediaType.APPLICATION_JSON,
                                              MediaType.APPLICATION_YAML,
                                              MediaType.APPLICATION_XML );
-        final String allowsString = allows.stream().map( HttpMethod::name ).collect( Collectors.joining( "," ) );
-        final String mediaTypeString = mediaType.stream().map( MediaType::toString ).collect( Collectors.joining( "," ) );
+        final String allowsString    =
+                allows
+                        .stream()
+                        .map( HttpMethod::name )
+                        .collect( Collectors.joining( "," ) );
+        final String mediaTypeString =
+                mediaType
+                        .stream()
+                        .map( MediaType::toString )
+                        .collect( Collectors.joining( "," ) );
 
         headers.add( HttpHeaders.ALLOW, allowsString );
         headers.add( HttpHeaders.ACCEPT, mediaTypeString );
@@ -708,13 +726,65 @@ public class ContinentController
     public ResponseEntity<Void> restTraceContinent( @Valid @RequestHeader HttpHeaders requestHeader )
     {
         return ResponseEntity
-                .noContent()
+                .status( HttpStatus.OK )
                 .headers( responseHeaders( requestHeader ) )
                 .build();
     }
 
+    @Operation( method = "TRACE",
+                summary = "TRACE Continent",
+                description = "Continent API TRACE.",
+                responses = {
+                        @ApiResponse(
+                                description = "TRACE......",
+                                responseCode = "200",
+                                content =
+                                        {
+                                                @Content( mediaType = "application/json",
+                                                          schema = @Schema( implementation = ContinentDTO.class ) ),
+                                                @Content( mediaType = "application/yaml",
+                                                          schema = @Schema( implementation = ContinentDTO.class ) ),
+                                                @Content( mediaType = "application/xml",
+                                                          schema = @Schema( implementation = ContinentDTO.class ) )
+                                        }
+                        )
+                },
+                parameters = {
+                        @Parameter( name = "Bearer",
+                                    required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Authentication / Authorization token" ),
+                        @Parameter( name = "TRACEPARENT",
+                                    required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Distributed tracing identifier" ),
+                        @Parameter( name = "TRACESTATE",
+                                    required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Vendor specific trace identification" )
+                }
+    )
+    @RequestMapping( value = "/{continentId}", method = RequestMethod.TRACE )
+    public ResponseEntity<Void> restTraceContinent( @Valid @PathVariable( name = "continentId" ) final Integer continentId,
+                                                    @RequestHeader HttpHeaders requestHeader )
+    {
+        final URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path( "/{continentId}" )
+                .buildAndExpand( continentId )
+                .toUri();
+        return ResponseEntity
+                .status( HttpStatus.OK )
+                .headers( responseHeaders( requestHeader ) )
+                .location( location )
+                .build();
+    }
 
 
+    // TODO extract to a utility class
     private HttpHeaders copyTraceHeaders( HttpHeaders requestHeader )
     {
         HttpHeaders headers = new HttpHeaders();
@@ -725,6 +795,10 @@ public class ContinentController
         if ( null != requestHeader.get( "TRACESTATE" ) )
         {
             headers.put( "TRACESTATE", requestHeader.get( "TRACESTATE" ) );
+        }
+        if ( null != requestHeader.get( HttpHeaders.ACCEPT ) )
+        {
+            headers.put( HttpHeaders.ACCEPT, requestHeader.get( HttpHeaders.ACCEPT ) );
         }
 
         return headers;
@@ -750,7 +824,7 @@ public class ContinentController
 
     private HttpHeaders responseHeaders( HttpHeaders baseHeaders, MediaType desiredContentType )
     {
-        HttpHeaders headers = new HttpHeaders( copyTraceHeaders(  baseHeaders ) );
+        HttpHeaders headers = new HttpHeaders( copyTraceHeaders( baseHeaders ) );
         headers.setContentType( desiredContentType );
 
         return headers;
