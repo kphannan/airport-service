@@ -29,9 +29,10 @@ jsonassertVersion = '2.0-rc1'
 assertjVersion = '4.0.0-M1'
 
 # --- Data binding ---
-jacksonDatabindVersion = '2.18.2'
+#jacksonDatabindVersion = '2.18.2'
 #jacksonDatabindVersion = '2.19.4'
 #jacksonDatabindVersion = '2.21.1'
+jacksonDatabindVersion = '3.1.0'
 mapstructVersion = '1.6.3'
 jakartaAnnotationVersion = '3.0.0'
 #jakartaValidationVersion = '3.0.2'
@@ -72,9 +73,14 @@ gatlingVersion = '3.14.9.8'
 logcaptor = { group = 'io.github.hakky54', name = 'logcaptor', version.ref = 'logcaptorVersion' }
 
 # --- Jakarta ---
-jackson-databind = { group = 'com.fasterxml.jackson.core', name = 'jackson-databind', version.ref = 'jacksonDatabindVersion' }
-jackson-dataformat-yaml = { group = 'com.fasterxml.jackson.dataformat', name = 'jackson-dataformat-yaml', version.ref = 'jacksonDatabindVersion' }
-jackson-dataformat-xml = { group = 'com.fasterxml.jackson.dataformat', name = 'jackson-dataformat-xml', version.ref = 'jacksonDatabindVersion' }
+#jackson-databind = { group = 'com.fasterxml.jackson.core', name = 'jackson-databind', version.ref = 'jacksonDatabindVersion' }
+#jackson-dataformat-yaml = { group = 'com.fasterxml.jackson.dataformat', name = 'jackson-dataformat-yaml', version.ref = 'jacksonDatabindVersion' }
+#jackson-dataformat-xml = { group = 'com.fasterxml.jackson.dataformat', name = 'jackson-dataformat-xml', version.ref = 'jacksonDatabindVersion' }
+jackson-databind = { module = 'tools.jackson.core:jackson-databind', version.ref = 'jacksonDatabindVersion' }
+jackson-dataformat-yaml = { module = 'tools.jackson.dataformat:jackson-dataformat-yaml', version.ref = 'jacksonDatabindVersion' }
+jackson-dataformat-xml = { module = 'tools.jackson.dataformat:jackson-dataformat-xml', version.ref = 'jacksonDatabindVersion' }
+#jackson-core
+#jackson-annotations
 
 # --- Jakarta Annotations ---
 jakarta-annotation = { module = 'jakarta.annotation:jakarta.annotation-api', version.ref = 'jakartaAnnotationVersion' }  # TODO change to JSpec
@@ -98,17 +104,17 @@ apache-commons = { module = 'org.apache.commons:commons-collections4', version.r
 springdoc-openapi-ui = { module = 'org.springdoc:springdoc-openapi-starter-webmvc-ui', version.ref = 'swaggerVersion' }
 
 # --- Spring Boot ---
-spring-boot-starter = { module = 'org.springframework.boot:spring-boot-starter' }
-spring-boot-starter-actuator = { module = 'org.springframework.boot:spring-boot-starter-actuator', version.ref = 'springBootVersion' }
-spring-boot-starter-validation = { module = 'org.springframework.boot:spring-boot-starter-validation', version.ref = 'springBootVersion' }
-spring-boot-starter-web = { module = 'org.springframework.boot:spring-boot-starter-web', version.ref = 'springBootVersion' }
-spring-boot-logging = { module = 'org.springframework.boot:spring-boot-starter-logging' }
+spring-boot-starter            = { module = 'org.springframework.boot:spring-boot-starter',             version.ref = 'springBootVersion' }
+spring-boot-starter-actuator   = { module = 'org.springframework.boot:spring-boot-starter-actuator',    version.ref = 'springBootVersion' }
+spring-boot-starter-validation = { module = 'org.springframework.boot:spring-boot-starter-validation',  version.ref = 'springBootVersion' }
+spring-boot-starter-web        = { module = 'org.springframework.boot:spring-boot-starter-web',         version.ref = 'springBootVersion' }
+spring-boot-logging            = { module = 'org.springframework.boot:spring-boot-starter-logging',     version.ref = 'springBootVersion'  }
 
 # --- Persistence ---
 spring-boot-starter-jpa = { module = 'org.springframework.boot:spring-boot-starter-data-jpa', version.ref = 'springBootVersion' }
 hibernate-validation = { module = 'org.hibernate.validator:hibernate-validator', version.ref = 'hibernateValidationVersion' }
-liquibase = { module = 'org.liquibase:liquibase-core' }
-#liquibase = { module = 'org.liquibase:liquibase-core', version.ref = 'liquibaseVersion' }
+#liquibase = { module = 'org.liquibase:liquibase-core' }
+liquibase = { module = 'org.liquibase:liquibase-core', version.ref = 'liquibaseVersion' }
 #liquibase = { module = '', version.ref = '' }
 db2 = { module = 'com.ibm.db2:jcc' }
 h2 = { module = 'com.h2database:h2' }
