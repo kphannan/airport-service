@@ -85,16 +85,15 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
 
         details.setTitle( "Parameter Type Mismatch" );
 
-        HttpHeaders requestHeaders = new HttpHeaders();
+        final HttpHeaders requestHeaders = new HttpHeaders();
         if ( null != request )
         {
             requestHeaders.set( "TRACEPARENT", request.getHeader( "TRACEPARENT" ) );
             requestHeaders.set( "TRACESTATE", request.getHeader( "TRACESTATE" ) );
         }
-//        return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );
-        ResponseEntity<ProblemDetail> response = ResponseEntity
+        final ResponseEntity<ProblemDetail> response = ResponseEntity
                 .status( HttpStatus.BAD_REQUEST )
-                .headers( responseHeaders( requestHeaders))
+                .headers( responseHeaders( requestHeaders ) )
                 .body( details );
 
         return response;
@@ -124,16 +123,15 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
         details.setProperty( "Possibility 3", "Missing Form Data" );
 
 //        return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );
-        HttpHeaders requestHeaders = new HttpHeaders();
+        final HttpHeaders requestHeaders = new HttpHeaders();
         if ( null != request )
         {
             requestHeaders.set( "TRACEPARENT", request.getHeader( "TRACEPARENT" ) );
             requestHeaders.set( "TRACESTATE", request.getHeader( "TRACESTATE" ) );
         }
-//        return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );
-        ResponseEntity<ProblemDetail> response = ResponseEntity
+        final ResponseEntity<ProblemDetail> response = ResponseEntity
                 .status( HttpStatus.BAD_REQUEST )
-                .headers( responseHeaders( requestHeaders))
+                .headers( responseHeaders( requestHeaders ) )
                 .body( details );
 
         return response;
@@ -242,7 +240,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     @ExceptionHandler( MethodArgumentNotValidException.class )
     @ResponseStatus( code = HttpStatus.BAD_REQUEST )
     public ResponseEntity<ProblemDetail>
-        handleRestValidationException( WebRequest request,
+        handleRestValidationException( final WebRequest request,
                                        final MethodArgumentNotValidException exception )
     {
         final ProblemDetail details = exception.getBody();
@@ -271,13 +269,12 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
             details.setProperty( key, desc );
         }
 
-//        return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );
-        HttpHeaders requestHeaders = new HttpHeaders();
+        final HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.set( "TRACEPARENT", request.getHeader(  "TRACEPARENT" ) );
         requestHeaders.set( "TRACESTATE", request.getHeader(  "TRACESTATE" ) );
-        ResponseEntity<ProblemDetail> response = ResponseEntity
+        final ResponseEntity<ProblemDetail> response = ResponseEntity
                 .status( HttpStatus.BAD_REQUEST )
-                .headers( responseHeaders( requestHeaders))
+                .headers( responseHeaders( requestHeaders ) )
                 .body( details );
 
         return response;
@@ -312,16 +309,15 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
                                                                  ConstraintViolation::getMessage
                                                                ) ) );
 
-//        return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );
-        HttpHeaders requestHeaders = new HttpHeaders();
+        final HttpHeaders requestHeaders = new HttpHeaders();
         if ( null != request )
         {
             requestHeaders.set( "TRACEPARENT", request.getHeader( "TRACEPARENT" ) );
             requestHeaders.set( "TRACESTATE", request.getHeader( "TRACESTATE" ) );
         }
-        ResponseEntity<ProblemDetail> response = ResponseEntity
+        final  ResponseEntity<ProblemDetail> response = ResponseEntity
                 .status( HttpStatus.BAD_REQUEST )
-                .headers( responseHeaders( requestHeaders))
+                .headers( responseHeaders( requestHeaders ) )
                 .body( details );
 
         return response;
@@ -354,16 +350,15 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
         details.setProperty( "Possibility 3", "Incompatible data format" );
         details.setProperty( "Possibility 4", "Serialization errors" );
 
-//        return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );
-        HttpHeaders requestHeaders = new HttpHeaders();
+        final HttpHeaders requestHeaders = new HttpHeaders();
         if ( null != request )
         {
             requestHeaders.set( "TRACEPARENT", request.getHeader( "TRACEPARENT" ) );
             requestHeaders.set( "TRACESTATE", request.getHeader( "TRACESTATE" ) );
         }
-        ResponseEntity<ProblemDetail> response = ResponseEntity
+        final ResponseEntity<ProblemDetail> response = ResponseEntity
                 .status( HttpStatus.BAD_REQUEST )
-                .headers( responseHeaders( requestHeaders))
+                .headers( responseHeaders( requestHeaders ) )
                 .body( details );
 
         return response;
@@ -441,22 +436,16 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
         details.setProperty( "TraceId: ", UUID.randomUUID() );  // TODO change to pull the traceID from MDC
         details.setInstance( URI.create( exception.getResourcePath() ) );
 
-//        return ResponseEntity
-//                .status( details.getStatus() )
-//                .location( details.getInstance() )
-//                .body( details );
-
-
-        HttpHeaders requestHeaders = new HttpHeaders();
+        final HttpHeaders requestHeaders = new HttpHeaders();
         if ( null != request )
         {
             requestHeaders.set( "TRACEPARENT", request.getHeader( "TRACEPARENT" ) );
             requestHeaders.set( "TRACESTATE", request.getHeader( "TRACESTATE" ) );
         }
-        ResponseEntity<ProblemDetail> response = ResponseEntity
+        final ResponseEntity<ProblemDetail> response = ResponseEntity
                 .status( details.getStatus() )
                 .location( details.getInstance() )
-                .headers( responseHeaders( requestHeaders))
+                .headers( responseHeaders( requestHeaders ) )
                 .body( details );
 
         return response;
@@ -566,7 +555,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     {
         // TODO the MDC should include the traceId (UUID) and log pattern should
 
-        log.error( "Catch-All exception for: ", exception );
+//        log.error( "Catch-All exception for: ", exception );
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.INTERNAL_SERVER_ERROR,
                                                                         exception.getMessage() );
 
@@ -594,9 +583,9 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
 
 
     // TODO extract to a utility class
-    private HttpHeaders copyTraceHeaders( HttpHeaders requestHeader )
+    private HttpHeaders copyTraceHeaders( final HttpHeaders requestHeader )
     {
-        HttpHeaders headers = new HttpHeaders();
+        final HttpHeaders headers = new HttpHeaders();
         if ( null != requestHeader.get( "TRACEPARENT" ) )
         {
             headers.put( "TRACEPARENT", requestHeader.get( "TRACEPARENT" ) );
@@ -619,30 +608,26 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
 
     private HttpHeaders responseHeaders()
     {
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType( desiredContentType );
-//
-//        return headers;
         return responseHeaders( desiredContentType );
     }
 
 
-    private HttpHeaders responseHeaders( HttpHeaders baseHeaders, MediaType desiredContentType )
+    private HttpHeaders responseHeaders( final HttpHeaders baseHeaders, final MediaType desiredContentType )
     {
-        HttpHeaders headers = new HttpHeaders( copyTraceHeaders( baseHeaders ) );
+        final HttpHeaders headers = new HttpHeaders( copyTraceHeaders( baseHeaders ) );
         headers.setContentType( desiredContentType );
 
         return headers;
     }
 
-    private HttpHeaders responseHeaders( HttpHeaders baseHeaders )
+    private HttpHeaders responseHeaders( final HttpHeaders baseHeaders )
     {
         return responseHeaders( baseHeaders, desiredContentType );
     }
 
-    private HttpHeaders responseHeaders( MediaType desiredContentType )
+    private HttpHeaders responseHeaders( final MediaType desiredContentType )
     {
-        HttpHeaders headers = new HttpHeaders();
+        final HttpHeaders headers = new HttpHeaders();
         headers.setContentType( desiredContentType );
 
         return headers;

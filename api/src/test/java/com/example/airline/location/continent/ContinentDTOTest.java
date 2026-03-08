@@ -33,7 +33,7 @@ class ContinentDTOTest
 
     @Nested
     @DisplayName( "constructor will" )
-    class Constructor
+    class Constructor           // NOPMD
     {
 
         @Test

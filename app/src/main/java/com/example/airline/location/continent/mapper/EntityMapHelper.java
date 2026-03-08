@@ -17,6 +17,7 @@ public final class EntityMapHelper
     private EntityMapHelper()
     {
         // Prevent instantiation
+        throw new IllegalStateException( "Instantiation of utility class is not allowed." );
     }
 
     /**

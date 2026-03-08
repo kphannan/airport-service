@@ -105,15 +105,15 @@ public class AirportController
     @SuppressWarnings( "PMD.ShortVariable" )
     public ResponseEntity<AirportDTO> restGetFindAirportById( @PathVariable final Long id )
     {
-        log.error( String.format( "enter restGetFindAirportById( %s )", id ));
+//        log.error( String.format( "enter restGetFindAirportById( %s )", id ) );
         final Optional<Airport> optionalAirport = service.findAirportById( id );
-        log.error( String.format( "    fingAirportById( %s ) - [%s]", id, optionalAirport ));
+//        log.error( String.format( "    fingAirportById( %s ) - [%s]", id, optionalAirport ) );
 
         if ( optionalAirport.isPresent() )
         {
-            log.error( String.format( "    found airport( %s ) %s", id, optionalAirport.get() ));
+//            log.error( String.format( "    found airport( %s ) %s", id, optionalAirport.get() ) );
             final AirportDTO dto = mapper.domainToApi( optionalAirport.get() );
-            log.error( String.format( "    DTO airport( %s ), %s", id, dto ));
+//            log.error( String.format( "    DTO airport( %s ), %s", id, dto ) );
 
             return ResponseEntity.ok( dto );
         }
@@ -153,7 +153,7 @@ public class AirportController
     // get a list of countries in the continent, with counts of airports in each country
     @GetMapping( "/summary/continent/code/{continentCode}" )
     public ResponseEntity<List<AirportCountInCountryDTO>>
-    restGetCountCountryAirportsByContinent( @PathVariable final String continentCode )
+        restGetCountCountryAirportsByContinent( @PathVariable final String continentCode )
     {
         final List<AirportCountInCountry> counts = service.countCountryAirportsByContinent( continentCode );
 
@@ -204,7 +204,7 @@ public class AirportController
 
     @GetMapping( "/summary/country/code/{countryCode}" )
     public ResponseEntity<List<AirportCountInRegionDTO>>
-    restGetCountAirportsByRegion( @PathVariable final String countryCode )
+        restGetCountAirportsByRegion( @PathVariable final String countryCode )
     {
         final List<AirportCountInRegion> counts = service.countRegionAirportsByCountry( countryCode );
 

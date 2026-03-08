@@ -27,6 +27,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+@DisplayName( "Continent Controller" )
 class ContinentControllerTest
 {
     private ContinentReadService   readService;
@@ -46,7 +47,7 @@ class ContinentControllerTest
         dtoMapper     = Mappers.getMapper( ContinentDtoMapper.class );
 
 
-        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        final MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.set( "Accept", MediaType.APPLICATION_JSON_VALUE );
         headers.set( "Content-Type", MediaType.APPLICATION_JSON_VALUE );
         headers.set( HttpHeaders.ACCEPT_LANGUAGE, "en-US" );
@@ -56,21 +57,22 @@ class ContinentControllerTest
     }
 
     @Nested
-    @DisplayName( "GET methods" )
-    class Get
+    @DisplayName( "get/fetch" )
+    class Get           // NOPMD
     {
         @Test
-        void getContinentById()
+        @DisplayName( "Continent By Id" )
+        void methodGet_ContinentById()
         {
-            ContinentController controller = new ContinentController( readService, createService, updateService, deleteService, dtoMapper );
+            final ContinentController controller = new ContinentController( readService, createService, updateService, deleteService, dtoMapper );
 
             final Continent continent = new Continent( 1, "NA", "North", null, null );
 
-            when( readService.getReferenceById( anyInt() ))
+            when( readService.getReferenceById( anyInt() ) )
                     .thenReturn( Optional.of( continent ) );
 
             ResponseEntity<ContinentDTO> response = controller.restGetFindContinentById( 100, requestHeader );
-            HttpHeaders headers = response.getHeaders();
+            final HttpHeaders headers = response.getHeaders();
 
             assertAll( () -> assertNotNull( response.getBody() ),
                        () -> assertEquals( "application/json;charset=UTF-8", headers.getFirst( "Content-Type" )  )
@@ -82,19 +84,19 @@ class ContinentControllerTest
 
     @Nested
     @DisplayName( "Post methods" )
-    class Post
+    class Post           // NOPMD
     {
     }   // end of Post class group
 
     @Nested
     @DisplayName( "Put methods" )
-    class Put
+    class Put           // NOPMD
     {
     }   // end of Put class group
 
     @Nested
     @DisplayName( "Delete methods" )
-    class Delete
+    class Delete           // NOPMD
     {
     }   // end of Delete class group
 

@@ -289,6 +289,7 @@ public class GlobalExceptionHandlerTest
 
                 // --- then
                 assertAll( () -> assertNotNull( result ),
+                           () -> assertNotNull( detail ),
                            () -> assertEquals( "Unable to produce requested response format", detail.getTitle() ),
                            () -> assertEquals( 501, detail.getStatus() ),
                            () -> assertEquals( "Test writable exception", detail.getDetail() )

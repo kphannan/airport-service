@@ -86,8 +86,8 @@ class ContinentControllerRestTest
     void setup()
     {
         requestHeaders = new HttpHeaders();
-        requestHeaders.set( "TRACESTATE", "testState");
-        requestHeaders.set( "TRACEPARENT", "testParent");
+        requestHeaders.set( "TRACESTATE", "testState" );
+        requestHeaders.set( "TRACEPARENT", "testParent" );
     }
 
     /**
@@ -95,7 +95,7 @@ class ContinentControllerRestTest
      */
     @Nested
     @DisplayName( "HTTP GET" )
-    class GetMethod
+    class GetMethod           // NOPMD
     {
         @Test
         @DisplayName( "with valid ID - 200: Success - entity in response body" )
@@ -130,7 +130,7 @@ class ContinentControllerRestTest
             assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
                        () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
                        () -> assertThat( response.getHeaderNames() )
-                               .contains( "Content-Type" , "TRACESTATE", "TRACEPARENT" )
+                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
             );
         }
 
@@ -157,7 +157,7 @@ class ContinentControllerRestTest
 
             assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type" , "TRACESTATE", "TRACEPARENT" )
+                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
             );
         }
 
@@ -189,7 +189,7 @@ class ContinentControllerRestTest
             assertAll( () -> assertEquals( HttpStatus.BAD_REQUEST.value(), response.getStatus() ),
                        () -> assertFalse( body.isBlank() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type" , "TRACESTATE", "TRACEPARENT" )
+                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
                      );
         }
 
@@ -231,7 +231,7 @@ class ContinentControllerRestTest
 //                       () -> assertFalse( response.getHeaderNames().isEmpty() ),
 //                       () -> assertEquals( 1, response.getHeaderNames().size() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type" , "TRACESTATE", "TRACEPARENT" )
+                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
                      );
         }
 
@@ -260,7 +260,7 @@ class ContinentControllerRestTest
             assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), response.getStatus() ),
                        () -> assertThat( body ).isNullOrEmpty(),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type" , "TRACESTATE", "TRACEPARENT" )
+                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
                      );
         }
 
@@ -291,7 +291,7 @@ class ContinentControllerRestTest
             assertAll( () -> assertEquals( HttpStatus.NOT_FOUND.value(), response.getStatus() ),
                        () -> assertThat( body ).isNotBlank(),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type" , "TRACESTATE", "TRACEPARENT" )
+                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
                      );
         }
 
@@ -358,7 +358,7 @@ class ContinentControllerRestTest
 //                       () -> assertFalse( response.getHeaderNames().isEmpty() ),
 //                       () -> assertEquals( 1, response.getHeaderNames().size() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type" , "TRACESTATE", "TRACEPARENT" )
+                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
                      );
         }
     }
@@ -369,7 +369,7 @@ class ContinentControllerRestTest
      */
     @Nested
     @DisplayName( "HTTP POST" )
-    class PostMethod
+    class PostMethod           // NOPMD
     {
         @Test
         @DisplayName( "Existing resource - 409: Conflict - body ???" )
@@ -408,7 +408,7 @@ class ContinentControllerRestTest
                        () -> verify( repository ).existsByCode( anyString() ),
                        () -> verify( repository, never() ).save( any( ContinentEntity.class ) ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type" , "TRACESTATE", "TRACEPARENT" )
+                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
             );
         }
 
@@ -460,8 +460,8 @@ class ContinentControllerRestTest
                        () -> assertThat( result.getResponse().getHeader( "Location" ) )
                                .contains( "/location/continent/22" ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type" , "TRACESTATE", "TRACEPARENT" )
-                     );
+                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
+            );
         }
 
         @Nested
@@ -502,7 +502,7 @@ class ContinentControllerRestTest
                            () -> assertThat( body ).contains( "A 2-character code is required; provided: [null]" ),
                            () -> assertThat( body ).contains( "Name is required; provided: [null]" ),
                            () -> assertThat( result.getResponse().getHeaderNames() )
-                                   .contains( "Content-Type" , "TRACESTATE", "TRACEPARENT" )
+                                   .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
                 );
             }
 
@@ -537,7 +537,7 @@ class ContinentControllerRestTest
                 // It is desired to have all 'asserts' as soft asserts.
                 assertAll( () -> assertEquals( HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus() ),
                            () -> assertThat( result.getResponse().getHeaderNames() )
-                                   .contains( "Content-Type" , "TRACESTATE", "TRACEPARENT" ),
+                                   .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" ),
                            // TODO Use a JSON assertion instead of a plain string
                            () -> assertThat( body )
                                    .contains( "A 2-character code is required; provided: [  ]" )
@@ -581,7 +581,7 @@ class ContinentControllerRestTest
                 assertAll( () -> assertEquals( HttpStatus.BAD_REQUEST.value(),
                                                result.getResponse().getStatus() ),
                            () -> assertThat( result.getResponse().getHeaderNames() )
-                                   .contains( "Content-Type" , "TRACESTATE", "TRACEPARENT" ),
+                                   .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" ),
                            () -> assertThat( result.getResponse().getContentAsString() )
                                    .contains( "Cannot deserialize value of type `java.net.URI` from String" )
                 );
@@ -597,7 +597,7 @@ class ContinentControllerRestTest
      */
     @Nested
     @DisplayName( "HTTP PUT" )
-    class PutMethod
+    class PutMethod           // NOPMD
     {
         @Test
         @DisplayName( "entity does not exist - 409: Conflict - can't create a new instance" )
@@ -634,7 +634,7 @@ class ContinentControllerRestTest
 
             assertAll( () -> assertEquals( HttpStatus.CONFLICT.value(), result.getResponse().getStatus() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type" , "TRACESTATE", "TRACEPARENT" ),
+                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" ),
                        () -> verify( repository ).existsById( eq( 77 ) ),
                        () -> verify( repository, never() ).save( any( ContinentEntity.class ) )
             );
@@ -681,7 +681,7 @@ class ContinentControllerRestTest
 
             assertAll( () -> assertEquals( HttpStatus.OK.value(), result.getResponse().getStatus() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type" , "TRACESTATE", "TRACEPARENT" ),
+                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" ),
                        () -> verify( repository )
                                .existsById( eq( 77 ) ),
                        () -> verify( repository, times( 1 ) )
@@ -706,7 +706,7 @@ class ContinentControllerRestTest
      */
     @Nested
     @DisplayName( "HTTP DELETE" )
-    class DeleteMethod
+    class DeleteMethod           // NOPMD
     {
         @Test
         @DisplayName( "by ID - 204: No Content - empty body" )
@@ -730,7 +730,7 @@ class ContinentControllerRestTest
 
             assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type" , "TRACESTATE", "TRACEPARENT" ),
+                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" ),
                        () -> verify( repository ).deleteById( anyInt() )
             );
         }
@@ -757,7 +757,7 @@ class ContinentControllerRestTest
 
             assertAll( () -> assertEquals( HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type" , "TRACESTATE", "TRACEPARENT" ),
+                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" ),
                        () -> verify( repository ).deleteById( anyInt() )
             );
         }
@@ -815,7 +815,7 @@ class ContinentControllerRestTest
 
             assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type" , "TRACESTATE", "TRACEPARENT" ),
+                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" ),
                        () -> verify( repository ).delete( any( ContinentEntity.class ) )
             );
         }
@@ -851,7 +851,7 @@ class ContinentControllerRestTest
 
             assertAll( () -> assertEquals( HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type" , "TRACESTATE", "TRACEPARENT" ),
+                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" ),
                        () -> verify( repository ).delete( any( ContinentEntity.class ) )
             );
         }
@@ -864,7 +864,7 @@ class ContinentControllerRestTest
      */
     @Nested
     @DisplayName( "/continent - HTTP PATCH" )
-    class PatchMethod
+    class PatchMethod           // NOPMD
     {
     }
 
@@ -875,7 +875,7 @@ class ContinentControllerRestTest
      */
     @Nested
     @DisplayName( "/continent - HTTP INFO" )
-    class InfoMethod
+    class InfoMethod           // NOPMD
     {
        // @Test
        // void restTrace_returnsNoContent() throws Exception
@@ -905,7 +905,7 @@ class ContinentControllerRestTest
      */
     @Nested
     @DisplayName( "HTTP TRACE" )
-    class TraceMethod
+    class TraceMethod           // NOPMD
     {
         @Test
         @DisplayName( "no args - 200: OK - empty body" )
@@ -925,7 +925,7 @@ class ContinentControllerRestTest
             // --- then
             assertAll( () -> assertEquals( HttpStatus.OK.value(), result.getResponse().getStatus() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type" , "TRACESTATE", "TRACEPARENT" )
+                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
             );
         }
 
@@ -950,7 +950,7 @@ class ContinentControllerRestTest
             // --- then
             assertAll( () -> assertEquals( HttpStatus.OK.value(), result.getResponse().getStatus() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type" , "TRACESTATE", "TRACEPARENT" )
+                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
                      );
         }
 
@@ -961,7 +961,7 @@ class ContinentControllerRestTest
      */
     @Nested
     @DisplayName( "HTTP HEAD" )
-    class HeadMethod
+    class HeadMethod           // NOPMD
     {
         @Test
         @DisplayName( "no parameters - 204: No Content" )
@@ -1010,10 +1010,9 @@ class ContinentControllerRestTest
                        () -> assertEquals( HttpStatus.NO_CONTENT.value(), response.getStatus() ),
                        () -> assertFalse( response.getHeaderNames().isEmpty() ),
                        // TODO use AssertJ to test for trace headers and content-type
-//                       () -> assertEquals( 1, response.getHeaderNames().size() ),
-                       () -> assertTrue( response.getContentAsString().isEmpty()),
+                       () -> assertTrue( response.getContentAsString().isEmpty() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type" , "TRACESTATE", "TRACEPARENT" )
+                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
             );
         }
 
@@ -1049,7 +1048,7 @@ class ContinentControllerRestTest
      */
     @Nested
     @DisplayName( "HTTP OPT" )
-    class OptionsMethod
+    class OptionsMethod           // NOPMD
     {
         @Test
         @DisplayName( "no args - 204: No Content - empty body" )
@@ -1081,7 +1080,7 @@ class ContinentControllerRestTest
                                .contains( "PUT" )
                                .contains( "TRACE" ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type" , "TRACESTATE", "TRACEPARENT" )
+                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
             );
         }
     }

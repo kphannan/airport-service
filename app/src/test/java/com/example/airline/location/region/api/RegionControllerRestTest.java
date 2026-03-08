@@ -64,7 +64,7 @@ class RegionControllerRestTest //extends RestControllerTestBase
 
     @Nested
     @DisplayName( "HTTP GET" )
-    class GetMethod
+    class GetMethod        // NOPMD
     {
         @Test
         @DisplayName( "with id - 200: OK - body contains entity" )
@@ -95,7 +95,7 @@ class RegionControllerRestTest //extends RestControllerTestBase
                     .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
                     .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
                     .andReturn();
-            MockHttpServletResponse response = result.getResponse();
+            final MockHttpServletResponse response = result.getResponse();
 
             // --- then
             // TODO need to assert the resulting JSON....
@@ -122,7 +122,7 @@ class RegionControllerRestTest //extends RestControllerTestBase
                     .andDo( print() )
                     .andExpect( status().isNoContent() )
                     .andReturn();
-            MockHttpServletResponse response = result.getResponse();
+            final MockHttpServletResponse response = result.getResponse();
 
             // --- then
             assertThat( response.getStatus() )
@@ -217,7 +217,7 @@ class RegionControllerRestTest //extends RestControllerTestBase
                     .param( "sort", "name,asc" )   // <-- no space after comma!
                     .characterEncoding( "UTR-8" );
 
-            Page<RegionEntity> page = new PageImpl<>( entities );
+            final Page<RegionEntity> page = new PageImpl<>( entities );
             when( repository.findAll( any( Pageable.class ) ) )
                     .thenReturn( page );
 
@@ -245,13 +245,13 @@ class RegionControllerRestTest //extends RestControllerTestBase
             final PageRequest pageable = (PageRequest)pageableCaptor.getValue();
 
 
-            PageableAssert
+            assertAll( () -> PageableAssert
                     .assertThat( pageable )
                     .hasPageNumber( 5 )
                     .hasPageSize( 10 )
                     .hasSort( "name", Sort.Direction.ASC )
-                    .hasSort( "id", Sort.Direction.DESC );
-
+                    .hasSort( "id", Sort.Direction.DESC )
+            );
 //            assertThat( response.getContentType() )
 //                    .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
 //            final MockHttpServletResponse response = result.getResponse();
@@ -271,43 +271,43 @@ class RegionControllerRestTest //extends RestControllerTestBase
 
     @Nested
     @DisplayName( "/region - HTTP POST" )
-    class PostMethod
+    class PostMethod        // NOPMD
     {
     }
 
     @Nested
     @DisplayName( "/region - HTTP PUT" )
-    class PutMethod
+    class PutMethod        // NOPMD
     {
     }
 
     @Nested
     @DisplayName( "/region - HTTP DELETE" )
-    class DeleteMethod
+    class DeleteMethod        // NOPMD
     {
     }
 
     @Nested
     @DisplayName( "/region - HTTP PATCH" )
-    class PatchMethod
+    class PatchMethod        // NOPMD
     {
     }
 
     @Nested
     @DisplayName( "/region - HTTP INFO" )
-    class InfoMethod
+    class InfoMethod        // NOPMD
     {
     }
 
     @Nested
     @DisplayName( "/region - HTTP HEAD" )
-    class HeadMethod
+    class HeadMethod        // NOPMD
     {
     }
 
     @Nested
     @DisplayName( "/region - HTTP OPT" )
-    class OptionsMethod
+    class OptionsMethod        // NOPMD
     {
     }
 

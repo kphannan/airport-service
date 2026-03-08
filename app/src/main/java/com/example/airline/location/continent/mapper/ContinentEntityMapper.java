@@ -29,21 +29,21 @@ public interface ContinentEntityMapper
     /**
      * Map a single db entity instance to a domain instance.
      */
-    Continent entityToDomain( ContinentEntity entity );
+    Continent entityToDomain( final ContinentEntity entity );
 
     // --- Collection
 
     /**
      * Map a list of domain instances to a list of db entity instances.
      */
-    List<Continent> entityToDomain( List<ContinentEntity> entities );
+    List<Continent> entityToDomain( final List<ContinentEntity> entities );
 
     // --- Domain --> Persistence ---
     // --- Instance
-    ContinentEntity domainToEntity( Continent domain );
+    ContinentEntity domainToEntity( final Continent domain );
 
     @Mapping( target = "id", ignore = true)
-    ContinentEntity domainToEntity( NewContinent domain );
+    ContinentEntity domainToEntity( final NewContinent domain );
     // --- Collection
 
 }

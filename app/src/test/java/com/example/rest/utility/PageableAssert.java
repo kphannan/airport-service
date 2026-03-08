@@ -19,7 +19,7 @@ public class PageableAssert extends AbstractAssert<PageableAssert, Pageable>
         return new PageableAssert( actual );
     }
 
-    public PageableAssert hasPageSize( int expectedPageSize )
+    public PageableAssert hasPageSize( final int expectedPageSize )
     {
         if ( !Objects.equals( actual.getPageSize(), expectedPageSize ) )
         {

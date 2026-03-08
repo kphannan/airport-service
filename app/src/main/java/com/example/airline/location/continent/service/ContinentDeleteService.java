@@ -49,7 +49,7 @@ public class ContinentDeleteService
     {
         boolean existing = repository.existsById( entity.getId() ) || repository.existsByCode( entity.getCode() );
 
-            repository.delete( mapper.domainToEntity( entity ) );
+        repository.delete( mapper.domainToEntity( entity ) );
 
         return existing;
     }

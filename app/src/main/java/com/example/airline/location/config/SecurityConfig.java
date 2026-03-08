@@ -47,7 +47,7 @@ public class SecurityConfig         // TODO create security tests
         log.error( "SecurityConfig.securityFilterChain...." );
         http.headers( headers ->
                               headers.frameOptions( options ->
-                                                            options.sameOrigin() ))  // For H2 console access
+                                                            options.sameOrigin() ) )  // For H2 console access
 //                .headers( headers ->
 //                                  headers.frameOptions( frameOptions ->
 //                                                                frameOptions.mode(SAMEORIGIGN))
@@ -59,7 +59,7 @@ public class SecurityConfig         // TODO create security tests
                                                        .csrf( AbstractHttpConfigurer::disable )
                                                        .sessionManagement( customizer ->
                                             customizer.sessionCreationPolicy( SessionCreationPolicy.STATELESS ) )
-                                                       .authorizeHttpRequests( (requests) ->
+                                                       .authorizeHttpRequests( requests ->
                                                 requests.anyRequest().permitAll() )
                 ;
 

@@ -29,10 +29,13 @@ public interface AirportEntityMapper
     /** Map a single db entity instance to a domain instance. */
     Airport entityToDomain( AirportEntity entity );
 
+    /** Map a AirportCountInContinentEntity DB entity to a domain instance. **/
     AirportCountInContinent entityToDomain( AirportCountInContinentEntity entity );
 
+    /** Map a AirportCountInCountryEntity DB entity to a domain instance. **/
     AirportCountInCountry entityToDomain( AirportCountInCountryEntity entity );
 
+    /** Map a AirportCountInRegionEntity DB entity to a domain instance. **/
     AirportCountInRegion entityToDomain( AirportCountInRegionEntity entity );
 
     // --- Collection

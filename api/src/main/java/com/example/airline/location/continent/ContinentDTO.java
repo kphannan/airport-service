@@ -11,11 +11,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+//import lombok.NonNull;
 import lombok.NonNull;
 import org.jspecify.annotations.Nullable;
+import org.springframework.validation.annotation.Validated;
 
 // TODO change code to a 2 character code...
 // record ContinentDTO( Long id, String code, String name, String wikiLink,
@@ -28,8 +27,8 @@ import org.jspecify.annotations.Nullable;
  * API representation of a Continent.
  */
 @IgnoreGeneratedCoverage
-public record ContinentDTO
-(
+@Validated
+public record ContinentDTO(
     @SuppressWarnings( "PMD.ShortVariable" )
     @JsonProperty( "id" )
     @Schema( name = "id",
@@ -38,7 +37,7 @@ public record ContinentDTO
     @NotNull( message = "A continent id is required" )
     Integer id,
 
-    @JsonProperty( "code" )
+    @JsonProperty( value = "code", required = true )
     @Schema( name = "code",
              description = "Unique abbreviation, which is a 2-character uppercase alphabetic code\"",
              requiredMode = Schema.RequiredMode.REQUIRED,
@@ -47,11 +46,12 @@ public record ContinentDTO
              pattern = "[A-Z]{2}",
              example = "NA" )
     @NotBlank( message = "A 2-character code is required" )
-    @NonNull
+    @NotNull( message = "A continent code is required" )
     @Pattern( regexp = "[A-Z]{2}", message = "Code must be 2 uppercase characters" )
+    @NonNull
     String code,
 
-    @JsonProperty( "name" )
+    @JsonProperty( value = "name", required = true )
     @Schema( name = "name",
              description = "Common use name",
              example = "North America",
@@ -71,7 +71,6 @@ public record ContinentDTO
              requiredMode = Schema.RequiredMode.NOT_REQUIRED,
              maxLength = 255 )
     @Nullable
-    // @Size( max = 255, message = "List of keywords may not exceed 255 characters" )
     URI    wikiLink,
 
     @JsonProperty( "keywords" )
