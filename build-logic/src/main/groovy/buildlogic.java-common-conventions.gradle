@@ -201,7 +201,7 @@ jacocoTestCoverageVerification {
             limit {
                 counter = 'INSTRUCTION'
                 value   = 'COVEREDRATIO'
-                minimum = 0.80
+                minimum = 0.86
             }
         }
 
@@ -211,7 +211,7 @@ jacocoTestCoverageVerification {
             limit {
                 counter = 'BRANCH'
                 value   = 'COVEREDRATIO'
-                minimum = 0.80
+                minimum = 0.87
             }
         }
 
@@ -230,14 +230,14 @@ jacocoTestCoverageVerification {
                 counter = 'BRANCH'
                 // COVEREDCOUNT, COVEREDRATION, MISSEDCOUNT, TOTALCOUNT
                 value   = 'COVEREDRATIO'
-                minimum = 0.85
+                minimum = 0.95
             }
 
             // Instruction coverage
             limit {
                 counter = 'INSTRUCTION'
                 value   = 'COVEREDRATIO'
-                minimum = 0.85
+                minimum = 0.90
             }
         }
     }
@@ -255,10 +255,10 @@ jacocoTestReport {
             fileTree(dir: it, exclude: [
                       "**/*Application.class"  // Do not include the application class in coverage stats
                     , "**/*App.class"          // Do not include the application class in coverage stats
-                    , "**/*Config"             // Ignore Config classes - they are just carriers for annotations -- so far
+                    , "**/*Config.class"       // Ignore Config classes - they are just carriers for annotations -- so far
                                                // OpenApiConfig, JpaConfig
                                                // Spring security will probably break this rule....
-                    , "**/mapper/*"            // Ignore MapStruct generated classes
+                    , "**/mapper/*Mapper*"     // Ignore MapStruct generated classes
             ])
         }))
     }
@@ -276,7 +276,8 @@ pitest {
     // Ignore:
     //     Spring application (unless it includes more than boilerplate)
     //     MapStruct generated implementation classes.  Maybe later force the generated source to be included.
-    excludedTestClasses = [ '**.*App*', '**.mapper*Impl', '**.*Config' ]
+//    excludedTestClasses = [ '**.*App*', '**.mapper*Impl', '**.*Config' ]
+    excludedClasses = [ '**.*App*', '**.mapper*Impl', '**.*Config' ]
     threads = 16
     timestampedReports = false
     withHistory = false
@@ -403,11 +404,11 @@ pmd {
     ignoreFailures = true       // Don't interrupt the build
 
     pmdMain {
-        excludes = [ '**/*generated*/**']
+        excludes = [ '**/generated/**' ]
     }
 
     pmdTest {
-        excludes = [ '**/build/*generated*/**']
+        excludes = [ '**/build/*generated*/**' ]
     }
 }
 
