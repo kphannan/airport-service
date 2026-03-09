@@ -5,7 +5,7 @@ Feature: NewContinent constraint validation
   Background:
     * url baseUrl + '/location/continent'
 
-  @Validation
+  @Validation @Foo
   Scenario: Code and Name are null
        Given request
              """
@@ -14,8 +14,9 @@ Feature: NewContinent constraint validation
         When method POST
            * print response
         Then status 400
-         And match $.code contains( "A 2-character code is required; provided: [null]" )
-         And match $.name contains( "Name is required; provided: [null]" )
+#         And match $.code contains( "A 2-character code is required, provided: [null]" )
+#         And match $.name contains( "Name is required, provided: [null]" )
+         And match $.detail contains( "code is marked non-null but is null" )
 
   @Validation
   Scenario: Code is empty string
@@ -26,8 +27,7 @@ Feature: NewContinent constraint validation
     When method POST
        * print response
     Then status 400
-     And match $.code contains( "A 2-character code is required; provided: []" )
-     And match $.code contains( "Code must be 2 uppercase characters; provided: []" )
+     And match $.code contains( "Code must be 2 uppercase characters, provided: []" )
 
 
   @Validation
@@ -39,8 +39,7 @@ Feature: NewContinent constraint validation
     When method POST
        * print response
     Then status 400
-     And match $.code contains( "A 2-character code is required; provided: [  ]" )
-     And match $.code contains( "Code must be 2 uppercase characters; provided: [  ]" )
+     And match $.code contains( "Code must be 2 uppercase characters, provided: [  ]" )
 
 
   @Validation
@@ -52,7 +51,7 @@ Feature: NewContinent constraint validation
     When method POST
        * print response
     Then status 400
-     And match $.code contains( "Code must be 2 uppercase characters; provided: [42]" )
+     And match $.code contains( "Code must be 2 uppercase characters, provided: [42]" )
 
   @Validation
   Scenario: Code is null
@@ -63,7 +62,7 @@ Feature: NewContinent constraint validation
     When method POST
        * print response
     Then status 400
-     And match $.code contains( "A 2-character code is required; provided: [null]" )
+     And match $.detail contains( "code is marked non-null but is null" )
 
   @Validation
   Scenario: Name is blank
@@ -74,8 +73,7 @@ Feature: NewContinent constraint validation
     When method POST
        * print response
     Then status 400
-     And match $.name contains( "Name must be between 2 and 52 characters; provided: []" )
-     And match $.name contains( "Name is required; provided: []" )
+     And match $.name contains( "Name must be between 2 and 52 characters, provided: []" )
 
   @Validation
   Scenario: Name is a single character
@@ -86,7 +84,7 @@ Feature: NewContinent constraint validation
     When method POST
        * print response
     Then status 400
-     And match $.name contains( "Name must be between 2 and 52 characters; provided: [A]" )
+     And match $.name contains( "Name must be between 2 and 52 characters, provided: [A]" )
 
   @Validation
   Scenario: Name is blank
@@ -100,5 +98,5 @@ Feature: NewContinent constraint validation
     When method POST
        * print response
     Then status 400
-     And match $.name contains( "Name must be between 2 and 52 characters; provided: [abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ]" )
+     And match $.name contains( "Name must be between 2 and 52 characters, provided: [abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ]" )
 

@@ -38,7 +38,7 @@ public class NewContinentDTO //implements Serializable
              maxLength = 2,
              pattern = "[A-Z]{2}",
              example = "NA" )
-    @NotBlank( message = "A 2-character code is required" )
+//    @NotBlank( message = "A 2-character code is required" )
     @NonNull
     @Pattern( regexp = "[A-Z]{2}", message = "Code must be 2 uppercase characters" )
     private String code;
@@ -50,9 +50,9 @@ public class NewContinentDTO //implements Serializable
              requiredMode = Schema.RequiredMode.REQUIRED,
              minLength = 2,
              maxLength = 52 )
-    @NotBlank( message = "Name is required" )
-    @Size( min = 2, max = 52, message = "Name must be between 2 and 52 characters" )
-    @Pattern( regexp = "[a-zA-Z][a-zA-Z ]{1,51}", message = "Continent name must be 2 to 52 characters" )
+//    @NotBlank( message = "Name is required" )
+//    @Size( min = 2, max = 52, message = "Name must be between 2 and 52 characters" )
+    @Pattern( regexp = "[a-zA-Z][a-zA-Z ]{1,51}", message = "Name must be between 2 and 52 characters" )
     @NonNull
     private String name;
 

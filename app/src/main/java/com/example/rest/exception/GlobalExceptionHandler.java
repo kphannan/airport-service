@@ -243,7 +243,9 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
         handleRestValidationException( final WebRequest request,
                                        final MethodArgumentNotValidException exception )
     {
+        log.debug( "handleRestValidationException", () -> exception );
         final ProblemDetail details = exception.getBody();
+        log.debug( "    details: ", () -> details );
         details.setTitle( String.format( "Validation failed on '%s'", exception.getObjectName() ) );
 
         final Multimap<String, String> validations =  ArrayListMultimap.create();
@@ -253,7 +255,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
             // violations
             // Apache Commons or Google Guava
             validations.put( error.getField(),
-                             String.format( "%s; provided: [%s]",
+                             String.format( "%s, provided: [%s]",
                                             error.getDefaultMessage(),
                                             error.getRejectedValue() ) );
         }
@@ -340,6 +342,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
         handleMessageNotReadableException( final ServletWebRequest request,
                                            final HttpMessageNotReadableException exception )
     {
+        log.debug( "message not readable", () -> exception );
         // TODO potentially a problem with the content-type or lack of mapping to/from the
         // requested format and the internal POJO.
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST,
@@ -500,6 +503,38 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     }
 
 
+    // ========== IllegalArgument ==========
+    /**
+     * Create a standard error message for an IllegalArgumentException.
+     *
+     * @param exception the intercepted exception
+     *
+     * @return a formatted {@code ProblemDetail}.
+     */
+    @ExceptionHandler( IllegalArgumentException.class )
+    @ResponseStatus( HttpStatus.INTERNAL_SERVER_ERROR )
+    public ResponseEntity<ProblemDetail>
+    handleIllegalArgumentException( final ServletWebRequest request,
+                                    final IllegalArgumentException exception )
+    {
+        // TODO the MDC should include the traceId (UUID) and log pattern should
+        log.debug( "handleIllegalArgumentException", () -> exception );
+
+        final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST,
+                                                                        exception.getMessage() );
+
+//        details.setProperty( "logref", UUID.randomUUID() );
+        details.setProperty( "Exception", exception.getClass().getTypeName() );
+        details.setProperty( "Cause", exception.getCause() );
+        if ( null != request )
+        {
+            details.setProperty( "TRACEPARENT", request.getHeader( "TRACEPARENT" ) );
+            details.setProperty( "TRACESTATE", request.getHeader( "TRACESTATE" ) );
+        }
+
+        return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );
+    }
+
 
     // ========== Catch-All ==========
     /**
@@ -517,7 +552,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     {
         // TODO the MDC should include the traceId (UUID) and log pattern should
 
-        log.error( "--UnsupportedOperation--", exception );
+        log.debug( "--UnsupportedOperation--", () -> exception );
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.UNPROCESSABLE_ENTITY,
                                                                         exception.getMessage() );
 
@@ -555,7 +590,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     {
         // TODO the MDC should include the traceId (UUID) and log pattern should
 
-//        log.error( "Catch-All exception for: ", exception );
+        log.debug( "Catch-All exception for: ", () -> exception );
         final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.INTERNAL_SERVER_ERROR,
                                                                         exception.getMessage() );
 

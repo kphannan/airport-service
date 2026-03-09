@@ -18,6 +18,8 @@ buildscript {
         // mapstructVersion            = '1.6.3'
 
         // --- Spring  Boot
+        springBootVersion           = '3.5.11'
+//        springBootVersion           = libs.versions.springBootVersion
 //    	springCloudVersion          = '2025.1.1'
 
         // ===== Quality checks =====
@@ -74,13 +76,14 @@ plugins {
     // ===== Frameworks =====
     // --- Spring boot
 //    alias libs.spring.boot.starter
-    id 'org.springframework.boot' version '3.5.11' apply false       // TODO get version from TOML
+    id 'org.springframework.boot' version "${springBootVersion}" apply false
+//    id 'org.springframework.boot' version libs.versions.springBootVersion.get() apply false
     id 'io.spring.dependency-management' version '1.1.7' apply false
 
     alias( libs.plugins.lombok ).apply( false )
 
     // // --- Compile time
-    // id 'org.checkerframework' version "${checkerFrameworkVersion}" apply false
+//    id 'org.checkerframework' version "${checkerFrameworkVersion}" apply false
 
     alias( libs.plugins.checkstyle )
     alias( libs.plugins.pmd )
