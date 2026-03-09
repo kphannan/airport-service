@@ -14,9 +14,8 @@ Feature: NewContinent constraint validation
         When method POST
            * print response
         Then status 400
-#         And match $.code contains( "A 2-character code is required, provided: [null]" )
-#         And match $.name contains( "Name is required, provided: [null]" )
-         And match $.detail contains( "code is marked non-null but is null" )
+         And match $.code contains( "A 2-character code is required, provided: [null]" )
+         And match $.name contains( "Name is required, provided: [null]" )
 
   @Validation
   Scenario: Code is empty string
@@ -62,7 +61,7 @@ Feature: NewContinent constraint validation
     When method POST
        * print response
     Then status 400
-     And match $.detail contains( "code is marked non-null but is null" )
+     And match $.code contains( "A 2-character code is required, provided: [null]" )
 
   @Validation
   Scenario: Name is blank

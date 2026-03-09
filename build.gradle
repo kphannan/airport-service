@@ -16,7 +16,7 @@ buildscript {
         // --- model mapping
 
         // --- Spring  Boot
-        springBootVersion           = '4.0.1'
+        springBootVersion           = '4.0.3'
 //        springBootVersion           = libs.versions.springBootVersion
 //    	springCloudVersion          = '2025.1.1'
 
