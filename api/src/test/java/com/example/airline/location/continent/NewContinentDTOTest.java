@@ -93,7 +93,6 @@ class NewContinentDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "code", "A 2-character code is required" ),
                                              tuple( "code", "Code must be 2 uppercase characters" )
                                            );
         }
@@ -143,8 +142,7 @@ class NewContinentDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "name", "Name is required" ),
-                                             tuple( "name", "Continent name must be 2 to 52 characters" ) );
+                                             tuple( "name", "Name must be between 2 and 52 characters" ) );
         }
     }
 

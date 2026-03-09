@@ -11,14 +11,12 @@ buildscript {
         log4jVersion                = '2.24.3'
 
         // --- OpenAPI
-//        swaggerVersion              = '2.8.6'
 
         // ===== Frameworks =====
         // --- model mapping
-        // mapstructVersion            = '1.6.3'
 
         // --- Spring  Boot
-        springBootVersion           = '3.5.11'
+        springBootVersion           = '4.0.1'
 //        springBootVersion           = libs.versions.springBootVersion
 //    	springCloudVersion          = '2025.1.1'
 
@@ -31,7 +29,6 @@ buildscript {
         // --- Testing ---
         // --- Unit Test
         junitVersion                = '5.12.2'
-        // logcaptorVersion            = '2.10.1'
 
         // --- BDD / REST Testing
         karateVersion               = '1.5.2'
@@ -82,22 +79,22 @@ plugins {
 
     alias( libs.plugins.lombok ).apply( false )
 
-    // // --- Compile time
+    // --- Compile time
 //    id 'org.checkerframework' version "${checkerFrameworkVersion}" apply false
 
     alias( libs.plugins.checkstyle )
     alias( libs.plugins.pmd )
     alias( libs.plugins.jacoco )
 
-    // // --- Mutation testing
+    // --- Mutation testing
     alias( libs.plugins.pitest ).apply( false )
 
 
     // --- Performance Testing
     alias( libs.plugins.gatling ).apply( false )
 
-    // // ===== Configuration Management =====
-    // // --- Artifact Versioning
+    // ===== Configuration Management =====
+    // --- Artifact Versioning
     // id 'net.nemerosa.versioning' version "${nemerosaVersion}" apply false
     // id "com.gorylenko.gradle-git-properties" version "${gorylenkoVersion}" apply false
 

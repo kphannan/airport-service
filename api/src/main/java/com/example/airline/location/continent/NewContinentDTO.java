@@ -6,6 +6,7 @@ import java.net.URI;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.jspecify.annotations.Nullable;
+import org.springframework.validation.annotation.Validated;
 
 // TODO change code to a 2 character code...
 // record ContinentDTO( Long id, String code, String name, String wikiLink,
@@ -26,7 +28,8 @@ import org.jspecify.annotations.Nullable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class NewContinentDTO //implements Serializable
+@Validated
+public class NewContinentDTO
 {
     // TODO convert to a Java record
     @JsonProperty( "code" )
@@ -37,6 +40,7 @@ public class NewContinentDTO //implements Serializable
              maxLength = 2,
              pattern = "[A-Z]{2}",
              example = "NA" )
+    @NotNull( message = "A 2-character code is required" )
     @NonNull
     @Pattern( regexp = "[A-Z]{2}", message = "Code must be 2 uppercase characters" )
     private String code;
@@ -49,6 +53,7 @@ public class NewContinentDTO //implements Serializable
              minLength = 2,
              maxLength = 52 )
     @Pattern( regexp = "[a-zA-Z][a-zA-Z ]{1,51}", message = "Name must be between 2 and 52 characters" )
+    @NotNull( message = "Name is required" )
     @NonNull
     private String name;
 

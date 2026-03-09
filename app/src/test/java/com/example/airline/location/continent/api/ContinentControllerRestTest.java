@@ -38,8 +38,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -228,8 +228,6 @@ class ContinentControllerRestTest
 
             assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
                        () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
-//                       () -> assertFalse( response.getHeaderNames().isEmpty() ),
-//                       () -> assertEquals( 1, response.getHeaderNames().size() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
                                .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
                      );
@@ -355,8 +353,6 @@ class ContinentControllerRestTest
 
             assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
                        () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
-//                       () -> assertFalse( response.getHeaderNames().isEmpty() ),
-//                       () -> assertEquals( 1, response.getHeaderNames().size() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
                                .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
                      );
@@ -379,7 +375,6 @@ class ContinentControllerRestTest
             final String jsonString =
                     """
                             {
-                               "id": 77,
                                "code": "CC",
                                "name": "foo"
                             }
@@ -422,7 +417,6 @@ class ContinentControllerRestTest
             final String jsonString =
                     """
                             {
-                               "id": 77,
                                "code": "CC",
                                "name": "foo"
                             }
@@ -499,8 +493,8 @@ class ContinentControllerRestTest
                 // It is desired to have all 'asserts' as soft asserts.
                 assertAll( () -> assertEquals( HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus() ),
                            // TODO Use a JSON assertion instead of a plain string
-                           () -> assertThat( body ).contains( "A 2-character code is required; provided: [null]" ),
-                           () -> assertThat( body ).contains( "Name is required; provided: [null]" ),
+                           () -> assertThat( body ).contains( "A 2-character code is required, provided: [null]" ),
+                           () -> assertThat( body ).contains( "Name is required, provided: [null]" ),
                            () -> assertThat( result.getResponse().getHeaderNames() )
                                    .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
                 );
@@ -540,10 +534,9 @@ class ContinentControllerRestTest
                                    .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" ),
                            // TODO Use a JSON assertion instead of a plain string
                            () -> assertThat( body )
-                                   .contains( "A 2-character code is required; provided: [  ]" )
-                                   .contains( "Code must be 2 uppercase characters; provided: [  ]" ),
+                                   .contains( "Code must be 2 uppercase characters, provided: [  ]" ),
                            () -> assertThat( body )
-                                   .contains( "Name is required; provided: [     ]" )
+                                   .contains( "Name must be between 2 and 52 characters, provided: [     ]" )
                 );
             }
 

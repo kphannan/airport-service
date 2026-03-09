@@ -175,7 +175,7 @@ public class GlobalExceptionHandlerTest
             {
                 // --- given
                 final NoResourceFoundException exception =
-                    new NoResourceFoundException( HttpMethod.GET, "/some/resource/path" );
+                        new NoResourceFoundException( HttpMethod.GET, "request-uri", "/some/resource/path" ); // TODO 3rd param and change in behavior
 
                 // --- when
                 final ResponseEntity<ProblemDetail> result =

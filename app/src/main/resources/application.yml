@@ -14,8 +14,8 @@ spring:
   application:
     name: pool-airport
 
-  jackson:
-    defaultPropertyInclusion: NON_NULL
+#  jackson:
+#    defaultPropertyInclusion: NON_NULL
 
 
   jpa:

@@ -16,11 +16,14 @@ spring:
   # for Spring Boot
   # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html#application-properties.jackson
   jackson:
+    use-jackson2-defaults: true
     defaultPropertyInclusion: non-null
     serialization:
       indent-output: true
+#      writeDatesAsTimestamps: false
+#      WRITE-DATES-AS-TIMESTAMPS: false
       # false means write as ISO-8601
-      write-dates-as-timestamps: false
+  #      write-dates-as-timestamps: false
 
   jpa:
     hibernate:

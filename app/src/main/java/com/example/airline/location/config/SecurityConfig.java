@@ -44,7 +44,7 @@ public class SecurityConfig         // TODO create security tests
     @Bean
     public SecurityFilterChain securityFilterChain( HttpSecurity http ) throws Exception
     {
-        log.error( "SecurityConfig.securityFilterChain...." );
+        log.debug( () -> "SecurityConfig.securityFilterChain...." );
         http.headers( headers ->
                               headers.frameOptions( options ->
                                                             options.sameOrigin() ) )  // For H2 console access
