@@ -106,6 +106,7 @@ testing {
 //                runtimeOnly configurations.testRuntimeOnly
                 // Add dependencies specific to integration tests here
                 implementation( "io.karatelabs:karate-junit5:${karateVersion}" )
+//                implementation libs.karate.bdd
             }
 
             sources {

@@ -55,8 +55,7 @@ dependencies {
 
     // --- OpenAPI doc
     implementation libs.springdoc.openapi.ui
-    // implementation( "org.springdoc:springdoc-openapi-starter-webmvc-ui:${swaggerVersion}" )
-    // testImplementation( "org.springdoc:springdoc-openapi-starter-webmvc-api:2.8.6" )
+    implementation libs.springdoc.openapi.api
 
     // ===== Persistence =====
     implementation libs.bundles.persistence
@@ -70,7 +69,6 @@ dependencies {
 	testImplementation libs.logcaptor
 
     testImplementation libs.spring.boot.starter.test
-//    testImplementation( "io.karatelabs:karate-junit5:${karateVersion}" )
 
     // --- BDD
 //    bddTestImplementation( "io.karatelabs:karate-junit5:${karateVersion}" )

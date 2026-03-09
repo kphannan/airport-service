@@ -18,7 +18,6 @@ group = 'com.example.conventions'
 version = '0.5'
 
 tasks.named( 'check') {
-//    dependsOn( testing.suites.named( 'integrationTest', 'bddTest', 'pitest' ))
     dependsOn( testing.suites.named( 'integrationTest' ))
     dependsOn( testing.suites.named( 'bddTest' ))
     dependsOn( testing.suites.named( 'pitest' ))
