@@ -105,15 +105,15 @@ public class AirportController
     @SuppressWarnings( "PMD.ShortVariable" )
     public ResponseEntity<AirportDTO> restGetFindAirportById( @PathVariable final Long id )
     {
-//        log.error( String.format( "enter restGetFindAirportById( %s )", id ) );
+        log.debug( () -> String.format( "enter restGetFindAirportById( %s )", id ) );
         final Optional<Airport> optionalAirport = service.findAirportById( id );
-//        log.error( String.format( "    fingAirportById( %s ) - [%s]", id, optionalAirport ) );
+        log.debug( () -> String.format( "    fingAirportById( %s ) - [%s]", id, optionalAirport ) );
 
         if ( optionalAirport.isPresent() )
         {
-//            log.error( String.format( "    found airport( %s ) %s", id, optionalAirport.get() ) );
+            log.debug( () -> String.format( "    found airport( %s ) %s", id, optionalAirport.get() ) );
             final AirportDTO dto = mapper.domainToApi( optionalAirport.get() );
-//            log.error( String.format( "    DTO airport( %s ), %s", id, dto ) );
+            log.debug( () -> String.format( "    DTO airport( %s ), %s", id, dto ) );
 
             return ResponseEntity.ok( dto );
         }

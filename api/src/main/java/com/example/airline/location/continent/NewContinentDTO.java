@@ -6,7 +6,6 @@ import java.net.URI;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -38,7 +37,6 @@ public class NewContinentDTO //implements Serializable
              maxLength = 2,
              pattern = "[A-Z]{2}",
              example = "NA" )
-//    @NotBlank( message = "A 2-character code is required" )
     @NonNull
     @Pattern( regexp = "[A-Z]{2}", message = "Code must be 2 uppercase characters" )
     private String code;
@@ -50,8 +48,6 @@ public class NewContinentDTO //implements Serializable
              requiredMode = Schema.RequiredMode.REQUIRED,
              minLength = 2,
              maxLength = 52 )
-//    @NotBlank( message = "Name is required" )
-//    @Size( min = 2, max = 52, message = "Name must be between 2 and 52 characters" )
     @Pattern( regexp = "[a-zA-Z][a-zA-Z ]{1,51}", message = "Name must be between 2 and 52 characters" )
     @NonNull
     private String name;
@@ -63,7 +59,6 @@ public class NewContinentDTO //implements Serializable
              requiredMode = Schema.RequiredMode.NOT_REQUIRED,
              maxLength = 255 )
     @Nullable
-    // @Size( max = 255, message = "List of keywords may not exceed 255 characters" )
     private URI    wikiLink;
 
     @JsonProperty( "keywords" )

@@ -73,10 +73,14 @@ logging:
         # At INFO, log startup of the service
         airline: #INFO
           location:
+            airport: ERROR
+            config: ERROR
             continent: DEBUG
+            country: DEBUG
+            region: DEBUG
         rest:
           # Global exception handler
-          exception: DEBUG
+          exception: ERROR
       zaxxer:
         hikari:
           pool:
