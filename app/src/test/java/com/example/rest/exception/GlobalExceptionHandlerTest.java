@@ -1,8 +1,11 @@
 package com.example.rest.exception;
 
+import static java.util.Map.entry;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Path;
@@ -32,6 +36,8 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.web.HttpMediaTypeException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -53,7 +59,13 @@ public class GlobalExceptionHandlerTest
     void setup()
     {
         handler = new GlobalExceptionHandler();
+
+        MockHttpServletRequest mock = new MockHttpServletRequest();
+        mock.addHeader( "TRACEPARENT", "traceParent" );
+        mock.addHeader( "TRACESTATE", "traceState" );
+
         request = null;  // TODO build out a reasonable request object
+        request = new ServletWebRequest( mock );
     }
 
 
@@ -184,6 +196,20 @@ public class GlobalExceptionHandlerTest
 
                 // --- then
                 assertAll( () -> assertNotNull( result ),
+                        //
+                           () -> assertThat( result )
+                                   .actual()
+                                   .getHeaders()
+                                   .containsHeader( "TRACEPARENT " ),
+                        //
+                           () -> assertThat( result.getHeaders().getLocation() )
+                                   .isNotNull(),
+                        //
+                           () -> assertThat( result )
+                                   .actual()
+                                   .getHeaders()
+                                   .containsHeader( "TRACEPARENT " ),
+                        //
                            () -> assertEquals( "Not Found", detail.getTitle() ),
                            () -> assertEquals( 404, detail.getStatus() ),
                            () -> assertEquals( "No static resource /some/resource/path.", detail.getDetail() )
@@ -216,6 +242,44 @@ public class GlobalExceptionHandlerTest
                            // TODO check for accepted methods
                 );
             }
+
+
+
+            @Test
+            @DisplayName( "unsupported operation" )
+            void exception_unsupportedOperation_formatsProblemDetails()
+            {
+                // --- given
+                final UnsupportedOperationException exception =
+                        new UnsupportedOperationException( "Test UnsupportedOperation" );
+
+                // --- when
+                final ResponseEntity<ProblemDetail> result =
+                        handler.handleUnsupportedOperationException( request, exception );
+                final ProblemDetail detail = result.getBody();
+
+                // --- then
+                assertAll( () -> assertNotNull( result ),
+                        //
+                           () -> assertThat( result )
+                                   .actual()
+                                   .getHeaders()
+                                   .containsHeader( "TRACEPARENT" ),
+                        //
+//                           () -> assertThat( result.getHeaders().getLocation() )
+//                                   .isNotNull(),
+                        //
+                           () -> assertThat( result )
+                                   .actual()
+                                   .getHeaders()
+                                   .containsHeader( "TRACEPARENT" ),
+                        //
+                           () -> assertEquals( "Unprocessable Content", detail.getTitle() ),
+                           () -> assertEquals( 422, detail.getStatus() ),
+                           () -> assertEquals( "Test UnsupportedOperation", detail.getDetail() )
+                         );
+            }
+
         }
 
 
@@ -540,5 +604,47 @@ public class GlobalExceptionHandlerTest
                        () -> assertEquals( "Dummy message", detail.getDetail() )
             );
         }
+
+
+        @Test
+        @DisplayName( "Generic JPA" )
+        void persistence_generic_formatsProblemDetails()
+        {
+            // --- given
+            final RuntimeException except = new ClassCastException( "Test JPA cause" );
+            final JpaSystemException exception =
+                    new JpaSystemException( except );
+
+            // --- when
+            final ResponseEntity<ProblemDetail> result =
+                    handler.handleJpaSystemException( request, exception );
+            final ProblemDetail detail = result.getBody();
+
+            // --- then
+            assertAll( () -> assertNotNull( result ),
+                       () -> assertEquals( "Internal Server Error", detail.getTitle() ),
+                       () -> assertEquals( 500, detail.getStatus() ),
+                        //
+                       () -> assertThat( result )
+                               .actual()
+                               .getHeaders()
+                               .containsHeader( "TRACEPARENT " ),
+                        //
+                       () -> assertEquals( "Test JPA cause", detail.getDetail() ),
+                        //
+                       () -> assertThat( detail.getProperties() )
+                               .hasEntrySatisfying( "Exception",  //Exception -> org.springframework.orm.jpa.JpaSystemException
+                                                    value -> assertThat( value.toString() )
+                                                            .matches( ".*JpaSystemException$" ) ),
+                       () -> assertThat( detail.getProperties() )
+                               .hasEntrySatisfying( "logref",
+                                                    value -> assertThat( value.toString() )
+                                                            .matches( "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$" ) ),
+                       () -> assertThat( detail.getProperties() )
+                               .containsEntry( "Cause",  except )
+
+                     );
+        }
+
     }
 }

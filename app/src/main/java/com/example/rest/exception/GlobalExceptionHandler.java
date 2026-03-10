@@ -5,8 +5,13 @@
 package com.example.rest.exception;
 
 
+import static org.hibernate.internal.util.collections.CollectionHelper.map;
+
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -614,31 +619,28 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
 
 
 
+    // TODO Move to utility class with filter list as a static....
+    private HttpHeaders copyNeededHeaders( final HttpHeaders headers )
+    {
+        List<String> filterList = Arrays.asList( "TRACEPARENT", "TRACESTATE", "Content-Type" );
+        Set<String> filterSet = filterList.stream().collect( Collectors.toSet() );
 
+        headers
+                .headerSet()
+                .stream()
+                .filter( entry -> filterSet.contains( entry.getKey() ))
+                .collect( Collectors.toMap( Map.Entry::getKey, Map.Entry::getValue ) );
 
+        HttpHeaders newHeaders = new HttpHeaders();
+        newHeaders.putAll( headers );
+
+        return newHeaders;
+    }
 
     // TODO extract to a utility class
     private HttpHeaders copyTraceHeaders( final HttpHeaders requestHeader )
     {
-        final HttpHeaders headers = new HttpHeaders();
-        if ( null != requestHeader.get( "TRACEPARENT" ) )
-        {
-            headers.put( "TRACEPARENT", requestHeader.get( "TRACEPARENT" ) );
-        }
-        if ( null != requestHeader.get( "TRACESTATE" ) )
-        {
-            headers.put( "TRACESTATE", requestHeader.get( "TRACESTATE" ) );
-        }
-
-        return headers;
-//        requestHeader
-//                .entrySet()
-//                .stream()
-//                .filter( entry -> !entry.getKey().equalsIgnoreCase( "TRACEPARENT" ) )
-//                .collect(  );
-
-        // TODO add method to copy trace headers.
-//        return requestHeader;
+        return copyNeededHeaders( requestHeader );
     }
 
     private HttpHeaders responseHeaders()

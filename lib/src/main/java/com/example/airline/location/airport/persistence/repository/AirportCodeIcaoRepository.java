@@ -30,7 +30,7 @@ public interface AirportCodeIcaoRepository extends PagingAndSortingRepository<Ai
      *
      * @return the record if found.
      */
-    @Query( "from #{#entityName} a where a.icaoCode = :icaoCode" )
+    @Query( "FROM #{#entityName} a WHERE a.icaoCode = :icaoCode" )
     Optional<AirportCodeIcaoEntity> findById( @Param( "icaoCode" ) String icaoCode );
 
     /**
