@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.jspecify.annotations.NonNull;
 
+/**
+ * Count of the number of Airports within a given Country.
+ */
 @Data
 @AllArgsConstructor
 public class AirportCountInCountry
