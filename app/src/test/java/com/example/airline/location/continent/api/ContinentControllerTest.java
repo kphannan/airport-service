@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 import com.example.airline.location.continent.ContinentDTO;
@@ -47,9 +48,11 @@ class ContinentControllerTest
         dtoMapper     = Mappers.getMapper( ContinentDtoMapper.class );
 
 
+        final MediaType desiredContentType = new MediaType( MediaType.APPLICATION_JSON,
+                                                            StandardCharsets.UTF_8 );
         final MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.set( "Accept", MediaType.APPLICATION_JSON_VALUE );
-        headers.set( "Content-Type", MediaType.APPLICATION_JSON_VALUE );
+        headers.set( "Content-Type", desiredContentType.toString() );
         headers.set( HttpHeaders.ACCEPT_LANGUAGE, "en-US" );
         headers.set( HttpHeaders.ACCEPT_CHARSET, "utf-8" );
         headers.set( HttpHeaders.ACCEPT_ENCODING, "gzip" );
