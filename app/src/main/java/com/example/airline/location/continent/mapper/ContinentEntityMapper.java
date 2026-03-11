@@ -42,7 +42,7 @@ public interface ContinentEntityMapper
     // --- Instance
     ContinentEntity domainToEntity( final Continent domain );
 
-    @Mapping( target = "id", ignore = true)
+    @Mapping( target = "id", ignore = true )
     ContinentEntity domainToEntity( final NewContinent domain );
     // --- Collection
 

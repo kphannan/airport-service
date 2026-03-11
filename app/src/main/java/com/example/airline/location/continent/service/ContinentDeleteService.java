@@ -47,7 +47,7 @@ public class ContinentDeleteService
      */
     public boolean delete( final Continent entity )
     {
-        boolean existing = repository.existsById( entity.getId() ) || repository.existsByCode( entity.getCode() );
+        final boolean existing = repository.existsById( entity.getId() ) || repository.existsByCode( entity.getCode() );
 
         repository.delete( mapper.domainToEntity( entity ) );
 
@@ -62,7 +62,7 @@ public class ContinentDeleteService
      */
     public boolean deleteById( final Integer continentId )
     {
-        boolean existing = repository.existsById( continentId );
+        final boolean existing = repository.existsById( continentId );
 
         repository.deleteById( continentId );
 
