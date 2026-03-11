@@ -35,8 +35,10 @@ class ContinentControllerTest
     private ContinentCreateService createService;
     private ContinentUpdateService updateService;
     private ContinentDeleteService deleteService;
-    private ContinentDtoMapper dtoMapper;
-    private HttpHeaders        requestHeader;
+
+    private ContinentDtoMapper     dtoMapper;
+
+    private HttpHeaders            requestHeader;
 
     @BeforeEach
     void setUp()
@@ -45,6 +47,7 @@ class ContinentControllerTest
         createService = Mockito.mock( ContinentCreateService.class );
         updateService = Mockito.mock( ContinentUpdateService.class );
         deleteService = Mockito.mock( ContinentDeleteService.class );
+
         dtoMapper     = Mappers.getMapper( ContinentDtoMapper.class );
 
 

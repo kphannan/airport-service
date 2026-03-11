@@ -100,6 +100,10 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
 
     List<AirportCountInRegionEntity> countRegionAirportsByCountry( String countryCode );
 
+    List<AirportCountInRegionEntity> countAirportsByRegion( String regionCode );
+
+    List<AirportCountInCountryEntity> countAirportsByCountry( String countryCode );
+
     List<AirportSummaryEntity> findSummaryByContinent( String continentCode );
 
     List<AirportSummaryEntity> findSummaryByCountry( String isoCountry );

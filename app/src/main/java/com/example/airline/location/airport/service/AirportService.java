@@ -12,6 +12,7 @@ import com.example.airline.location.airport.model.AirportCountInContinent;
 import com.example.airline.location.airport.model.AirportCountInCountry;
 import com.example.airline.location.airport.model.AirportCountInRegion;
 import com.example.airline.location.airport.persistence.model.AirportCountInContinentEntity;
+import com.example.airline.location.airport.persistence.model.AirportCountInRegionEntity;
 import com.example.airline.location.airport.persistence.model.AirportEntity;
 import com.example.airline.location.airport.persistence.model.AirportSummaryEntity;
 import com.example.airline.location.airport.persistence.repository.AirportRepository;
@@ -103,6 +104,8 @@ public class AirportService
     }
 
 
+    // ===== Counts =====
+    // --- by Continent ---
     public List<AirportCountInContinent> countAirportsByContinent()
     {
         final List<AirportCountInContinentEntity> entities = repository.countAirportsByContinent();
@@ -116,26 +119,40 @@ public class AirportService
         return mapper.entityToDomainAirportsInCountry( repository.countCountryAirportsByContinent( countryCode ) );
     }
 
-//    public List<AirportCountInCountry> countAirportsByCountry( final String countryCode )
-//    {
-//        return mapper.entityToDomainAirportsInCountry( repository.countAirportsByCountry( countryCode ) );
-//    }
+    // --- by Country ---
+    public List<AirportCountInCountry> countAirportsByCountry( final String countryCode )
+    {
+        return mapper.entityToDomainAirportsInCountry( repository.countAirportsByCountry( countryCode ) );
+    }
 
     public List<AirportCountInRegion> countRegionAirportsByCountry( final String countryCode )
     {
         return mapper.entityToDomainAirportsInRegion( repository.countRegionAirportsByCountry( countryCode ) );
     }
 
+    // --- by Region ---
+    public List<AirportCountInRegion> countAirportsByRegion( final String regionCode )
+    {
+        final List<AirportCountInRegionEntity> entities = repository.countAirportsByRegion( regionCode );
+
+        return mapper.entityToDomainAirportsInRegion( entities );
+    }
+
+
+    // ===== Counts =====
+    // --- by Continent ---
     public List<AirportSummaryEntity> findSummaryByContinent( String continent )
     {
         return List.of();
     }
 
+    // --- by Country ---
     public List<AirportSummaryEntity> findSummaryByCountry( String isoCountry )
     {
         return List.of();
     }
 
+    // --- by Region ---
     public List<AirportSummaryEntity> findSummaryByRegion( String isoRegion )
     {
         return List.of();
