@@ -11,6 +11,7 @@ import com.example.airline.location.region.RegionDTO;
 import com.example.airline.location.region.mapper.RegionDtoMapper;
 import com.example.airline.location.region.model.Region;
 import com.example.airline.location.region.service.RegionsService;
+import com.example.utility.HeaderUtility;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -120,12 +121,12 @@ public class RegionsController
                             schema = @Schema( implementation = String.class ),
                             in = ParameterIn.HEADER,
                             description = "Authentication / Authorization token" ),
-                @Parameter( name = "TRACEPARENT",
+                @Parameter( name = HeaderUtility.TRACEID,
                             required = false,
                             schema = @Schema( implementation = String.class ),
                             in = ParameterIn.HEADER,
                             description = "Distributed tracing identifier" ),
-                @Parameter( name = "TRACESTATE",
+                @Parameter( name = HeaderUtility.TRACESTATE,
                             required = false,
                             schema = @Schema( implementation = String.class ),
                             in = ParameterIn.HEADER,
@@ -177,12 +178,12 @@ public class RegionsController
                                 required = true,
                                 in = ParameterIn.PATH,
                                 description = "3-7 character code" ),
-                    @Parameter( name = "TRACEPARENT",
+                    @Parameter( name = HeaderUtility.TRACEID,
                                 required = false,
                                 schema = @Schema( implementation = String.class ),
                                 in = ParameterIn.HEADER,
                                 description = "Distributed tracing identifier" ),
-                    @Parameter( name = "TRACESTATE",
+                    @Parameter( name = HeaderUtility.TRACESTATE,
                                 required = false,
                                 schema = @Schema( implementation = String.class ),
                                 in = ParameterIn.HEADER,
@@ -200,9 +201,11 @@ public class RegionsController
         {
             final RegionDTO dto = mapper.domainToApi( optionalEntity.get() );
 
-            ResponseEntity.BodyBuilder bodyBuilder = ResponseEntity.status( HttpStatusCode.valueOf( 200 ) );
+            final ResponseEntity.BodyBuilder bodyBuilder = ResponseEntity.status( HttpStatusCode.valueOf( 200 ) );
+
             bodyBuilder.contentType( requestHeader.getContentType() );
             bodyBuilder.contentLength( dto.toString().length() );
+
             return bodyBuilder.body( dto );
         }
 

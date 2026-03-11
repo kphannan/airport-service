@@ -19,6 +19,7 @@ import com.example.airline.location.airport.model.AirportCountInRegion;
 import com.example.airline.location.airport.service.AirportService;
 import com.example.airline.location.config.GlobalApiResponses;
 import com.example.airline.location.config.GlobalApiSecurityResponses;
+import com.example.utility.HeaderUtility;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -91,11 +92,11 @@ public class AirportController
                                        schema = @Schema( implementation = String.class ),
                                        in = ParameterIn.HEADER,
                                        description = "Authentication / Authorization token" ),
-                           @Parameter( name = "TRACEPARENT", required = false,
+                           @Parameter( name = HeaderUtility.TRACEID, required = false,
                                        schema = @Schema( implementation = String.class ),
                                        in = ParameterIn.HEADER,
                                        description = "Distributed tracing identifier" ),
-                           @Parameter( name = "TRACESTATE", required = false,
+                           @Parameter( name = HeaderUtility.TRACESTATE, required = false,
                                        schema = @Schema( implementation = String.class ),
                                        in = ParameterIn.HEADER,
                                        description = "Vendor specific trace identification" )

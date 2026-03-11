@@ -26,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +34,7 @@ import com.example.airline.location.continent.mapper.ContinentDtoMapper;
 import com.example.airline.location.continent.persistence.model.ContinentEntity;
 import com.example.airline.location.continent.persistence.repository.ContinentRepository;
 import com.example.airline.location.continent.service.ContinentReadService;
+import com.example.utility.HeaderUtility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -64,6 +66,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @DisplayName( "REST Controller - /continent" )
 class ContinentControllerRestTest
 {
+    private static final MediaType desiredContentType = new MediaType( MediaType.APPLICATION_JSON,
+                                                                            StandardCharsets.UTF_8 );
     @Autowired
     protected MockMvc mvc;
 
@@ -86,8 +90,10 @@ class ContinentControllerRestTest
     void setup()
     {
         requestHeaders = new HttpHeaders();
-        requestHeaders.set( "TRACESTATE", "testState" );
-        requestHeaders.set( "TRACEPARENT", "testParent" );
+        requestHeaders.set( HeaderUtility.TRACESTATE, "testState" );
+        requestHeaders.set( HeaderUtility.TRACEID, "testParent" );
+        requestHeaders.set( "NoWay", "Should not exist" );
+        requestHeaders.setContentType( desiredContentType );
     }
 
     /**
@@ -130,7 +136,7 @@ class ContinentControllerRestTest
             assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
                        () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
                        () -> assertThat( response.getHeaderNames() )
-                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
+                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
             );
         }
 
@@ -157,7 +163,7 @@ class ContinentControllerRestTest
 
             assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
+                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
             );
         }
 
@@ -189,7 +195,7 @@ class ContinentControllerRestTest
             assertAll( () -> assertEquals( HttpStatus.BAD_REQUEST.value(), response.getStatus() ),
                        () -> assertFalse( body.isBlank() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
+                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
                      );
         }
 
@@ -229,7 +235,7 @@ class ContinentControllerRestTest
             assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
                        () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
+                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
                      );
         }
 
@@ -258,7 +264,7 @@ class ContinentControllerRestTest
             assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), response.getStatus() ),
                        () -> assertThat( body ).isNullOrEmpty(),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
+                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
                      );
         }
 
@@ -289,7 +295,11 @@ class ContinentControllerRestTest
             assertAll( () -> assertEquals( HttpStatus.NOT_FOUND.value(), response.getStatus() ),
                        () -> assertThat( body ).isNotBlank(),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
+                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+                    //
+//                       () -> assertTrue( result.getResponse().containsHeader( "NoWay" ) ),
+//                       () -> assertTrue( result.getResponse().containsHeader( "NoWay" ) ),
+                       () -> assertFalse( result.getResponse().containsHeader( "NoWay" ) )
                      );
         }
 
@@ -354,7 +364,7 @@ class ContinentControllerRestTest
             assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
                        () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
+                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
                      );
         }
     }
@@ -403,7 +413,7 @@ class ContinentControllerRestTest
                        () -> verify( repository ).existsByCode( anyString() ),
                        () -> verify( repository, never() ).save( any( ContinentEntity.class ) ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
+                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
             );
         }
 
@@ -454,7 +464,7 @@ class ContinentControllerRestTest
                        () -> assertThat( result.getResponse().getHeader( "Location" ) )
                                .contains( "/location/continent/22" ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
+                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
             );
         }
 
@@ -496,7 +506,7 @@ class ContinentControllerRestTest
                            () -> assertThat( body ).contains( "A 2-character code is required, provided: [null]" ),
                            () -> assertThat( body ).contains( "Name is required, provided: [null]" ),
                            () -> assertThat( result.getResponse().getHeaderNames() )
-                                   .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
+                                   .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
                 );
             }
 
@@ -531,7 +541,7 @@ class ContinentControllerRestTest
                 // It is desired to have all 'asserts' as soft asserts.
                 assertAll( () -> assertEquals( HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus() ),
                            () -> assertThat( result.getResponse().getHeaderNames() )
-                                   .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" ),
+                                   .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
                            // TODO Use a JSON assertion instead of a plain string
                            () -> assertThat( body )
                                    .contains( "Code must be 2 uppercase characters, provided: [  ]" ),
@@ -574,7 +584,7 @@ class ContinentControllerRestTest
                 assertAll( () -> assertEquals( HttpStatus.BAD_REQUEST.value(),
                                                result.getResponse().getStatus() ),
                            () -> assertThat( result.getResponse().getHeaderNames() )
-                                   .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" ),
+                                   .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
                            () -> assertThat( result.getResponse().getContentAsString() )
                                    .contains( "Cannot deserialize value of type `java.net.URI` from String" )
                 );
@@ -627,7 +637,7 @@ class ContinentControllerRestTest
 
             assertAll( () -> assertEquals( HttpStatus.CONFLICT.value(), result.getResponse().getStatus() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" ),
+                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
                        () -> verify( repository ).existsById( eq( 77 ) ),
                        () -> verify( repository, never() ).save( any( ContinentEntity.class ) )
             );
@@ -674,7 +684,7 @@ class ContinentControllerRestTest
 
             assertAll( () -> assertEquals( HttpStatus.OK.value(), result.getResponse().getStatus() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" ),
+                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
                        () -> verify( repository )
                                .existsById( eq( 77 ) ),
                        () -> verify( repository, times( 1 ) )
@@ -723,7 +733,7 @@ class ContinentControllerRestTest
 
             assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" ),
+                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
                        () -> verify( repository ).deleteById( anyInt() )
             );
         }
@@ -750,7 +760,7 @@ class ContinentControllerRestTest
 
             assertAll( () -> assertEquals( HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" ),
+                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
                        () -> verify( repository ).deleteById( anyInt() )
             );
         }
@@ -808,7 +818,7 @@ class ContinentControllerRestTest
 
             assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" ),
+                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
                        () -> verify( repository ).delete( any( ContinentEntity.class ) )
             );
         }
@@ -844,7 +854,7 @@ class ContinentControllerRestTest
 
             assertAll( () -> assertEquals( HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" ),
+                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
                        () -> verify( repository ).delete( any( ContinentEntity.class ) )
             );
         }
@@ -918,7 +928,7 @@ class ContinentControllerRestTest
             // --- then
             assertAll( () -> assertEquals( HttpStatus.OK.value(), result.getResponse().getStatus() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
+                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
             );
         }
 
@@ -943,7 +953,7 @@ class ContinentControllerRestTest
             // --- then
             assertAll( () -> assertEquals( HttpStatus.OK.value(), result.getResponse().getStatus() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
+                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
                      );
         }
 
@@ -1005,7 +1015,7 @@ class ContinentControllerRestTest
                        // TODO use AssertJ to test for trace headers and content-type
                        () -> assertTrue( response.getContentAsString().isEmpty() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
+                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
             );
         }
 
@@ -1073,7 +1083,7 @@ class ContinentControllerRestTest
                                .contains( "PUT" )
                                .contains( "TRACE" ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type", "TRACESTATE", "TRACEPARENT" )
+                               .contains( HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
             );
         }
     }

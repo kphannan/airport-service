@@ -11,6 +11,7 @@ import com.example.airline.location.country.CountryDTO;
 import com.example.airline.location.country.mapper.CountryDtoMapper;
 import com.example.airline.location.country.model.Country;
 import com.example.airline.location.country.service.CountryService;
+import com.example.utility.HeaderUtility;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -108,11 +109,11 @@ public class CountryController
                             schema = @Schema( implementation = String.class ),
                             in = ParameterIn.HEADER,
                             description = "Authentication / Authorization token" ),
-                @Parameter( name = "TRACEPARENT", required = false,
+                @Parameter( name = HeaderUtility.TRACEID, required = false,
                             schema = @Schema( implementation = String.class ),
                             in = ParameterIn.HEADER,
                             description = "Distributed tracing identifier" ),
-                @Parameter( name = "TRACESTATE", required = false,
+                @Parameter( name = HeaderUtility.TRACESTATE, required = false,
                             schema = @Schema( implementation = String.class ),
                             in = ParameterIn.HEADER,
                             description = "Vendor specific trace identification" )

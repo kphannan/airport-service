@@ -4,6 +4,7 @@ import static java.util.Map.entry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -15,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import com.example.utility.HeaderUtility;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
@@ -46,6 +48,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+import org.springframework.test.http.HttpHeadersAssert;
 
 
 @Log4j2
@@ -61,8 +64,9 @@ public class GlobalExceptionHandlerTest
         handler = new GlobalExceptionHandler();
 
         MockHttpServletRequest mock = new MockHttpServletRequest();
-        mock.addHeader( "TRACEPARENT", "traceParent" );
-        mock.addHeader( "TRACESTATE", "traceState" );
+        mock.addHeader( HeaderUtility.TRACEID, "traceParent" );
+        mock.addHeader( HeaderUtility.TRACESTATE, "traceState" );
+        mock.addHeader( "NoWay", "should not be in the response" );
 
         request = null;  // TODO build out a reasonable request object
         request = new ServletWebRequest( mock );
@@ -200,7 +204,7 @@ public class GlobalExceptionHandlerTest
                            () -> assertThat( result )
                                    .actual()
                                    .getHeaders()
-                                   .containsHeader( "TRACEPARENT " ),
+                                   .containsHeader( "TRACEPARENT" ),
                         //
                            () -> assertThat( result.getHeaders().getLocation() )
                                    .isNotNull(),
@@ -208,7 +212,9 @@ public class GlobalExceptionHandlerTest
                            () -> assertThat( result )
                                    .actual()
                                    .getHeaders()
-                                   .containsHeader( "TRACEPARENT " ),
+                                   .containsHeader( "TRACESTATE" ),
+                        //
+                           () -> assertFalse( result.getHeaders().containsHeader( "NoWay")),
                         //
                            () -> assertEquals( "Not Found", detail.getTitle() ),
                            () -> assertEquals( 404, detail.getStatus() ),
@@ -258,6 +264,9 @@ public class GlobalExceptionHandlerTest
                         handler.handleUnsupportedOperationException( request, exception );
                 final ProblemDetail detail = result.getBody();
 
+//                HttpHeadersAssert as  = new HttpHeadersAssert( null );
+//                as.doesNotContainHeader(  );
+//                result.getHeaders()
                 // --- then
                 assertAll( () -> assertNotNull( result ),
                         //
@@ -274,8 +283,10 @@ public class GlobalExceptionHandlerTest
                                    .getHeaders()
                                    .containsHeader( "TRACEPARENT" ),
                         //
-                           () -> assertEquals( "Unprocessable Content", detail.getTitle() ),
-                           () -> assertEquals( 422, detail.getStatus() ),
+                           () -> assertFalse( result.getHeaders().containsHeader( "NoWay")),
+                        //
+                           () -> assertEquals( "Internal Server Error", detail.getTitle() ),
+                           () -> assertEquals( 500, detail.getStatus() ),
                            () -> assertEquals( "Test UnsupportedOperation", detail.getDetail() )
                          );
             }
@@ -387,6 +398,19 @@ public class GlobalExceptionHandlerTest
                 assertAll( () -> assertNotNull( result ),
                            () -> assertEquals( "Missing Parameter", detail.getTitle() ),
                            () -> assertEquals( 400, detail.getStatus() ),
+                        //
+                           () -> assertThat( result )
+                                   .actual()
+                                   .getHeaders()
+                                   .containsHeader( "TRACEPARENT" ),
+                        //
+                           () -> assertThat( result )
+                                   .actual()
+                                   .getHeaders()
+                                   .containsHeader( "TRACEPARENT" ),
+                        //
+                           () -> assertFalse( result.getHeaders().containsHeader( "NoWay")),
+                        //
                            () -> assertEquals( "Required parameter 'Param1' is not present.",
                                                detail.getDetail() ),
                            () -> assertEquals( "Missing Path Variables",
