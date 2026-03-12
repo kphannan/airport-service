@@ -31,8 +31,8 @@ import org.springframework.util.MultiValueMap;
 @DisplayName( "Continent Controller" )
 class ContinentControllerTest
 {
-    private ContinentReadService   readService;
     private ContinentCreateService createService;
+    private ContinentReadService   readService;
     private ContinentUpdateService updateService;
     private ContinentDeleteService deleteService;
 
