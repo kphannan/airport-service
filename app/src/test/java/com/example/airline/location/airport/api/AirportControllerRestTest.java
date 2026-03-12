@@ -3,6 +3,8 @@ package com.example.airline.location.airport.api;
 
 import static com.example.rest.utility.HeaderUtility.withHeaders;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -19,7 +21,9 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.airline.airport.AirportDTO;
 import com.example.airline.location.airport.mapper.AirportDtoMapper;
+import com.example.airline.location.airport.model.AirportCountInRegion;
 import com.example.airline.location.airport.persistence.model.AirportCountInContinentEntity;
 import com.example.airline.location.airport.persistence.model.AirportCountInCountryEntity;
 import com.example.airline.location.airport.persistence.model.AirportCountInRegionEntity;
@@ -49,7 +53,33 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
+
+/**
+ * REST Controller for Airport entities.
+ *
+ * Paged list of all airports
+ * By Continent
+ *    List of all airports within the continent.
+ *    List of Count of airports by Country.
+ * By Country
+ *    List of all airports within the Country.
+ *    List of airport counts grouped by Region.
+ * By Region
+ *    List of all airports within the Region.
+ *
+ *    Continent
+ *       - List of all airports.
+ *       - Count of airports by country.
+ *       Country
+ *          - List of all airports in the country
+ *          - Count of airports grouped by Region.
+ *          Region (state/province)
+ *             - List of airports in the Region.
+ *             Airport
+ */
 @WebMvcTest( controllers = AirportController.class )
 @ComponentScan( basePackages = { "com.example.airline.location.airport" } )
 @AutoConfigureMockMvc( addFilters = false )
@@ -508,18 +538,19 @@ class AirportControllerRestTest //extends RestControllerTestBase
             @DisplayName( "by Region" )
             void restGet_countAirportsByRegion_returnsSuccess() throws Exception
             {
-                List<AirportCountInRegionEntity> entities =
-                        List.of( new AirportCountInRegionEntity( "YY", "::YYNAME::", 42L ),
-                                 new AirportCountInRegionEntity( "ZZ", "::ZZNAME::", 21L )
+                List<AirportCountInRegion> entities =
+                        List.of( new AirportCountInRegion( "YY", "::YYNAME::", 42L ),
+                                 new AirportCountInRegion( "ZZ", "::ZZNAME::", 21L )
                                );
 
-                when( repository.countRegionAirportsByCountry( eq( "RE" ) ) )
+                when( service.countRegionAirportsByCountry( anyString() ) )
                         .thenReturn( entities );
 
 
-                final RequestBuilder request       = withHeaders( get( "/location/airport/summary/region/code/{regionCode}", "RE" ) );
+                final RequestBuilder request = withHeaders( get( "/location/airport/summary/region/code/{regionCode}",
+                                                                "RE" ) );
 
-                final MvcResult result = mvc
+                final MvcResult mvcResult = mvc
                         .perform( request )
                         .andDo( print() )
                         .andExpect( status().isOk() )
@@ -528,13 +559,28 @@ class AirportControllerRestTest //extends RestControllerTestBase
                         //      don't complain about lack of assertions in tests
                         // TODO test for an empty result body (empty list)
                         .andReturn();
-                MockHttpServletResponse response = result.getResponse();
+                MockHttpServletResponse response = mvcResult.getResponse();
+                ObjectMapper mapper = new ObjectMapper();
+//                List<AirportDTO> result = mapper.readValue( response.getContentAsString(), new TypeReference<List<AirportDTO>>() );
+                AirportDTO[] resultA = mapper.readValue( response.getContentAsString(), AirportDTO[].class );
+                List<AirportDTO> result = List.of( resultA );
 
                 // --- then
                 // TODO need to assert the resulting JSON....
 
-                assertThat( response.getContentType() )
-                        .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+//                assertThat( response.getContentType() )
+//                        .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+                assertAll( () -> assertThat( response.getContentType() )
+                        .contains( MediaType.APPLICATION_JSON_VALUE )
+
+//                           () -> assertThat( result )
+//                                   .isNotNull()
+//                                   .hasSize( 2 )
+
+//                           () -> assertEquals( "YY", result.get(0).getRegionCode() ),
+//                           () -> assertEquals( "::YYNAME::", result.get(0).getName() ),
+//                           () -> assertEquals( 42, result.get(0).getAirportCount() )
+                         );
             }
 
 

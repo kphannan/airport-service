@@ -120,17 +120,35 @@ public class AirportService
     }
 
     // --- by Country ---
+
+    /**
+     * Get the number of airports in a country.
+     * @param countryCode
+     * @return
+     */
     public List<AirportCountInCountry> countAirportsByCountry( final String countryCode )
     {
         return mapper.entityToDomainAirportsInCountry( repository.countAirportsByCountry( countryCode ) );
     }
 
+    /**
+     * Get the number of airports by region within a country.
+     *
+     * @param countryCode  the target country.
+     * @return list of counts of airports in a region.
+     */
     public List<AirportCountInRegion> countRegionAirportsByCountry( final String countryCode )
     {
         return mapper.entityToDomainAirportsInRegion( repository.countRegionAirportsByCountry( countryCode ) );
     }
 
     // --- by Region ---
+
+    /** Get the number of airports in a specific region
+     *
+     * @param regionCode the desired region
+     * @return list of airport counts.
+     */
     public List<AirportCountInRegion> countAirportsByRegion( final String regionCode )
     {
         final List<AirportCountInRegionEntity> entities = repository.countAirportsByRegion( regionCode );
