@@ -134,19 +134,20 @@ WHERE r.code = 'US-GA'
 )
 
 
-//@NamedQuery( name = "AirportEntity.countAirportsByCountry",
-//             query = """
-//                    SELECT new com.example.airline.location.airport.persistence.model.AirportCountInCountryEntity(
-//                           c.code AS countryCode,
-//                           c.name AS name,
-//                           COUNT(a.id) AS airportCount
-//                           )
-//                      FROM AirportEntity a
-//                    INNER JOIN CountryEntity c ON c.code = a.isoCountry
-//                    WHERE c.code  = :countryCode
-//                    GROUP BY a.isoCountry
-//                    """
-//)
+@NamedQuery( name = "AirportEntity.countAirportsByCountry",
+             query = """
+                    SELECT new com.example.airline.location.airport.persistence.model.AirportCountInCountryEntity(
+                           c.code AS countryCode,
+                           c.name AS name,
+                           COUNT(a.id) AS airportCount
+                           )
+                      FROM AirportEntity a
+                    INNER JOIN CountryEntity c ON c.code = a.isoCountry
+                    WHERE c.code  = :countryCode
+                    GROUP BY a.isoCountry
+                    """
+)
+
 @NamedQuery( name = "AirportEntity.countRegionAirportsByCountry",
              query = """
                 SELECT new com.example.airline.location.airport.persistence.model.AirportCountInRegionEntity(

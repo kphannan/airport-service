@@ -92,10 +92,6 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
     // Defined as NamedQueries
     List<AirportCountInContinentEntity> countAirportsByContinent();
 
-    // TODO pass country code as argument
-    // return list of regions with airport counts by region
-//    List<AirportCountInCountryEntity> countAirportsByCountry( String countryCode );
-
     List<AirportCountInCountryEntity> countCountryAirportsByContinent( String continentCode );
 
     List<AirportCountInRegionEntity> countRegionAirportsByCountry( String countryCode );
