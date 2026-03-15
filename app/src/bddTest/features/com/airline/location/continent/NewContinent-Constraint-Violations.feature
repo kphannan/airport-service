@@ -5,7 +5,7 @@ Feature: NewContinent constraint validation
   Background:
     * url baseUrl + '/location/continent'
 
-  @Validation @Foo
+  @Validation
   Scenario: Code and Name are null
        Given request
              """

@@ -3,7 +3,7 @@ Feature: Continent Read Operations
   Background:
     * url baseUrl + '/location/continent'
 
-  @Functional
+  @Functional @Foo
   Scenario: Create, Read, Update and Delete a test-only continent
              # Create a test continent
        Given request
@@ -12,12 +12,16 @@ Feature: Continent Read Operations
               """
         When method POST
         Then status 201
+           * print response
+           * print responseHeaders
            * def id = $.id
 
              # Can it be read back
        Given path id
         When method GET
         Then status 200
+           * print response
+           * print responseHeaders
 
              # Update the name
        Given request
@@ -30,6 +34,8 @@ Feature: Continent Read Operations
             """
         When method PUT
         Then status 200
+           * print response
+           * print responseHeaders
          And match $.name == "Bogus continent name changed"
 
              # Add wikilink
@@ -46,6 +52,7 @@ Feature: Continent Read Operations
 #        And print request
        When method PUT
           * print response
+          * print responseHeaders
        Then status 200
         And match $.wikiLink == "https://en.wikipedia.org/wiki/Antarctica"
 
@@ -53,6 +60,7 @@ Feature: Continent Read Operations
        Given path id
         When method GET
            * print response
+           * print responseHeaders
         Then status 200
          And match $.name == "name to foo"
          And match $.wikiLink == "https://en.wikipedia.org/wiki/Antarctica"
@@ -65,4 +73,6 @@ Feature: Continent Read Operations
              # Verify it is gone
        Given path id
         When method GET
-        Then status 410
+           * print response
+           * print responseHeaders
+        Then status 204

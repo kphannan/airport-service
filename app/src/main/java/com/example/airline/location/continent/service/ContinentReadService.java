@@ -64,9 +64,10 @@ public class ContinentReadService
      */
     @Transactional
     @SuppressWarnings( "PMD.ShortVariable" )
-    public Optional<Continent> getReferenceById( final Integer id )
+    public Optional<Continent> findById( final Integer id )
     {
-        final ContinentEntity continentEntity = repository.getReferenceById( id );
+//        final ContinentEntity continentEntity = repository.getReferenceById( id );
+        final Optional<ContinentEntity> continentEntity = repository.findById( id );
 
         // Example of using transactionTemplate to execute a read-only transaction
         // ContinentEntity continentEntity = null;
@@ -75,7 +76,8 @@ public class ContinentReadService
         //     continentEntity = repository.getReferenceById( id );
         // } );
 
-        return EntityMapHelper.mapOptionalEntityToDomain( Optional.ofNullable( continentEntity ) );
+        return EntityMapHelper.mapOptionalEntityToDomain( continentEntity );
+//        return EntityMapHelper.mapOptionalEntityToDomain( Optional.ofNullable( continentEntity ) );
     }
 
 

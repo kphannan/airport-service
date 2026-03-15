@@ -118,17 +118,17 @@ logging:
           internal: INFO
         internal: INFO
           # SessionFactoryImpl: INFO
-        hqlFunctions: INFO
+        hqlFunctions: DEBUG
         # HQL_FUNCTIONS: INFO
         orm:
           idgen:
-            factory: WARN
+            factory: DEBUG
           jdbc:
             bind: TRACE
         query:
           sqm:
             function:
-              SqmFunctionRegistry: INFO
+              SqmFunctionRegistry: DEBUG
         SQL: DEBUG
         # performance stats for SQL
         stat: DEBUG

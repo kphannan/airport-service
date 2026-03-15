@@ -19,6 +19,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.head;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -31,14 +32,17 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.airline.location.continent.mapper.ContinentDtoMapper;
+import com.example.airline.location.continent.model.Continent;
 import com.example.airline.location.continent.persistence.model.ContinentEntity;
 import com.example.airline.location.continent.persistence.repository.ContinentRepository;
 import com.example.airline.location.continent.service.ContinentReadService;
 import com.example.utility.HeaderUtility;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -73,10 +77,11 @@ class ContinentControllerRestTest
 
     @Autowired
     @SuppressWarnings( "unused" )
-    private ContinentReadService service;
+    private ContinentReadService readService;
 
     @Autowired
     @SuppressWarnings( "unused" )
+    private ContinentDtoMapper mapperReal;
     private ContinentDtoMapper mapper;
 
     @MockitoBean
@@ -89,6 +94,8 @@ class ContinentControllerRestTest
     @BeforeEach
     void setup()
     {
+        mapper = Mockito.spy( mapperReal );
+
         requestHeaders = new HttpHeaders();
         requestHeaders.set( HeaderUtility.TRACESTATE, "testState" );
         requestHeaders.set( HeaderUtility.TRACEID, "testParent" );
@@ -112,8 +119,8 @@ class ContinentControllerRestTest
                     .characterEncoding( "UTF-8" )
                     .headers( requestHeaders );
 
-            when( repository.getReferenceById( eq( 1 ) ) )
-                    .thenReturn( continentEntity );
+            when( repository.findById( eq( 1 ) ) )
+                    .thenReturn( Optional.of( continentEntity ) );
 
 
             final MvcResult result = mvc
@@ -136,7 +143,8 @@ class ContinentControllerRestTest
             assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
                        () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
                        () -> assertThat( response.getHeaderNames() )
-                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
+                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+                       () -> verify( repository ).findById( anyInt() )
             );
         }
 
@@ -264,7 +272,9 @@ class ContinentControllerRestTest
             assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), response.getStatus() ),
                        () -> assertThat( body ).isNullOrEmpty(),
                        () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
+                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+                       () -> verify( repository ).findByCode( anyString() ),
+                       () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
                      );
         }
 
@@ -869,6 +879,52 @@ class ContinentControllerRestTest
     @DisplayName( "/continent - HTTP PATCH" )
     class PatchMethod           // NOPMD
     {
+        @Disabled       // TODO research JsonPatch more.
+        @Test
+        void patchContinent_withKeywords_returnsOk() throws Exception
+        {
+            // --- given
+//            String x = "[{\"op\":\"move\",\"from\":\"/a\",\"path\":\"/b/2\"}]";
+            final String json = "[{\"op\": \"replace\", \"path\": \'/keywords\", \"value\": \"Key 7, Key 8\"}]";
+
+            final ContinentEntity continentEntity = new ContinentEntity( 1, "NA", "North", null, null );
+            when( repository.findById( anyInt() ) )
+                    .thenReturn( Optional.of( continentEntity ) );
+
+            final MediaType patchContentType = new MediaType( "application",
+                                                              "json-patch+json",
+                                                              StandardCharsets.UTF_8 );
+
+            requestHeaders.setContentType( patchContentType );
+            final RequestBuilder request = withHeaders( patch( "/location/continent/{id}", 1 ) )
+                    .characterEncoding( "UTF-8" )
+//                    .contentType( "application/json-patch+json" )
+                    .headers( requestHeaders )
+                    .content( json );
+
+            // --- when
+
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andDo( print() )
+                    .andExpect( status().isOk() )
+                    .andExpect( content().encoding( "UTF-8" ) )
+                    // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
+                    //      don't complain about lack of assertions in tests
+                    .andExpect( jsonPath( "$.id" ).value( 1 ) )
+                    .andExpect( jsonPath( "$.code" ).value( "NA" ) )
+                    .andExpect( jsonPath( "$.name" ).value( "North" ) )
+                    .andExpect( jsonPath( "$.keywords" ).value( "North" ) )
+                    .andReturn();
+
+            // --- then
+
+//            final Optional<Continent> original = readService.findById( 7 );
+//
+//            final Optional<Continent> updated = applyPatchEntity( json, original );
+
+
+        }
     }
 
 
@@ -996,27 +1052,56 @@ class ContinentControllerRestTest
                     .headers( requestHeaders );
 
             final ContinentEntity entity = new ContinentEntity( 22, "ZZ", "::ZNAMEZ::", null, null );
-            when( repository.getReferenceById( anyInt() ) )
-                    .thenReturn( entity );
+            when( repository.findById( anyInt() ) )
+                    .thenReturn( Optional.of( entity ) );
 
             // --- when
             final MvcResult result = mvc
                     .perform( request )
                     .andDo( print() )
-//                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
+                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
                     .andReturn();
 
             // --- then
             final MockHttpServletResponse response = result.getResponse();
 
-            assertAll( //() -> assertEquals( 204, response.getStatus() ),
-                       () -> assertEquals( HttpStatus.NO_CONTENT.value(), response.getStatus() ),
-                       () -> assertFalse( response.getHeaderNames().isEmpty() ),
+            assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
                        // TODO use AssertJ to test for trace headers and content-type
                        () -> assertTrue( response.getContentAsString().isEmpty() ),
                        () -> assertThat( result.getResponse().getHeaderNames() )
                                .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
             );
+        }
+
+
+        @Test
+        @DisplayName( "with ID - 204: No Content - has headers" )
+        void restHeadWithBadId_returnsHeaders() throws Exception
+        {
+            // --- given
+            final RequestBuilder request = withHeaders( head( "/location/continent/{continentId}", 123 ) )
+                    .headers( requestHeaders );
+
+            when( readService.findById( anyInt() ) )
+                    .thenReturn( Optional.empty() );
+
+            // --- when
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andDo( print() )
+                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
+                    .andReturn();
+
+            // --- then
+            final MockHttpServletResponse response = result.getResponse();
+
+            assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), response.getStatus() ),
+                       () -> assertFalse( response.getHeaderNames().isEmpty() ),
+                       // TODO use AssertJ to test for trace headers and content-type
+                       () -> assertTrue( response.getContentAsString().isEmpty() ),
+                       () -> assertThat( result.getResponse().getHeaderNames() )
+                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
+                     );
         }
 
 

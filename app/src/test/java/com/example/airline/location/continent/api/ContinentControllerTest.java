@@ -62,8 +62,9 @@ class ContinentControllerTest
         requestHeader = new HttpHeaders( headers );
     }
 
+    // ===== Get =====
     @Nested
-    @DisplayName( "get/fetch" )
+    @DisplayName( "Find" )
     class Get           // NOPMD
     {
         @Test
@@ -74,10 +75,10 @@ class ContinentControllerTest
 
             final Continent continent = new Continent( 1, "NA", "North", null, null );
 
-            when( readService.getReferenceById( anyInt() ) )
+            when( readService.findById( anyInt() ) )
                     .thenReturn( Optional.of( continent ) );
 
-            ResponseEntity<ContinentDTO> response = controller.restGetFindContinentById( 100, requestHeader );
+            ResponseEntity<ContinentDTO> response = controller.restFindContinentById( 100, requestHeader );
             final HttpHeaders headers = response.getHeaders();
 
             assertAll( () -> assertNotNull( response.getBody() ),
@@ -87,23 +88,53 @@ class ContinentControllerTest
 
     }   // end of Get class group
 
-
+    // ===== Post =====
     @Nested
-    @DisplayName( "Post methods" )
+    @DisplayName( "Create" )
     class Post           // NOPMD
     {
     }   // end of Post class group
 
+    // ===== Patch =====
     @Nested
-    @DisplayName( "Put methods" )
+    @DisplayName( "Update (patch)" )
+    class Patch           // NOPMD
+    {
+    }   // end of Put class group
+
+    // ===== Put =====
+    @Nested
+    @DisplayName( "Update" )
     class Put           // NOPMD
     {
     }   // end of Put class group
 
+    // ===== Delete =====
     @Nested
-    @DisplayName( "Delete methods" )
+    @DisplayName( "Delete" )
     class Delete           // NOPMD
     {
     }   // end of Delete class group
+
+    // ===== Head =====
+    @Nested
+    @DisplayName( "HEAD" )
+    class Head           // NOPMD
+    {
+    }   // end of Put class group
+
+    // ===== Info =====
+    @Nested
+    @DisplayName( "INFO" )
+    class Info           // NOPMD
+    {
+    }   // end of Put class group
+
+    // ===== Trace =====
+    @Nested
+    @DisplayName( "TRACE" )
+    class Trace           // NOPMD
+    {
+    }   // end of Put class group
 
 }

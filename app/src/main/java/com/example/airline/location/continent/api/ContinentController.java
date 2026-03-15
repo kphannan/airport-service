@@ -20,6 +20,7 @@ import com.example.airline.location.continent.service.ContinentDeleteService;
 import com.example.airline.location.continent.service.ContinentReadService;
 import com.example.airline.location.continent.service.ContinentUpdateService;
 import com.example.utility.HeaderUtility;
+import com.github.fge.jsonpatch.JsonPatch;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -30,6 +31,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.expression.TypeConverter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -47,6 +49,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 // TODO Trace header.... https://github.com/w3c/trace-context/blob/main/spec/20-http_request_header_format.md
 //      https://w3c.github.io/trace-context/
@@ -180,20 +184,15 @@ public class ContinentController
     @GetMapping( "/{continentId}" )
     @SuppressWarnings( "PMD.ShortVariable" )
     public ResponseEntity<ContinentDTO>
-        restGetFindContinentById( @Valid @PathVariable( name = "continentId" ) final Integer continentId,
-                                  @RequestHeader final HttpHeaders requestHeaders )
+    restFindContinentById( @Valid @PathVariable( name = "continentId" ) final Integer continentId,
+                           @RequestHeader final HttpHeaders requestHeaders )
     {
-        final Optional<Continent> optionalContinent = readService.getReferenceById( continentId );
+        final Optional<Continent> optionalContinent = readService.findById( continentId );
 
         if ( optionalContinent.isPresent() )
         {
             final ContinentDTO dto = mapper.domainToApi( optionalContinent.get() );
 
-//            final ResponseEntity<ContinentDTO> response = new ResponseEntity<>( dto,
-//                                                                                HeaderUtility.copyNeededHeaders( requestHeaders ),
-////                                                                          responseHeaders( requestHeaders, desiredContentType ),
-//                                                                          HttpStatus.OK );
-////            return response;
 //            ResponseEntity.BodyBuilder bb = ResponseEntity.status( HttpStatusCode.valueOf( 200 ) );
 //            bb.contentType( requestHeader.getContentType() );
 //            return bb.body( dto );
@@ -334,12 +333,14 @@ public class ContinentController
                     .path( "/{continentId}" )
                     .buildAndExpand( continent.getId() )
                     .toUri();
+            printHeaders(  requestHeaders );
             final ResponseEntity<ContinentDTO> response = ResponseEntity
                     .created( location )
                     .headers( HeaderUtility.copyNeededHeaders( requestHeaders ) )
                     .body( mapper.domainToApi( continent ) );
 
             log.error( response.toString() );
+            printHeaders( response.getHeaders() );
 
             return response;
         }
@@ -353,6 +354,10 @@ public class ContinentController
                 .build();
     }
 
+    private void printHeaders( final HttpHeaders headers )
+    {
+        headers.forEach(  ( name, value ) -> log.error( name + " : " + value ) );
+    }
 
 
     // ===================
@@ -532,66 +537,85 @@ public class ContinentController
     // ===================
     // ===== PATCH =====
 
-    /**
-     * Handle HTTP Method PATCH for /location/continent/{continentId}.
-     *
-     * @param continent A modified continent instance.
-     * @param requestHeaders Request's HttpHeaders
-     * @return
-     */
-    @Operation( method = "PATCH",
-                summary = "Update a Continent",
-                description = "Update a Continent only if it exists.  All non-null attributes are updated.",
-                requestBody =
-                    @RequestBody( required = true,
-                                  content = { @Content( mediaType = "application/json",
-                                                        schema = @Schema( implementation = ContinentDTO.class ) )
-                                  }
-                ),
-                responses = {
-                    @ApiResponse(
-                        description = "Continent updated and returned",
-                        responseCode = "200",
-                        content =
-                        {
-                            @Content( mediaType = "application/json",
-                                      schema = @Schema( implementation = ContinentDTO.class ) ),
-                            @Content( mediaType = "application/yaml",
-                                      schema = @Schema( implementation = ContinentDTO.class ) ),
-                            @Content( mediaType = "application/xml",
-                                      schema = @Schema( implementation = ContinentDTO.class ) )
-                        }
-                    )
-                },
-                parameters = {
-                    @Parameter( name = "Bearer",
-                                required = false,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Authentication / Authorization token" ),
-                    @Parameter( name = HeaderUtility.TRACEID,
-                                required = false,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Distributed tracing identifier" ),
-                    @Parameter( name = HeaderUtility.TRACESTATE,
-                                required = false,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Vendor specific trace identification" )
-                }
-    )
-    @PatchMapping( "" )
-    @SuppressWarnings( "PMD.ShortVariable" )
-    public ResponseEntity<ContinentDTO> restPatchContinentById( @Valid @RequestBody final ContinentDTO continent,
-                                                                @RequestHeader final HttpHeaders requestHeaders )
-    {
-        // TODO implement PATCH
-        return ResponseEntity
-                .noContent()
-                .headers( HeaderUtility.copyNeededHeaders( requestHeaders ) )
-                .build();
-    }
+//    /**
+//     * Handle HTTP Method PATCH for /location/continent/{continentId}.
+//     *
+//     * @param continentId key of the entity to update.
+//     * @param patch A modified continent instance.
+//     * @param requestHeaders Request's HttpHeaders
+//     * @return
+//     */
+//    @Operation( method = "PATCH",
+//                summary = "Update a Continent",
+//                description = "Update a Continent only if it exists.  All non-null attributes are updated.",
+//                requestBody =
+//                    @RequestBody( required = true,
+//                                  content = { @Content( mediaType = "application/json-patch+json",
+//                                                        schema = @Schema( implementation = ContinentDTO.class ) )
+//                                  }
+//                ),
+//                responses = {
+//                    @ApiResponse(
+//                        description = "Continent updated and returned",
+//                        responseCode = "200",
+//                        content =
+//                        {
+//                            @Content( mediaType = "application/json",
+//                                      schema = @Schema( implementation = ContinentDTO.class ) ),
+//                            @Content( mediaType = "application/yaml",
+//                                      schema = @Schema( implementation = ContinentDTO.class ) ),
+//                            @Content( mediaType = "application/xml",
+//                                      schema = @Schema( implementation = ContinentDTO.class ) )
+//                        }
+//                    )
+//                },
+//                parameters = {
+//                    @Parameter( name = "Bearer",
+//                                required = false,
+//                                schema = @Schema( implementation = String.class ),
+//                                in = ParameterIn.HEADER,
+//                                description = "Authentication / Authorization token" ),
+//                    @Parameter( name = HeaderUtility.TRACEID,
+//                                required = false,
+//                                schema = @Schema( implementation = String.class ),
+//                                in = ParameterIn.HEADER,
+//                                description = "Distributed tracing identifier" ),
+//                    @Parameter( name = HeaderUtility.TRACESTATE,
+//                                required = false,
+//                                schema = @Schema( implementation = String.class ),
+//                                in = ParameterIn.HEADER,
+//                                description = "Vendor specific trace identification" )
+//                }
+//    )
+//    @PatchMapping( path = "/{continentId}", consumes = "application/json-patch+json" )
+//    public ResponseEntity<ContinentDTO> restPatchContinentById( @Valid @PathVariable( name = "continentId" ) final Integer continentId,
+////                                                                @RequestBody final String patch,
+//                                                                @RequestBody final JsonPatch jsonPatch,
+//                                                                @RequestHeader final HttpHeaders requestHeaders )
+//    {
+//        Optional<Continent> original = readService.findById( continentId );
+//        Optional<Continent> updated = applyPatchToContinent( original, jsonPatch );
+//        ContinentDTO dto = mapper.domainToApi( updated.get() );
+//        // TODO implement PATCH
+//        return ResponseEntity
+//                .status( HttpStatus.OK )
+//                .headers( HeaderUtility.copyNeededHeaders( requestHeaders ) )
+//                .body( dto ); // .... use mapper to convert to DTO.
+////                .build();
+//    }
+//
+//    private Optional<Continent> applyPatchToContinent( Optional<Continent> original, JsonPatch jsonPatch )
+//    {
+//        Optional<Continent> updated = original;
+//        if ( original.isPresent() )
+//        {
+//            // TODO setup ObjectMapper
+////            ObjectMapper objectMapper;
+////            jsonPatch.apply( objectMapper.convertValue( original.get(), JsonNode.class ) );
+//        }
+//
+//        return updated;
+//    }
 
     // ===================
     // ===== Options =====
@@ -673,10 +697,6 @@ public class ContinentController
         // Headers are set for Content-Type and Content length, and the same status code.
         // "detail": "Request method 'DELETE' is not supported; Supported methods: HEAD, TRACE, POST, GET, OPTIONS",
 
-        // HttpHeaders headers = new HttpHeaders();
-        // headers.add( HttpHeaders.CONTENT_TYPE, requestHeaders.getAccept().toString() );
-        // ResponseEntity<ContinentDTO> rr = restGetFindContinentById( continentId, requestHeaders );
-
         return ResponseEntity
                 .noContent()
                 .headers( HeaderUtility.copyNeededHeaders( requestHeaders ) )
@@ -699,14 +719,15 @@ public class ContinentController
         // Headers are set for Content-Type and Content length, and the same status code.
         // "detail": "Request method 'DELETE' is not supported; Supported methods: HEAD, TRACE, POST, GET, OPTIONS",
 
-        // HttpHeaders headers = new HttpHeaders();
-        // headers.add( HttpHeaders.CONTENT_TYPE, requestHeaders.getAccept().toString() );
-        final ResponseEntity<ContinentDTO> rr = restGetFindContinentById( continentId, requestHeaders );
+        final ResponseEntity<ContinentDTO> rr = restFindContinentById( continentId, requestHeaders );
 
-        return new ResponseEntity<>( rr.getHeaders(),
-                                     //  HttpStatusCode.valueOf( 200 )
-                                     rr.getStatusCode().equals( HttpStatusCode.valueOf( 200 ) )
-                                        ? HttpStatus.NO_CONTENT : rr.getStatusCode() );
+//        return new ResponseEntity<>( rr.getHeaders(),
+//                                     rr.getStatusCode().equals( HttpStatusCode.valueOf( 500 ) )
+//                                        ? HttpStatus.NO_CONTENT : rr.getStatusCode() );
+        return ResponseEntity
+                .status( rr.getStatusCode() )
+                .headers( HeaderUtility.copyNeededHeaders( requestHeaders ) )
+                .build();
     }
 
     // ===== INFO =====
