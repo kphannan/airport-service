@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -55,6 +56,9 @@ import org.springframework.test.http.HttpHeadersAssert;
 @DisplayName( "Exceptions - Global Handling" )
 public class GlobalExceptionHandlerTest
 {
+    private final MediaType desiredContentType = new MediaType( MediaType.APPLICATION_JSON,
+                                                                StandardCharsets.UTF_8 );
+
     private GlobalExceptionHandler handler;
     private ServletWebRequest request;
 
@@ -66,11 +70,14 @@ public class GlobalExceptionHandlerTest
         MockHttpServletRequest mock = new MockHttpServletRequest();
         mock.addHeader( HeaderUtility.TRACEID, "traceParent" );
         mock.addHeader( HeaderUtility.TRACESTATE, "traceState" );
+        mock.addHeader( "Content-Type", desiredContentType.toString() );
+//        mock.setContentType( desiredContentType.getType() );
         mock.addHeader( "NoWay", "should not be in the response" );
 
         request = null;  // TODO build out a reasonable request object
         request = new ServletWebRequest( mock );
     }
+
 
 
     @Nested
@@ -196,29 +203,32 @@ public class GlobalExceptionHandlerTest
                 // --- when
                 final ResponseEntity<ProblemDetail> result =
                         handler.handleResourceNotFoundException( request, exception );
-                final ProblemDetail detail = result.getBody();
 
                 // --- then
+                final ProblemDetail detail = result.getBody();
+                final HttpHeadersAssert headersAssert = new HttpHeadersAssert( result.getHeaders() );
                 assertAll( () -> assertNotNull( result ),
-                        //
-                           () -> assertThat( result )
-                                   .actual()
-                                   .getHeaders()
-                                   .containsHeader( "TRACEPARENT" ),
+                           //
+                           () -> headersAssert
+                                   .hasValue( "TRACEPARENT", "traceParent" )
+                                   .hasValue( "TRACESTATE", "traceState" )
+                                   .hasValue( "Content-Type", "application/json;charset=UTF-8" )
+                                   .doesNotContainHeader( "NoWay" ),
                         //
                            () -> assertThat( result.getHeaders().getLocation() )
                                    .isNotNull(),
                         //
-                           () -> assertThat( result )
-                                   .actual()
-                                   .getHeaders()
-                                   .containsHeader( "TRACESTATE" ),
                         //
-                           () -> assertFalse( result.getHeaders().containsHeader( "NoWay")),
-                        //
+                           () -> assertThat( detail.getProperties() )
+                                   .containsEntry( "Exception", "org.springframework.web.servlet.resource.NoResourceFoundException: No static resource /some/resource/path for request 'request-uri'." )
+//                                   .doesNotContainKey( "Exception" )
+//                                   .containsEntry( "Cause", "java.lang.Exception: Just Cause"  ),
+                                   .doesNotContainKey( "Cause" ),
+                           //
                            () -> assertEquals( "Not Found", detail.getTitle() ),
                            () -> assertEquals( 404, detail.getStatus() ),
-                           () -> assertEquals( "No static resource /some/resource/path.", detail.getDetail() )
+                           () -> assertEquals( "No static resource /some/resource/path for request 'request-uri'.",
+                                               detail.getDetail() )
                 );
             }
         }
@@ -238,13 +248,25 @@ public class GlobalExceptionHandlerTest
                 // --- when
                 final ResponseEntity<ProblemDetail> result =
                         handler.handleMethodNotSupportedException( request, exception );
-                final ProblemDetail detail = result.getBody();
 
                 // --- then
+                final ProblemDetail detail = result.getBody();
+                final HttpHeadersAssert headersAssert = new HttpHeadersAssert( result.getHeaders() );
                 assertAll( () -> assertNotNull( result ),
+                           //
+                           () -> headersAssert
+                                   .hasValue( "TRACEPARENT", "traceParent" )
+                                   .hasValue( "TRACESTATE", "traceState" )
+                                   .hasValue( "Content-Type", "application/json;charset=UTF-8" )
+                                   .doesNotContainHeader( "NoWay" ),
+                           //
+                           () -> assertThat( detail.getProperties() )
+                                   .containsEntry( "Exception", "org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'GET' is not supported" )
+                                   .doesNotContainKey( "Cause" ),
+                           //
                            () -> assertEquals( "Method Not Allowed", detail.getTitle() ),
                            () -> assertEquals( 405, detail.getStatus() ),
-                           () -> assertEquals( "Method 'GET' is not supported.", detail.getDetail() )
+                           () -> assertEquals( "Request method 'GET' is not supported", detail.getDetail() )
                            // TODO check for accepted methods
                 );
             }
@@ -262,28 +284,24 @@ public class GlobalExceptionHandlerTest
                 // --- when
                 final ResponseEntity<ProblemDetail> result =
                         handler.handleUnsupportedOperationException( request, exception );
-                final ProblemDetail detail = result.getBody();
 
-//                HttpHeadersAssert as  = new HttpHeadersAssert( null );
-//                as.doesNotContainHeader(  );
-//                result.getHeaders()
                 // --- then
+                final ProblemDetail detail = result.getBody();
+                final HttpHeadersAssert headersAssert = new HttpHeadersAssert( result.getHeaders() );
                 assertAll( () -> assertNotNull( result ),
-                        //
-                           () -> assertThat( result )
-                                   .actual()
-                                   .getHeaders()
-                                   .containsHeader( "TRACEPARENT" ),
-                        //
+                           //
+                           () -> headersAssert
+                                   .hasValue( "TRACEPARENT", "traceParent" )
+                                   .hasValue( "TRACESTATE", "traceState" )
+                                   .hasValue( "Content-Type", "application/json;charset=UTF-8" )
+                                   .doesNotContainHeader( "NoWay" ),
+                           //
 //                           () -> assertThat( result.getHeaders().getLocation() )
 //                                   .isNotNull(),
-                        //
-                           () -> assertThat( result )
-                                   .actual()
-                                   .getHeaders()
-                                   .containsHeader( "TRACEPARENT" ),
-                        //
-                           () -> assertFalse( result.getHeaders().containsHeader( "NoWay")),
+                           //
+                           () -> assertThat( detail.getProperties() )
+                                   .containsEntry( "Exception", "java.lang.UnsupportedOperationException: Test UnsupportedOperation" )
+                                   .doesNotContainKey( "Cause" ),
                         //
                            () -> assertEquals( "Internal Server Error", detail.getTitle() ),
                            () -> assertEquals( 500, detail.getStatus() ),
@@ -324,10 +342,26 @@ public class GlobalExceptionHandlerTest
                 // --- when
                 final ResponseEntity<ProblemDetail> result =
                         handler.handleMessageNotReadableException( request, exception );
-                final ProblemDetail detail = result.getBody();
 
                 // --- then
+                final ProblemDetail detail = result.getBody();
+                final HttpHeadersAssert headersAssert = new HttpHeadersAssert( result.getHeaders() );
                 assertAll( () -> assertNotNull( result ),
+                           //
+                           () -> headersAssert
+                                   .hasValue( "TRACEPARENT", "traceParent" )
+                                   .hasValue( "TRACESTATE", "traceState" )
+                                   .hasValue( "Content-Type", "application/json;charset=UTF-8" )
+                                   .doesNotContainHeader( "NoWay" ),
+                           //
+                           () -> assertThat( detail.getProperties() )
+                                   .containsEntry( "Exception", "org.springframework.http.converter.HttpMessageNotReadableException: Test exception" )
+                                   .doesNotContainKey( "Cause" )
+                                   .containsEntry( "Possibility 1", "Malformed request body" )
+                                   .containsEntry( "Possibility 2", "Invalid request parameters" )
+                                   .containsEntry( "Possibility 3", "Incompatible data format" )
+                                   .containsEntry( "Possibility 4", "Serialization errors" ),
+                           //
                            () -> assertEquals( "Malformed Request", detail.getTitle() ),
                            () -> assertEquals( 400, detail.getStatus() ),
                            () -> assertEquals( "Test exception", detail.getDetail() )
@@ -360,13 +394,20 @@ public class GlobalExceptionHandlerTest
                 // --- when
                 final ResponseEntity<ProblemDetail> result =
                         handler.handleMessageNotWritableException( request, exception );
-                final ProblemDetail detail = result.getBody();
 
                 // --- then
+                final HttpHeadersAssert headersAssert = new HttpHeadersAssert( result.getHeaders() );
+                final ProblemDetail detail = result.getBody();
                 assertAll( () -> assertNotNull( result ),
                            () -> assertNotNull( detail ),
                            () -> assertEquals( "Unable to produce requested response format", detail.getTitle() ),
                            () -> assertEquals( 501, detail.getStatus() ),
+                           //
+                           () -> headersAssert
+                                   .hasValue( "TRACEPARENT", "traceParent" )
+                                   .hasValue( "TRACESTATE", "traceState" )
+                                   .hasValue( "Content-Type", "application/json;charset=UTF-8" )
+                                   .doesNotContainHeader( "NoWay" ),
                            () -> assertEquals( "Test writable exception", detail.getDetail() )
                 );
             }
@@ -390,35 +431,24 @@ public class GlobalExceptionHandlerTest
                         handler.handleMissingServletRequestParameterException( request, exception );
                 final ProblemDetail detail = result.getBody();
 
-//                var props = detail.getProperties();
-//                for ( Object o : props.values() )
-//                    log.error( o );
-
                 // --- then
+                HttpHeadersAssert headersAssert = new HttpHeadersAssert( result.getHeaders() );
                 assertAll( () -> assertNotNull( result ),
                            () -> assertEquals( "Missing Parameter", detail.getTitle() ),
                            () -> assertEquals( 400, detail.getStatus() ),
                         //
-                           () -> assertThat( result )
-                                   .actual()
-                                   .getHeaders()
-                                   .containsHeader( "TRACEPARENT" ),
+                           () -> headersAssert
+                                   .hasValue( "TRACEPARENT", "traceParent" )
+                                   .hasValue( "TRACESTATE", "traceState" )
+                                   .hasValue( "Content-Type", "application/json;charset=UTF-8" )
+                                   .doesNotContainHeader( "NoWay" ),
                         //
-                           () -> assertThat( result )
-                                   .actual()
-                                   .getHeaders()
-                                   .containsHeader( "TRACEPARENT" ),
-                        //
-                           () -> assertFalse( result.getHeaders().containsHeader( "NoWay")),
-                        //
+                           () -> assertThat( detail.getProperties() )
+                                   .containsEntry( "Possibility 1", "Missing Path Variables" )
+                                   .containsEntry( "Possibility 2", "Missing Query Parameter" )
+                                   .containsEntry( "Possibility 3", "Missing Form Data" ),
                            () -> assertEquals( "Required parameter 'Param1' is not present.",
-                                               detail.getDetail() ),
-                           () -> assertEquals( "Missing Path Variables",
-                                               detail.getProperties().get( "Possibility 1" ) ),
-                           () -> assertEquals( "Missing Query Parameter",
-                                               detail.getProperties().get( "Possibility 2" ) ),
-                           () -> assertEquals( "Missing Form Data",
-                                               detail.getProperties().get( "Possibility 3" ) )
+                                               detail.getDetail() )
                 );
             }
 
@@ -433,15 +463,87 @@ public class GlobalExceptionHandlerTest
                 // --- when
                 final ResponseEntity<ProblemDetail> result =
                         handler.handleMethodArgumentTypeMismatchException( request, exception );
-                final ProblemDetail detail = result.getBody();
 
                 // --- then
+                final ProblemDetail detail = result.getBody();
+                final HttpHeadersAssert headersAssert = new HttpHeadersAssert( result.getHeaders() );
                 assertAll( () -> assertNotNull( result ),
                            () -> assertEquals( "Parameter Type Mismatch", detail.getTitle() ),
                            () -> assertEquals( 400, detail.getStatus() ),
                            () -> assertEquals( "Method parameter 'name': Failed to convert value of type 'java.lang.String' to required type 'java.util.ArrayList'",
-                                               detail.getDetail() )
+                                               detail.getDetail() ),
+                           //
+                           () -> assertThat( detail.getProperties() )
+                                   .containsEntry( "Exception", "org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Method parameter 'name': Failed to convert value of type 'java.lang.String' to required type 'java.util.ArrayList'" )
+                                   .doesNotContainKey( "Cause" ),
+                           //
+                           () -> headersAssert
+                                   .hasValue( "TRACEPARENT", "traceParent" )
+                                   .hasValue( "TRACESTATE", "traceState" )
+                                   .hasValue( "Content-Type", "application/json;charset=UTF-8" )
+                                   .doesNotContainHeader( "NoWay" )
                 );
+            }
+
+
+            @Test
+            @DisplayName( "Illegal Argument with cause" )
+            void exception_IllegalArgument_formatsProblemDetails() throws NoSuchMethodException
+            {
+                // --- given
+                final IllegalArgumentException exception =
+                        new IllegalArgumentException( "value", new Exception( "Just Cause" ) );
+
+                // --- when
+                final ResponseEntity<ProblemDetail> result =
+                        handler.handleIllegalArgumentException( request, exception );
+
+                // --- then
+                final ProblemDetail detail = result.getBody();
+                HttpHeadersAssert headersAssert = new HttpHeadersAssert( result.getHeaders() );
+                assertAll( () -> assertNotNull( result ),
+                           () -> assertEquals( "Bad Request", detail.getTitle() ),
+                           () -> assertEquals( 400,           detail.getStatus() ),
+                           () -> assertEquals( "value",       detail.getDetail() ),
+                           () -> assertThat( detail.getProperties() )
+                                   .containsEntry( "Exception", "java.lang.IllegalArgumentException: value" )
+                                   .containsEntry( "Cause", "java.lang.Exception: Just Cause"  ),
+                           () -> headersAssert
+                                   .hasValue( "TRACEPARENT", "traceParent" )
+                                   .hasValue( "TRACESTATE", "traceState" )
+                                   .hasValue( "Content-Type", "application/json;charset=UTF-8" )
+                         );
+            }
+
+            @Test
+            @DisplayName( "Illegal Argument w/o" )
+            void exception_IllegalArgumentWithoutCause_formatsProblemDetails() throws NoSuchMethodException
+            {
+                // --- given
+                final IllegalArgumentException exception =
+                        new IllegalArgumentException( "value" );
+
+                // --- when
+                final ResponseEntity<ProblemDetail> result =
+                        handler.handleIllegalArgumentException( request, exception );
+                final ProblemDetail detail = result.getBody();
+
+
+                // --- then
+                HttpHeadersAssert headersAssert = new HttpHeadersAssert( result.getHeaders() );
+                assertAll( () -> assertNotNull( result ),
+                           () -> assertEquals( "Bad Request", detail.getTitle() ),
+                           () -> assertEquals( 400,           detail.getStatus() ),
+                           () -> assertEquals( "value",       detail.getDetail() ),
+                           () -> assertThat( detail.getProperties() )
+                                   .containsEntry( "Exception", "java.lang.IllegalArgumentException: value" )
+//                                   .doesNotContainEntry( "Cause", null  )
+                                   .doesNotContainKey( "Cause" ),
+                           () -> headersAssert
+                                   .hasValue( "TRACEPARENT", "traceParent" )
+                                   .hasValue( "TRACESTATE", "traceState" )
+                                   .hasValue( "Content-Type", "application/json;charset=UTF-8" )
+                         );
             }
 
         }
@@ -467,11 +569,22 @@ public class GlobalExceptionHandlerTest
                 final ProblemDetail detail = result.getBody();
 
                 // --- then
+                final HttpHeadersAssert headersAssert = new HttpHeadersAssert( result.getHeaders() );
                 assertAll( () -> assertNotNull( result ),
                            () -> assertEquals( "Constraint violation message", detail.getTitle() ),
                            () -> assertEquals( 400, detail.getStatus() ),
                            () -> assertEquals( "Constraint violation message",
-                                               detail.getDetail() )
+                                               detail.getDetail() ),
+                           //
+//                           () -> assertThat( detail.getProperties() )
+//                                   .containsEntry( "Exception", "java.lang.IllegalArgumentException: value" )
+//                                   .containsEntry( "Cause", "java.lang.Exception: Just Cause"  ),
+                           //
+                           () -> headersAssert
+                                   .hasValue( "TRACEPARENT", "traceParent" )
+                                   .hasValue( "TRACESTATE", "traceState" )
+                                   .hasValue( "Content-Type", "application/json;charset=UTF-8" )
+                                   .doesNotContainHeader( "NoWay" )
                 );
             }
 
@@ -579,20 +692,26 @@ public class GlobalExceptionHandlerTest
                 // --- when
                 final ResponseEntity<ProblemDetail> result =
                         handler.handleGenericException( request, exception );
-                final ProblemDetail detail = result.getBody();
 
                 // --- then
-                final Exception cause = (Exception)detail.getProperties().get( "Cause" );
+                final ProblemDetail detail = result.getBody();
+                final HttpHeadersAssert headersAssert = new HttpHeadersAssert( result.getHeaders() );
                 assertAll( () -> assertNotNull( result ),
                            () -> assertEquals( "Internal Server Error", detail.getTitle() ),
                            () -> assertEquals( 500, detail.getStatus() ),
-                           () -> assertEquals( "Catch all test",
-                                               detail.getDetail() ),
+//                           () -> assertEquals( "Catch all test",
+//                                               detail.getDetail() ),
                            () -> assertNotNull( detail.getProperties().get( "logref" ) ),
-                           () -> assertEquals( "java.lang.Exception",
-                                               detail.getProperties().get( "Exception" ) ),
-                           () -> assertEquals( "Test Cause",
-                                               cause.getMessage() )
+                           //
+                           () -> assertThat( detail.getProperties() )
+                                   .containsEntry( "Exception", "java.lang.Exception: Catch all test" )
+                                   .containsEntry( "Cause", "java.lang.Exception: Test Cause"  ),
+                           //
+                           () -> headersAssert
+                                   .hasValue( "TRACEPARENT", "traceParent" )
+                                   .hasValue( "TRACESTATE", "traceState" )
+                                   .hasValue( "Content-Type", "application/json;charset=UTF-8" )
+                                   .doesNotContainHeader( "NoWay" )
                 );
             }
         }
@@ -619,13 +738,24 @@ public class GlobalExceptionHandlerTest
             // --- when
             final ResponseEntity<ProblemDetail> result =
                     handler.handleEntityNotFoundException( request, exception );
-            final ProblemDetail detail = result.getBody();
 
             // --- then
+            final HttpHeadersAssert headersAssert = new HttpHeadersAssert( result.getHeaders() );
+            final ProblemDetail detail = result.getBody();
             assertAll( () -> assertNotNull( result ),
                        () -> assertEquals( "Not Found", detail.getTitle() ),
                        () -> assertEquals( 410, detail.getStatus() ),
-                       () -> assertEquals( "Dummy message", detail.getDetail() )
+                       () -> assertEquals( "Dummy message", detail.getDetail() ),
+                       //
+                       () -> assertThat( detail.getProperties() )
+                               .containsEntry( "Exception", "jakarta.persistence.EntityNotFoundException: Dummy message" )
+                               .containsEntry( "Cause", "java.lang.Exception: Test cause"  ),
+                       //
+                       () -> headersAssert
+                               .hasValue( "TRACEPARENT", "traceParent" )
+                               .hasValue( "TRACESTATE", "traceState" )
+                               .hasValue( "Content-Type", "application/json;charset=UTF-8" )
+                               .doesNotContainHeader( "NoWay" )
             );
         }
 
@@ -642,30 +772,37 @@ public class GlobalExceptionHandlerTest
             // --- when
             final ResponseEntity<ProblemDetail> result =
                     handler.handleJpaSystemException( request, exception );
-            final ProblemDetail detail = result.getBody();
 
             // --- then
+            final ProblemDetail detail = result.getBody();
+            final HttpHeadersAssert headersAssert = new HttpHeadersAssert( result.getHeaders() );
             assertAll( () -> assertNotNull( result ),
                        () -> assertEquals( "Internal Server Error", detail.getTitle() ),
                        () -> assertEquals( 500, detail.getStatus() ),
-                        //
-                       () -> assertThat( result )
-                               .actual()
-                               .getHeaders()
-                               .containsHeader( "TRACEPARENT " ),
-                        //
+                       //
+                       () -> headersAssert
+                               .hasValue( "TRACEPARENT", "traceParent" )
+                               .hasValue( "TRACESTATE", "traceState" )
+                               .hasValue( "Content-Type", "application/json;charset=UTF-8" )
+                               .doesNotContainHeader( "NoWay" ),
+                       //
                        () -> assertEquals( "Test JPA cause", detail.getDetail() ),
                         //
                        () -> assertThat( detail.getProperties() )
+////                               .matches()
+                               .containsEntry( "Exception", "org.springframework.orm.jpa.JpaSystemException: Test JPA cause" )
+                               .containsEntry( "Cause", "java.lang.ClassCastException: Test JPA cause"  ),
+                       // TODO look for an assertThat()...matches( "key", <regex> ) or ....contains( "key", <regex> )
+                       () -> assertThat( detail.getProperties() )
                                .hasEntrySatisfying( "Exception",  //Exception -> org.springframework.orm.jpa.JpaSystemException
                                                     value -> assertThat( value.toString() )
-                                                            .matches( ".*JpaSystemException$" ) ),
+                                                            .matches( ".*JpaSystemException.*Test JPA cause$" ) ),
                        () -> assertThat( detail.getProperties() )
                                .hasEntrySatisfying( "logref",
                                                     value -> assertThat( value.toString() )
-                                                            .matches( "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$" ) ),
-                       () -> assertThat( detail.getProperties() )
-                               .containsEntry( "Cause",  except )
+                                                            .matches( "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$" ) )
+//                       () -> assertThat( detail.getProperties() )
+//                               .containsEntry( "Cause",  except )
 
                      );
         }

@@ -18,7 +18,6 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
@@ -27,6 +26,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.HttpMediaTypeException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -40,7 +40,6 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
-
 
 // TODO add support for.... MissingPathVariableException
 /*
@@ -81,8 +80,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
         handleMethodArgumentTypeMismatchException( final ServletWebRequest request,
                                                    final MethodArgumentTypeMismatchException exception )
     {
-        final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST,
-                                                                        exception.getMessage() );
+        final ProblemDetail details = detailForException( HttpStatus.BAD_REQUEST, exception );
 
         details.setTitle( "Parameter Type Mismatch" );
 
@@ -115,6 +113,8 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
         details.setProperty( "Possibility 2", "Missing Query Parameter" );
         details.setProperty( "Possibility 3", "Missing Form Data" );
 
+        setDetailProperties( details, exception );
+
         return ResponseEntity
                 .status( HttpStatus.BAD_REQUEST )
                 .headers( HeaderUtility.copyNeededHeaders( request ) )
@@ -124,7 +124,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
 
 
 
-    // ========== MediaType ==========
+    // ========== MediaType ==========z
     /**
      * Create a standard error message when called requesting an unsupported
      * media type as input or output.
@@ -139,7 +139,8 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
         handleUnsupportedMediaTypeException( final ServletWebRequest request,
                                              final HttpMediaTypeNotSupportedException exception )
     {
-        final ProblemDetail details = ProblemDetail.forStatus( HttpStatus.UNSUPPORTED_MEDIA_TYPE );
+//        final ProblemDetail details = detailForException( HttpStatus.UNSUPPORTED_MEDIA_TYPE, exception );
+        final ProblemDetail details = detailForException( exception );
 
         details.setDetail( exception.getMessage() );
         details.setProperty( "Unsupported content:", exception.getContentType().toString() );
@@ -149,7 +150,10 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
                                       .map( MediaType::toString )
                                       .collect( Collectors.joining( ", " ) ) );
 
-        return new ResponseEntity<>( details, HttpStatus.UNSUPPORTED_MEDIA_TYPE );
+        return ResponseEntity
+                .status( HttpStatus.UNSUPPORTED_MEDIA_TYPE )
+                .headers( HeaderUtility.copyNeededHeaders( request ) )
+                .body( details );
     }
 
     /**
@@ -166,7 +170,8 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
         handleUnacceptableMediaTypeException( final ServletWebRequest request,
                                               final HttpMediaTypeNotAcceptableException exception )
     {
-        final ProblemDetail details = ProblemDetail.forStatus( HttpStatus.NOT_ACCEPTABLE );
+//        final ProblemDetail details = detailForException( HttpStatus.NOT_ACCEPTABLE, exception );
+        final ProblemDetail details = detailForException( exception );
 
         details.setTitle( "Unacceptable Media Type" );
         details.setDetail( exception.getMessage() );
@@ -176,7 +181,10 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
                                       .map( MediaType::toString )
                                       .collect( Collectors.joining( ", " ) ) );
 
-        return new ResponseEntity<>( details, HttpStatus.NOT_ACCEPTABLE );
+        return ResponseEntity
+                .status( HttpStatus.NOT_ACCEPTABLE )
+                .headers( HeaderUtility.copyNeededHeaders( request ) )
+                .body( details );
     }
 
     /**
@@ -193,7 +201,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
         handleMediaTypeException( final ServletWebRequest request,
                                   final HttpMediaTypeException exception )
     {
-        final ProblemDetail details = ProblemDetail.forStatus( exception.getStatusCode() );
+        final ProblemDetail details = detailForException( exception );
 
         details.setTitle( "Bad Media Type" );
         details.setDetail( exception.getMessage() );
@@ -204,7 +212,11 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
                                       .collect( Collectors.joining( ", " ) ) );
 
         // TODO Message should indicate the bad media type as well as the acceptable types
-        return new ResponseEntity<>( details, exception.getStatusCode() );
+        return ResponseEntity
+                .status( exception.getStatusCode() )
+                .headers( HeaderUtility.copyNeededHeaders( request ) )
+                .headers( HeaderUtility.copyNeededHeaders( request ) )
+                .body( details );
     }
 
 
@@ -226,9 +238,9 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
         handleRestValidationException( final WebRequest request,
                                        final MethodArgumentNotValidException exception )
     {
-        log.debug( "handleRestValidationException", () -> exception );
+//        log.debug( "handleRestValidationException", () -> exception );
         final ProblemDetail details = exception.getBody();
-        log.debug( "    details: ", () -> details );
+//        log.debug( "    details: ", () -> details );
         details.setTitle( String.format( "Validation failed on '%s'", exception.getObjectName() ) );
 
         final Multimap<String, String> validations =  ArrayListMultimap.create();
@@ -278,10 +290,9 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     {
         final Set<ConstraintViolation<?>> constraintViolations = exception.getConstraintViolations();
 
-        final ProblemDetail details = ProblemDetail
-                .forStatusAndDetail( HttpStatus.BAD_REQUEST, exception.getMessage() );
-        details.setTitle( exception.getMessage() );
+        final ProblemDetail details = detailForException( HttpStatus.BAD_REQUEST, exception );
 
+        details.setTitle( exception.getMessage() );
         details.setProperties( constraintViolations
                                        .stream()
                                        .collect( Collectors
@@ -312,11 +323,11 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
         handleMessageNotReadableException( final ServletWebRequest request,
                                            final HttpMessageNotReadableException exception )
     {
-        log.debug( "message not readable", () -> exception );
+//        log.debug( "message not readable", () -> exception );
         // TODO potentially a problem with the content-type or lack of mapping to/from the
         // requested format and the internal POJO.
-        final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST,
-                                                                        exception.getMessage() );
+        final ProblemDetail details = detailForException( HttpStatus.BAD_REQUEST, exception );
+
         details.setTitle( "Malformed Request" );
         details.setProperty( "Possibility 1", "Malformed request body" );
         details.setProperty( "Possibility 2", "Invalid request parameters" );
@@ -343,11 +354,13 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
         handleMessageNotWritableException( final ServletWebRequest request,
                                            final HttpMessageNotWritableException exception )
     {
-        final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.NOT_IMPLEMENTED,
-                                                                        exception.getMessage() );
+        final ProblemDetail details = detailForException( HttpStatus.NOT_IMPLEMENTED, exception );
         details.setTitle( "Unable to produce requested response format" );
 
-        return new ResponseEntity<>( details, HttpStatus.NOT_IMPLEMENTED );
+        return ResponseEntity
+                .status( HttpStatus.NOT_IMPLEMENTED )
+                .headers( HeaderUtility.copyNeededHeaders( request ) )
+                .body( details );
     }
 
 
@@ -367,13 +380,14 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
         handleMethodNotSupportedException( final ServletWebRequest request,
                                            final HttpRequestMethodNotSupportedException exception )
     {
-        final ProblemDetail details = exception.getBody();
+        final ProblemDetail details = detailForException( exception );
 
 //        details.setProperty( "TraceId: ", UUID.randomUUID() );  // TODO change to pull the traceID from MDC
 
         return ResponseEntity
                 .status( HttpStatus.METHOD_NOT_ALLOWED )
                 .header( "Allow", exception.getSupportedMethods() )
+                .headers( HeaderUtility.copyNeededHeaders( request ) )
                 .body( details );
     }
 
@@ -397,7 +411,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     {
         // TODO the MDC should include the traceId (UUID) and log pattern should
 
-        final ProblemDetail details = exception.getBody();
+        final ProblemDetail details = detailForException( exception );
 //        details.setProperty( "TraceId: ", UUID.randomUUID() );  // TODO change to pull the traceID from MDC
         details.setInstance( URI.create( exception.getResourcePath() ) );
 
@@ -406,7 +420,6 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
                 .location( details.getInstance() )
                 .headers( HeaderUtility.copyNeededHeaders( request ) )
                 .body( details );
-
     }
 
     /**
@@ -422,8 +435,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
         handleEntityNotFoundException( final ServletWebRequest request,
                                        final EntityNotFoundException exception )
     {
-        final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.GONE,
-                                                                        exception.getMessage() );
+        final ProblemDetail details = detailForException( HttpStatus.GONE, exception );
         details.setTitle( "Not Found" );
 
         return ResponseEntity
@@ -449,12 +461,9 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     {
         // TODO the MDC should include the traceId (UUID) and log pattern should
 
-        final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.INTERNAL_SERVER_ERROR,
-                                                                        exception.getMessage() );
+        final ProblemDetail details = detailForException( HttpStatus.INTERNAL_SERVER_ERROR, exception );
 
         details.setProperty( "logref", UUID.randomUUID() );
-        details.setProperty( "Exception", exception.getClass().getTypeName() );
-        details.setProperty( "Cause", exception.getCause() );
 
         return ResponseEntity
                 .status( HttpStatus.INTERNAL_SERVER_ERROR )
@@ -478,20 +487,10 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
                                     final IllegalArgumentException exception )
     {
         // TODO the MDC should include the traceId (UUID) and log pattern should
-        log.debug( "handleIllegalArgumentException", () -> exception );
+//        log.debug( "handleIllegalArgumentException", () -> exception );
 
-        final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST,
-                                                                        exception.getMessage() );
+        final ProblemDetail details = detailForException( HttpStatus.BAD_REQUEST, exception );
 
-        details.setProperty( "Exception", exception.getClass().getTypeName() );
-        details.setProperty( "Cause", exception.getCause() );
-//        if ( null != request )
-//        {
-//            details.setProperty( HeaderUtility.TRACEID, request.getHeader( HeaderUtility.TRACEID ) );
-//            details.setProperty( HeaderUtility.TRACESTATE, request.getHeader( HeaderUtility.TRACESTATE ) );
-//        }
-
-//        return new ResponseEntity<>( details, HttpStatus.BAD_REQUEST );
         return ResponseEntity
                 .status( HttpStatus.BAD_REQUEST )
                 .headers( HeaderUtility.copyNeededHeaders( request ) )
@@ -515,9 +514,8 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     {
         // TODO the MDC should include the traceId (UUID) and log pattern should
 
-        log.debug( "--UnsupportedOperation--", () -> exception );
-        final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.INTERNAL_SERVER_ERROR,
-                                                                        exception.getMessage() );
+//        log.debug( "--UnsupportedOperation--", () -> exception );
+        final ProblemDetail details = detailForException( HttpStatus.INTERNAL_SERVER_ERROR, exception );
 
         details.setDetail( exception.getLocalizedMessage() );
         details.setProperty( "x-logref", UUID.randomUUID() );
@@ -554,25 +552,60 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     {
         // TODO the MDC should include the traceId (UUID) and log pattern should
 
-        log.debug( "Catch-All exception for: ", () -> exception );
-        final ProblemDetail details = ProblemDetail.forStatusAndDetail( HttpStatus.INTERNAL_SERVER_ERROR,
-                                                                        exception.getMessage() );
+        final ProblemDetail details = detailForException( HttpStatus.INTERNAL_SERVER_ERROR, exception );
 
         details.setProperty( "logref", UUID.randomUUID() );
-        details.setProperty( "Exception", exception.getClass().getTypeName() );
-        details.setProperty( "Cause", exception.getCause() );
-//        if ( null != request )
-//        {
-//            details.setProperty( HeaderUtility.TRACEID, request.getHeader( HeaderUtility.TRACEID ) );
-//            details.setProperty( HeaderUtility.TRACESTATE, request.getHeader( HeaderUtility.TRACESTATE ) );
-//        }
-
-//        return new ResponseEntity<>( details, HttpStatus.INTERNAL_SERVER_ERROR );
 
         return ResponseEntity
                 .status( HttpStatus.INTERNAL_SERVER_ERROR )
                 .headers( HeaderUtility.copyNeededHeaders( request ) )
                 .body( details );
+    }
+
+
+//    private static <T extends ServletException & ErrorResponse> ProblemDetail details( Exception arg )
+//    {
+//        log.error( String.format( "Got exception implementing ErrorResponse '%s'", arg ) );
+//
+//        return detailForException( ((ErrorResponse)arg).getBody().getStatus(), arg );
+//    }
+
+    private static ProblemDetail detailForException( final Exception exception )
+    {
+        if ( exception instanceof ErrorResponse )
+        {
+//            ErrorResponse errorResponse = ( ErrorResponse ) exception;
+
+            return detailForException( ((ErrorResponse)exception).getBody().getStatus(), exception );
+        }
+
+        return detailForException( HttpStatus.INTERNAL_SERVER_ERROR, exception );
+    }
+
+
+    private static ProblemDetail detailForException( final int status, final Throwable throwable )
+    {
+        return detailForException( HttpStatus.valueOf( status ), throwable );
+    }
+
+    private static ProblemDetail detailForException( final HttpStatus status, final Throwable throwable )
+    {
+        final ProblemDetail details = ProblemDetail.forStatusAndDetail( status,
+                                                                        throwable.getMessage() );
+        setDetailProperties( details, throwable );
+
+        return details;
+    }
+
+
+    private static void setDetailProperties( final ProblemDetail details, final Throwable exception )
+    {
+        Throwable cause = exception.getCause();
+        details.setProperty( "Exception", exception.toString() );
+        if ( null != cause )
+        {
+            details.setProperty( "Cause", cause.toString() );
+        }
     }
 
 }
