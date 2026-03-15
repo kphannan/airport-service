@@ -16,7 +16,8 @@ public final class HeaderUtility
     public static final String TRACEID    = "TRACEPARENT";
     public static final String TRACESTATE = "TRACESTATE";
 
-    private static final List<String> usualHeaders = Arrays.asList( TRACEID, TRACESTATE, "Content-Type", "Allow" );
+    private static final List<String> usualHeaders =
+            Arrays.asList( TRACEID, TRACESTATE, "Content-Type", "Allow" );
 
     /**
      * Hide constructor of a utility class.
@@ -42,12 +43,12 @@ public final class HeaderUtility
         return headers;
     }
 
-    public static HttpHeaders copyNeededHeaders( WebRequest request )
+    public static HttpHeaders copyNeededHeaders( final WebRequest request )
     {
         return copyNeededHeaders( createHeaders(  request ) );
     }
 
-    public static HttpHeaders copyNeededHeaders( HttpHeaders headers )
+    public static HttpHeaders copyNeededHeaders( final HttpHeaders headers )
     {
         return copyNeededHeaders( headers, usualHeaders );
     }
@@ -60,17 +61,20 @@ public final class HeaderUtility
             return headers;
         }
 
-        //        List<String> filterList = Arrays.asList( "TRACEPARENT", "TRACESTATE", "Content-Type" );
-        Set<String>  filterSet  = filterList.stream().collect( Collectors.toSet() );
+        Set<String>  filterSet  = filterList
+                .stream()
+                .collect( Collectors.toSet() );
 
-        headers
+
+        Map<String, List<String>> filteredHeaders =
+            headers
                 .headerSet()
                 .stream()
                 .filter( entry -> filterSet.contains( entry.getKey() ))
                 .collect( Collectors.toMap( Map.Entry::getKey, Map.Entry::getValue ) );
 
         HttpHeaders newHeaders = new HttpHeaders();
-        newHeaders.putAll( headers );
+        newHeaders.putAll( filteredHeaders );
 
         return newHeaders;
     }
