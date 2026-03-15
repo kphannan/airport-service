@@ -21,7 +21,7 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     nullable: false
-                  remarks: Internal OurAirports integer identifier for the country. This will stay persistent, even if the country name or code changes.
+                  remarks: Internal integer identifier for the country. This will stay persistent, even if the country name or code changes.
 
               - column:
                   name: code

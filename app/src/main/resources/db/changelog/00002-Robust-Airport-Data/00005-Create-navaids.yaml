@@ -27,7 +27,7 @@ databaseChangeLog:
                   type: char(64)
                   constraints:
                     nullable: false
-                  remarks: This is a unique string identifier constructed from the navaid name and country, and used in the OurAirports URL.
+                  remarks: This is a unique string identifier constructed from the navaid name and country, and used in the URL.
               - column:
                   name: ident
                   type: char(8)
@@ -122,7 +122,7 @@ databaseChangeLog:
                   # Data file contains blanks, yet column is not nullable
                   constraints:
                     nullable: true
-                  remarks: The OurAirports text identifier (usually the ICAO code) for an airport associated with the navaid. Links to the ident column in airports.csv.
+                  remarks: The text identifier (usually the ICAO code) for an airport associated with the navaid. Links to the ident column in airports.csv.
 
         - createSequence:
             sequenceName: seq_navaids_kind_id

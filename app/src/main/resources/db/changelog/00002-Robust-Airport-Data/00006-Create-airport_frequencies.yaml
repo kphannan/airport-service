@@ -21,7 +21,7 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     nullable: false
-                  remarks: Internal OurAirports integer identifier for the frequency. This will stay persistent, even if the radio frequency or description changes.
+                  remarks: Internal integer identifier for the frequency. This will stay persistent, even if the radio frequency or description changes.
 
               - column:
                   name: airport_ref

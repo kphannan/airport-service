@@ -21,7 +21,7 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     nullable: false
-                  remarks: Internal OurAirports integer identifier for the region. This will stay persistent, even if the region code changes.
+                  remarks: Internal integer identifier for the region. This will stay persistent, even if the region code changes.
 
               - column:
                   name: code
@@ -34,7 +34,7 @@ databaseChangeLog:
                   type: varchar(4)
                   constraints:
                     nullable: false
-                  remarks: The local code for the administrative subdivision. Whenever possible, these are official ISO 3166:2, at the highest level available, but in some cases OurAirports has to use unofficial codes. There is also a pseudo code "U-A" for each country, which means that the airport has not yet been assigned to a region (or perhaps cant be, as in the case of a deep-sea oil platform).
+                  remarks: The local code for the administrative subdivision. Whenever possible, these are official ISO 3166:2, at the highest level available, but in some cases use unofficial codes. There is also a pseudo code "U-A" for each country, which means that the airport has not yet been assigned to a region (or perhaps cant be, as in the case of a deep-sea oil platform).
               - column:
                   name: name
                   # Data is max 72

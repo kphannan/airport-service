@@ -21,7 +21,7 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     nullable: false
-                  remarks: Internal OurAirports integer identifier for the runway. This will stay persistent, even if the runway numbering changes.
+                  remarks: Internal integer identifier for the runway. This will stay persistent, even if the runway numbering changes.
 
               - column:
                   name: airport_ref
