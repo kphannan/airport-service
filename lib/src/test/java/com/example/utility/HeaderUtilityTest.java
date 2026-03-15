@@ -2,8 +2,6 @@ package com.example.utility;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -46,9 +44,11 @@ class HeaderUtilityTest
     void copyHeaders_validFilter_returnsFilteredHeaders()
     {
         // -- given
-//        private static final List<String> usualHeaders =
-//                Arrays.asList( TRACEID, TRACESTATE, "Content-Type", "Allow" );
-        List<String> copiedHeaders = Arrays.asList( "TRACEID", "TRACESTATE", "Content-Type", "Allow" );;
+        List<String> copiedHeaders = Arrays.asList( "TRACEID",
+                                                    "TRACESTATE",
+                                                    "Content-Type",
+                                                    "Allow",
+                                                    "Accept-Encoding" );
 
         HttpHeaders headers = new HttpHeaders();
         headers.set( "Accept", MediaType.APPLICATION_JSON_VALUE );
@@ -60,7 +60,7 @@ class HeaderUtilityTest
         headers.set( "TRACESTATE", "traceState" );
 
         // --- when
-        HttpHeaders result = HeaderUtility.copyNeededHeaders( headers );
+        HttpHeaders result = HeaderUtility.copyNeededHeaders( headers, copiedHeaders );
 
         // --- then
         final HttpHeadersAssert headersAssert = new HttpHeadersAssert( result );

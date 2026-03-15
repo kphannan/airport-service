@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.web.context.request.WebRequest;
 
 public final class HeaderUtility
@@ -78,39 +77,5 @@ public final class HeaderUtility
 
         return newHeaders;
     }
-
-    // TODO extract to a utility class
-//    private HttpHeaders copyTraceHeaders( final HttpHeaders requestHeader )
-//    {
-//        return copyNeededHeaders( requestHeader );
-//    }
-
-//    private HttpHeaders responseHeaders()
-//    {
-//        return responseHeaders( desiredContentType );
-//    }
-
-
-//    private HttpHeaders responseHeaders( final HttpHeaders baseHeaders, final MediaType desiredContentType )
-//    {
-//        final HttpHeaders headers = new HttpHeaders( copyTraceHeaders( baseHeaders ) );
-//        headers.setContentType( desiredContentType );
-//
-//        return headers;
-//    }
-
-//    private HttpHeaders responseHeaders( final HttpHeaders baseHeaders )
-//    {
-//        return responseHeaders( baseHeaders, desiredContentType );
-//    }
-
-//    private HttpHeaders responseHeaders( final MediaType desiredContentType )
-//    {
-//        final HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType( desiredContentType );
-//
-//        return headers;
-//    }
-
 
 }
