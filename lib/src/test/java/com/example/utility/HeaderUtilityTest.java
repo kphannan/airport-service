@@ -44,7 +44,7 @@ class HeaderUtilityTest
     void copyHeaders_validFilter_returnsFilteredHeaders()
     {
         // -- given
-        List<String> copiedHeaders = Arrays.asList( "TRACEID",
+        List<String> copiedHeaders = Arrays.asList( "TRACEPARENT",
                                                     "TRACESTATE",
                                                     "Content-Type",
                                                     "Allow",
