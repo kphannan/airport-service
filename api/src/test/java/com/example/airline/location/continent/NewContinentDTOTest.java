@@ -153,7 +153,7 @@ class NewContinentDTOTest
         private ObjectMapper objectMapper;
 
         @BeforeEach
-        void setUp()
+        void init()
         {
             objectMapper = new ObjectMapper();
         }

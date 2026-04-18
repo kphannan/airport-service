@@ -22,7 +22,7 @@ class UriConverterTest
     private UriConverter classUnderTest;
 
     @BeforeEach
-    void setUp()
+    void init()
     {
         classUnderTest = new UriConverter();
     }

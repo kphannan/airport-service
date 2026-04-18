@@ -53,7 +53,7 @@ class ValidateUtilityClassTest
 
 
     @BeforeEach
-    void setup()
+    void init()
     {
         reason = new StringJoiner( "; ", "[", "]" );
     }

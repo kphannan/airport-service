@@ -26,7 +26,7 @@ class StopwatchTest
     private LogCaptor logCaptor; // will be set in @BeforeAll
 
     @BeforeEach
-    void setup()
+    void init()
     {
         logCaptor = LogCaptor.forClass( Stopwatch.class );
     }

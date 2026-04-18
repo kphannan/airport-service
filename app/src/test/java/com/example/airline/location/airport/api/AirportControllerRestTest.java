@@ -97,7 +97,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
 
     /*
     @BeforeEach
-    void setup()
+    void init()
     {
         mvc = MockMvcBuilders.standaloneSetup( service )
                              .setCustomArgumentResolvers( new PageableHandlerMethodArgumentResolver() )
@@ -337,7 +337,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
             private MockHttpServletRequestBuilder request;
 
             @BeforeEach
-            void setUp()
+            void init()
             {
                 List<AirportEntity> entities =
                         List.of(
