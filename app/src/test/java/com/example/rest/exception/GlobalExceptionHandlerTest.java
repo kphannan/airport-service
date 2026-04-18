@@ -8,13 +8,16 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.beans.PropertyEditor;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.example.utility.HeaderUtility;
@@ -25,10 +28,14 @@ import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Path;
 import jakarta.validation.metadata.ConstraintDescriptor;
 import lombok.extern.log4j.Log4j2;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.PropertyEditorRegistry;
+import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpMethod;
@@ -41,10 +48,14 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.orm.jpa.JpaSystemException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -56,6 +67,7 @@ import org.springframework.test.http.HttpHeadersAssert;
 @DisplayName( "Exceptions - Global Handling" )
 public class GlobalExceptionHandlerTest
 {
+    private final String    uuidPattern = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$";
     private final MediaType desiredContentType = new MediaType( MediaType.APPLICATION_JSON,
                                                                 StandardCharsets.UTF_8 );
 
@@ -63,7 +75,7 @@ public class GlobalExceptionHandlerTest
     private ServletWebRequest request;
 
     @BeforeEach
-    void setup()
+    void init()
     {
         handler = new GlobalExceptionHandler();
 
@@ -106,22 +118,32 @@ public class GlobalExceptionHandlerTest
                 // --- when
                 final ResponseEntity<ProblemDetail> result =
                     handler.handleUnsupportedMediaTypeException( request, exception );
-                final ProblemDetail detail = result.getBody();
 
                 // --- then
                 // NullPointerExceptions are a form of test failure.
                 // detail should always exist
+                final ProblemDetail detail = result.getBody();
+                final HttpHeadersAssert headersAssert = new HttpHeadersAssert( result.getHeaders() );
                 assertAll( () -> assertNotNull( result ),
-                           () -> assertEquals( "Unsupported Media Type", detail.getTitle() ),
+                           // -- status
+                           () -> assertEquals( HttpStatus.UNSUPPORTED_MEDIA_TYPE, result.getStatusCode() ),
+                           // -- headers
+                           () -> headersAssert
+                                   .hasValue( "TRACEPARENT", "traceParent" )
+                                   .hasValue( "TRACESTATE", "traceState" )
+                                   .hasValue( "Content-Type", "application/json;charset=UTF-8" )
+                                   .doesNotContainHeader( "NoWay" ),
+                           // -- Problem Detail
                            () -> assertEquals( 415, detail.getStatus() ),
-                           () -> assertEquals( "Test Message", detail.getDetail() ),
-                           () -> assertEquals( "application/rss+xml",
-                                               detail.getProperties()
-                                                     .get( "Unsupported content:" ) ),
-                           () -> assertEquals( "application/json, application/yaml",
-                                               detail.getProperties()
-                                                     .get( "Supported content:" ) ),
-                           () -> assertEquals( HttpStatus.UNSUPPORTED_MEDIA_TYPE, result.getStatusCode() )
+                           () -> assertThat( detail.getTitle() )
+                                   .contains( "Unsupported Media Type" ),
+                           () -> assertThat( detail.getDetail() )
+                                   .contains(  "Test Message" ),
+                           () -> assertThat( detail.getProperties() )
+                                   .containsEntry( "Exception", "org.springframework.web.HttpMediaTypeNotSupportedException: Test Message" )
+                                   .doesNotContainKey( "Cause" )
+                                   .containsEntry( "Unsupported content:", "application/rss+xml" )
+                                   .containsEntry( "Supported content:", "application/json, application/yaml" )
                 );
             }
 
@@ -139,17 +161,30 @@ public class GlobalExceptionHandlerTest
                 // --- when
                 final ResponseEntity<ProblemDetail> result =
                         handler.handleUnacceptableMediaTypeException( request, exception );
-                final ProblemDetail detail = result.getBody();
 
                 // --- then
+                final ProblemDetail detail = result.getBody();
+                final HttpHeadersAssert headersAssert = new HttpHeadersAssert( result.getHeaders() );
                 assertAll( () -> assertNotNull( result ),
-                           () -> assertEquals( "Unacceptable Media Type", detail.getTitle() ),
+                           // -- status
+                           () -> assertEquals( HttpStatus.NOT_ACCEPTABLE, result.getStatusCode() ),
+                           // -- headers
+                           () -> headersAssert
+                                   .hasValue( "TRACEPARENT", "traceParent" )
+                                   .hasValue( "TRACESTATE", "traceState" )
+                                   .hasValue( "Content-Type", "application/json;charset=UTF-8" )
+                                   .doesNotContainHeader( "NoWay" ),
+                           // -- Details
                            () -> assertEquals( 406, detail.getStatus() ),
-                           () -> assertEquals( "No acceptable representation", detail.getDetail() ),
-                           () -> assertEquals( "application/json, application/yaml",
-                                               detail.getProperties()
-                                                     .get( "Supported content:" ) ),
-                           () -> assertEquals( HttpStatus.NOT_ACCEPTABLE, result.getStatusCode() )
+                           () -> assertThat( detail.getTitle() )
+                                   .contains( "Unacceptable Media Type" ),
+                           () -> assertThat( detail.getDetail() )
+                                   .contains(  "No acceptable representation" ),
+                           //    -- detail properties
+                           () -> assertThat( detail.getProperties() )
+                                   .containsEntry( "Exception", "org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation" )
+                                   .doesNotContainKey( "Cause" )
+                                   .containsEntry( "Supported content:", "application/json, application/yaml" )
                 );
             }
 
@@ -173,17 +208,30 @@ public class GlobalExceptionHandlerTest
                 // --- when
                 final ResponseEntity<ProblemDetail> result =
                         handler.handleMediaTypeException( request, exception );
-                final ProblemDetail detail = result.getBody();
 
                 // --- then
+                final ProblemDetail detail = result.getBody();
+                final HttpHeadersAssert headersAssert = new HttpHeadersAssert( result.getHeaders() );
                 assertAll( () -> assertNotNull( result ),
-                           () -> assertEquals( "Bad Media Type", detail.getTitle() ),
+                           // -- status
+                           () -> assertEquals( HttpStatus.ALREADY_REPORTED, result.getStatusCode() ),
+                           // -- headers
+                           () -> headersAssert
+                                   .hasValue( "TRACEPARENT", "traceParent" )
+                                   .hasValue( "TRACESTATE", "traceState" )
+                                   .hasValue( "Content-Type", "application/json;charset=UTF-8" )
+                                   .doesNotContainHeader( "NoWay" ),
+                           // -- Problem Detail
                            () -> assertEquals( 208, detail.getStatus() ),
-                           () -> assertEquals( "Kilroy was here", detail.getDetail() ),
-                           () -> assertEquals( "application/json, application/yaml",
-                                               detail.getProperties()
-                                                     .get( "Supported content:" ) ),
-                           () -> assertEquals( HttpStatus.ALREADY_REPORTED, result.getStatusCode() )
+                           () -> assertThat( detail.getTitle() )
+                                   .contains( "Bad Media Type" ),
+                           () -> assertThat( detail.getDetail() )
+                                   .contains(  "Kilroy was here" ),
+                           //    -- detail properties
+                           () -> assertThat( detail.getProperties() )
+                                   .containsEntry( "Exception", "com.example.rest.exception.GlobalExceptionHandlerTest$Rest$Media$1: Kilroy was here" )
+                                   .doesNotContainKey( "Cause" )
+                                   .containsEntry( "Supported content:", "application/json, application/yaml" )
                 );
             }
         }
@@ -274,8 +322,49 @@ public class GlobalExceptionHandlerTest
 
 
             @Test
-            @DisplayName( "unsupported operation" )
-            void exception_unsupportedOperation_formatsProblemDetails()
+            @DisplayName( "unsupported operation - no cause or request" )
+            void exception_unsupportedOperationNoCauseNoRequest_formatsProblemDetails()
+            {
+                // --- given
+                final UnsupportedOperationException exception =
+                        new UnsupportedOperationException( "Test UnsupportedOperation" );
+
+                // --- when
+                final ResponseEntity<ProblemDetail> result =
+                        handler.handleUnsupportedOperationException( null, exception );
+
+                // --- then
+                final ProblemDetail detail = result.getBody();
+                final HttpHeadersAssert headersAssert = new HttpHeadersAssert( result.getHeaders() );
+                assertAll( () -> assertNotNull( result ),
+                           //
+                           () -> headersAssert
+                                   .doesNotContainHeader( "TRACEPARENT" )
+                                   .doesNotContainHeader( "TRACESTATE" )
+                                   .doesNotContainHeader( "Content-Type" )
+                                   .doesNotContainHeader( "NoWay" ),
+                           //
+                           () -> assertThat( detail.getProperties() )
+                                   .containsEntry( "Exception", "java.lang.UnsupportedOperationException: Test UnsupportedOperation" )
+                                   .containsEntry( "x-exception", "java.lang.UnsupportedOperationException" )
+                                   .hasEntrySatisfying( "x-logref",
+                                                        value -> assertThat( value.toString() )
+                                                                .matches( uuidPattern ) )
+                                   .doesNotContainKey( "Cause" )
+                                   .doesNotContainKey( "x-TRACEPARENT" )
+                                   .doesNotContainKey( "x-TRACESTATE" )
+                                   .doesNotContainKey( "x-Cause" ),
+                           //
+                           () -> assertEquals( "Internal Server Error", detail.getTitle() ),
+                           () -> assertEquals( 500, detail.getStatus() ),
+                           () -> assertEquals( "Test UnsupportedOperation", detail.getDetail() )
+                         );
+
+            }
+
+            @Test
+            @DisplayName( "unsupported operation - no cause" )
+            void exception_unsupportedOperationNoCause_formatsProblemDetails()
             {
                 // --- given
                 final UnsupportedOperationException exception =
@@ -301,12 +390,70 @@ public class GlobalExceptionHandlerTest
                            //
                            () -> assertThat( detail.getProperties() )
                                    .containsEntry( "Exception", "java.lang.UnsupportedOperationException: Test UnsupportedOperation" )
-                                   .doesNotContainKey( "Cause" ),
+                                   .containsEntry( "x-exception", "java.lang.UnsupportedOperationException" )
+                                   .containsEntry( "x-TRACEPARENT", "traceParent" )
+                                   .containsEntry( "x-TRACESTATE", "traceState" )
+                                   .hasEntrySatisfying( "x-logref",
+                                                        value -> assertThat( value.toString() )
+                                                                .matches( uuidPattern ) )
+                                   .doesNotContainKey( "Cause" )
+                                   .doesNotContainKey( "x-Cause" ),
+                           //
+                           () -> assertEquals( "Internal Server Error", detail.getTitle() ),
+                           () -> assertEquals( 500, detail.getStatus() ),
+                           () -> assertEquals( "Test UnsupportedOperation", detail.getDetail() )
+                         );
+
+            }
+
+
+            @Test
+            @DisplayName( "unsupported operation" )
+            void exception_unsupportedOperation_formatsProblemDetails()
+            {
+                // --- given
+                final UnsupportedOperationException exception =
+                        new UnsupportedOperationException( "Test UnsupportedOperation",
+                                                           new Throwable( "throwable cause" ) );
+
+                // --- when
+                final ResponseEntity<ProblemDetail> result =
+                        handler.handleUnsupportedOperationException( request, exception );
+
+                // --- then
+                final ProblemDetail detail = result.getBody();
+                final HttpHeadersAssert headersAssert = new HttpHeadersAssert( result.getHeaders() );
+                assertAll( () -> assertNotNull( result ),
+                           //
+                           () -> headersAssert
+                                   .hasValue( "TRACEPARENT", "traceParent" )
+                                   .hasValue( "TRACESTATE", "traceState" )
+                                   .hasValue( "Content-Type", "application/json;charset=UTF-8" )
+                                   .doesNotContainHeader( "NoWay" ),
+                           //
+//                           () -> assertThat( result.getHeaders().getLocation() )
+//                                   .isNotNull(),
+                           //
+                           () -> assertThat( detail.getProperties() )
+                                   .containsEntry( "Exception", "java.lang.UnsupportedOperationException: Test UnsupportedOperation" )
+                                   .containsEntry( "x-exception", "java.lang.UnsupportedOperationException" )
+                                   .containsEntry( "x-TRACEPARENT", "traceParent" )
+                                   .containsEntry( "x-TRACESTATE", "traceState" )
+                                   .hasEntrySatisfying( "x-logref",
+                                                        value -> assertThat( value.toString() )
+                                                                .matches( uuidPattern ) )
+                                   .hasEntrySatisfying( "x-Cause",
+                                                        value -> assertThat( value.toString() )
+                                                                .matches( "java.lang.Throwable: throwable cause" ) )
+                                   .containsEntry( "Cause", "java.lang.Throwable: throwable cause" ),
+//                                   .doesNotContainKey( "x-Cause" ),
+//                        .doesNotContainKey( "x-Cause" ),
                         //
                            () -> assertEquals( "Internal Server Error", detail.getTitle() ),
                            () -> assertEquals( 500, detail.getStatus() ),
                            () -> assertEquals( "Test UnsupportedOperation", detail.getDetail() )
                          );
+
             }
 
         }
@@ -444,6 +591,8 @@ public class GlobalExceptionHandlerTest
                                    .doesNotContainHeader( "NoWay" ),
                         //
                            () -> assertThat( detail.getProperties() )
+//                                   .hasEntrySatisfying( "Exception",  ) // TODO add a predicate regex
+                                   .containsEntry( "Exception", "org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'Param1' for method parameter type String is not present" )
                                    .containsEntry( "Possibility 1", "Missing Path Variables" )
                                    .containsEntry( "Possibility 2", "Missing Query Parameter" )
                                    .containsEntry( "Possibility 3", "Missing Form Data" ),
@@ -488,7 +637,7 @@ public class GlobalExceptionHandlerTest
 
             @Test
             @DisplayName( "Illegal Argument with cause" )
-            void exception_IllegalArgument_formatsProblemDetails() throws NoSuchMethodException
+            void exceptionParameter_IllegalArgument_formatsProblemDetails() throws NoSuchMethodException
             {
                 // --- given
                 final IllegalArgumentException exception =
@@ -517,7 +666,7 @@ public class GlobalExceptionHandlerTest
 
             @Test
             @DisplayName( "Illegal Argument w/o" )
-            void exception_IllegalArgumentWithoutCause_formatsProblemDetails() throws NoSuchMethodException
+            void exceptionParameter_IllegalArgumentWithoutCause_formatsProblemDetails() throws NoSuchMethodException
             {
                 // --- given
                 final IllegalArgumentException exception =
@@ -546,6 +695,43 @@ public class GlobalExceptionHandlerTest
                          );
             }
 
+            @Test
+            @DisplayName( "Illegal State (400)" )
+            void exceptionParameter_illegalState_formatsProblemDetails()
+            {
+                // --- given
+                final IllegalStateException exception = new IllegalStateException( "test illegal state" );
+
+
+                // --- when
+                final ResponseEntity<ProblemDetail> result =
+                        handler.handleIllegalStateException( request, exception );
+
+                // --- then
+                // NullPointerExceptions are a form of test failure.
+                // detail should always exist
+                final ProblemDetail detail = result.getBody();
+                final HttpHeadersAssert headersAssert = new HttpHeadersAssert( result.getHeaders() );
+                assertAll( () -> assertNotNull( result ),
+                           // -- status
+                           () -> assertEquals( HttpStatus.INTERNAL_SERVER_ERROR, result.getStatusCode() ),
+                           // -- headers
+                           () -> headersAssert
+                                   .hasValue( "TRACEPARENT", "traceParent" )
+                                   .hasValue( "TRACESTATE", "traceState" )
+                                   .hasValue( "Content-Type", "application/json;charset=UTF-8" )
+                                   .doesNotContainHeader( "NoWay" ),
+                           // -- Problem Detail
+                           () -> assertEquals( 400, detail.getStatus() ),
+                           () -> assertThat( detail.getTitle() )
+                                   .contains( "Bad Request" ),
+                           () -> assertThat( detail.getDetail() )
+                                   .contains(  "test illegal state" ),
+                           () -> assertThat( detail.getProperties() )
+                                   .containsEntry( "Exception", "java.lang.IllegalStateException: test illegal state" )
+                                   .doesNotContainKey( "Cause" )
+                         );
+            }
         }
 
 
@@ -566,25 +752,29 @@ public class GlobalExceptionHandlerTest
                 // --- when
                 final ResponseEntity<ProblemDetail> result =
                         handler.handleConstraintViolations( request, exception );
-                final ProblemDetail detail = result.getBody();
 
                 // --- then
+                final ProblemDetail detail = result.getBody();
                 final HttpHeadersAssert headersAssert = new HttpHeadersAssert( result.getHeaders() );
                 assertAll( () -> assertNotNull( result ),
-                           () -> assertEquals( "Constraint violation message", detail.getTitle() ),
-                           () -> assertEquals( 400, detail.getStatus() ),
-                           () -> assertEquals( "Constraint violation message",
-                                               detail.getDetail() ),
-                           //
-//                           () -> assertThat( detail.getProperties() )
-//                                   .containsEntry( "Exception", "java.lang.IllegalArgumentException: value" )
-//                                   .containsEntry( "Cause", "java.lang.Exception: Just Cause"  ),
-                           //
+                           // -- status
+                           () -> assertEquals( HttpStatus.BAD_REQUEST, result.getStatusCode() ),
+                           // -- headers
                            () -> headersAssert
                                    .hasValue( "TRACEPARENT", "traceParent" )
                                    .hasValue( "TRACESTATE", "traceState" )
                                    .hasValue( "Content-Type", "application/json;charset=UTF-8" )
-                                   .doesNotContainHeader( "NoWay" )
+                                   .doesNotContainHeader( "NoWay" ),
+                           // -- Problem Details
+                           () -> assertEquals( 400, detail.getStatus() ),
+                           () -> assertThat( detail.getTitle() )
+                                   .contains( "Constraint violation message" ),
+                           () -> assertThat( detail.getDetail() )
+                                   .contains(  "Constraint violation message" ),
+                           //    -- detail properties
+                           () -> assertThat( detail.getProperties() )
+                                   .containsEntry( "property path", "constraint message" )
+                                   .doesNotContainKey( "Cause" )
                 );
             }
 
@@ -672,6 +862,144 @@ public class GlobalExceptionHandlerTest
                     }
                 };
             }
+
+
+            private BindingResult buildBindingResult()
+            {
+                BindingResult foo = new BindingResult()
+                {
+                    @Override
+                    public @Nullable Object getTarget()
+                    {
+                        return null;
+                    }
+
+                    @Override
+                    public Map<String, Object> getModel()
+                    {
+                        return Map.of();
+                    }
+
+                    @Override
+                    public @Nullable Object getRawFieldValue( String field )
+                    {
+                        return null;
+                    }
+
+                    @Override
+                    public @Nullable PropertyEditor findEditor( @Nullable String field, @Nullable Class<?> valueType )
+                    {
+                        return null;
+                    }
+
+                    @Override
+                    public @Nullable PropertyEditorRegistry getPropertyEditorRegistry()
+                    {
+                        return null;
+                    }
+
+                    @Override
+                    public String[] resolveMessageCodes( String errorCode )
+                    {
+                        return new String[0];
+                    }
+
+                    @Override
+                    public String[] resolveMessageCodes( String errorCode, String field )
+                    {
+                        return new String[0];
+                    }
+
+                    @Override
+                    public void addError( ObjectError error )
+                    {
+
+                    }
+
+                    @Override
+                    public String getObjectName()
+                    {
+                        return "TestStandIn";
+                    }
+
+                    @Override
+                    public void reject( String errorCode, Object @Nullable [] errorArgs, @Nullable String defaultMessage )
+                    {
+
+                    }
+
+                    @Override
+                    public void rejectValue( @Nullable String field, String errorCode, Object @Nullable [] errorArgs, @Nullable String defaultMessage )
+                    {
+
+                    }
+
+                    @Override
+                    public List<ObjectError> getGlobalErrors()
+                    {
+                        return List.of();
+                    }
+
+                    @Override
+                    public List<FieldError> getFieldErrors()
+                    {
+                        FieldError fe1 = new FieldError( "TestStandIn", "foo", "Value", false, null, null, "default foo error message" );
+                        FieldError fe2 = new FieldError( "TestStandIn", "bar", "default bar error message" );
+                        return List.of( fe1, fe2 );
+                    }
+
+                    @Override
+                    public @Nullable Object getFieldValue( String field )
+                    {
+                        return null;
+                    }
+                };
+
+                return foo;
+            }
+
+
+//            @Disabled
+            @Test
+            @DisplayName( "constraint violation returns 400" )
+            void exceptionValidation_methodArguments_formatsProblemDetails() throws NoSuchMethodException
+            {
+                // --- given
+                final Method toStringMethod = Object.class.getDeclaredMethod( "toString" );
+                final MethodParameter parameter = new MethodParameter( toStringMethod, -1 );
+
+                final MethodArgumentNotValidException exception = new MethodArgumentNotValidException( parameter, buildBindingResult() );
+
+                // --- when
+                final ResponseEntity<ProblemDetail> result =
+                        handler.handleRestValidationException( request, exception );
+
+                // --- then
+                final ProblemDetail detail = result.getBody();
+                final HttpHeadersAssert headersAssert = new HttpHeadersAssert( result.getHeaders() );
+                assertAll( () -> assertNotNull( result ),
+                           // -- status
+                           () -> assertEquals( HttpStatus.BAD_REQUEST, result.getStatusCode() ),
+                           // -- headers
+                           () -> headersAssert
+                                   .hasValue( "TRACEPARENT", "traceParent" )
+                                   .hasValue( "TRACESTATE", "traceState" )
+                                   .hasValue( "Content-Type", "application/json;charset=UTF-8" )
+                                   .doesNotContainHeader( "NoWay" ),
+                           // -- Problem Details
+                           () -> assertEquals( 400, detail.getStatus() ),
+                           () -> assertThat( detail.getTitle() )
+                                   .contains( "Validation failed on 'TestStandIn'" ),
+                           () -> assertThat( detail.getDetail() )
+                                   .contains(  "Invalid request content" ),
+                           //    -- detail properties
+                           () -> assertThat( detail.getProperties() )
+                                   .containsOnly( entry( "foo", "default foo error message, provided: [Value]" ),
+                                                  entry( "bar", "default bar error message, provided: [null]" )
+                                                )
+                );
+            }
+
         }
 
 
@@ -699,8 +1027,6 @@ public class GlobalExceptionHandlerTest
                 assertAll( () -> assertNotNull( result ),
                            () -> assertEquals( "Internal Server Error", detail.getTitle() ),
                            () -> assertEquals( 500, detail.getStatus() ),
-//                           () -> assertEquals( "Catch all test",
-//                                               detail.getDetail() ),
                            () -> assertNotNull( detail.getProperties().get( "logref" ) ),
                            //
                            () -> assertThat( detail.getProperties() )
@@ -800,7 +1126,7 @@ public class GlobalExceptionHandlerTest
                        () -> assertThat( detail.getProperties() )
                                .hasEntrySatisfying( "logref",
                                                     value -> assertThat( value.toString() )
-                                                            .matches( "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$" ) )
+                                                            .matches( uuidPattern ) )
 //                       () -> assertThat( detail.getProperties() )
 //                               .containsEntry( "Cause",  except )
 

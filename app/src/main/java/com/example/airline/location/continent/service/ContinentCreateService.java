@@ -29,6 +29,8 @@ public class ContinentCreateService
      * @param repository jpa repository of Continents
      * @param mapper     maps entities to/from the domain model
      */
+    // @PitExclude
+    // @DoNotMutate
     public ContinentCreateService( final ContinentRepository repository, final ContinentEntityMapper mapper )
     {
         this.repository = repository;

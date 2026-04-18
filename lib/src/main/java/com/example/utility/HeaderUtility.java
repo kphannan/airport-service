@@ -27,7 +27,7 @@ public final class HeaderUtility
     }
 
 
-    public static Collection<String> usualHeaders()
+    public static List<String> usualHeaders()
     {
         return usualHeaders;
     }
@@ -37,7 +37,10 @@ public final class HeaderUtility
     {
         HttpHeaders headers = new HttpHeaders();
 
-        usualHeaders.forEach( u -> headers.set(  u, request.getHeader( u ) ) );
+        if ( null != request )
+        {
+            usualHeaders.forEach( u -> headers.set( u, request.getHeader( u ) ) );
+        }
 
         return headers;
     }

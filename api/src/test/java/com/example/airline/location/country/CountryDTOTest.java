@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
+import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -223,7 +224,7 @@ class CountryDTOTest
         private ObjectMapper objectMapper;
 
         @BeforeEach
-        void setUp()
+        void init()
         {
             objectMapper = new ObjectMapper();
         }
@@ -266,7 +267,7 @@ class CountryDTOTest
         class ToJson
         {
             @Test
-            void continentDTO_fromObject_producesJSON() throws JsonProcessingException
+            void continentDTO_fromObject_producesJSON() throws JsonProcessingException, JSONException
             {
                 // --- given
                 final CountryDTO dto = new CountryDTO( 42,
