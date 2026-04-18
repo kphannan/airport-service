@@ -59,6 +59,8 @@ dependencies {
 //    implementation( plugins( libs.plugins.lombok ))
 
     implementation libs.jspecify
+
+    testImplementation libs.bundles.unit.test;
 }
 
 
@@ -73,7 +75,7 @@ clean {
 
 
 compileJava {
-    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation" << "-Amapstruct.verbose=false"
+    options.compilerArgs << "-parameters" << "-Xlint:unchecked" << "-Xlint:deprecation" << "-Amapstruct.verbose=false"
 //    options.forkOptions.jvmArgs << "--enable-native-access=ALL-UNNAMED"
 }
 

@@ -16,6 +16,7 @@ logcaptorVersion = '2.10.2'
 
 # --- Unit Testing ---
 jsonassertVersion = '2.0-rc1'
+jsonUnitAssertVersion = '5.1.1'
 assertjVersion = '4.0.0-M1'
 
 # --- Data binding ---
@@ -125,7 +126,9 @@ spring-boot-starter-security-test = { group = 'org.springframework.boot', name =
 # --- Unit Testing ---
 spring-boot-starter-test = { group = 'org.springframework.boot', name = 'spring-boot-starter-test', version.ref = 'springBootVersion' }
 assertj = { module = 'org.assertj:assertj-core', version.ref = 'assertjVersion' }
-jsonassert = { module = 'org.skyscreamer:jsonassert', version.ref = 'jsonassertVersion' }
+#jsonassert = { module = 'org.skyscreamer:jsonassert', version.ref = 'jsonassertVersion' }
+jsonUnitAssert = { module = 'net.javacrumbs.json-unit:json-unit-assertj', version.ref = 'jsonUnitAssertVersion' }
+jsonUnitAssertSpring = { module = 'net.javacrumbs.json-unit:json-unit-spring', version.ref = 'jsonUnitAssertVersion' }
 karate-bdd = { module = 'io.karatelabs:karate-junit5', version.ref = 'karateVersion'}
 
 #{
@@ -243,7 +246,9 @@ spring-validation = [
 
 unit-test = [
     'assertj',
-    'jsonassert'
+#    'jsonassert',
+    'jsonUnitAssert',
+    'jsonUnitAssertSpring'
 ]
 
 # --- Plugins can't be part of a bundle
