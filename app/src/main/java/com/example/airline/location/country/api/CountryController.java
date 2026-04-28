@@ -61,6 +61,25 @@ public class CountryController
     }
 
 
+    // ========== CREATE ==========
+    // ===== POST =====
+
+    // ========== READ ==========
+    // ===== GET =====
+
+    // ========== UPDATE ==========
+    // ===== PATCH =====
+    // ===== PUT =====
+
+    // ========== DELETE ==========
+    // ===== DELETE =====
+
+    // ========== Administrative ==========
+    // ===== HEAD =====
+    // ===== INFO =====
+    // ===== OPTION =====
+    // ===== TRACE =====
+
 
     /**
      * Find all Countries.

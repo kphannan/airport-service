@@ -41,6 +41,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 
+@DisplayName( "Country: API (/country)" )
 @WebMvcTest( controllers = CountryController.class )
 @ComponentScan( basePackages = { "com.example.airline.location.country" } )
 @AutoConfigureMockMvc( addFilters = false )
@@ -66,8 +67,32 @@ class CountryControllerRestTest //extends RestControllerTestBase
 //                             .build();
 //    }
 
+
+
+    // ========== CREATE ==========
+    // ===== POST =====
+
+    // ========== READ ==========
+    // ===== GET =====
+
+    // ========== UPDATE ==========
+    // ===== PATCH =====
+    // ===== PUT =====
+
+    // ========== DELETE ==========
+    // ===== DELETE =====
+
+    // ========== Administrative ==========
+    // ===== HEAD =====
+    // ===== INFO =====
+    // ===== OPTION =====
+    // ===== TRACE =====
+
+
+
+
     @Nested
-    @DisplayName( "/country - HTTP GET" )
+    @DisplayName( "HTTP GET" )
     class GetMethod
     {
         @Test
@@ -244,43 +269,43 @@ class CountryControllerRestTest //extends RestControllerTestBase
     }
 
     @Nested
-    @DisplayName( "/country - HTTP POST" )
+    @DisplayName( "HTTP POST" )
     class PostMethod
     {
     }
 
     @Nested
-    @DisplayName( "/country - HTTP PUT" )
+    @DisplayName( "HTTP PUT" )
     class PutMethod
     {
     }
 
     @Nested
-    @DisplayName( "/country - HTTP DELETE" )
+    @DisplayName( "HTTP DELETE" )
     class DeleteMethod
     {
     }
 
     @Nested
-    @DisplayName( "/continent - HTTP PATCH" )
+    @DisplayName( "HTTP PATCH" )
     class PatchMethod
     {
     }
 
     @Nested
-    @DisplayName( "/continent - HTTP INFO" )
+    @DisplayName( "HTTP INFO" )
     class InfoMethod
     {
     }
 
     @Nested
-    @DisplayName( "/continent - HTTP HEAD" )
+    @DisplayName( "HTTP HEAD" )
     class HeadMethod
     {
     }
 
     @Nested
-    @DisplayName( "/continent - HTTP OPT" )
+    @DisplayName( "HTTP OPT" )
     class OptionsMethod
     {
     }
