@@ -24,6 +24,7 @@ public interface AirportEntityMapper
 {
     // --------------------------------
     // ----- Domain / Persistence -----
+
     // --- Persistence --> Domain ---
     // --- Instance
     /** Map a single db entity instance to a domain instance. */

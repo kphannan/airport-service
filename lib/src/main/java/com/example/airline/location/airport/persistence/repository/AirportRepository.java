@@ -27,6 +27,17 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AirportRepository extends PagingAndSortingRepository<AirportEntity, Long>
 {
+    /*
+        @Override
+        boolean existsById( Integer airportId );
+
+        boolean existsByCode( String airportCode );
+
+     */
+
+    boolean existsById( Long airportId );
+    boolean existsByCode( String airportCode );
+
     /**
      * Retrieve all {@code Airport} records by {@code Page}.
      *

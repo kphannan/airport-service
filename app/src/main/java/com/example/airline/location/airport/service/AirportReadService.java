@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Log4j2
-public class AirportService
+public class AirportReadService
 {
     private final AirportRepository repository;
 
@@ -40,7 +40,7 @@ public class AirportService
      * @param repository jpa repository of Airports
      * @param mapper maps entities to/from the domain model
      */
-    public AirportService( final AirportRepository repository, final AirportEntityMapper mapper )
+    public AirportReadService( final AirportRepository repository, final AirportEntityMapper mapper )
     {
         this.repository = repository;
         this.mapper     = mapper;
@@ -197,7 +197,17 @@ public class AirportService
                                         final String name,
                                         final Pageable paging )
     {
-        final Page<AirportEntity> entities = repository.advancedQuery( iataCode, icaoCode, ident, name, paging );
+        final String criteriaIataCode = null == iataCode ? "" : iataCode.toUpperCase();
+        final String criteriaIcaoCode = null == icaoCode ? "" : icaoCode.toUpperCase();
+        final String criteriaIdent    = null == ident    ? "" : ident.toUpperCase();
+        final String criteriaName     = null == name     ? "" : name.toUpperCase();
+
+        final Page<AirportEntity> entities = repository.advancedQuery( criteriaIataCode,
+                                                                       criteriaIcaoCode,
+                                                                       criteriaIdent,
+                                                                       criteriaName,
+                                                                       paging );
+
         // TODO should probably think about handling null here though it shouldn't ever happen.
         return entities.map( mapper::entityToDomain );
     }

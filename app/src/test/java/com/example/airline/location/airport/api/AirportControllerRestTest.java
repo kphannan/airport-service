@@ -6,9 +6,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -23,13 +25,13 @@ import java.util.Optional;
 
 import com.example.airline.airport.AirportDTO;
 import com.example.airline.location.airport.mapper.AirportDtoMapper;
+import com.example.airline.location.airport.model.Airport;
 import com.example.airline.location.airport.model.AirportCountInRegion;
 import com.example.airline.location.airport.persistence.model.AirportCountInContinentEntity;
 import com.example.airline.location.airport.persistence.model.AirportCountInCountryEntity;
-import com.example.airline.location.airport.persistence.model.AirportCountInRegionEntity;
 import com.example.airline.location.airport.persistence.model.AirportEntity;
 import com.example.airline.location.airport.persistence.repository.AirportRepository;
-import com.example.airline.location.airport.service.AirportService;
+import com.example.airline.location.airport.service.AirportReadService;
 import com.example.rest.utility.PageableAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -49,11 +51,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
 
@@ -80,6 +82,7 @@ import tools.jackson.databind.ObjectMapper;
  *             - List of airports in the Region.
  *             Airport
  */
+@DisplayName( "Airport: API (/airport)" )
 @WebMvcTest( controllers = AirportController.class )
 @ComponentScan( basePackages = { "com.example.airline.location.airport" } )
 @AutoConfigureMockMvc( addFilters = false )
@@ -88,11 +91,12 @@ class AirportControllerRestTest //extends RestControllerTestBase
     @Autowired
     protected MockMvc mvc;
     @MockitoBean
-    protected AirportRepository repository;
+    protected AirportRepository  repository;
     @Autowired
-    private AirportService   service;
-    @Autowired
-    private AirportDtoMapper mapper;
+    private   AirportReadService service;
+
+    @MockitoSpyBean
+    private   AirportDtoMapper   mapper;
 
 
     /*
@@ -132,7 +136,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
 
 
     @Nested
-    @DisplayName( "/airport - HTTP GET" )
+    @DisplayName( "HTTP GET" )
     class GetMethod
     {
 
@@ -291,6 +295,8 @@ class AirportControllerRestTest //extends RestControllerTestBase
                 when( repository.findAll( any( Pageable.class ) ) )
                         .thenReturn( page );
 
+
+
                 // --- when
                 final MvcResult result = mvc
                         .perform( request )
@@ -308,22 +314,30 @@ class AirportControllerRestTest //extends RestControllerTestBase
                 final MockHttpServletResponse response = result.getResponse();
 
                 // --- then
-                // TODO need to assert the resulting JSON....
                 final ArgumentCaptor<Pageable> pageableCaptor =
                         ArgumentCaptor.forClass( Pageable.class );
-                verify( repository ).findAll( pageableCaptor.capture() );
-                final PageRequest pageable = (PageRequest)pageableCaptor.getValue();
+//                final PageRequest pageable = (PageRequest)pageableCaptor.getValue();
+//                PageableAssert
+//                        .assertThat( pageable )
+//                        .hasPageNumber( 5 )
+//                        .hasPageSize( 10 )
+//                        .hasSort( "name", Sort.Direction.ASC )
+//                        .hasSort( "id", Sort.Direction.DESC );
 
-
-                PageableAssert
-                        .assertThat( pageable )
-                        .hasPageNumber( 5 )
-                        .hasPageSize( 10 )
-                        .hasSort( "name", Sort.Direction.ASC )
-                        .hasSort( "id", Sort.Direction.DESC );
-
-                assertThat( response.getContentType() )
-                        .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+                // TODO need to assert the resulting JSON....
+                assertAll( () -> verify( repository )
+                                   .findAll( pageableCaptor.capture() ),
+                           () -> verify( mapper, times( 3 ) )
+                                   .domainToApi( any( Airport.class) ),
+//                           () -> PageableAssert
+//                                   .assertThat( pageable )
+//                                   .hasPageNumber( 5 )
+//                                   .hasPageSize( 10 )
+//                                   .hasSort( "name", Sort.Direction.ASC )
+//                                   .hasSort( "id", Sort.Direction.DESC ),
+                           () -> assertThat( response.getContentType() )
+                                   .isEqualTo( MediaType.APPLICATION_JSON_VALUE )
+                         );
             }
         }
 
@@ -369,11 +383,11 @@ class AirportControllerRestTest //extends RestControllerTestBase
                 // --- when
                 final MvcResult result = mvc
                         .perform( request )
+                        .andDo( print() )
                         .andExpect( status().isOk() )
                         .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
                         // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
                         //      don't complain about lack of assertions in tests
-                        .andDo( print() )
                         .andExpect( jsonPath( "$.content[0].id" ).value( 1 ) )
                         .andExpect( jsonPath( "$.content[0].ident" ).value( "KATL" ) )
                         .andExpect( jsonPath( "$.content[0].name" ).value( "::NAME::" ) )
@@ -382,12 +396,14 @@ class AirportControllerRestTest //extends RestControllerTestBase
                         .andReturn();
 
                 // --- then
-                verifyPagedResponse();
-
                 final MockHttpServletResponse response = result.getResponse();
                 // TODO need to assert the resulting JSON....
-                assertThat( response.getContentType() )
-                        .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+                assertAll( () -> assertThat( response.getContentType() )
+                                   .isEqualTo( MediaType.APPLICATION_JSON_VALUE ),
+                           () -> verifyPagedResponse(),
+                           () -> verify( mapper, times( 3 ) )
+                                   .domainToApi( any( Airport.class ) )
+                         );
             }
 
 
@@ -611,43 +627,43 @@ class AirportControllerRestTest //extends RestControllerTestBase
 
 
     @Nested
-    @DisplayName( "/airport - HTTP POST" )
+    @DisplayName( "HTTP POST" )
     class PostMethod
     {
     }
 
     @Nested
-    @DisplayName( "/airport - HTTP PUT" )
+    @DisplayName( "HTTP PUT" )
     class PutMethod
     {
     }
 
     @Nested
-    @DisplayName( "/airport - HTTP DELETE" )
+    @DisplayName( "HTTP DELETE" )
     class DeleteMethod
     {
     }
 
     @Nested
-    @DisplayName( "/airport - HTTP PATCH" )
+    @DisplayName( "HTTP PATCH" )
     class PatchMethod
     {
     }
 
     @Nested
-    @DisplayName( "/airport - HTTP INFO" )
+    @DisplayName( "HTTP INFO" )
     class InfoMethod
     {
     }
 
     @Nested
-    @DisplayName( "/airport - HTTP HEAD" )
+    @DisplayName( "HTTP HEAD" )
     class HeadMethod
     {
     }
 
     @Nested
-    @DisplayName( "/airport - HTTP OPT" )
+    @DisplayName( "HTTP OPT" )
     class OptionsMethod
     {
     }

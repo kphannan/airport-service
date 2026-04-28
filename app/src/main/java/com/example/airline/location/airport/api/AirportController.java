@@ -16,7 +16,10 @@ import com.example.airline.location.airport.model.Airport;
 import com.example.airline.location.airport.model.AirportCountInContinent;
 import com.example.airline.location.airport.model.AirportCountInCountry;
 import com.example.airline.location.airport.model.AirportCountInRegion;
-import com.example.airline.location.airport.service.AirportService;
+import com.example.airline.location.airport.service.AirportCreateService;
+import com.example.airline.location.airport.service.AirportDeleteService;
+import com.example.airline.location.airport.service.AirportReadService;
+import com.example.airline.location.airport.service.AirportUpdateService;
 import com.example.airline.location.config.GlobalApiResponses;
 import com.example.airline.location.config.GlobalApiSecurityResponses;
 import com.example.utility.HeaderUtility;
@@ -39,6 +42,34 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
+/*
+ *   API (Controller)
+ *       Create
+ *           Post
+ *       Read
+ *           Get
+ *       Update
+ *           Patch
+ *           Put
+ *       Delete
+ *           Delete
+ *       Administrative
+ *           Head
+ *           Info
+ *           Opt
+ *           Trace
+ *
+ *   Config
+ *   mapper
+ *   model
+ *   persistence
+ *
+ *   Service
+ *       Create
+ *       Read
+ *       Update
+ *       Delete
+ */
 
 @RestController
 @RequestMapping( "/location/airport" )
@@ -49,72 +80,82 @@ import org.springframework.web.bind.annotation.RestController;
 public class AirportController
 {
     // Autowired via constructor
-    private final AirportService   service;
-    private final AirportDtoMapper mapper;
+    private final AirportCreateService createService;
+    private final AirportReadService   readService;
+    private final AirportUpdateService updateService;
+    private final AirportDeleteService deleteService;
+    private final AirportDtoMapper     mapper;
 
-    public AirportController( final AirportService service, final AirportDtoMapper mapper )
+    public AirportController( final AirportCreateService createService,
+                              final AirportReadService readService,
+                              final AirportUpdateService updateService,
+                              final AirportDeleteService deleteService,
+                              final AirportDtoMapper mapper )
     {
-        this.service = service;
-        this.mapper  = mapper;
+        this.createService = createService;
+        this.readService   = readService;
+        this.updateService = updateService;
+        this.deleteService = deleteService;
+        this.mapper        = mapper;
     }
 
+    // ========== CREATE ==========
+    // ===== POST =====
 
-
+    // ========== READ ==========
+    // ===== GET =====
+    // --- List ---
     @GetMapping( "" )
     public Page<AirportDTO> restGetFindAll( final Pageable pageable )
     {
-        final Page<Airport> regions = service.findAll( pageable );
+        final Page<Airport> regions = readService.findAll( pageable );
 
         return regions.map( mapper::domainToApi );
     }
 
 
-
+    // --- Single entity ---
     @Operation( method = "GET",
-            summary = "Find a Airport by Id",
-            description = "Find a Airport by Id",
-            requestBody = @RequestBody( required = false ),
-            responses = { @ApiResponse( description = "Success",
-                    responseCode = "200",
-                    content = { @Content( mediaType = "application/json",
-                                          schema = @Schema( implementation = AirportDTO.class ) ),
-                                @Content( mediaType = "application/yaml",
-                                          schema = @Schema( implementation = AirportDTO.class ) ),
-                                @Content( mediaType = "application/xml",
-                                          schema = @Schema( implementation = AirportDTO.class ) )
-                    }
+                summary = "Find a Airport by Id",
+                description = "Find a Airport by Id",
+                requestBody = @RequestBody( required = false ),
+                responses = { @ApiResponse( description = "Success",
+                                            responseCode = "200",
+                                            content = { @Content( mediaType = "application/json",
+                                                                  schema = @Schema( implementation = AirportDTO.class ) ),
+                                                        @Content( mediaType = "application/yaml",
+                                                                  schema = @Schema( implementation = AirportDTO.class ) ),
+                                                        @Content( mediaType = "application/xml",
+                                                                  schema = @Schema( implementation = AirportDTO.class ) )
+                                            }
                 )
-            },
-            parameters = { @Parameter( name = "id", required = true,
-                                       in = ParameterIn.PATH,
-                                       description = "Primary Key" ),
-                           @Parameter( name = "Bearer", required = false,
-                                       schema = @Schema( implementation = String.class ),
-                                       in = ParameterIn.HEADER,
-                                       description = "Authentication / Authorization token" ),
-                           @Parameter( name = HeaderUtility.TRACEID, required = false,
-                                       schema = @Schema( implementation = String.class ),
-                                       in = ParameterIn.HEADER,
-                                       description = "Distributed tracing identifier" ),
-                           @Parameter( name = HeaderUtility.TRACESTATE, required = false,
-                                       schema = @Schema( implementation = String.class ),
-                                       in = ParameterIn.HEADER,
-                                       description = "Vendor specific trace identification" )
-            }
+                },
+                parameters = { @Parameter( name = "id", required = true,
+                                           in = ParameterIn.PATH,
+                                           description = "Primary Key" ),
+                               @Parameter( name = "Bearer", required = false,
+                                           schema = @Schema( implementation = String.class ),
+                                           in = ParameterIn.HEADER,
+                                           description = "Authentication / Authorization token" ),
+                               @Parameter( name = HeaderUtility.TRACEID, required = false,
+                                           schema = @Schema( implementation = String.class ),
+                                           in = ParameterIn.HEADER,
+                                           description = "Distributed tracing identifier" ),
+                               @Parameter( name = HeaderUtility.TRACESTATE, required = false,
+                                           schema = @Schema( implementation = String.class ),
+                                           in = ParameterIn.HEADER,
+                                           description = "Vendor specific trace identification" )
+                }
     )
     @GetMapping( "/{id}" )
     @SuppressWarnings( "PMD.ShortVariable" )
     public ResponseEntity<AirportDTO> restGetFindAirportById( @PathVariable final Long id )
     {
-//        log.debug( () -> String.format( "enter restGetFindAirportById( %s )", id ) );
-        final Optional<Airport> optionalAirport = service.findAirportById( id );
-//        log.debug( () -> String.format( "    fingAirportById( %s ) - [%s]", id, optionalAirport ) );
+        final Optional<Airport> optionalAirport = readService.findAirportById( id );
 
         if ( optionalAirport.isPresent() )
         {
-//            log.debug( () -> String.format( "    found airport( %s ) %s", id, optionalAirport.get() ) );
             final AirportDTO dto = mapper.domainToApi( optionalAirport.get() );
-//            log.debug( () -> String.format( "    DTO airport( %s ), %s", id, dto ) );
 
             return ResponseEntity.ok( dto );
         }
@@ -123,11 +164,10 @@ public class AirportController
     }
 
 
-
     @GetMapping( "/code/{code}" )
     public ResponseEntity<AirportDTO> restGetFindAirportByCode( @PathVariable final String code )
     {
-        final Optional<Airport> optionalEntity = service.findAirportByIdent( code );
+        final Optional<Airport> optionalEntity = readService.findAirportByIdent( code );
 
         if ( optionalEntity.isPresent() )
         {
@@ -141,27 +181,33 @@ public class AirportController
         // return ResponseEntity.noContent().location().build();
     }
 
+
+    // ----- Count of airports -----
+    // --- grouped by Continent ---
     @GetMapping( "/summary/continent/code" )
     public ResponseEntity<List<AirportCountInContinentDTO>> restGetCountAirportsInAllContinents()
     {
-        final List<AirportCountInContinent> counts = service.countAirportsByContinent();
+        final List<AirportCountInContinent> counts = readService.countAirportsByContinent();
 
         final List<AirportCountInContinentDTO> dto = mapper.domainToApiAirportsInContinent( counts );
 
         return ResponseEntity.ok( dto );
     }
 
+    // --- grouped by Country within a specific continent ---
     // get a list of countries in the continent, with counts of airports in each country
     @GetMapping( "/summary/continent/code/{continentCode}" )
     public ResponseEntity<List<AirportCountInCountryDTO>>
-        restGetCountCountryAirportsByContinent( @PathVariable final String continentCode )
+    restGetCountCountryAirportsByContinent( @PathVariable final String continentCode )
     {
-        final List<AirportCountInCountry> counts = service.countCountryAirportsByContinent( continentCode );
+        final List<AirportCountInCountry> counts = readService.countCountryAirportsByContinent( continentCode );
 
         final List<AirportCountInCountryDTO> dto = mapper.domainToApiAirportsInCountry( counts );
 
         return ResponseEntity.ok( dto );
     }
+
+    // --- Country ---
 
 //    @GetMapping( "/summary/country/code/{countryCode}" )
 //    public ResponseEntity<List<AirportCountInCountryDTO>>
@@ -179,19 +225,22 @@ public class AirportController
 //    restGetCountAirportsByCountry( @PathVariable final String code )
 //    {
 //        List<AirportCountInCountryDTO> foo = service.countAirportsByCountry();
-////        final Optional<Airport> optionalEntity = service.findAirportByIdent( code );
-////
-////        if ( optionalEntity.isPresent() )
-////        {
-////            final AirportDTO dto = mapper.domainToApi( optionalEntity.get() );
-////
-////            return ResponseEntity.ok( dto );
-////        }
+    ////        final Optional<Airport> optionalEntity = service.findAirportByIdent( code );
+    ////
+    ////        if ( optionalEntity.isPresent() )
+    ////        {
+    ////            final AirportDTO dto = mapper.domainToApi( optionalEntity.get() );
+    ////
+    ////            return ResponseEntity.ok( dto );
+    ////        }
 //
 //        // may include instance in header.....
 //        return ResponseEntity.noContent().build();
 //        // return ResponseEntity.noContent().location().build();
 //    }
+
+    // --- Region ---
+
 
 //    @GetMapping( "/summary/region/code/{code}" )
 //    public ResponseEntity<List<AirportCountInRegionDTO>> restGetCountAirportsByRegion( @PathVariable final String code )
@@ -203,11 +252,13 @@ public class AirportController
 //        return ResponseEntity.ok( dto );
 //    }
 
+    // --- by Region within a country
+    //     Grouped/counted by region within a specific country
     @GetMapping( "/summary/country/code/{countryCode}" )
     public ResponseEntity<List<AirportCountInRegionDTO>>
-        restGetCountAirportsByRegion( @PathVariable final String countryCode )
+    restGetCountAirportsByRegion( @PathVariable final String countryCode )
     {
-        final List<AirportCountInRegion> counts = service.countRegionAirportsByCountry( countryCode );
+        final List<AirportCountInRegion> counts = readService.countRegionAirportsByCountry( countryCode );
 
         final List<AirportCountInRegionDTO> dto = mapper.domainToApiAirportsInRegion( counts );
 
@@ -225,6 +276,7 @@ public class AirportController
 //        return ResponseEntity.ok( dto );
 //    }
 
+    // --- by specific Region  ---
     /**
      * REST method to retrieve a list of {@link AirportDTO} within the specified @see Region.
      *
@@ -234,15 +286,16 @@ public class AirportController
     @GetMapping( "/summary/region/code/{regionCode}" )
     public ResponseEntity<List<AirportDTO>> restGetAirportsByRegion( @PathVariable final String regionCode )
     {
-        final List<Airport> counts = service.findAirportsByRegion( regionCode );
+        final List<Airport> airports = readService.findAirportsByRegion( regionCode );
 
-        final List<AirportDTO> dto = mapper.domainToApi( counts );
+        final List<AirportDTO> dto = mapper.domainToApi( airports );
 
         return ResponseEntity.ok( dto );
     }
 
 
 
+    // --- Advanced Search ---
     /**
      * Search for {@code Airport} records that contain any of the query parameters.
      *
@@ -262,12 +315,28 @@ public class AirportController
                                            @RequestParam( name = "name", required = false ) final String name,
                                            final Pageable paging )
     {
-        final Page<Airport> result = service.advancedQuery( null == iataCode ? "" : iataCode.toUpperCase( Locale.US ),
-                                                            null == icaoCode ? "" : icaoCode.toUpperCase( Locale.US ),
-                                                            null == ident ? "" : ident.toUpperCase( Locale.US ),
-                                                            null == name ? "" : name.toUpperCase( Locale.US ), paging );
+        final Page<Airport> result = readService.advancedQuery( iataCode,
+                                                                icaoCode,
+                                                                ident,
+                                                                name,
+                                                                paging );
 
         return result.map( mapper::domainToApi );
     }
+
+    // ========== UPDATE ==========
+    // ===== PATCH =====
+    // ===== PUT =====
+
+    // ========== DELETE ==========
+    // ===== DELETE =====
+
+    // ========== Administrative ==========
+    // ===== HEAD =====
+    // ===== INFO =====
+    // ===== OPTION =====
+    // ===== TRACE =====
+
+
 
 }
