@@ -6,24 +6,15 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import java.util.Optional;
-
-import com.example.airline.location.continent.ContinentDTO;
-import com.example.airline.location.continent.NewContinentDTO;
 import com.example.airline.location.continent.api.ContinentController;
 import com.example.airline.location.continent.model.Continent;
 import com.example.airline.location.continent.model.NewContinent;
 import com.example.airline.location.continent.persistence.model.ContinentEntity;
-import com.example.airline.location.continent.persistence.model.NewContinentEntity;
 import com.example.airline.location.continent.persistence.repository.ContinentRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,14 +22,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @WebMvcTest( controllers = ContinentController.class )
 @ComponentScan( basePackages = { "com.example.airline.location.continent" } )
 @AutoConfigureMockMvc( addFilters = false /*, secure = false */ )
-@DisplayName( "Continent: Service - Delete" )
+@DisplayName( "Continent: Service - Create" )
 class ContinentCreateServiceTest
 {
     @MockitoBean

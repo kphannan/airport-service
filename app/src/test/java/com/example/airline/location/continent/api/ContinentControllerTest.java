@@ -44,7 +44,7 @@ import org.springframework.test.http.HttpHeadersAssert;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-@DisplayName( "Continent Controller" )
+@DisplayName( "Continent: Controller" )
 class ContinentControllerTest
 {
     private ContinentCreateService createService;

@@ -6,16 +6,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.atMost;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.example.airline.location.continent.api.ContinentController;
 import com.example.airline.location.continent.model.Continent;
-import com.example.airline.location.continent.persistence.model.ContinentEntity;
 import com.example.airline.location.continent.persistence.repository.ContinentRepository;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;

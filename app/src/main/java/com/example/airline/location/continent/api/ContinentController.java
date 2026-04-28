@@ -55,6 +55,34 @@ import tools.jackson.databind.ObjectMapper;
 // TODO Trace header.... https://github.com/w3c/trace-context/blob/main/spec/20-http_request_header_format.md
 //      https://w3c.github.io/trace-context/
 
+/*
+ *   API (Controller)
+ *       Create
+ *           Post
+ *       Read
+ *           Get
+ *       Update
+ *           Patch
+ *           Put
+ *       Delete
+ *           Delete
+ *       Administrative
+ *           Head
+ *           Info
+ *           Opt
+ *           Trace
+ *
+ *   Config
+ *   mapper
+ *   model
+ *   persistence
+ *
+ *   Service
+ *       Create
+ *       Read
+ *       Update
+ *       Delete
+ */
 
 @RestController
 @RequestMapping( "/location/continent" )
@@ -95,7 +123,88 @@ public class ContinentController
     }
 
 
-    // ===================
+    // ========== CREATE ==========
+    // ===== POST =====
+    @Operation( method = "POST",
+                summary = "Add a Continent",
+                description = "Add a new Continent only if it does not already exist",
+                requestBody = @RequestBody( required = true,
+                                            content = { @Content( mediaType = "application/json",
+                                                                  schema = @Schema( implementation = NewContinentDTO.class ) )
+                                            }
+                ),
+                responses = {
+                        @ApiResponse( description = "Continent created and returned",
+                                      responseCode = "201",
+                                      content = {
+                                              @Content( mediaType = "application/json",
+                                                        schema = @Schema( implementation = ContinentDTO.class ) ),
+                                              @Content( mediaType = "application/yaml",
+                                                        schema = @Schema( implementation = ContinentDTO.class ) ),
+                                              @Content( mediaType = "application/xml",
+                                                        schema = @Schema( implementation = ContinentDTO.class ) )
+                                      }
+                        )
+                },
+                parameters = {
+                        @Parameter( name = "Bearer",
+                                    required = true,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Authentication / Authorization token" ),
+                        @Parameter( name = HeaderUtility.TRACEID,
+                                    required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Distributed tracing identifier" ),
+                        @Parameter( name = HeaderUtility.TRACESTATE,
+                                    required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Vendor specific trace identification" )
+                }
+    )
+    @PostMapping( "" )
+    public ResponseEntity<ContinentDTO>
+    restPostAddContinent( @Valid @org.springframework.web.bind.annotation.RequestBody final NewContinentDTO newContinentDTO,
+                          @RequestHeader final HttpHeaders requestHeaders )
+    {
+        final Continent continent = createService.create( mapper.apiToDomain( newContinentDTO ) );
+        if ( null != continent )
+        {
+            // Build the resource id (path) of the newly created item
+            final URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path( "/{continentId}" )
+                    .buildAndExpand( continent.getId() )
+                    .toUri();
+//            printHeaders(  requestHeaders );
+            final ResponseEntity<ContinentDTO> response = ResponseEntity
+                    .created( location )
+                    .headers( HeaderUtility.copyNeededHeaders( requestHeaders ) )
+                    .body( mapper.domainToApi( continent ) );
+
+//            log.error( response.toString() );
+//            printHeaders( response.getHeaders() );
+
+            return response;
+        }
+
+        // The item is already in the DB.  If the client intention is to update,
+        // then a PUT should have been used.
+        return ResponseEntity
+                .status( HttpStatus.CONFLICT )
+                .headers( HeaderUtility.copyNeededHeaders( requestHeaders ) )
+                //.body( "Continent does not exist" )
+                .build();
+    }
+
+//    private void printHeaders( final HttpHeaders headers )
+//    {
+//        headers.forEach(  ( name, value ) -> log.error( name + " : " + value ) );
+//    }
+
+    // ========== READ ==========
     // ===== GET =====
     /**
      * Find all Continents.
@@ -109,28 +218,28 @@ public class ContinentController
                 responses = { @ApiResponse( description = "All Continents found and returned in an array",
                                             responseCode = "200",
                                             content = {
-                                                @Content( mediaType = "application/json"
-                                                          /*, schema = @Schema( implementation = ContinentDTO.class ) */ ),
-                                                @Content( mediaType = "application/yaml"
-                                                          /*, schema = @Schema( implementation = ContinentDTO.class ) */ ),
-                                                @Content( mediaType = "application/xml"
-                                                          /*, schema = @Schema( implementation = ContinentDTO.class ) */ )
+                                                    @Content( mediaType = "application/json"
+                                                            /*, schema = @Schema( implementation = ContinentDTO.class ) */ ),
+                                                    @Content( mediaType = "application/yaml"
+                                                            /*, schema = @Schema( implementation = ContinentDTO.class ) */ ),
+                                                    @Content( mediaType = "application/xml"
+                                                            /*, schema = @Schema( implementation = ContinentDTO.class ) */ )
                                             }
-                                         ),
-                               @ApiResponse( description = "Unauthorized", responseCode = "403" )
+                ),
+                              @ApiResponse( description = "Unauthorized", responseCode = "403" )
                 },
                 parameters = {
-                    @Parameter( name = HeaderUtility.TRACEID, required = false,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Distributed tracing identifier" ),
-                    @Parameter( name = HeaderUtility.TRACESTATE, required = false,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Vendor specific trace identification" )
+                        @Parameter( name = HeaderUtility.TRACEID, required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Distributed tracing identifier" ),
+                        @Parameter( name = HeaderUtility.TRACESTATE, required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Vendor specific trace identification" )
                 },
                 security = {}
-                )
+    )
     @GetMapping( "" )
     public ResponseEntity<List<ContinentDTO>> restGetFindAll( @Valid @RequestHeader final HttpHeaders requestHeaders )
     {
@@ -165,25 +274,25 @@ public class ContinentController
                 responses = { @ApiResponse( description = "Continent found and returned",
                                             responseCode = "200",
                                             content = {
-                                                @Content( mediaType = "application/json",
-                                                          schema = @Schema( implementation = ContinentDTO.class ) ),
-                                                @Content( mediaType = "application/yaml",
-                                                          schema = @Schema( implementation = ContinentDTO.class ) ),
-                                                @Content( mediaType = "application/xml",
-                                                          schema = @Schema( implementation = ContinentDTO.class ) )
+                                                    @Content( mediaType = "application/json",
+                                                              schema = @Schema( implementation = ContinentDTO.class ) ),
+                                                    @Content( mediaType = "application/yaml",
+                                                              schema = @Schema( implementation = ContinentDTO.class ) ),
+                                                    @Content( mediaType = "application/xml",
+                                                              schema = @Schema( implementation = ContinentDTO.class ) )
                                             }
                 )
                 },
                 parameters = {
-                    @Parameter( name = "continentId", required = true, in = ParameterIn.PATH, description = "Primary Key" ),
-                    @Parameter( name = HeaderUtility.TRACEID, required = false,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Distributed tracing identifier" ),
-                    @Parameter( name = HeaderUtility.TRACESTATE, required = false,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Vendor specific trace identification" )
+                        @Parameter( name = "continentId", required = true, in = ParameterIn.PATH, description = "Primary Key" ),
+                        @Parameter( name = HeaderUtility.TRACEID, required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Distributed tracing identifier" ),
+                        @Parameter( name = HeaderUtility.TRACESTATE, required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Vendor specific trace identification" )
                 },
                 security = {}
     )
@@ -227,40 +336,40 @@ public class ContinentController
                 summary = "Find a Continent by its abbreviation",
                 description = "Find a Continent by its 2 letter code",
                 responses = {
-                    @ApiResponse( description = "Continent found and returned",
-                                  responseCode = "200",
-                                  content = {
-                                      @Content( mediaType = "application/json",
-                                                schema = @Schema( implementation = ContinentDTO.class ) ),
-                                      @Content( mediaType = "application/yaml",
-                                                schema = @Schema( implementation = ContinentDTO.class ) ),
-                                      @Content( mediaType = "application/xml",
-                                                schema = @Schema( implementation = ContinentDTO.class ) )
-                                  }
-                    )
+                        @ApiResponse( description = "Continent found and returned",
+                                      responseCode = "200",
+                                      content = {
+                                              @Content( mediaType = "application/json",
+                                                        schema = @Schema( implementation = ContinentDTO.class ) ),
+                                              @Content( mediaType = "application/yaml",
+                                                        schema = @Schema( implementation = ContinentDTO.class ) ),
+                                              @Content( mediaType = "application/xml",
+                                                        schema = @Schema( implementation = ContinentDTO.class ) )
+                                      }
+                        )
                 },
                 parameters = {
-                    @Parameter( name = "code",
-                                required = true,
-                                in = ParameterIn.PATH,
-                                description = "2 character code" ),
-                    @Parameter( name = HeaderUtility.TRACEID,
-                                required = false,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Distributed tracing identifier" ),
-                    @Parameter( name = HeaderUtility.TRACESTATE,
-                                required = false,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Vendor specific trace identification" )
+                        @Parameter( name = "code",
+                                    required = true,
+                                    in = ParameterIn.PATH,
+                                    description = "2 character code" ),
+                        @Parameter( name = HeaderUtility.TRACEID,
+                                    required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Distributed tracing identifier" ),
+                        @Parameter( name = HeaderUtility.TRACESTATE,
+                                    required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Vendor specific trace identification" )
                 },
                 security = {}
     )
     @GetMapping( "/code/{code}" )
     public ResponseEntity<ContinentDTO>
-        restGetFindContinentByCode( @Valid @PathVariable final String code,
-                                    @RequestHeader final HttpHeaders requestHeaders )
+    restGetFindContinentByCode( @Valid @PathVariable final String code,
+                                @RequestHeader final HttpHeaders requestHeaders )
     {
         final Optional<Continent> optionalEntity = readService.findByCode( code );
 
@@ -281,268 +390,8 @@ public class ContinentController
                 .build();
     }
 
-
-
-
-    // ===================
-    // ===== POST =====
-    @Operation( method = "POST",
-                summary = "Add a Continent",
-                description = "Add a new Continent only if it does not already exist",
-                requestBody = @RequestBody( required = true,
-                                            content = { @Content( mediaType = "application/json",
-                                                                  schema = @Schema( implementation = NewContinentDTO.class ) )
-                                            }
-                              ),
-                responses = {
-                    @ApiResponse( description = "Continent created and returned",
-                                  responseCode = "201",
-                                  content = {
-                                      @Content( mediaType = "application/json",
-                                                schema = @Schema( implementation = ContinentDTO.class ) ),
-                                      @Content( mediaType = "application/yaml",
-                                                schema = @Schema( implementation = ContinentDTO.class ) ),
-                                      @Content( mediaType = "application/xml",
-                                                schema = @Schema( implementation = ContinentDTO.class ) )
-                                  }
-                    )
-                },
-                parameters = {
-                    @Parameter( name = "Bearer",
-                                required = true,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Authentication / Authorization token" ),
-                    @Parameter( name = HeaderUtility.TRACEID,
-                                required = false,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Distributed tracing identifier" ),
-                    @Parameter( name = HeaderUtility.TRACESTATE,
-                                required = false,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Vendor specific trace identification" )
-                }
-    )
-    @PostMapping( "" )
-    public ResponseEntity<ContinentDTO>
-        restPostAddContinent( @Valid @org.springframework.web.bind.annotation.RequestBody final NewContinentDTO newContinentDTO,
-                              @RequestHeader final HttpHeaders requestHeaders )
-    {
-        final Continent continent = createService.create( mapper.apiToDomain( newContinentDTO ) );
-        if ( null != continent )
-        {
-            // Build the resource id (path) of the newly created item
-            final URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path( "/{continentId}" )
-                    .buildAndExpand( continent.getId() )
-                    .toUri();
-//            printHeaders(  requestHeaders );
-            final ResponseEntity<ContinentDTO> response = ResponseEntity
-                    .created( location )
-                    .headers( HeaderUtility.copyNeededHeaders( requestHeaders ) )
-                    .body( mapper.domainToApi( continent ) );
-
-//            log.error( response.toString() );
-//            printHeaders( response.getHeaders() );
-
-            return response;
-        }
-
-        // The item is already in the DB.  If the client intention is to update,
-        // then a PUT should have been used.
-        return ResponseEntity
-                .status( HttpStatus.CONFLICT )
-                .headers( HeaderUtility.copyNeededHeaders( requestHeaders ) )
-                //.body( "Continent does not exist" )
-                .build();
-    }
-
-//    private void printHeaders( final HttpHeaders headers )
-//    {
-//        headers.forEach(  ( name, value ) -> log.error( name + " : " + value ) );
-//    }
-
-
-    // ===================
-    // ===== PUT =====
-    @Operation( method = "PUT",
-                summary = "Update a Continent",
-                description = "Update a Continent only if it exists",
-                requestBody = @RequestBody( required = true,
-                                            content = { @Content( mediaType = "application/json",
-                                                                  schema = @Schema( implementation = ContinentDTO.class ) )
-                                            }
-                ),
-                responses = { @ApiResponse( description = "Continent updated and returned",
-                                            responseCode = "200",
-                                            content = {
-                                                @Content( mediaType = "application/json",
-                                                          schema = @Schema( implementation = ContinentDTO.class ) ),
-                                                @Content( mediaType = "application/yaml",
-                                                          schema = @Schema( implementation = ContinentDTO.class ) ),
-                                                @Content( mediaType = "application/xml",
-                                                          schema = @Schema( implementation = ContinentDTO.class ) )
-                                            }
-                )
-                },
-                parameters = {
-                    @Parameter( name = "Bearer",
-                                required = true,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Authentication / Authorization token" ),
-                    @Parameter( name = HeaderUtility.TRACEID,
-                                required = false,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Distributed tracing identifier" ),
-                    @Parameter( name = HeaderUtility.TRACESTATE,
-                                required = false,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Vendor specific trace identification" )
-                }
-    )
-    @PutMapping( "" )
-    @SuppressWarnings( "PMD.ShortVariable" )
-    public ResponseEntity<ContinentDTO>
-        restPutContinentById( @Valid @org.springframework.web.bind.annotation.RequestBody final ContinentDTO continentDTO,
-                              @RequestHeader final HttpHeaders requestHeaders )
-    {
-        final Continent continent = updateService.update( mapper.apiToDomain( continentDTO ) );
-        if ( null != continent )
-        {
-            // TODO handle Accept:application/json or Accept:application/XML
-            return ResponseEntity
-                    .status( HttpStatus.OK )
-                    .headers( HeaderUtility.copyNeededHeaders( requestHeaders ) )
-                    .body( mapper.domainToApi( continent ) );
-        }
-
-        // The item is not in the DB.  If the client intention is to insert,
-        // then a POST should have been used.
-        return ResponseEntity
-                .status( HttpStatus.CONFLICT )
-                .headers( HeaderUtility.copyNeededHeaders( requestHeaders ) )
-                .build();
-    }
-
-    // ===================
-    // ===== DELETE =====
-    @Operation( method = "DELETE",
-                summary = "Delete a Continent by id",
-                description = "Delete a Continent regardless if it exists or not.",
-                responses = { @ApiResponse( description = "Continent deleted",
-                                            responseCode = "204",
-                                            content = {
-                                                @Content( mediaType = "application/json",
-                                                          schema = @Schema( implementation = ContinentDTO.class ) ),
-                                                @Content( mediaType = "application/yaml",
-                                                          schema = @Schema( implementation = ContinentDTO.class ) ),
-                                                @Content( mediaType = "application/xml",
-                                                          schema = @Schema( implementation = ContinentDTO.class ) )
-                                            }
-                              )
-                },
-                parameters = {
-                    @Parameter( name = "continentId", required = true, in = ParameterIn.PATH, description = "Unique ID" ),
-                    @Parameter( name = "Bearer",
-                                required = true,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Authentication / Authorization token" ),
-                    @Parameter( name = HeaderUtility.TRACEID,
-                                required = false,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Distributed tracing identifier" ),
-                    @Parameter( name = HeaderUtility.TRACESTATE,
-                                required = false,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Vendor specific trace identification" )
-                }
-    )
-    @DeleteMapping( "/{continentId}" )
-    @SuppressWarnings( "PMD.ShortVariable" )
-    public ResponseEntity<ContinentDTO>
-        restDeleteContinentById( @Valid @PathVariable( name = "continentId" ) final Integer continentId,
-                                 @RequestHeader final HttpHeaders requestHeaders )
-    {
-        // Delete is idempotent and will return NO_CONTENT regardless if
-        // the item was deleted, or if it didn't exist.
-        //  deleteService.deleteById( continentId );
-        // return ResponseEntity.status( HttpStatus.GONE ).build();
-
-        return ResponseEntity
-                .status( deleteService.deleteById( continentId )
-                                        ? HttpStatus.NO_CONTENT
-                                        : HttpStatus.NOT_FOUND )
-                .headers( HeaderUtility.copyNeededHeaders( requestHeaders ) )
-                .build();
-    }
-
-    @DeleteMapping( "" )
-    @SuppressWarnings( "PMD.ShortVariable" )
-    @Operation( method = "DELETE",
-                summary = "Delete a Continent",
-                description = "Delete a Continent regardless if it exists or not.",
-                requestBody = @RequestBody( required = true,
-                                            content = { @Content( mediaType = "application/json",
-                                                                  schema = @Schema( implementation = ContinentDTO.class ) )
-                                            }
-                ),
-                responses = {
-                    @ApiResponse( description = "Continent has been deleted",
-                                  responseCode = "204",
-                                  content = {
-                                      @Content( mediaType = "application/json",
-                                                schema = @Schema( implementation = ContinentDTO.class ) ),
-                                      @Content( mediaType = "application/yaml",
-                                                schema = @Schema( implementation = ContinentDTO.class ) ),
-                                      @Content( mediaType = "application/xml",
-                                                schema = @Schema( implementation = ContinentDTO.class ) )
-                                  }
-                    )
-                },
-                parameters = {
-                    @Parameter( name = "Bearer",
-                                required = true,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Authentication / Authorization token" ),
-                    @Parameter( name = HeaderUtility.TRACEID,
-                                required = false,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Distributed tracing identifier" ),
-                    @Parameter( name = HeaderUtility.TRACESTATE,
-                                required = false,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Vendor specific trace identification" )
-                }
-    )
-    public ResponseEntity<ContinentDTO>
-        restDelete( @Valid @org.springframework.web.bind.annotation.RequestBody final ContinentDTO continentDTO,
-                    @RequestHeader final HttpHeaders requestHeaders )
-    {
-        // Delete is idempotent and will return NO_CONTENT regardless if
-        // the item was deleted, or if it didn't exist.
-        return ResponseEntity
-                .status( deleteService.delete( mapper.apiToDomain( continentDTO ) )
-                         ? HttpStatus.NO_CONTENT
-                         : HttpStatus.NOT_FOUND )
-                .headers( HeaderUtility.copyNeededHeaders( requestHeaders ) )
-                .build();
-    }
-
-    // ===================
+    // ========== UPDATE ==========
     // ===== PATCH =====
-
     /**
      * Handle HTTP Method PATCH for /location/continent/{continentId}.
      *
@@ -555,42 +404,42 @@ public class ContinentController
                 summary = "Update a Continent",
                 description = "Update a Continent only if it exists.  All non-null attributes are updated.",
                 requestBody =
-                    @RequestBody( required = true,
-                                  content = { @Content( mediaType = "application/json-patch+json",
-                                                        schema = @Schema( implementation = ContinentDTO.class ) )
-                                  }
+                @RequestBody( required = true,
+                              content = { @Content( mediaType = "application/json-patch+json",
+                                                    schema = @Schema( implementation = ContinentDTO.class ) )
+                              }
                 ),
                 responses = {
-                    @ApiResponse(
-                        description = "Continent updated and returned",
-                        responseCode = "200",
-                        content =
-                        {
-                            @Content( mediaType = "application/json",
-                                      schema = @Schema( implementation = ContinentDTO.class ) ),
-                            @Content( mediaType = "application/yaml",
-                                      schema = @Schema( implementation = ContinentDTO.class ) ),
-                            @Content( mediaType = "application/xml",
-                                      schema = @Schema( implementation = ContinentDTO.class ) )
-                        }
-                    )
+                        @ApiResponse(
+                                description = "Continent updated and returned",
+                                responseCode = "200",
+                                content =
+                                        {
+                                                @Content( mediaType = "application/json",
+                                                          schema = @Schema( implementation = ContinentDTO.class ) ),
+                                                @Content( mediaType = "application/yaml",
+                                                          schema = @Schema( implementation = ContinentDTO.class ) ),
+                                                @Content( mediaType = "application/xml",
+                                                          schema = @Schema( implementation = ContinentDTO.class ) )
+                                        }
+                        )
                 },
                 parameters = {
-                    @Parameter( name = "Bearer",
-                                required = false,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Authentication / Authorization token" ),
-                    @Parameter( name = HeaderUtility.TRACEID,
-                                required = false,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Distributed tracing identifier" ),
-                    @Parameter( name = HeaderUtility.TRACESTATE,
-                                required = false,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Vendor specific trace identification" )
+                        @Parameter( name = "Bearer",
+                                    required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Authentication / Authorization token" ),
+                        @Parameter( name = HeaderUtility.TRACEID,
+                                    required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Distributed tracing identifier" ),
+                        @Parameter( name = HeaderUtility.TRACESTATE,
+                                    required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Vendor specific trace identification" )
                 }
     )
     @PatchMapping( path = "/{continentId}", consumes = "application/json-patch+json" )
@@ -631,10 +480,233 @@ public class ContinentController
         return updated;
     }
 
+    // ===== PUT =====
+    @Operation( method = "PUT",
+                summary = "Update a Continent",
+                description = "Update a Continent only if it exists",
+                requestBody = @RequestBody( required = true,
+                                            content = { @Content( mediaType = "application/json",
+                                                                  schema = @Schema( implementation = ContinentDTO.class ) )
+                                            }
+                ),
+                responses = { @ApiResponse( description = "Continent updated and returned",
+                                            responseCode = "200",
+                                            content = {
+                                                    @Content( mediaType = "application/json",
+                                                              schema = @Schema( implementation = ContinentDTO.class ) ),
+                                                    @Content( mediaType = "application/yaml",
+                                                              schema = @Schema( implementation = ContinentDTO.class ) ),
+                                                    @Content( mediaType = "application/xml",
+                                                              schema = @Schema( implementation = ContinentDTO.class ) )
+                                            }
+                )
+                },
+                parameters = {
+                        @Parameter( name = "Bearer",
+                                    required = true,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Authentication / Authorization token" ),
+                        @Parameter( name = HeaderUtility.TRACEID,
+                                    required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Distributed tracing identifier" ),
+                        @Parameter( name = HeaderUtility.TRACESTATE,
+                                    required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Vendor specific trace identification" )
+                }
+    )
+    @PutMapping( "" )
+    @SuppressWarnings( "PMD.ShortVariable" )
+    public ResponseEntity<ContinentDTO>
+    restPutContinentById( @Valid @org.springframework.web.bind.annotation.RequestBody final ContinentDTO continentDTO,
+                          @RequestHeader final HttpHeaders requestHeaders )
+    {
+        final Continent continent = updateService.update( mapper.apiToDomain( continentDTO ) );
+        if ( null != continent )
+        {
+            // TODO handle Accept:application/json or Accept:application/XML
+            return ResponseEntity
+                    .status( HttpStatus.OK )
+                    .headers( HeaderUtility.copyNeededHeaders( requestHeaders ) )
+                    .body( mapper.domainToApi( continent ) );
+        }
 
-    // ===================
-    // ===== Options =====
+        // The item is not in the DB.  If the client intention is to insert,
+        // then a POST should have been used.
+        return ResponseEntity
+                .status( HttpStatus.CONFLICT )
+                .headers( HeaderUtility.copyNeededHeaders( requestHeaders ) )
+                .build();
+    }
 
+    // ========== DELETE ==========
+    // ===== DELETE =====
+    @Operation( method = "DELETE",
+                summary = "Delete a Continent by id",
+                description = "Delete a Continent regardless if it exists or not.",
+                responses = { @ApiResponse( description = "Continent deleted",
+                                            responseCode = "204",
+                                            content = {
+                                                    @Content( mediaType = "application/json",
+                                                              schema = @Schema( implementation = ContinentDTO.class ) ),
+                                                    @Content( mediaType = "application/yaml",
+                                                              schema = @Schema( implementation = ContinentDTO.class ) ),
+                                                    @Content( mediaType = "application/xml",
+                                                              schema = @Schema( implementation = ContinentDTO.class ) )
+                                            }
+                )
+                },
+                parameters = {
+                        @Parameter( name = "continentId", required = true, in = ParameterIn.PATH, description = "Unique ID" ),
+                        @Parameter( name = "Bearer",
+                                    required = true,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Authentication / Authorization token" ),
+                        @Parameter( name = HeaderUtility.TRACEID,
+                                    required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Distributed tracing identifier" ),
+                        @Parameter( name = HeaderUtility.TRACESTATE,
+                                    required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Vendor specific trace identification" )
+                }
+    )
+    @DeleteMapping( "/{continentId}" )
+    @SuppressWarnings( "PMD.ShortVariable" )
+    public ResponseEntity<ContinentDTO>
+    restDeleteContinentById( @Valid @PathVariable( name = "continentId" ) final Integer continentId,
+                             @RequestHeader final HttpHeaders requestHeaders )
+    {
+        // Delete is idempotent and will return NO_CONTENT regardless if
+        // the item was deleted, or if it didn't exist.
+        //  deleteService.deleteById( continentId );
+        // return ResponseEntity.status( HttpStatus.GONE ).build();
+
+        return ResponseEntity
+                .status( deleteService.deleteById( continentId )
+                         ? HttpStatus.NO_CONTENT
+                         : HttpStatus.NOT_FOUND )
+                .headers( HeaderUtility.copyNeededHeaders( requestHeaders ) )
+                .build();
+    }
+
+    @DeleteMapping( "" )
+    @SuppressWarnings( "PMD.ShortVariable" )
+    @Operation( method = "DELETE",
+                summary = "Delete a Continent",
+                description = "Delete a Continent regardless if it exists or not.",
+                requestBody = @RequestBody( required = true,
+                                            content = { @Content( mediaType = "application/json",
+                                                                  schema = @Schema( implementation = ContinentDTO.class ) )
+                                            }
+                ),
+                responses = {
+                        @ApiResponse( description = "Continent has been deleted",
+                                      responseCode = "204",
+                                      content = {
+                                              @Content( mediaType = "application/json",
+                                                        schema = @Schema( implementation = ContinentDTO.class ) ),
+                                              @Content( mediaType = "application/yaml",
+                                                        schema = @Schema( implementation = ContinentDTO.class ) ),
+                                              @Content( mediaType = "application/xml",
+                                                        schema = @Schema( implementation = ContinentDTO.class ) )
+                                      }
+                        )
+                },
+                parameters = {
+                        @Parameter( name = "Bearer",
+                                    required = true,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Authentication / Authorization token" ),
+                        @Parameter( name = HeaderUtility.TRACEID,
+                                    required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Distributed tracing identifier" ),
+                        @Parameter( name = HeaderUtility.TRACESTATE,
+                                    required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Vendor specific trace identification" )
+                }
+    )
+    public ResponseEntity<ContinentDTO>
+    restDelete( @Valid @org.springframework.web.bind.annotation.RequestBody final ContinentDTO continentDTO,
+                @RequestHeader final HttpHeaders requestHeaders )
+    {
+        // Delete is idempotent and will return NO_CONTENT regardless if
+        // the item was deleted, or if it didn't exist.
+        return ResponseEntity
+                .status( deleteService.delete( mapper.apiToDomain( continentDTO ) )
+                         ? HttpStatus.NO_CONTENT
+                         : HttpStatus.NOT_FOUND )
+                .headers( HeaderUtility.copyNeededHeaders( requestHeaders ) )
+                .build();
+    }
+
+    // ========== Administrative ==========
+    // ===== HEAD =====
+    /**
+     * Handle HTTP Method HEAD for /location/continent.
+     *
+     * @param requestHeaders Request's HttpHeaders
+     * @return
+     */
+    @RequestMapping( value = "", method = RequestMethod.HEAD )
+    public ResponseEntity<Void> restHeadContinent( @Valid @RequestHeader final HttpHeaders requestHeaders )
+    {
+        // This effectively needs to do the same as GET, but with an empty response body.
+        // Headers are set for Content-Type and Content length, and the same status code.
+        // "detail": "Request method 'DELETE' is not supported; Supported methods: HEAD, TRACE, POST, GET, OPTIONS",
+        final ResponseEntity<List<ContinentDTO>> result = restGetFindAll( requestHeaders );
+
+        return ResponseEntity
+                .status( HttpStatus.OK )
+                .headers( result.getHeaders() )
+                .build();
+    }
+
+    /**
+     * Handle HTTP Method HEAD for /location/continent/{continentId}.
+     *
+     * @param continentId A continent ID.
+     * @param requestHeaders Request's HttpHeaders
+     * @return
+     */
+    @RequestMapping( value = "/{continentId}", method = RequestMethod.HEAD )
+    public ResponseEntity<Void>
+    restHeadContinent_withID( @Valid @PathVariable( name = "continentId" ) final Integer continentId,
+                              @RequestHeader final HttpHeaders requestHeaders )
+    {
+        // This effectively needs to do the same as GET, but with an empty response body.
+        // Headers are set for Content-Type and Content length, and the same status code.
+        // "detail": "Request method 'DELETE' is not supported; Supported methods: HEAD, TRACE, POST, GET, OPTIONS",
+
+        final ResponseEntity<ContinentDTO> rr = restFindContinentById( continentId, requestHeaders );
+
+        return ResponseEntity
+                .status( HttpStatus.OK )
+                .headers( rr.getHeaders() )
+                .build();
+    }
+
+    // ===== INFO =====
+    // @RequestMapping( value = "", method = RequestMethod.INFO )
+    // public ResponseEntity<ContinentDTO> restInfoContinent( @RequestHeader HttpHeaders requestHeader )
+    // {
+    //     return ResponseEntity.noContent().build();
+    // }
+
+    // ===== OPTION =====
     /**
      * Handle HTTP Method OPTIONS for /location/continent.
      *
@@ -677,7 +749,7 @@ public class ContinentController
                 HttpMethod.POST,
                 HttpMethod.PUT,
                 HttpMethod.TRACE
-                                         );
+                                               );
         final String allowsString    =
                 allows
                         .stream()
@@ -698,63 +770,7 @@ public class ContinentController
         return headers;
     }
 
-    // ===================
-    // ===== HEAD =====
-
-    /**
-     * Handle HTTP Method HEAD for /location/continent.
-     *
-     * @param requestHeaders Request's HttpHeaders
-     * @return
-     */
-    @RequestMapping( value = "", method = RequestMethod.HEAD )
-    public ResponseEntity<Void> restHeadContinent( @Valid @RequestHeader final HttpHeaders requestHeaders )
-    {
-        // This effectively needs to do the same as GET, but with an empty response body.
-        // Headers are set for Content-Type and Content length, and the same status code.
-        // "detail": "Request method 'DELETE' is not supported; Supported methods: HEAD, TRACE, POST, GET, OPTIONS",
-        final ResponseEntity<List<ContinentDTO>> result = restGetFindAll( requestHeaders );
-
-        return ResponseEntity
-                .status( HttpStatus.OK )
-                .headers( result.getHeaders() )
-                .build();
-    }
-
-    /**
-     * Handle HTTP Method HEAD for /location/continent/{continentId}.
-     *
-     * @param continentId A continent ID.
-     * @param requestHeaders Request's HttpHeaders
-     * @return
-     */
-    @RequestMapping( value = "/{continentId}", method = RequestMethod.HEAD )
-    public ResponseEntity<Void>
-        restHeadContinent_withID( @Valid @PathVariable( name = "continentId" ) final Integer continentId,
-                                  @RequestHeader final HttpHeaders requestHeaders )
-    {
-        // This effectively needs to do the same as GET, but with an empty response body.
-        // Headers are set for Content-Type and Content length, and the same status code.
-        // "detail": "Request method 'DELETE' is not supported; Supported methods: HEAD, TRACE, POST, GET, OPTIONS",
-
-        final ResponseEntity<ContinentDTO> rr = restFindContinentById( continentId, requestHeaders );
-
-        return ResponseEntity
-                .status( HttpStatus.OK )
-                .headers( rr.getHeaders() )
-                .build();
-    }
-
-    // ===== INFO =====
-    // @RequestMapping( value = "", method = RequestMethod.INFO )
-    // public ResponseEntity<ContinentDTO> restInfoContinent( @RequestHeader HttpHeaders requestHeader )
-    // {
-    //     return ResponseEntity.noContent().build();
-    // }
-
-    // ===================
     // ===== TRACE =====
-
     /**
      * Handle HTTP Method TRACE for /location/continent.
      *
@@ -765,36 +781,36 @@ public class ContinentController
                 summary = "TRACE Continent",
                 description = "Continent API TRACE.",
                 responses = {
-                    @ApiResponse(
-                        description = "TRACE......",
-                        responseCode = "200",
-                        content =
-                        {
-                            @Content( mediaType = "application/json",
-                                      schema = @Schema( implementation = ContinentDTO.class ) ),
-                            @Content( mediaType = "application/yaml",
-                                      schema = @Schema( implementation = ContinentDTO.class ) ),
-                            @Content( mediaType = "application/xml",
-                                      schema = @Schema( implementation = ContinentDTO.class ) )
-                        }
-                    )
+                        @ApiResponse(
+                                description = "TRACE......",
+                                responseCode = "200",
+                                content =
+                                        {
+                                                @Content( mediaType = "application/json",
+                                                          schema = @Schema( implementation = ContinentDTO.class ) ),
+                                                @Content( mediaType = "application/yaml",
+                                                          schema = @Schema( implementation = ContinentDTO.class ) ),
+                                                @Content( mediaType = "application/xml",
+                                                          schema = @Schema( implementation = ContinentDTO.class ) )
+                                        }
+                        )
                 },
                 parameters = {
-                    @Parameter( name = "Bearer",
-                                required = false,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Authentication / Authorization token" ),
-                    @Parameter( name = HeaderUtility.TRACEID,
-                                required = false,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Distributed tracing identifier" ),
-                    @Parameter( name = HeaderUtility.TRACESTATE,
-                                required = false,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Vendor specific trace identification" )
+                        @Parameter( name = "Bearer",
+                                    required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Authentication / Authorization token" ),
+                        @Parameter( name = HeaderUtility.TRACEID,
+                                    required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Distributed tracing identifier" ),
+                        @Parameter( name = HeaderUtility.TRACESTATE,
+                                    required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Vendor specific trace identification" )
                 }
     )
     @RequestMapping( value = "", method = RequestMethod.TRACE )
@@ -822,36 +838,36 @@ public class ContinentController
                 summary = "TRACE Continent",
                 description = "Continent API TRACE.",
                 responses = {
-                    @ApiResponse(
-                        description = "TRACE......",
-                        responseCode = "200",
-                        content =
-                        {
-                            @Content( mediaType = "application/json",
-                                      schema = @Schema( implementation = ContinentDTO.class ) ),
-                            @Content( mediaType = "application/yaml",
-                                      schema = @Schema( implementation = ContinentDTO.class ) ),
-                            @Content( mediaType = "application/xml",
-                                      schema = @Schema( implementation = ContinentDTO.class ) )
-                        }
-                    )
+                        @ApiResponse(
+                                description = "TRACE......",
+                                responseCode = "200",
+                                content =
+                                        {
+                                                @Content( mediaType = "application/json",
+                                                          schema = @Schema( implementation = ContinentDTO.class ) ),
+                                                @Content( mediaType = "application/yaml",
+                                                          schema = @Schema( implementation = ContinentDTO.class ) ),
+                                                @Content( mediaType = "application/xml",
+                                                          schema = @Schema( implementation = ContinentDTO.class ) )
+                                        }
+                        )
                 },
                 parameters = {
-                    @Parameter( name = "Bearer",
-                                required = false,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Authentication / Authorization token" ),
-                    @Parameter( name = HeaderUtility.TRACEID,
-                                required = false,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Distributed tracing identifier" ),
-                    @Parameter( name = HeaderUtility.TRACESTATE,
-                                required = false,
-                                schema = @Schema( implementation = String.class ),
-                                in = ParameterIn.HEADER,
-                                description = "Vendor specific trace identification" )
+                        @Parameter( name = "Bearer",
+                                    required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Authentication / Authorization token" ),
+                        @Parameter( name = HeaderUtility.TRACEID,
+                                    required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Distributed tracing identifier" ),
+                        @Parameter( name = HeaderUtility.TRACESTATE,
+                                    required = false,
+                                    schema = @Schema( implementation = String.class ),
+                                    in = ParameterIn.HEADER,
+                                    description = "Vendor specific trace identification" )
                 }
     )
     @RequestMapping( value = "/{continentId}", method = RequestMethod.TRACE )
@@ -868,5 +884,30 @@ public class ContinentController
                 .location( location )
                 .build();
     }
+
+
+
+
+
+
+
+    // ===================
+    // ===== GET =====
+    // ===================
+    // ===== POST =====
+    // ===================
+    // ===== PUT =====
+    // ===================
+    // ===== DELETE =====
+    // ===================
+    // ===== PATCH =====
+    // ===================
+    // ===== Options =====
+    // ===================
+    // ===== HEAD =====
+    // ===== INFO =====
+    // ===================
+    // ===== TRACE =====
+
 
 }

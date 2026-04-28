@@ -8,7 +8,6 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -27,7 +26,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 @WebMvcTest( controllers = ContinentController.class )
 @ComponentScan( basePackages = { "com.example.airline.location.continent" } )
 @AutoConfigureMockMvc( addFilters = false /*, secure = false */ )
-@DisplayName( "Continent: Service - Delete" )
+@DisplayName( "Continent: Service - Update" )
 class ContinentUpdateServiceTest
 {
     @MockitoBean

@@ -1,9 +1,6 @@
 package com.example.airline.location.continent.api;
 
 
-//import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
-//import static net.javacrumbs.jsonunit.assertj.JsonAssertions.json;
-//import static net.javacrumbs.jsonunit.assertj.*;
 import static com.example.rest.utility.HeaderUtility.withHeaders;
 import static java.util.Map.entry;
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
@@ -17,7 +14,6 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -54,8 +50,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -64,17 +58,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ProblemDetail;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
-import org.springframework.test.http.HttpHeadersAssert;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.ObjectMapper;
 //import org.springframework.transaction.support.TransactionTemplate;
 
@@ -86,7 +77,7 @@ import tools.jackson.databind.ObjectMapper;
 @WebMvcTest( controllers = ContinentController.class )
 @ComponentScan( basePackages = { "com.example.airline.location.continent" } )
 @AutoConfigureMockMvc( addFilters = false /*, secure = false */ )
-@DisplayName( "REST Controller - /continent" )
+@DisplayName( "Continent: API (/continent)" )
 class ContinentControllerRestTest
 {
     private static final MediaType desiredContentType = new MediaType( MediaType.APPLICATION_JSON,
@@ -103,8 +94,8 @@ class ContinentControllerRestTest
     @MockitoSpyBean
     private ContinentDeleteService deleteService;
 
-    @Autowired
-    @SuppressWarnings( "unused" )
+//    @Autowired
+//    @SuppressWarnings( "unused" )
 //    private ContinentDtoMapper mapperReal;
     @MockitoSpyBean
     private ContinentDtoMapper mapper;
@@ -114,6 +105,7 @@ class ContinentControllerRestTest
 
 //    @Autowired
 //    private TransactionTemplate transactionTemplate;
+
     private HttpHeaders requestHeaders;
 
     @BeforeEach
@@ -126,6 +118,385 @@ class ContinentControllerRestTest
         requestHeaders.setContentType( desiredContentType );
     }
 
+
+    // ========== CREATE ==========
+    // ===== POST =====
+    /**
+     * Tests for the POST http method.
+     */
+    @Nested
+    @DisplayName( "HTTP POST" )
+    class PostMethod           // NOPMD
+    {
+        @Test
+        @DisplayName( "Existing resource - 409: Conflict - body ???" )
+        void restPost_withExisting_returnsConflict() throws Exception
+        {
+            // --- given
+            final String jsonString =
+                    """
+                            {
+                               "code": "CC",
+                               "name": "foo"
+                            }
+                            """;
+            final RequestBuilder request = withHeaders( post( "/location/continent" ) )
+                    .characterEncoding( "UTF-8" )
+                    .content( jsonString )
+                    .headers( requestHeaders );
+
+            // -- mocks behavior
+            when( repository.existsByCode( anyString() ) )
+                    .thenReturn( true );
+
+
+            // --- when
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andDo( print() )
+                    .andExpect( status().isConflict() )
+//                    .andExpect( jsonPath( "$[0].id" ).value( 1 ) )
+                    .andReturn();
+
+            // --- then
+            final MockHttpServletResponse response = result.getResponse();
+            // TODO verify the JSON is the created entity
+            final Collection<String> headerNames   = response.getHeaderNames();
+
+            assertAll( () -> assertEquals( HttpStatus.CONFLICT.value(), result.getResponse().getStatus() ),
+                       () -> assertThat( headerNames )
+                               .contains( "TRACEPARENT" )
+                               .contains( "TRACESTATE" )
+                               .contains( "Content-Type" )
+                               .doesNotContain( "NoWay" ),
+                    // TODO should response include problem details indicating existing entity with same ID
+                       () -> verify( createService ).create( any( NewContinent.class ) ),
+                       () -> verifyNoInteractions( readService ),
+                       () -> verifyNoInteractions( updateService ),
+                       () -> verifyNoInteractions( deleteService ),
+                       () -> verify( repository ).existsByCode( anyString() ),
+                       () -> verify( repository, never() ).save( any( NewContinentEntity.class ) ),
+                       () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
+                     );
+        }
+
+
+/*
+        //            final HttpHeadersAssert  headersAssert = new HttpHeadersAssert( response.getHeaders() );
+        final Collection<String> headerNames   = response.getHeaderNames();
+        assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
+            () -> assertThat( headerNames )
+                               .contains( "TRACEPARENT" )
+                               .contains( "TRACESTATE" )
+                               .contains( "Content-Type" )
+                               .doesNotContain( "NoWay" ),
+//                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
+//                       () -> assertThat( result.getResponse().getHeaderNames() )
+//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+                       () -> verify( readService ).findAll(),
+                       () -> verify( repository ).findAll()
+                     );
+*/
+
+
+        @Test
+        @DisplayName( "new resource - 200: Success - body is new entity" )
+        void restPost_withNew_returnsCreated() throws Exception
+        {
+            // --- given
+            final ContinentEntity entity = new ContinentEntity( 22, "CC", "::ZNAMEZ::", null, null );
+            final String jsonString =
+                    """
+                            {
+                               "code": "CC",
+                               "name": "foo"
+                            }
+                            """;
+            final RequestBuilder request = withHeaders( post( "/location/continent" ) )
+                    .characterEncoding( "UTF-8" )
+                    .content( jsonString )
+                    .headers( requestHeaders );
+
+            when( repository.existsByCode( anyString() ) )
+                    .thenReturn( false );
+            when( repository.save( any( ContinentEntity.class ) ) )
+                    .thenReturn( entity );
+
+            // --- when
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andDo( print() )
+                    .andExpect( status().isCreated() )
+                    .andReturn();
+
+            // --- then
+            // final MockHttpServletResponse response = result.getResponse();
+            // TODO verify the JSON is the created entity
+
+            // It is desired to have all 'asserts' as soft asserts.
+            final MockHttpServletResponse response = result.getResponse();
+            final Collection<String> headerNames   = response.getHeaderNames();
+            assertAll( () -> assertEquals( HttpStatus.CREATED.value(), result.getResponse().getStatus() ),
+                       () -> assertThat( headerNames )
+                               .contains( "TRACEPARENT" )
+                               .contains( "TRACESTATE" )
+                               .contains( "Content-Type" )
+                               .contains( "Location" )
+                               .doesNotContain( "NoWay" ),
+                    // The newly created resource's address is returned
+                    // - only verify the end since the host and context root may vary by environment
+                    // - final number (22) is the id of the created row
+                       () -> assertThat( response.getRedirectedUrl() )
+                               .matches( "^.*/location/continent/22" ),
+                       () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
+                               .anyMatch( location -> location.matches( "^.*/location/continent/22$" ) ),
+                    //
+                       () -> verify( createService ).create( any( NewContinent.class ) ),
+                       () -> verifyNoInteractions( readService ),
+                       () -> verifyNoInteractions( updateService ),
+                       () -> verifyNoInteractions( deleteService ),
+                    //
+                       () -> verify( repository ).existsByCode( anyString() ),
+                       () -> verify( repository ).save( any( ContinentEntity.class ) ),
+                       () -> verify( mapper ).domainToApi( any( Continent.class ) )
+                     );
+        }
+
+
+
+        @Disabled
+        @Nested
+        @DisplayName( "validations" )
+        class Validation
+        {
+
+            @Disabled
+            @Test
+            @DisplayName( "No name or Code - 400: Bad Request - Problem details with messages" )
+            void restPost_withNoRequiredParams_returnsValidationError() throws Exception
+            {
+                // --- given
+                final String jsonString =
+                        """
+                        {
+                           "keywords": "will report missing code, name fields"
+                        }
+                        """;
+                final RequestBuilder request = withHeaders( post( "/location/continent" ) )
+                        .characterEncoding( "UTF-8" )
+                        .content( jsonString )
+                        .headers( requestHeaders );
+
+                // --- when
+                final MvcResult result = mvc
+                        .perform( request )
+                        .andDo( print() )
+                        .andReturn();
+
+                // --- then
+                // final MockHttpServletResponse response = result.getResponse();
+                final String body = result.getResponse().getContentAsString();
+//                final Gson gson = new Gson();
+//                final ProblemDetail details = gson.fromJson( body );
+//                final ObjectMapper  mapper  = buildMapper();
+//                final ProblemDetail details = mapper.readValue( body, ProblemDetail.class );
+                // TODO verify the JSON is the created entity
+
+                // It is desired to have all 'asserts' as soft asserts.
+                assertAll( () -> assertEquals( HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus() ),
+                        // TODO Use a JSON assertion instead of a plain string
+//                           () -> assertThat( details.getTitle() )
+//                                   .isEqualTo( "Validation failed on 'newContinentDTO'" ),
+//                           () -> assertThat( details.getDetail() )
+//                                   .isEqualTo( "Invalid request content." ),
+                           () -> assertThatJson( body )
+                                   .isObject()
+                                   .containsOnly( entry( "title", "Validation failed on 'newContinentDTO'" ),
+                                                  entry( "status", 400),
+                                                  entry( "detail",  "Invalid request content." ),
+                                                  entry( "instance", "/location/continent" ),
+                                                  entry( "name", "Name is required, provided: [null]"  ),
+                                                  entry( "code", "A 2-character code is required, provided: [null]"  )
+                                                ),
+                           () -> assertThat( result.getResponse().getHeaderNames() )
+                                   .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
+                         );
+            }
+
+
+        /*
+        () -> assertThat( result.getResponse().getRedirectedUrl() )
+                               .matches( "^.* /location/continent/123$" ),
+        () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
+            .anyMatch( location -> location.matches( "^.* /location/continent/123$" ) )
+
+        final MockHttpServletResponse response = result.getResponse();
+        // TODO verify the JSON is the created entity
+        final Collection<String> headerNames   = response.getHeaderNames();
+        //            final HttpHeadersAssert  headersAssert = new HttpHeadersAssert( response.getHeaders() );
+        final Collection<String> headerNames   = response.getHeaderNames();
+        assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
+            () -> assertThat( headerNames )
+                               .contains( "TRACEPARENT" )
+                               .contains( "TRACESTATE" )
+                               .contains( "Content-Type" )
+                               .doesNotContain( "NoWay" ),
+//                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
+//                       () -> assertThat( result.getResponse().getHeaderNames() )
+//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+                       () -> verify( readService ).findAll(),
+                       () -> verify( repository ).findAll()
+                     );
+*/
+
+
+            @Disabled
+            @Test
+            @DisplayName( "blank name and code - 400: Bad Request - problem details indicate blank values" )
+            void restPost_withBlankRequiredParams_returnsValidationError() throws Exception
+            {
+                // --- given
+                final String jsonString =
+                        """
+                        {
+                           "code": "  ",
+                           "code": "  ",
+                           "name": "     "
+                        }
+                        """;
+                final RequestBuilder request = withHeaders( post( "/location/continent" ) )
+                        .characterEncoding( "UTF-8" )
+                        .headers( requestHeaders )
+                        .content( jsonString );
+
+                // --- when
+                final MvcResult result = mvc
+                        .perform( request )
+                        .andDo( print() )
+                        .andReturn();
+
+                // --- then
+                // final MockHttpServletResponse response = result.getResponse();
+                // TODO verify the JSON is the created entity
+                final String body = result.getResponse().getContentAsString();
+
+                // It is desired to have all 'asserts' as soft asserts.
+                assertAll( () -> assertEquals( HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus() ),
+                           () -> assertThat( result.getResponse().getHeaderNames() )
+                                   .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+                        // TODO Use a JSON assertion instead of a plain string
+                           () -> assertThatJson( body )
+                                   .isObject()
+                                   .containsOnly( entry( "title", "Validation failed on 'newContinentDTO'" ),
+                                                  entry( "status", 400),
+                                                  entry( "detail",  "Invalid request content." ),
+                                                  entry( "instance", "/location/continent" ),
+                                                  entry( "name", "Name must be between 2 and 52 characters, provided: [     ]"  ),
+                                                  entry( "code", "Code must be 2 uppercase characters, provided: [  ]"  )
+                                                )
+                         );
+            }
+
+
+        /*
+        () -> assertThat( result.getResponse().getRedirectedUrl() )
+                               .matches( "^.* /location/continent/123$" ),
+        () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
+            .anyMatch( location -> location.matches( "^.* /location/continent/123$" ) )
+
+        final MockHttpServletResponse response = result.getResponse();
+        // TODO verify the JSON is the created entity
+        final Collection<String> headerNames   = response.getHeaderNames();
+        //            final HttpHeadersAssert  headersAssert = new HttpHeadersAssert( response.getHeaders() );
+        final Collection<String> headerNames   = response.getHeaderNames();
+        assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
+            () -> assertThat( headerNames )
+                               .contains( "TRACEPARENT" )
+                               .contains( "TRACESTATE" )
+                               .contains( "Content-Type" )
+                               .doesNotContain( "NoWay" ),
+//                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
+//                       () -> assertThat( result.getResponse().getHeaderNames() )
+//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+                       () -> verify( readService ).findAll(),
+                       () -> verify( repository ).findAll()
+                     );
+*/
+
+
+
+            @Test
+            @DisplayName( "invalid Wiki URI - 400: Bad Request - problem detail shows malformed URI" )
+            void restPost_withInvalidWikiLink_returnsValidationError() throws Exception
+            {
+                // --- given
+                final String jsonString =
+                        """
+                        {
+                           "id": 1,
+                           "code": "NA",
+                           "name": "A valid length name",
+                           "wikiLink": "https://wikipedia.com/bad url/not encoded",
+                           "keywords": "will report missing code, name fields"
+                        }
+                        """;
+                final RequestBuilder request = withHeaders( put( "/location/continent" ) )
+                        .characterEncoding( "UTF-8" )
+                        .headers( requestHeaders )
+                        .content( jsonString );
+
+                // --- when
+                final MvcResult result = mvc
+                        .perform( request )
+                        .andDo( print() )
+                        .andReturn();
+
+                // --- then
+                // final MockHttpServletResponse response = result.getResponse();
+                // TODO verify the JSON is the created entity
+
+                // It is desired to have all 'asserts' as soft asserts.
+                assertAll( () -> assertEquals( HttpStatus.BAD_REQUEST.value(),
+                                               result.getResponse().getStatus() ),
+                           () -> assertThat( result.getResponse().getHeaderNames() )
+                                   .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+                           () -> assertThat( result.getResponse().getContentAsString() )
+                                   .contains( "Cannot deserialize value of type `java.net.URI` from String" )
+                         );
+
+            }
+
+        /*
+        () -> assertThat( result.getResponse().getRedirectedUrl() )
+                               .matches( "^.* /location/continent/123$" ),
+        () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
+            .anyMatch( location -> location.matches( "^.* /location/continent/123$" ) )
+
+        final MockHttpServletResponse response = result.getResponse();
+        // TODO verify the JSON is the created entity
+        final Collection<String> headerNames   = response.getHeaderNames();
+        //            final HttpHeadersAssert  headersAssert = new HttpHeadersAssert( response.getHeaders() );
+        final Collection<String> headerNames   = response.getHeaderNames();
+        assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
+            () -> assertThat( headerNames )
+                               .contains( "TRACEPARENT" )
+                               .contains( "TRACESTATE" )
+                               .contains( "Content-Type" )
+                               .doesNotContain( "NoWay" ),
+//                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
+//                       () -> assertThat( result.getResponse().getHeaderNames() )
+//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+                       () -> verify( readService ).findAll(),
+                       () -> verify( repository ).findAll()
+                     );
+*/
+
+        }
+    }
+
+
+    // ========== READ ==========
+    // ===== GET =====
     /**
      * Tests for the GET http method.
      */
@@ -183,7 +554,7 @@ class ContinentControllerRestTest
                        () -> verifyNoInteractions( deleteService ),
                        () -> verify( repository ).findById( anyInt() ),
                        () -> verify( mapper ).domainToApi( any( Continent.class ) )
-            );
+                     );
         }
 
 
@@ -221,7 +592,7 @@ class ContinentControllerRestTest
                        () -> verifyNoInteractions( deleteService ),
                        () -> verify( repository ).findById( anyInt() ),
                        () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
-            );
+                     );
         }
 
 
@@ -388,12 +759,12 @@ class ContinentControllerRestTest
                                .contains( "Content-Type" )
                                .doesNotContain( "NoWay" ),
                        () -> assertThat( body ).isNotBlank(),
-                       //
+                    //
                        () -> verifyNoInteractions( createService ),
                        () -> verifyNoInteractions( readService ),
                        () -> verifyNoInteractions( updateService ),
                        () -> verifyNoInteractions( deleteService )
-                       // TODO mapper check
+                    // TODO mapper check
                      );
         }
 
@@ -426,10 +797,10 @@ class ContinentControllerRestTest
                     // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
                     //      don't complain about lack of assertions in tests
                     .andExpect( jsonPath( "$[0].id" ).value( 1 ) );
-                    // .andExpect( jsonPath( "$.code" ).value( "ZZ" ) )
-                    // .andExpect( jsonPath( "$.name" ).value( "::NAME::" ) )
-                    // .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
-                    // .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
+            // .andExpect( jsonPath( "$.code" ).value( "ZZ" ) )
+            // .andExpect( jsonPath( "$.name" ).value( "::NAME::" ) )
+            // .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
+            // .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
             final MvcResult result = actions.andReturn();
 
             // final String jsonString =
@@ -473,686 +844,16 @@ class ContinentControllerRestTest
         }
     }
 
-
-    /**
-     * Tests for the POST http method.
-     */
-    @Nested
-    @DisplayName( "HTTP POST" )
-    class PostMethod           // NOPMD
-    {
-        @Test
-        @DisplayName( "Existing resource - 409: Conflict - body ???" )
-        void restPost_withExisting_returnsConflict() throws Exception
-        {
-            // --- given
-            final String jsonString =
-                    """
-                            {
-                               "code": "CC",
-                               "name": "foo"
-                            }
-                            """;
-            final RequestBuilder request = withHeaders( post( "/location/continent" ) )
-                    .characterEncoding( "UTF-8" )
-                    .content( jsonString )
-                    .headers( requestHeaders );
-
-            // -- mocks behavior
-            when( repository.existsByCode( anyString() ) )
-                    .thenReturn( true );
-
-
-            // --- when
-            final MvcResult result = mvc
-                    .perform( request )
-                    .andDo( print() )
-                    .andExpect( status().isConflict() )
-//                    .andExpect( jsonPath( "$[0].id" ).value( 1 ) )
-                    .andReturn();
-
-            // --- then
-             final MockHttpServletResponse response = result.getResponse();
-            // TODO verify the JSON is the created entity
-            final Collection<String> headerNames   = response.getHeaderNames();
-
-            assertAll( () -> assertEquals( HttpStatus.CONFLICT.value(), result.getResponse().getStatus() ),
-                       () -> assertThat( headerNames )
-                               .contains( "TRACEPARENT" )
-                               .contains( "TRACESTATE" )
-                               .contains( "Content-Type" )
-                               .doesNotContain( "NoWay" ),
-                       // TODO should response include problem details indicating existing entity with same ID
-                       () -> verify( createService ).create( any( NewContinent.class ) ),
-                       () -> verifyNoInteractions( readService ),
-                       () -> verifyNoInteractions( updateService ),
-                       () -> verifyNoInteractions( deleteService ),
-                       () -> verify( repository ).existsByCode( anyString() ),
-                       () -> verify( repository, never() ).save( any( NewContinentEntity.class ) ),
-                       () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
-            );
-        }
-
-
-/*
-        //            final HttpHeadersAssert  headersAssert = new HttpHeadersAssert( response.getHeaders() );
-        final Collection<String> headerNames   = response.getHeaderNames();
-        assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
-            () -> assertThat( headerNames )
-                               .contains( "TRACEPARENT" )
-                               .contains( "TRACESTATE" )
-                               .contains( "Content-Type" )
-                               .doesNotContain( "NoWay" ),
-//                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
-//                       () -> assertThat( result.getResponse().getHeaderNames() )
-//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
-                       () -> verify( readService ).findAll(),
-                       () -> verify( repository ).findAll()
-                     );
-*/
-
-
-        @Test
-        @DisplayName( "new resource - 200: Success - body is new entity" )
-        void restPost_withNew_returnsCreated() throws Exception
-        {
-            // --- given
-            final ContinentEntity entity = new ContinentEntity( 22, "CC", "::ZNAMEZ::", null, null );
-            final String jsonString =
-                    """
-                            {
-                               "code": "CC",
-                               "name": "foo"
-                            }
-                            """;
-            final RequestBuilder request = withHeaders( post( "/location/continent" ) )
-                    .characterEncoding( "UTF-8" )
-                    .content( jsonString )
-                    .headers( requestHeaders );
-
-            when( repository.existsByCode( anyString() ) )
-                    .thenReturn( false );
-            when( repository.save( any( ContinentEntity.class ) ) )
-                    .thenReturn( entity );
-
-            // --- when
-            final MvcResult result = mvc
-                    .perform( request )
-                    .andDo( print() )
-                    .andExpect( status().isCreated() )
-                    .andReturn();
-
-            // --- then
-            // final MockHttpServletResponse response = result.getResponse();
-            // TODO verify the JSON is the created entity
-
-            // It is desired to have all 'asserts' as soft asserts.
-            final MockHttpServletResponse response = result.getResponse();
-            final Collection<String> headerNames   = response.getHeaderNames();
-            assertAll( () -> assertEquals( HttpStatus.CREATED.value(), result.getResponse().getStatus() ),
-                       () -> assertThat( headerNames )
-                               .contains( "TRACEPARENT" )
-                               .contains( "TRACESTATE" )
-                               .contains( "Content-Type" )
-                               .contains( "Location" )
-                               .doesNotContain( "NoWay" ),
-                       // The newly created resource's address is returned
-                       // - only verify the end since the host and context root may vary by environment
-                       // - final number (22) is the id of the created row
-                       () -> assertThat( response.getRedirectedUrl() )
-                               .matches( "^.*/location/continent/22" ),
-                       () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
-                               .anyMatch( location -> location.matches( "^.*/location/continent/22$" ) ),
-                       //
-                       () -> verify( createService ).create( any( NewContinent.class ) ),
-                       () -> verifyNoInteractions( readService ),
-                       () -> verifyNoInteractions( updateService ),
-                       () -> verifyNoInteractions( deleteService ),
-                       //
-                       () -> verify( repository ).existsByCode( anyString() ),
-                       () -> verify( repository ).save( any( ContinentEntity.class ) ),
-                       () -> verify( mapper ).domainToApi( any( Continent.class ) )
-            );
-        }
-
-
-
-        @Disabled
-        @Nested
-        @DisplayName( "validations" )
-        class Validation
-        {
-
-            @Disabled
-            @Test
-            @DisplayName( "No name or Code - 400: Bad Request - Problem details with messages" )
-            void restPost_withNoRequiredParams_returnsValidationError() throws Exception
-            {
-                // --- given
-                final String jsonString =
-                        """
-                        {
-                           "keywords": "will report missing code, name fields"
-                        }
-                        """;
-                final RequestBuilder request = withHeaders( post( "/location/continent" ) )
-                        .characterEncoding( "UTF-8" )
-                        .content( jsonString )
-                        .headers( requestHeaders );
-
-                // --- when
-                final MvcResult result = mvc
-                        .perform( request )
-                        .andDo( print() )
-                        .andReturn();
-
-                // --- then
-                // final MockHttpServletResponse response = result.getResponse();
-                final String body = result.getResponse().getContentAsString();
-//                final Gson gson = new Gson();
-//                final ProblemDetail details = gson.fromJson( body );
-//                final ObjectMapper  mapper  = buildMapper();
-//                final ProblemDetail details = mapper.readValue( body, ProblemDetail.class );
-                // TODO verify the JSON is the created entity
-
-                // It is desired to have all 'asserts' as soft asserts.
-                assertAll( () -> assertEquals( HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus() ),
-                           // TODO Use a JSON assertion instead of a plain string
-//                           () -> assertThat( details.getTitle() )
-//                                   .isEqualTo( "Validation failed on 'newContinentDTO'" ),
-//                           () -> assertThat( details.getDetail() )
-//                                   .isEqualTo( "Invalid request content." ),
-                           () -> assertThatJson( body )
-                                   .isObject()
-                                   .containsOnly( entry( "title", "Validation failed on 'newContinentDTO'" ),
-                                                  entry( "status", 400),
-                                                  entry( "detail",  "Invalid request content." ),
-                                                  entry( "instance", "/location/continent" ),
-                                                  entry( "name", "Name is required, provided: [null]"  ),
-                                                  entry( "code", "A 2-character code is required, provided: [null]"  )
-                                                ),
-                           () -> assertThat( result.getResponse().getHeaderNames() )
-                                   .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
-                );
-            }
-
-
-        /*
-        () -> assertThat( result.getResponse().getRedirectedUrl() )
-                               .matches( "^.* /location/continent/123$" ),
-        () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
-            .anyMatch( location -> location.matches( "^.* /location/continent/123$" ) )
-
-        final MockHttpServletResponse response = result.getResponse();
-        // TODO verify the JSON is the created entity
-        final Collection<String> headerNames   = response.getHeaderNames();
-        //            final HttpHeadersAssert  headersAssert = new HttpHeadersAssert( response.getHeaders() );
-        final Collection<String> headerNames   = response.getHeaderNames();
-        assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
-            () -> assertThat( headerNames )
-                               .contains( "TRACEPARENT" )
-                               .contains( "TRACESTATE" )
-                               .contains( "Content-Type" )
-                               .doesNotContain( "NoWay" ),
-//                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
-//                       () -> assertThat( result.getResponse().getHeaderNames() )
-//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
-                       () -> verify( readService ).findAll(),
-                       () -> verify( repository ).findAll()
-                     );
-*/
-
-
-            @Disabled
-            @Test
-            @DisplayName( "blank name and code - 400: Bad Request - problem details indicate blank values" )
-            void restPost_withBlankRequiredParams_returnsValidationError() throws Exception
-            {
-                // --- given
-                final String jsonString =
-                        """
-                        {
-                           "code": "  ",
-                           "code": "  ",
-                           "name": "     "
-                        }
-                        """;
-                final RequestBuilder request = withHeaders( post( "/location/continent" ) )
-                        .characterEncoding( "UTF-8" )
-                        .headers( requestHeaders )
-                        .content( jsonString );
-
-                // --- when
-                final MvcResult result = mvc
-                        .perform( request )
-                        .andDo( print() )
-                        .andReturn();
-
-                // --- then
-                // final MockHttpServletResponse response = result.getResponse();
-                // TODO verify the JSON is the created entity
-                final String body = result.getResponse().getContentAsString();
-
-                // It is desired to have all 'asserts' as soft asserts.
-                assertAll( () -> assertEquals( HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus() ),
-                           () -> assertThat( result.getResponse().getHeaderNames() )
-                                   .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
-                           // TODO Use a JSON assertion instead of a plain string
-                           () -> assertThatJson( body )
-                                   .isObject()
-                                   .containsOnly( entry( "title", "Validation failed on 'newContinentDTO'" ),
-                                                  entry( "status", 400),
-                                                  entry( "detail",  "Invalid request content." ),
-                                                  entry( "instance", "/location/continent" ),
-                                                  entry( "name", "Name must be between 2 and 52 characters, provided: [     ]"  ),
-                                                  entry( "code", "Code must be 2 uppercase characters, provided: [  ]"  )
-                                                )
-                );
-            }
-
-
-        /*
-        () -> assertThat( result.getResponse().getRedirectedUrl() )
-                               .matches( "^.* /location/continent/123$" ),
-        () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
-            .anyMatch( location -> location.matches( "^.* /location/continent/123$" ) )
-
-        final MockHttpServletResponse response = result.getResponse();
-        // TODO verify the JSON is the created entity
-        final Collection<String> headerNames   = response.getHeaderNames();
-        //            final HttpHeadersAssert  headersAssert = new HttpHeadersAssert( response.getHeaders() );
-        final Collection<String> headerNames   = response.getHeaderNames();
-        assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
-            () -> assertThat( headerNames )
-                               .contains( "TRACEPARENT" )
-                               .contains( "TRACESTATE" )
-                               .contains( "Content-Type" )
-                               .doesNotContain( "NoWay" ),
-//                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
-//                       () -> assertThat( result.getResponse().getHeaderNames() )
-//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
-                       () -> verify( readService ).findAll(),
-                       () -> verify( repository ).findAll()
-                     );
-*/
-
-
-
-            @Test
-            @DisplayName( "invalid Wiki URI - 400: Bad Request - problem detail shows malformed URI" )
-            void restPost_withInvalidWikiLink_returnsValidationError() throws Exception
-            {
-                // --- given
-                final String jsonString =
-                        """
-                        {
-                           "id": 1,
-                           "code": "NA",
-                           "name": "A valid length name",
-                           "wikiLink": "https://wikipedia.com/bad url/not encoded",
-                           "keywords": "will report missing code, name fields"
-                        }
-                        """;
-                final RequestBuilder request = withHeaders( put( "/location/continent" ) )
-                        .characterEncoding( "UTF-8" )
-                        .headers( requestHeaders )
-                        .content( jsonString );
-
-                // --- when
-                final MvcResult result = mvc
-                        .perform( request )
-                        .andDo( print() )
-                        .andReturn();
-
-                // --- then
-                // final MockHttpServletResponse response = result.getResponse();
-                // TODO verify the JSON is the created entity
-
-                // It is desired to have all 'asserts' as soft asserts.
-                assertAll( () -> assertEquals( HttpStatus.BAD_REQUEST.value(),
-                                               result.getResponse().getStatus() ),
-                           () -> assertThat( result.getResponse().getHeaderNames() )
-                                   .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
-                           () -> assertThat( result.getResponse().getContentAsString() )
-                                   .contains( "Cannot deserialize value of type `java.net.URI` from String" )
-                );
-
-            }
-
-        /*
-        () -> assertThat( result.getResponse().getRedirectedUrl() )
-                               .matches( "^.* /location/continent/123$" ),
-        () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
-            .anyMatch( location -> location.matches( "^.* /location/continent/123$" ) )
-
-        final MockHttpServletResponse response = result.getResponse();
-        // TODO verify the JSON is the created entity
-        final Collection<String> headerNames   = response.getHeaderNames();
-        //            final HttpHeadersAssert  headersAssert = new HttpHeadersAssert( response.getHeaders() );
-        final Collection<String> headerNames   = response.getHeaderNames();
-        assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
-            () -> assertThat( headerNames )
-                               .contains( "TRACEPARENT" )
-                               .contains( "TRACESTATE" )
-                               .contains( "Content-Type" )
-                               .doesNotContain( "NoWay" ),
-//                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
-//                       () -> assertThat( result.getResponse().getHeaderNames() )
-//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
-                       () -> verify( readService ).findAll(),
-                       () -> verify( repository ).findAll()
-                     );
-*/
-
-        }
-    }
-
-
-
-    /**
-     * Tests for the PUT http method.
-     */
-    @Nested
-    @DisplayName( "HTTP PUT" )
-    class PutMethod           // NOPMD
-    {
-        @Test
-        @DisplayName( "entity does not exist - 409: Conflict - can't create a new instance" )
-        void restPut_withNewEntity_returnsConflict() throws Exception
-        {
-            // --- given
-            final ContinentEntity entity = new ContinentEntity( 22, "ZZ", "::ZNAMEZ::", null, null );
-            final String jsonString =
-                    """
-                            {
-                               "id": 77,
-                               "code": "CC",
-                               "name": "foo"
-                            }
-                            """;
-            final RequestBuilder request = withHeaders( put( "/location/continent" ) )
-                    .characterEncoding( "UTF-8" )
-                    .headers( requestHeaders )
-                    .content( jsonString );
-
-            when( repository.existsById( anyInt() ) )
-                    .thenReturn( false );
-            when( repository.getReferenceById( anyInt() ) )
-                    .thenReturn( entity );
-
-            // --- when
-            final MvcResult result = mvc
-                    .perform( request )
-                    .andDo( print() )
-                    .andReturn();
-
-            // --- then
-            // final MockHttpServletResponse response = result.getResponse();
-            final Collection<String> headerNames   = result.getResponse().getHeaderNames();
-            assertAll( () -> assertEquals( HttpStatus.CONFLICT.value(), result.getResponse().getStatus() ),
-                       () -> assertThat( headerNames )
-                               .contains( "TRACEPARENT" )
-                               .contains( "TRACESTATE" )
-                               .contains( "Content-Type" )
-                               .doesNotContain( "NoWay" ),
-                       () -> verify( updateService ).update( any( Continent.class ) ),
-                       () -> verify( repository ).existsById( anyInt() ),
-                       () -> verify( repository, never() ).save( any( ContinentEntity.class) ),
-                       () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
-            );
-        }
-
-        @Test
-        @DisplayName( "existing entity - 200: Success  - update/return an existing instance" )
-        void restPut_withExistingEntity_returnsOK() throws Exception
-        {
-            // --- given
-            final ContinentEntity entity = new ContinentEntity( 22, "ZZ", "::ZNAMEZ::", null, null );
-            final String jsonString =
-                    """
-                            {
-                               "id": 77,
-                               "code": "CC",
-                               "name": "foo"
-                            }
-                            """;
-            final RequestBuilder request = withHeaders( put( "/location/continent" ) )
-                    .characterEncoding( "UTF-8" )
-                    .headers( requestHeaders )
-                    .content( jsonString );
-
-            when( repository.existsById( anyInt() ) )
-                    .thenReturn( true );
-            when( repository.save( any( ContinentEntity.class ) ) )
-                    .thenReturn( entity );
-
-            // --- when
-            final MvcResult result = mvc
-                    .perform( request )
-                    .andDo( print() )
-                    .andExpect( content().contentTypeCompatibleWith( "application/json" ) )
-                    .andExpect( jsonPath( "$.id" ).value( 22 ) )
-                    .andExpect( jsonPath( "$.code" ).value( "ZZ" ) )
-                    .andExpect( jsonPath( "$.name" ).value( "::ZNAMEZ::" ) )
-                    .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
-                    .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
-                    .andReturn();
-
-            // --- then
-            // final MockHttpServletResponse response = result.getResponse();
-
-            final Collection<String> headerNames   = result.getResponse().getHeaderNames();
-            assertAll( () -> assertEquals( HttpStatus.OK.value(), result.getResponse().getStatus() ),
-                       () -> assertThat( headerNames )
-                               .contains( "TRACEPARENT" )
-                               .contains( "TRACESTATE" )
-                               .contains( "Content-Type" )
-                               .doesNotContain( "NoWay" ),
-//                       () -> assertThat( result.getResponse().getHeaderNames() )
-//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
-//                       () -> verify( repository )
-//                               .existsById( eq( 77 ) ),
-                       () -> verify( updateService ).update( any( Continent.class ) ),
-                       () -> verify( repository ).existsById( anyInt() ),
-                       () -> verify( repository ).save( any( ContinentEntity.class) ),
-                       () -> verify( mapper ).domainToApi( any( Continent.class ) )
-//                       () -> verify( repository, times( 1 ) )
-//                               .save( any( ContinentEntity.class ) )
-            );
-        }
-    }
-
-
-//    public static String asJsonString(final Object obj) {
-//        try {
-//            return new ObjectMapper().writeValueAsString(obj);
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
-
-
-    /**
-     * Tests for the DELETE http method.
-     */
-    @Nested
-    @DisplayName( "HTTP DELETE" )
-    class DeleteMethod           // NOPMD
-    {
-        @Test
-        @DisplayName( "by ID - 204: No Content - empty body" )
-        void restDeleteById_withId_returnsGone() throws Exception
-        {
-            // --- given
-            final RequestBuilder request = withHeaders( delete( "/location/continent/{id}", 99 ) )
-                    .headers( requestHeaders );
-
-            when( repository.existsById( anyInt() ) )
-                    .thenReturn( true );
-
-            // --- when
-            final MvcResult result = mvc
-                    .perform( request )
-                    .andDo( print() )
-                    .andReturn();
-
-            // --- then
-            // final MockHttpServletResponse response = result.getResponse();
-            final Collection<String> headerNames   = result.getResponse().getHeaderNames();
-
-            assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() ),
-                       () -> assertThat( headerNames )
-                               .contains( "TRACEPARENT" )
-                               .contains( "TRACESTATE" )
-                               .contains( "Content-Type" )
-                               .doesNotContain( "NoWay" ),
-//                       () -> assertThat( result.getResponse().getHeaderNames() )
-//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
-                       () -> verify( deleteService ).deleteById( anyInt() ),
-                       () -> verify( repository ).deleteById( anyInt() )
-            );
-        }
-
-        @Test
-        @DisplayName( "by invalid ID - 404: Not Found - empty body" )
-        void restDeleteByUnknownId_withId_returnsNotFound() throws Exception
-        {
-            // --- given
-            final RequestBuilder request = withHeaders( delete( "/location/continent/{id}", 99 ) )
-                    .headers( requestHeaders );
-
-            when( repository.existsById( anyInt() ) )
-                    .thenReturn( false );
-
-            // --- when
-            final MvcResult result = mvc
-                    .perform( request )
-                    .andDo( print() )
-                    .andReturn();
-
-            // --- then
-            // final MockHttpServletResponse response = result.getResponse();
-
-            assertAll( () -> assertEquals( HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus() ),
-                       () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
-                       () -> verify( repository ).deleteById( anyInt() )
-            );
-        }
-
-        //        @Test
-//        @DisplayName( "by ID - 204: No Content - empty body" )
-//        void restDeleteById_withId_returnsGone() throws Exception
-//        {
-//            // --- given
-//            final RequestBuilder request = withHeaders( delete( "/location/continent/{id}", 99 ) );
-//
-//            // --- when
-//            final MvcResult result = mvc
-//                    .perform( request )
-//                    .andDo( print() )
-//                    .andReturn();
-//
-//            // --- then
-//            // final MockHttpServletResponse response = result.getResponse();
-//
-//            assertAll( () -> assertEquals( HttpStatus.GONE.value(), result.getResponse().getStatus() ),
-//                       () -> verify( repository ).deleteById( anyInt() )
-//                     );
-//        }
-
-        @Test
-        @DisplayName( "by entity - 204: No Content - empty body" )
-        void restDelete_withEntity_returnsNoContent() throws Exception
-        {
-            // --- given
-            final String jsonString =
-                    """
-                            {
-                               "id": 77,
-                               "code": "CC",
-                               "name": "foo"
-                            }
-                            """;
-            final RequestBuilder request = withHeaders( delete( "/location/continent" ) )
-                    .characterEncoding( "UTF-8" )
-                    .headers( requestHeaders )
-                    .content( jsonString );
-
-            when( repository.existsById( anyInt() ) )
-                    .thenReturn( true );
-
-            // --- when
-            final MvcResult result = mvc
-                    .perform( request )
-                    .andDo( print() )
-                    .andReturn();
-
-            // --- then
-            // final MockHttpServletResponse response = result.getResponse();
-
-            final Collection<String> headerNames   = result.getResponse().getHeaderNames();
-            assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() ),
-                       () -> assertThat( headerNames )
-                               .contains( "TRACEPARENT" )
-                               .contains( "TRACESTATE" )
-                               .contains( "Content-Type" )
-                               .doesNotContain( "NoWay" ),
-//                       () -> assertThat( result.getResponse().getHeaderNames() )
-//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
-                       () -> verify( deleteService ).delete( any( Continent.class ) ),
-                       () -> verify( repository ).delete( any( ContinentEntity.class ) )
-            );
-        }
-
-        @Test
-        @DisplayName( "by unknown entity - 404: Not Found - empty body" )
-        void restDelete_withUnknownEntity_returnsNotFound() throws Exception
-        {
-            // --- given
-            final String jsonString =
-                    """
-                            {
-                               "id": 77,
-                               "code": "CC",
-                               "name": "foo"
-                            }
-                            """;
-            final RequestBuilder request = withHeaders( delete( "/location/continent" ) )
-                    .characterEncoding( "UTF-8" )
-                    .headers( requestHeaders )
-                    .content( jsonString );
-            when( repository.existsById( anyInt() ) )
-                    .thenReturn( false );
-
-            // --- when
-            final MvcResult result = mvc
-                    .perform( request )
-                    .andDo( print() )
-                    .andReturn();
-
-            // --- then
-            // final MockHttpServletResponse response = result.getResponse();
-
-            assertAll( () -> assertEquals( HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus() ),
-                       () -> assertThat( result.getResponse().getHeaderNames() )
-                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
-                       () -> verify( repository ).delete( any( ContinentEntity.class ) )
-            );
-        }
-    }
-
-
-
+    // ========== UPDATE ==========
+    // ===== PATCH =====
     /**
      * Tests for the PATCH http method.
      */
     @Nested
-    @DisplayName( "/continent - HTTP PATCH" )
+    @DisplayName( "HTTP PATCH" )
     class PatchMethod           // NOPMD
     {
-//        @Disabled       // TODO research JsonPatch more.
+        //        @Disabled       // TODO research JsonPatch more.
         @Test
         void patchContinent_withKeywords_returnsOk() throws Exception
         {
@@ -1233,53 +934,37 @@ class ContinentControllerRestTest
 
     }
 
-
-
+    // ===== PUT =====
     /**
-     * Tests for the INFO http method.
+     * Tests for the PUT http method.
      */
     @Nested
-    @DisplayName( "/continent - HTTP INFO" )
-    class InfoMethod           // NOPMD
-    {
-       // @Test
-       // void restTrace_returnsNoContent() throws Exception
-       // {
-       //     // --- given
-       //     final RequestBuilder request = withHeaders( MockMvcRequestBuilders.request( HttpMethod.INFO,
-       //                                                                                 "/location/continent" ) );
-       //
-       //     // --- when
-       //     final MvcResult result = mvc
-       //             .perform( request )
-       //             .andDo( print() )
-       //             .andReturn();
-       //
-       //     // --- then
-       //     final MockHttpServletResponse response = result.getResponse();
-       //
-       //     assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() )
-       //              );
-       // }
-    }
-
-
-
-    /**
-     * Tests for the TRACE http method.
-     */
-    @Nested
-    @DisplayName( "HTTP TRACE" )
-    class TraceMethod           // NOPMD
+    @DisplayName( "HTTP PUT" )
+    class PutMethod           // NOPMD
     {
         @Test
-        @DisplayName( "no args - 200: OK - empty body" )
-        void restTrace_returnsOk() throws Exception
+        @DisplayName( "entity does not exist - 409: Conflict - can't create a new instance" )
+        void restPut_withNewEntity_returnsConflict() throws Exception
         {
             // --- given
-            final RequestBuilder request = withHeaders( MockMvcRequestBuilders.request( HttpMethod.TRACE,
-                                                                                        "/location/continent" ) )
-                    .headers( requestHeaders );
+            final ContinentEntity entity = new ContinentEntity( 22, "ZZ", "::ZNAMEZ::", null, null );
+            final String jsonString =
+                    """
+                            {
+                               "id": 77,
+                               "code": "CC",
+                               "name": "foo"
+                            }
+                            """;
+            final RequestBuilder request = withHeaders( put( "/location/continent" ) )
+                    .characterEncoding( "UTF-8" )
+                    .headers( requestHeaders )
+                    .content( jsonString );
+
+            when( repository.existsById( anyInt() ) )
+                    .thenReturn( false );
+            when( repository.getReferenceById( anyInt() ) )
+                    .thenReturn( entity );
 
             // --- when
             final MvcResult result = mvc
@@ -1288,65 +973,203 @@ class ContinentControllerRestTest
                     .andReturn();
 
             // --- then
-            final MockHttpServletResponse response = result.getResponse();
-            final Collection<String> headerNames   = response.getHeaderNames();
-            assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
+            // final MockHttpServletResponse response = result.getResponse();
+            final Collection<String> headerNames   = result.getResponse().getHeaderNames();
+            assertAll( () -> assertEquals( HttpStatus.CONFLICT.value(), result.getResponse().getStatus() ),
                        () -> assertThat( headerNames )
                                .contains( "TRACEPARENT" )
                                .contains( "TRACESTATE" )
                                .contains( "Content-Type" )
-                               .contains( "Location" )
                                .doesNotContain( "NoWay" ),
-                       () -> assertThat( response.getRedirectedUrl() )
-                               .matches( "^.*/location/continent$" ),
-                       () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
-                               .anyMatch( location -> location.matches( "^.*/location/continent$" ) )
-            );
-
-
+                       () -> verify( updateService ).update( any( Continent.class ) ),
+                       () -> verify( repository ).existsById( anyInt() ),
+                       () -> verify( repository, never() ).save( any( ContinentEntity.class) ),
+                       () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
+                     );
         }
 
-
         @Test
-        @DisplayName( "no args - 200: OK - empty body" )
-        void restTraceWithId_returnsOk() throws Exception
+        @DisplayName( "existing entity - 200: Success  - update/return an existing instance" )
+        void restPut_withExistingEntity_returnsOK() throws Exception
         {
             // --- given
-            final RequestBuilder request = withHeaders( MockMvcRequestBuilders.request( HttpMethod.TRACE,
-                                                                                        "/location/continent/{continentId}",
-                                                                                        123
-                                                                                      ) )
-                    .headers( requestHeaders );
+            final ContinentEntity entity = new ContinentEntity( 22, "ZZ", "::ZNAMEZ::", null, null );
+            final String jsonString =
+                    """
+                            {
+                               "id": 77,
+                               "code": "CC",
+                               "name": "foo"
+                            }
+                            """;
+            final RequestBuilder request = withHeaders( put( "/location/continent" ) )
+                    .characterEncoding( "UTF-8" )
+                    .headers( requestHeaders )
+                    .content( jsonString );
+
+            when( repository.existsById( anyInt() ) )
+                    .thenReturn( true );
+            when( repository.save( any( ContinentEntity.class ) ) )
+                    .thenReturn( entity );
 
             // --- when
             final MvcResult result = mvc
                     .perform( request )
                     .andDo( print() )
+                    .andExpect( content().contentTypeCompatibleWith( "application/json" ) )
+                    .andExpect( jsonPath( "$.id" ).value( 22 ) )
+                    .andExpect( jsonPath( "$.code" ).value( "ZZ" ) )
+                    .andExpect( jsonPath( "$.name" ).value( "::ZNAMEZ::" ) )
+                    .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
+                    .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
                     .andReturn();
 
             // --- then
-//            var response = result.getResponse();
-            final MockHttpServletResponse response = result.getResponse();
+            // final MockHttpServletResponse response = result.getResponse();
+
             final Collection<String> headerNames   = result.getResponse().getHeaderNames();
             assertAll( () -> assertEquals( HttpStatus.OK.value(), result.getResponse().getStatus() ),
                        () -> assertThat( headerNames )
                                .contains( "TRACEPARENT" )
                                .contains( "TRACESTATE" )
                                .contains( "Content-Type" )
-                               .doesNotContain( "NoWay" )
-                               .contains( HttpHeaders.LOCATION ),
-                       () -> assertThat( result.getResponse().getRedirectedUrl() )
-                               .matches( "^.*/location/continent/123$" ),
-                       () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
-                               .anyMatch( location -> location.matches( "^.*/location/continent/123$" ) )
-//                               .contains( "/location/continent/123")
-//                               .matches( ".*/location/continent/123$" )
-//                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Locastion" ) )
-
+                               .doesNotContain( "NoWay" ),
 //                       () -> assertThat( result.getResponse().getHeaderNames() )
-//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
+//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+//                       () -> verify( repository )
+//                               .existsById( eq( 77 ) ),
+                       () -> verify( updateService ).update( any( Continent.class ) ),
+                       () -> verify( repository ).existsById( anyInt() ),
+                       () -> verify( repository ).save( any( ContinentEntity.class) ),
+                       () -> verify( mapper ).domainToApi( any( Continent.class ) )
+//                       () -> verify( repository, times( 1 ) )
+//                               .save( any( ContinentEntity.class ) )
                      );
-/*
+        }
+    }
+
+
+    // ========== DELETE ==========
+    // ===== DELETE =====
+    /**
+     * Tests for the DELETE http method.
+     */
+    @Nested
+    @DisplayName( "HTTP DELETE" )
+    class DeleteMethod           // NOPMD
+    {
+        @Test
+        @DisplayName( "by ID - 204: No Content - empty body" )
+        void restDeleteById_withId_returnsGone() throws Exception
+        {
+            // --- given
+            final RequestBuilder request = withHeaders( delete( "/location/continent/{id}", 99 ) )
+                    .headers( requestHeaders );
+
+            when( repository.existsById( anyInt() ) )
+                    .thenReturn( true );
+
+            // --- when
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andDo( print() )
+                    .andReturn();
+
+            // --- then
+            // final MockHttpServletResponse response = result.getResponse();
+            final Collection<String> headerNames   = result.getResponse().getHeaderNames();
+
+            assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() ),
+                       () -> assertThat( headerNames )
+                               .contains( "TRACEPARENT" )
+                               .contains( "TRACESTATE" )
+                               .contains( "Content-Type" )
+                               .doesNotContain( "NoWay" ),
+//                       () -> assertThat( result.getResponse().getHeaderNames() )
+//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+                       () -> verify( deleteService ).deleteById( anyInt() ),
+                       () -> verify( repository ).deleteById( anyInt() )
+                     );
+        }
+
+        @Test
+        @DisplayName( "by invalid ID - 404: Not Found - empty body" )
+        void restDeleteByUnknownId_withId_returnsNotFound() throws Exception
+        {
+            // --- given
+            final RequestBuilder request = withHeaders( delete( "/location/continent/{id}", 99 ) )
+                    .headers( requestHeaders );
+
+            when( repository.existsById( anyInt() ) )
+                    .thenReturn( false );
+
+            // --- when
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andDo( print() )
+                    .andReturn();
+
+            // --- then
+            // final MockHttpServletResponse response = result.getResponse();
+
+            assertAll( () -> assertEquals( HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus() ),
+                       () -> assertThat( result.getResponse().getHeaderNames() )
+                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+                       () -> verify( repository ).deleteById( anyInt() )
+                     );
+        }
+
+        //        @Test
+//        @DisplayName( "by ID - 204: No Content - empty body" )
+//        void restDeleteById_withId_returnsGone() throws Exception
+//        {
+//            // --- given
+//            final RequestBuilder request = withHeaders( delete( "/location/continent/{id}", 99 ) );
+//
+//            // --- when
+//            final MvcResult result = mvc
+//                    .perform( request )
+//                    .andDo( print() )
+//                    .andReturn();
+//
+//            // --- then
+//            // final MockHttpServletResponse response = result.getResponse();
+//
+//            assertAll( () -> assertEquals( HttpStatus.GONE.value(), result.getResponse().getStatus() ),
+//                       () -> verify( repository ).deleteById( anyInt() )
+//                     );
+//        }
+
+        @Test
+        @DisplayName( "by entity - 204: No Content - empty body" )
+        void restDelete_withEntity_returnsNoContent() throws Exception
+        {
+            // --- given
+            final String jsonString =
+                    """
+                            {
+                               "id": 77,
+                               "code": "CC",
+                               "name": "foo"
+                            }
+                            """;
+            final RequestBuilder request = withHeaders( delete( "/location/continent" ) )
+                    .characterEncoding( "UTF-8" )
+                    .headers( requestHeaders )
+                    .content( jsonString );
+
+            when( repository.existsById( anyInt() ) )
+                    .thenReturn( true );
+
+            // --- when
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andDo( print() )
+                    .andReturn();
+
+            // --- then
+            // final MockHttpServletResponse response = result.getResponse();
+
             final Collection<String> headerNames   = result.getResponse().getHeaderNames();
             assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() ),
                        () -> assertThat( headerNames )
@@ -1355,21 +1178,51 @@ class ContinentControllerRestTest
                                .contains( "Content-Type" )
                                .doesNotContain( "NoWay" ),
 //                       () -> assertThat( result.getResponse().getHeaderNames() )
-//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
-                       () -> verify( readService ).findAll(),
-                       () -> verify( repository ).findAll(),
-                       () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
+//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+                       () -> verify( deleteService ).delete( any( Continent.class ) ),
+                       () -> verify( repository ).delete( any( ContinentEntity.class ) )
                      );
-*/
-
-
-
-
-
         }
 
+        @Test
+        @DisplayName( "by unknown entity - 404: Not Found - empty body" )
+        void restDelete_withUnknownEntity_returnsNotFound() throws Exception
+        {
+            // --- given
+            final String jsonString =
+                    """
+                            {
+                               "id": 77,
+                               "code": "CC",
+                               "name": "foo"
+                            }
+                            """;
+            final RequestBuilder request = withHeaders( delete( "/location/continent" ) )
+                    .characterEncoding( "UTF-8" )
+                    .headers( requestHeaders )
+                    .content( jsonString );
+            when( repository.existsById( anyInt() ) )
+                    .thenReturn( false );
+
+            // --- when
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andDo( print() )
+                    .andReturn();
+
+            // --- then
+            // final MockHttpServletResponse response = result.getResponse();
+
+            assertAll( () -> assertEquals( HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus() ),
+                       () -> assertThat( result.getResponse().getHeaderNames() )
+                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+                       () -> verify( repository ).delete( any( ContinentEntity.class ) )
+                     );
+        }
     }
 
+    // ========== Administrative ==========
+    // ===== HEAD =====
     /**
      * Tests for the HEAD http method.
      */
@@ -1439,7 +1292,7 @@ class ContinentControllerRestTest
                        () -> verify( readService ).findById( anyInt() ),
                        () -> verify( repository ).findById(  anyInt() )
 //                       () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
-            );
+                     );
 
         }
 
@@ -1506,6 +1359,36 @@ class ContinentControllerRestTest
 
     }
 
+    // ===== INFO =====
+    /**
+     * Tests for the INFO http method.
+     */
+    @Nested
+    @DisplayName( "HTTP INFO" )
+    class InfoMethod           // NOPMD
+    {
+        // @Test
+        // void restTrace_returnsNoContent() throws Exception
+        // {
+        //     // --- given
+        //     final RequestBuilder request = withHeaders( MockMvcRequestBuilders.request( HttpMethod.INFO,
+        //                                                                                 "/location/continent" ) );
+        //
+        //     // --- when
+        //     final MvcResult result = mvc
+        //             .perform( request )
+        //             .andDo( print() )
+        //             .andReturn();
+        //
+        //     // --- then
+        //     final MockHttpServletResponse response = result.getResponse();
+        //
+        //     assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() )
+        //              );
+        // }
+    }
+
+    // ===== OPTION =====
     /**
      * Tests for the OPTIONS http method.
      */
@@ -1548,9 +1431,128 @@ class ContinentControllerRestTest
                                .contains( "TRACESTATE" )
 //                               .contains( "Content-Type" )
                                .doesNotContain( "NoWay" )
-            );
+                     );
         }
     }
+
+    // ===== TRACE =====
+    /**
+     * Tests for the TRACE http method.
+     */
+    @Nested
+    @DisplayName( "HTTP TRACE" )
+    class TraceMethod           // NOPMD
+    {
+        @Test
+        @DisplayName( "no args - 200: OK - empty body" )
+        void restTrace_returnsOk() throws Exception
+        {
+            // --- given
+            final RequestBuilder request = withHeaders( MockMvcRequestBuilders.request( HttpMethod.TRACE,
+                                                                                        "/location/continent" ) )
+                    .headers( requestHeaders );
+
+            // --- when
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andDo( print() )
+                    .andReturn();
+
+            // --- then
+            final MockHttpServletResponse response = result.getResponse();
+            final Collection<String> headerNames   = response.getHeaderNames();
+            assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
+                       () -> assertThat( headerNames )
+                               .contains( "TRACEPARENT" )
+                               .contains( "TRACESTATE" )
+                               .contains( "Content-Type" )
+                               .contains( "Location" )
+                               .doesNotContain( "NoWay" ),
+                       () -> assertThat( response.getRedirectedUrl() )
+                               .matches( "^.*/location/continent$" ),
+                       () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
+                               .anyMatch( location -> location.matches( "^.*/location/continent$" ) )
+                     );
+
+
+        }
+
+
+        @Test
+        @DisplayName( "no args - 200: OK - empty body" )
+        void restTraceWithId_returnsOk() throws Exception
+        {
+            // --- given
+            final RequestBuilder request = withHeaders( MockMvcRequestBuilders.request( HttpMethod.TRACE,
+                                                                                        "/location/continent/{continentId}",
+                                                                                        123
+                                                                                      ) )
+                    .headers( requestHeaders );
+
+            // --- when
+            final MvcResult result = mvc
+                    .perform( request )
+                    .andDo( print() )
+                    .andReturn();
+
+            // --- then
+//            var response = result.getResponse();
+            final MockHttpServletResponse response = result.getResponse();
+            final Collection<String> headerNames   = result.getResponse().getHeaderNames();
+            assertAll( () -> assertEquals( HttpStatus.OK.value(), result.getResponse().getStatus() ),
+                       () -> assertThat( headerNames )
+                               .contains( "TRACEPARENT" )
+                               .contains( "TRACESTATE" )
+                               .contains( "Content-Type" )
+                               .doesNotContain( "NoWay" )
+                               .contains( HttpHeaders.LOCATION ),
+                       () -> assertThat( result.getResponse().getRedirectedUrl() )
+                               .matches( "^.*/location/continent/123$" ),
+                       () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
+                               .anyMatch( location -> location.matches( "^.*/location/continent/123$" ) )
+//                               .contains( "/location/continent/123")
+//                               .matches( ".*/location/continent/123$" )
+//                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Locastion" ) )
+
+//                       () -> assertThat( result.getResponse().getHeaderNames() )
+//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
+                     );
+/*
+            final Collection<String> headerNames   = result.getResponse().getHeaderNames();
+            assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() ),
+                       () -> assertThat( headerNames )
+                               .contains( "TRACEPARENT" )
+                               .contains( "TRACESTATE" )
+                               .contains( "Content-Type" )
+                               .doesNotContain( "NoWay" ),
+//                       () -> assertThat( result.getResponse().getHeaderNames() )
+//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
+                       () -> verify( readService ).findAll(),
+                       () -> verify( repository ).findAll(),
+                       () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
+                     );
+*/
+
+
+
+
+
+        }
+
+    }
+
+
+//    public static String asJsonString(final Object obj) {
+//        try {
+//            return new ObjectMapper().writeValueAsString(obj);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+
+
+
+
 
 
     private static ObjectMapper buildMapper()
