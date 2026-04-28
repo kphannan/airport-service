@@ -65,6 +65,24 @@ public class RegionsController
         this.mapper  = mapper;
     }
 
+    // ========== CREATE ==========
+    // ===== POST =====
+
+    // ========== READ ==========
+    // ===== GET =====
+
+    // ========== UPDATE ==========
+    // ===== PATCH =====
+    // ===== PUT =====
+
+    // ========== DELETE ==========
+    // ===== DELETE =====
+
+    // ========== Administrative ==========
+    // ===== HEAD =====
+    // ===== INFO =====
+    // ===== OPTION =====
+    // ===== TRACE =====
 
 
     /**

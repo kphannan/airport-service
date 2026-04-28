@@ -49,7 +49,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 @WebMvcTest( controllers = RegionsController.class )
 @ComponentScan( basePackages = { "com.example.airline.location.region" } )
 @AutoConfigureMockMvc( addFilters = false )
-@DisplayName( "REST Controller - /region" )
+@DisplayName( "Region: API (/region)" )
 class RegionControllerRestTest //extends RestControllerTestBase
 {
     @Autowired
@@ -60,6 +60,27 @@ class RegionControllerRestTest //extends RestControllerTestBase
     private RegionsService  service;
     @Autowired
     private RegionDtoMapper mapper;
+
+
+    // ========== CREATE ==========
+    // ===== POST =====
+
+    // ========== READ ==========
+    // ===== GET =====
+
+    // ========== UPDATE ==========
+    // ===== PATCH =====
+    // ===== PUT =====
+
+    // ========== DELETE ==========
+    // ===== DELETE =====
+
+    // ========== Administrative ==========
+    // ===== HEAD =====
+    // ===== INFO =====
+    // ===== OPTION =====
+    // ===== TRACE =====
+
 
 
     @Nested
@@ -276,37 +297,37 @@ class RegionControllerRestTest //extends RestControllerTestBase
     }
 
     @Nested
-    @DisplayName( "/region - HTTP PUT" )
+    @DisplayName( "HTTP PUT" )
     class PutMethod        // NOPMD
     {
     }
 
     @Nested
-    @DisplayName( "/region - HTTP DELETE" )
+    @DisplayName( "HTTP DELETE" )
     class DeleteMethod        // NOPMD
     {
     }
 
     @Nested
-    @DisplayName( "/region - HTTP PATCH" )
+    @DisplayName( "HTTP PATCH" )
     class PatchMethod        // NOPMD
     {
     }
 
     @Nested
-    @DisplayName( "/region - HTTP INFO" )
+    @DisplayName( "HTTP INFO" )
     class InfoMethod        // NOPMD
     {
     }
 
     @Nested
-    @DisplayName( "/region - HTTP HEAD" )
+    @DisplayName( "HTTP HEAD" )
     class HeadMethod        // NOPMD
     {
     }
 
     @Nested
-    @DisplayName( "/region - HTTP OPT" )
+    @DisplayName( "HTTP OPT" )
     class OptionsMethod        // NOPMD
     {
     }
