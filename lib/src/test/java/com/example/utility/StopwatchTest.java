@@ -143,13 +143,17 @@ class StopwatchTest
     {
         final Stopwatch timer = new Stopwatch( "svc", "close", "ctx" );
 
-        assertTrue( timer.isRunning() );
+        assertTrue( timer.isRunning(), "Timer should immediately start running" );
         timer.close();
 
-        assertAll( () -> assertFalse( timer.isRunning() ), //
-                   () -> assertFalse( logCaptor.getLogs().isEmpty() ), //
-                   () -> assertTrue( StringUtility.inAnyOf( logCaptor.getLogs(),
-                                                            "ctx, svc, close: '' - elapsed time: 0 ms" ) ) );
+        assertAll( () -> assertFalse( timer.isRunning(), "close() should stop the timer" ), //
+                   () -> assertFalse( logCaptor.getLogs().isEmpty(), "A log entry should have been written" ), //
+                   () -> assertTrue( StringUtility
+                                             .inAnyOf( logCaptor.getLogs(),
+                                                            "ctx, svc, close: '' - elapsed time: 0 ms" ),
+                                     "General content of the log message"
+                                   )
+                 );
     }
 
 
