@@ -83,9 +83,9 @@ class AirportControllerTest //extends RestControllerTestBase
     private AirportController      controller;
 
     @MockitoSpyBean
-    private   AirportCreateService createService;
+    private AirportCreateService   createService;
     @MockitoSpyBean
-    private   AirportReadService   readService;
+    private AirportReadService     readService;
     @MockitoSpyBean
     private AirportUpdateService   updateService;
     @MockitoSpyBean
