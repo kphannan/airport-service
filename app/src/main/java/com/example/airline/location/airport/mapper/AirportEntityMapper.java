@@ -51,5 +51,6 @@ public interface AirportEntityMapper
 
     // --- Domain --> Persistence ---
     // --- Instance
+    AirportEntity domainToEntity( Airport entity );
     // --- Collection
 }

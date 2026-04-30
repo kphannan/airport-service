@@ -27,27 +27,15 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AirportRepository extends PagingAndSortingRepository<AirportEntity, Long>
 {
-    /*
-        @Override
-        boolean existsById( Integer airportId );
 
-        boolean existsByCode( String airportCode );
+    // ========== CREATE ==========
 
-     */
-
+    // ========== READ ==========
+    // ----- Test for existence -----
     boolean existsById( Long airportId );
     boolean existsByCode( String airportCode );
 
-    /**
-     * Retrieve all {@code Airport} records by {@code Page}.
-     *
-     * @param paging the {@code Page} criteria.
-     *
-     * @return the located page, whose body contains the found records.
-     */
-    @Override
-    @NonNull Page<AirportEntity> findAll( @NonNull Pageable paging );
-
+    // ----- Single Entity -----
     /**
      * Lookup a {@code Airport} by its unique identifier.
      *
@@ -67,6 +55,18 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
      * @return the DB entry for the target airport.
      */
     Optional<AirportEntity> findByIdent( String ident );
+
+    // ----- List of entities -----
+    /**
+     * Retrieve all {@code Airport} records by {@code Page}.
+     *
+     * @param paging the {@code Page} criteria.
+     *
+     * @return the located page, whose body contains the found records.
+     */
+    @Override
+    @NonNull Page<AirportEntity> findAll( @NonNull Pageable paging );
+
 
     /**
      * Find an airport from its commonly used identifier, often this is the iata
@@ -99,8 +99,6 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
                                        @Param( "ident" ) String ident,
                                        @Param( "name" ) String name,
                                        Pageable paging );
-
-    // Defined as NamedQueries
     List<AirportCountInContinentEntity> countAirportsByContinent();
 
     List<AirportCountInCountryEntity> countCountryAirportsByContinent( String continentCode );
@@ -116,4 +114,37 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
     List<AirportSummaryEntity> findSummaryByCountry( String isoCountry );
 
     List<AirportSummaryEntity> findSummaryByRegion( String isoRegion );
+
+    // ========== UPDATE ==========
+
+    // ========== DELETE ==========
+    /**
+     * Delete a specific Continent row.
+     *
+     * @param entity must not be {@literal null}.
+     */
+//    @Override
+    void delete( AirportEntity entity );
+
+    /**
+     * Delete a Airport row by its primary key.
+     *
+     * @param airportId must not be {@literal null}.
+     */
+//    @Override
+    void deleteById( Long airportId );
+
+
+
+
+    /*
+        @Override
+        boolean existsById( Integer airportId );
+
+        boolean existsByCode( String airportCode );
+
+     */
+
+
+    // Defined as NamedQueries
 }

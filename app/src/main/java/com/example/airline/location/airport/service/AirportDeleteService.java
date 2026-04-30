@@ -49,9 +49,12 @@ public class AirportDeleteService
      */
     public boolean delete( final Airport entity )
     {
-        final boolean existing = repository.existsById( entity.getId() ) || repository.existsByCode( entity.getIdent() );
+        final boolean existing = repository.existsById( entity.getId() );
 
-//        repository.delete( mapper.domainToEntity( entity ) );
+        if ( existing )
+        {
+            repository.delete( mapper.domainToEntity( entity ) );
+        }
 
         return existing;
     }
@@ -66,7 +69,10 @@ public class AirportDeleteService
     {
         final boolean existing = repository.existsById( airportId );
 
-//        repository.deleteById( airportId );
+        if ( existing )
+        {
+            repository.deleteById( airportId );
+        }
 
         return existing;
     }
