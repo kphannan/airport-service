@@ -1,7 +1,6 @@
 package com.example.utility;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -55,7 +54,6 @@ public final class HeaderUtility
         return copyNeededHeaders( headers, usualHeaders );
     }
 
-    // TODO Move to utility class with filter list as a static....
     public static HttpHeaders copyNeededHeaders( final HttpHeaders headers, final List<String> filterList )
     {
         if ( null == filterList || filterList.isEmpty() )

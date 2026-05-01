@@ -18,7 +18,6 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.jspecify.annotations.Nullable;
 
-// TODO change code to a 2 character code...
 // record CountryDTO( Long id, String code, String name, String wikiLink,
 // String keywords )
 // {}

@@ -1,16 +1,11 @@
 package com.example.airline.location.airport.api;
 
 
-import static com.example.rest.utility.HeaderUtility.withHeaders;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -31,13 +26,9 @@ import com.example.airline.location.airport.service.AirportCreateService;
 import com.example.airline.location.airport.service.AirportDeleteService;
 import com.example.airline.location.airport.service.AirportReadService;
 import com.example.airline.location.airport.service.AirportUpdateService;
-import org.aspectj.lang.annotation.Before;
-import org.hibernate.id.BulkInsertionCapableIdentifierGenerator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -153,12 +144,6 @@ class AirportControllerTest //extends RestControllerTestBase
         @DisplayName( "Lists of Airports" )
         class ListsOfAirports
         {
-
-//            @BeforeEach
-//            void init()
-//            {
-//                controller = new AirportController( createService, readService, updateService, deleteService, dtoMapper );
-//            }
 
             @Nested
             @DisplayName( "by Continent" )

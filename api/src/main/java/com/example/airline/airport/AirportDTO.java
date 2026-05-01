@@ -147,7 +147,6 @@ public class AirportDTO
              example = "IE-D" )
     @NotBlank( message = "A unique region code is required" )
     @lombok.NonNull
-    // TODO also need to support 'U-A' for unassigned
     @Pattern( regexp = "([A-Z]{2}-[A-Z\\-]{1,4})|(U-A)",
               message = "Region code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" )
     private String isoRegion;  // char-7

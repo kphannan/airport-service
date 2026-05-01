@@ -109,6 +109,7 @@ class CountryControllerRestTest //extends RestControllerTestBase
             // --- when
             final MvcResult result = mvc
                     .perform( request )
+                    .andDo( print() )
                     .andExpect( status().isOk() )
                     .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
                     // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
@@ -142,6 +143,7 @@ class CountryControllerRestTest //extends RestControllerTestBase
             // --- when
             final MvcResult result = mvc
                     .perform( request )
+                    .andDo( print() )
                     .andExpect( status().isNoContent() )
                     .andReturn();
             MockHttpServletResponse response = result.getResponse();
@@ -168,6 +170,7 @@ class CountryControllerRestTest //extends RestControllerTestBase
             // --- when
             final MvcResult result = mvc
                     .perform( request )
+                    .andDo( print() )
                     .andExpect( status().isOk() )
                     .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
                     // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
@@ -200,6 +203,7 @@ class CountryControllerRestTest //extends RestControllerTestBase
             // --- when
             final MvcResult result = mvc
                     .perform( request )
+                    .andDo( print() )
                     .andExpect( status().isNoContent() )
 //                .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ))
                     .andReturn();
@@ -235,11 +239,11 @@ class CountryControllerRestTest //extends RestControllerTestBase
             // --- when
             final MvcResult result = mvc
                     .perform( request )
+                    .andDo( print() )
                     .andExpect( status().isOk() )
                     .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
                     // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
                     //      don't complain about lack of assertions in tests
-                    .andDo( print() )
                     .andExpect( jsonPath( "$.content[0].id" ).value( 1 ) )
                     .andExpect( jsonPath( "$.content[0].code" ).value( "XXX" ) )
                     .andExpect( jsonPath( "$.content[0].name" ).value( "::X_NAME_X::" ) )

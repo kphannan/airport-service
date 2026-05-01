@@ -98,7 +98,7 @@ class ValidateUtilityClassTest
 
         /** The condition the test is looking for as a cause of failure. */
         @SuppressWarnings( { "PMD.UnusedFormalParameter" } )
-        private MultipleConstructors( int dummy )
+        private MultipleConstructors( int ignoredDummy )
         {
             // Nothing needed here.
         }
@@ -120,7 +120,7 @@ class ValidateUtilityClassTest
     private static final class ConstructorWithArguments
     {
         @SuppressWarnings( "PMD.UnusedFormalParameter" )
-        private ConstructorWithArguments( int arg )
+        private ConstructorWithArguments( int ignoredArg )
         {
             throw new IllegalStateException( "Test exception" );
         }
@@ -235,7 +235,7 @@ class ValidateUtilityClassTest
                                // log output
                                // n/a
                                // reason text
-                               () -> assertTrue( 0 <= reason.toString().indexOf( "class must be final" ),
+                               () -> assertTrue( reason.toString().contains( "class must be final" ),
                                                  "Missing reason 'class must be final'" ) );
                 }
 
@@ -274,7 +274,7 @@ class ValidateUtilityClassTest
                                // log output
                                // n/a
                                // reason text
-                               () -> assertTrue( 0 <= reason.toString().indexOf( "There must only be one constructor" ),
+                               () -> assertTrue( reason.toString().contains( "There must only be one constructor" ),
                                                  "Missing reason 'There must only be one constructor'" ) );
                 }
 
@@ -338,7 +338,7 @@ class ValidateUtilityClassTest
                                // n/a
                                // constructor" ) ),
                                // reason text
-                               () -> assertTrue( 0 <= reason.toString().indexOf( "constructor is not private" ),
+                               () -> assertTrue( reason.toString().contains( "constructor is not private" ),
                                                  "Missing reason 'constructor is not private'" ) );
                 }
 
@@ -363,7 +363,7 @@ class ValidateUtilityClassTest
                                // log output
                                // n/a
                                // reason text
-                               () -> assertTrue( 0 <= reason.toString().indexOf( "no-argument constructor is not present" ),
+                               () -> assertTrue( reason.toString().contains( "no-argument constructor is not present" ),
                                                  "constructor with arguments not properly detected" ) );
                 }
 
@@ -382,9 +382,9 @@ class ValidateUtilityClassTest
                                // log output
                                // n/a
                                // reason text
-                               () -> assertTrue( 0 <= reason.toString().indexOf( "ConstructorWithArguments" ),
+                               () -> assertTrue( reason.toString().contains( "ConstructorWithArguments" ),
                                                  "Invalid class not identified" ),
-                               () -> assertTrue( 0 <= reason.toString().indexOf( "no-argument constructor does not exist" ),
+                               () -> assertTrue( reason.toString().contains( "no-argument constructor does not exist" ),
                                                  "constructor with arguments not properly detected" ) );
                 }
 
@@ -401,8 +401,8 @@ class ValidateUtilityClassTest
                                () -> assertTrue( logCaptor.getLogs().isEmpty() ),
                                // reason text
                                // () -> assertTrue( isReasonBlank( reason ), REASON_NOT_NEEDED ) );
-                               () -> assertTrue( 0 <= reason.toString()
-                                                            .indexOf( "ConstructorNotPrivate': Must prevent instantiation" ),
+                               () -> assertTrue( reason.toString()
+                                                       .contains( "ConstructorNotPrivate': Must prevent instantiation" ),
                                                  "utiility constructor should be private" ) );
                 }
 
@@ -426,8 +426,8 @@ class ValidateUtilityClassTest
                                () -> assertTrue( logCaptor.getLogs().isEmpty() ),
                                // reason text
                                // () -> assertTrue( isReasonBlank( reason ), REASON_NOT_NEEDED ) );
-                               () -> assertTrue( 0 <= reason.toString()
-                                                            .indexOf( "ConstructorNotPrivate': Must prevent instantiation" ),
+                               () -> assertTrue( reason.toString()
+                                                       .contains( "ConstructorNotPrivate': Must prevent instantiation" ),
                                                  "utiility constructor should be private" ) );
                 }
 
@@ -444,9 +444,9 @@ class ValidateUtilityClassTest
                     // --- then
                     assertAll( () -> assertTrue( isUtility ), // basic return code
                                // reason text
-                               () -> assertTrue( 0 <= reasonString.indexOf( "ValidateUtilityClassTest$AbstractForFailure" ),
+                               () -> assertTrue( reasonString.contains( "ValidateUtilityClassTest$AbstractForFailure" ),
                                                  "Classname of failure mode test is missing. 'AbstractForFailure'" ),
-                               () -> assertTrue( 0 <= reasonString.indexOf( "InstantiationException from a utility constructor" ),
+                               () -> assertTrue( reasonString.contains( "InstantiationException from a utility constructor" ),
                                                  "Missing reason 'InstantiationException'" ) );
                 }
 
@@ -727,9 +727,9 @@ class ValidateUtilityClassTest
                            // log output
                            () -> assertTrue( logCaptor.getLogs().isEmpty() ),
                            // reason text
-                           () -> assertTrue( 0 <= reason.toString().indexOf( "A non-static method '" ),
+                           () -> assertTrue( reason.toString().contains( "A non-static method '" ),
                                              "non-static method was not identified'" ),
-                           () -> assertTrue( 0 <= reason.toString().indexOf( "MethodsNotAllStatic.notStatic()' exists" ),
+                           () -> assertTrue( reason.toString().contains( "MethodsNotAllStatic.notStatic()' exists" ),
                                              "method not identified'" ) );
             }
 
@@ -785,7 +785,7 @@ class ValidateUtilityClassTest
                        // log output
                        () -> assertTrue( StringUtility.inAnyOf( logCaptor.getLogs(), "class must be final" ) ),
                        // reason text
-                       () -> assertTrue( 0 <= reason.toString().indexOf( "class must be final" ),
+                       () -> assertTrue( reason.toString().contains( "class must be final" ),
                                          "Missing reason 'class must be final'" ) );
         }
 
@@ -805,7 +805,7 @@ class ValidateUtilityClassTest
                        () -> assertTrue( StringUtility.inAnyOf( logCaptor.getLogs(),
                                                                 "There must only be one constructor" ) ),
                        // reason text
-                       () -> assertTrue( 0 <= reason.toString().indexOf( "There must only be one constructor" ),
+                       () -> assertTrue( reason.toString().contains( "There must only be one constructor" ),
                                          "Missing reason 'There must only be one constructor'" ) );
         }
 
@@ -820,7 +820,7 @@ class ValidateUtilityClassTest
                        // reason text
                        // log output
                        // reason text
-                       () -> assertTrue( 0 <= reason.toString().indexOf( "constructor is not private" ),
+                       () -> assertTrue( reason.toString().contains( "constructor is not private" ),
                                          "Missing expected reason" ) );
         }
 
@@ -840,7 +840,7 @@ class ValidateUtilityClassTest
                        () -> assertTrue( StringUtility.inAnyOf( logCaptor.getLogs(),
                                                                 "The no-argument constructor does not exist" ) ),
                        // reason text
-                       () -> assertTrue( 0 <= reason.toString().indexOf( "no-argument constructor is not present" ),
+                       () -> assertTrue( reason.toString().contains( "no-argument constructor is not present" ),
                                          "constructor with arguments not properly detected" ) );
         }
 
@@ -881,9 +881,9 @@ class ValidateUtilityClassTest
                                                                 "InstantiationException from a utility constructor" ) ),
 
                        // reason text
-                       () -> assertTrue( 0 <= reasonString.indexOf( "ValidateUtilityClassTest$AbstractForFailure" ),
+                       () -> assertTrue( reasonString.contains( "ValidateUtilityClassTest$AbstractForFailure" ),
                                          "Missing class name 'AbstractForFailure'" ),
-                       () -> assertTrue( 0 <= reasonString.indexOf( "InstantiationException from a utility constructor" ),
+                       () -> assertTrue( reasonString.contains( "InstantiationException from a utility constructor" ),
                                          "Missing reason 'InstantiationException'" ) );
         }
 
@@ -920,9 +920,9 @@ class ValidateUtilityClassTest
                        () -> assertTrue( StringUtility.inAnyOf( debugLogs, "MethodsNotAllStatic.notStatic()' exists" ),
                                          "Identify the specific non-static method" ),
                        // reason text
-                       () -> assertTrue( 0 <= reason.toString().indexOf( "A non-static method '" ),
+                       () -> assertTrue( reason.toString().contains( "A non-static method '" ),
                                          "non-static method was not identified'" ),
-                       () -> assertTrue( 0 <= reason.toString().indexOf( "MethodsNotAllStatic.notStatic()' exists" ),
+                       () -> assertTrue( reason.toString().contains( "MethodsNotAllStatic.notStatic()' exists" ),
                                          "method not identified'" ) );
         }
 

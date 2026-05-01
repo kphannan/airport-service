@@ -19,7 +19,7 @@ import org.jspecify.annotations.Nullable;
 //import org.jspecify.annotations.Nullable;
 
 // TODO change code to a 2 character code...
-// record CountryDTO( Long id, String code, String name, String wikiLink,
+// record RegionDTO( Integer id, String code, String localCode, String name, String  country, String continent, String wikiLink,
 // String keywords )
 // {}
 

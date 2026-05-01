@@ -32,7 +32,7 @@ public final class ConstraintValidationUtility
      */
     public static <T> void showViolations( final Set<ConstraintViolation<T>> constraints )
     {
-        constraints.forEach( cv -> log.info( cv ) );
+        constraints.forEach( log::info );
     }
 
     /**
