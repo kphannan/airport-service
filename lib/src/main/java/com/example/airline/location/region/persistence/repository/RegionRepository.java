@@ -18,7 +18,7 @@ import org.springframework.stereotype.Repository;
  * CRUD operations on the {@code Region} repository.
  */
 @Repository
-public interface RegionsRepository extends PagingAndSortingRepository<RegionEntity, Integer>
+public interface RegionRepository extends PagingAndSortingRepository<RegionEntity, Integer>
 {
     /**
      * Find a single {@code Region} by its unique identifier.

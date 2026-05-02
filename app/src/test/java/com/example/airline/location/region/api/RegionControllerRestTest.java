@@ -22,8 +22,8 @@ import java.util.Optional;
 
 import com.example.airline.location.region.mapper.RegionDtoMapper;
 import com.example.airline.location.region.persistence.model.RegionEntity;
-import com.example.airline.location.region.persistence.repository.RegionsRepository;
-import com.example.airline.location.region.service.RegionsService;
+import com.example.airline.location.region.persistence.repository.RegionRepository;
+import com.example.airline.location.region.service.RegionService;
 import com.example.rest.utility.PageableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -46,20 +46,20 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 
-@WebMvcTest( controllers = RegionsController.class )
+@WebMvcTest( controllers = RegionController.class )
 @ComponentScan( basePackages = { "com.example.airline.location.region" } )
 @AutoConfigureMockMvc( addFilters = false )
 @DisplayName( "Region: API (/region)" )
 class RegionControllerRestTest //extends RestControllerTestBase
 {
     @Autowired
-    protected MockMvc mvc;
+    protected MockMvc          mvc;
     @MockitoBean
-    protected RegionsRepository repository;
+    protected RegionRepository repository;
     @Autowired
-    private RegionsService  service;
+    private   RegionService    service;
     @Autowired
-    private RegionDtoMapper mapper;
+    private   RegionDtoMapper  mapper;
 
 
     // ========== CREATE ==========

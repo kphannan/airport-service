@@ -8,7 +8,7 @@ import java.util.Optional;
 import com.example.airline.location.region.mapper.RegionEntityMapper;
 import com.example.airline.location.region.model.Region;
 import com.example.airline.location.region.persistence.model.RegionEntity;
-import com.example.airline.location.region.persistence.repository.RegionsRepository;
+import com.example.airline.location.region.persistence.repository.RegionRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,11 +18,43 @@ import org.springframework.stereotype.Service;
  * Spring Service (business logic) supporting the Region domain object.
  */
 @Service
-public class RegionsService
+public class RegionService
 {
-    private final RegionsRepository repository;
+    private final RegionRepository repository;
 
     private final RegionEntityMapper mapper;
+
+
+
+    /*
+     *   API (Controller)
+     *       Create
+     *           Post
+     *       Read
+     *           Get
+     *       Update
+     *           Patch
+     *           Put
+     *       Delete
+     *           Delete
+     *       Administrative
+     *           Head
+     *           Info
+     *           Opt
+     *           Trace
+     *
+     *   Config
+     *   mapper
+     *   model
+     *   persistence
+     *
+     *   Service
+     *       Create
+     *       Read
+     *       Update
+     *       Delete
+     */
+
 
     /**
      * Create a RegionService supported by autowire.
@@ -30,29 +62,19 @@ public class RegionsService
      * @param repository jpa repository of Regions
      * @param mapper maps entities to/from the domain model
      */
-    public RegionsService( final RegionsRepository repository, final RegionEntityMapper mapper )
+    public RegionService( final RegionRepository repository, final RegionEntityMapper mapper )
     {
         this.repository = repository;
         this.mapper     = mapper;
     }
 
 
+    // ========== CREATE ==========
+    // ===== POST =====
 
-    /**
-     * Retrieve a paged list of Regions.
-     *
-     * @param pageable the page control structure.
-     * @return a page of Regions.
-     */
-    public Page<Region> findAll( final Pageable pageable )
-    {
-        final Page<RegionEntity> pageItems = repository.findAll( pageable );
-
-        return pageItems.map( mapper::entityToDomain );
-    }
-
-
-
+    // ========== READ ==========
+    // ===== GET =====
+    // --- Single ---
     /**
      * Find a region by its id.
      *
@@ -77,6 +99,43 @@ public class RegionsService
     {
         return mapOptionalEntityToDomain( repository.findByCode( code ) );
     }
+
+    // --- Multiple ---
+    /**
+     * Retrieve a paged list of Regions.
+     *
+     * @param pageable the page control structure.
+     * @return a page of Regions.
+     */
+    public Page<Region> findAll( final Pageable pageable )
+    {
+        final Page<RegionEntity> pageItems = repository.findAll( pageable );
+
+        return pageItems.map( mapper::entityToDomain );
+    }
+
+
+    // ========== UPDATE ==========
+    // ===== PATCH =====
+    // ===== PUT =====
+
+    // ========== DELETE ==========
+    // ===== DELETE =====
+
+    // ========== Administrative ==========
+    // ===== HEAD =====
+    // ===== INFO =====
+    // ===== OPTION =====
+    // ===== TRACE =====
+
+
+
+
+
+
+
+
+
 
 
 
