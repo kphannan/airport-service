@@ -14,12 +14,6 @@ import lombok.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.validation.annotation.Validated;
 
-// TODO change code to a 2 character code...
-// record ContinentDTO( Long id, String code, String name, String wikiLink,
-// String keywords )
-// {}
-
-
 
 /**
  * API representation of a Continent.

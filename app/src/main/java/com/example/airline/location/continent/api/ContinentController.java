@@ -176,16 +176,12 @@ public class ContinentController
             final URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .path( "/{continentId}" )
-                    .buildAndExpand( continent.getId() )
+                    .buildAndExpand( continent.id() )
                     .toUri();
-//            printHeaders(  requestHeaders );
             final ResponseEntity<ContinentDTO> response = ResponseEntity
                     .created( location )
                     .headers( HeaderUtility.copyNeededHeaders( requestHeaders ) )
                     .body( mapper.domainToApi( continent ) );
-
-//            log.error( response.toString() );
-//            printHeaders( response.getHeaders() );
 
             return response;
         }
@@ -199,10 +195,6 @@ public class ContinentController
                 .build();
     }
 
-//    private void printHeaders( final HttpHeaders headers )
-//    {
-//        headers.forEach(  ( name, value ) -> log.error( name + " : " + value ) );
-//    }
 
     // ========== READ ==========
     // ===== GET =====
@@ -308,9 +300,6 @@ public class ContinentController
         {
             final ContinentDTO dto = mapper.domainToApi( optionalContinent.get() );
 
-//            ResponseEntity.BodyBuilder bb = ResponseEntity.status( HttpStatusCode.valueOf( 200 ) );
-//            bb.contentType( requestHeader.getContentType() );
-//            return bb.body( dto );
             // TODO handle Accept:application/json or Accept:application/XML
             // TODO  Last-Modified
             return ResponseEntity
@@ -884,30 +873,5 @@ public class ContinentController
                 .location( location )
                 .build();
     }
-
-
-
-
-
-
-
-    // ===================
-    // ===== GET =====
-    // ===================
-    // ===== POST =====
-    // ===================
-    // ===== PUT =====
-    // ===================
-    // ===== DELETE =====
-    // ===================
-    // ===== PATCH =====
-    // ===================
-    // ===== Options =====
-    // ===================
-    // ===== HEAD =====
-    // ===== INFO =====
-    // ===================
-    // ===== TRACE =====
-
 
 }
