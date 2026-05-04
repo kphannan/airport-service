@@ -9,7 +9,10 @@ import com.example.airline.location.config.GlobalApiSecurityResponses;
 import com.example.airline.location.region.RegionDTO;
 import com.example.airline.location.region.mapper.RegionDtoMapper;
 import com.example.airline.location.region.model.Region;
-import com.example.airline.location.region.service.RegionService;
+import com.example.airline.location.region.service.RegionCreateService;
+import com.example.airline.location.region.service.RegionDeleteService;
+import com.example.airline.location.region.service.RegionReadService;
+import com.example.airline.location.region.service.RegionUpdateService;
 import com.example.utility.HeaderUtility;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -49,8 +52,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class RegionController
 {
     // Autowired via constructor
-    private final RegionService   service;
-    private final RegionDtoMapper mapper;
+    private final RegionCreateService createService;
+    private final RegionReadService   readService;
+    private final RegionUpdateService updateService;
+    private final RegionDeleteService deleteService;
+    private final RegionDtoMapper     mapper;
 
     /**
      * Constructor for the RegionController.
@@ -58,9 +64,26 @@ public class RegionController
      * @param service The service to use for region operations.
      * @param mapper  The mapper to convert between domain and API objects.
      */
-    public RegionController( final RegionService service, final RegionDtoMapper mapper )
+
+
+    /**
+     *
+     * @param createService service to create instances
+     * @param readService service to read instances
+     * @param updateService service to update instances
+     * @param deleteService service to delete instances
+     * @param mapper The mapper to convert between domain and API objects.
+     */
+    public RegionController( final RegionCreateService createService,
+                             final RegionReadService   readService,
+                             final RegionUpdateService updateService,
+                             final RegionDeleteService deleteService,
+                             final RegionDtoMapper mapper )
     {
-        this.service = service;
+        this.createService = createService;
+        this.readService   = readService;
+        this.updateService = updateService;
+        this.deleteService = deleteService;
         this.mapper  = mapper;
     }
 
@@ -118,7 +141,7 @@ public class RegionController
     @SuppressWarnings( "PMD.ShortVariable" )
     public ResponseEntity<RegionDTO> restGetFindRegionById( @PathVariable final Integer id )
     {
-        final Optional<Region> optionalRegions = service.findRegionById( id );
+        final Optional<Region> optionalRegions = readService.findRegionById( id );
 
         if ( optionalRegions.isPresent() )
         {
@@ -176,7 +199,7 @@ public class RegionController
     public ResponseEntity<RegionDTO> restGetFindRegionByCode( @Valid @PathVariable final String code,
                                                               @RequestHeader final HttpHeaders requestHeader )
     {
-        final Optional<Region> optionalEntity = service.findRegionByCode( code );
+        final Optional<Region> optionalEntity = readService.findRegionByCode( code );
 
         if ( optionalEntity.isPresent() )
         {
@@ -207,7 +230,7 @@ public class RegionController
     @GetMapping( "" )
     public Page<RegionDTO> restGetFindAll( final Pageable pageable )
     {
-        final Page<Region> regions = service.findAll( pageable );
+        final Page<Region> regions = readService.findAll( pageable );
 
         // var zzz = regions.map( mapper::domainToApi );
 

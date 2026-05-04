@@ -20,7 +20,7 @@ public class RegionCreateService
     private final RegionEntityMapper mapper;
 
     /**
-     * Create a RegionService supported by autowire.
+     * Create a RegionCreateService supported by autowire.
      *
      * @param repository jpa repository of Region instances
      * @param mapper     maps entities to/from the domain model
@@ -33,13 +33,27 @@ public class RegionCreateService
 
 
 
-    // ========== Create ==========
+    // ========== CREATE ==========
+    // ===== POST =====
 
-    // ========== Read ==========
+    // ========== READ ==========
+    // ===== GET =====
+    // --- Single ---
+    // --- Multiple ---
 
-    // ========== Update ==========
+    // ========== UPDATE ==========
+    // ===== PATCH =====
+    // ===== PUT =====
 
-    // ========== Delete ==========
+    // ========== DELETE ==========
+    // ===== DELETE =====
+
+    // ========== Administrative ==========
+    // ===== HEAD =====
+    // ===== INFO =====
+    // ===== OPTION =====
+    // ===== TRACE =====
+
 
 
 }

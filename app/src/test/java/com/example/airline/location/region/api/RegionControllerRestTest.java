@@ -23,7 +23,7 @@ import java.util.Optional;
 import com.example.airline.location.region.mapper.RegionDtoMapper;
 import com.example.airline.location.region.persistence.model.RegionEntity;
 import com.example.airline.location.region.persistence.repository.RegionRepository;
-import com.example.airline.location.region.service.RegionService;
+import com.example.airline.location.region.service.RegionReadService;
 import com.example.rest.utility.PageableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -42,6 +42,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -53,36 +54,29 @@ import org.springframework.test.web.servlet.RequestBuilder;
 class RegionControllerRestTest //extends RestControllerTestBase
 {
     @Autowired
-    protected MockMvc          mvc;
+    protected MockMvc            mvc;
+
     @MockitoBean
-    protected RegionRepository repository;
-    @Autowired
-    private   RegionService    service;
-    @Autowired
-    private   RegionDtoMapper  mapper;
+    protected RegionRepository  repository;
+
+    @MockitoSpyBean
+    private   RegionReadService service;
+
+    @MockitoSpyBean
+    private   RegionDtoMapper   mapper;
 
 
     // ========== CREATE ==========
     // ===== POST =====
+    @Nested
+    @DisplayName( "/region - HTTP POST" )
+    class PostMethod        // NOPMD
+    {
+    }
+
 
     // ========== READ ==========
     // ===== GET =====
-
-    // ========== UPDATE ==========
-    // ===== PATCH =====
-    // ===== PUT =====
-
-    // ========== DELETE ==========
-    // ===== DELETE =====
-
-    // ========== Administrative ==========
-    // ===== HEAD =====
-    // ===== INFO =====
-    // ===== OPTION =====
-    // ===== TRACE =====
-
-
-
     @Nested
     @DisplayName( "HTTP GET" )
     class GetMethod        // NOPMD
@@ -189,12 +183,12 @@ class RegionControllerRestTest //extends RestControllerTestBase
             // TODO need to assert the resulting JSON....
 
             assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
-                       // () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" )),
-                       // () -> assertEquals( "application/json;charset=UTF-8", response.getContentType()),
+                    // () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" )),
+                    // () -> assertEquals( "application/json;charset=UTF-8", response.getContentType()),
                        () -> assertEquals( "119", response.getHeader( "Content-Length" ) ),
                        () -> assertFalse( response.getHeaderNames().isEmpty() ),
                        () -> assertEquals( 2, response.getHeaderNames().size() )
-            );
+                     );
         }
 
         @Test
@@ -267,12 +261,12 @@ class RegionControllerRestTest //extends RestControllerTestBase
 
 
             assertAll( () -> PageableAssert
-                    .assertThat( pageable )
-                    .hasPageNumber( 5 )
-                    .hasPageSize( 10 )
-                    .hasSort( "name", Sort.Direction.ASC )
-                    .hasSort( "id", Sort.Direction.DESC )
-            );
+                               .assertThat( pageable )
+                               .hasPageNumber( 5 )
+                               .hasPageSize( 10 )
+                               .hasSort( "name", Sort.Direction.ASC )
+                               .hasSort( "id", Sort.Direction.DESC )
+                     );
 //            assertThat( response.getContentType() )
 //                    .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
 //            final MockHttpServletResponse response = result.getResponse();
@@ -290,47 +284,53 @@ class RegionControllerRestTest //extends RestControllerTestBase
         }
     }
 
-    @Nested
-    @DisplayName( "/region - HTTP POST" )
-    class PostMethod        // NOPMD
-    {
-    }
 
-    @Nested
-    @DisplayName( "HTTP PUT" )
-    class PutMethod        // NOPMD
-    {
-    }
-
-    @Nested
-    @DisplayName( "HTTP DELETE" )
-    class DeleteMethod        // NOPMD
-    {
-    }
-
+    // ========== UPDATE ==========
+    // ===== PATCH =====
     @Nested
     @DisplayName( "HTTP PATCH" )
     class PatchMethod        // NOPMD
     {
     }
 
+    // ===== PUT =====
     @Nested
-    @DisplayName( "HTTP INFO" )
-    class InfoMethod        // NOPMD
+    @DisplayName( "HTTP PUT" )
+    class PutMethod        // NOPMD
     {
     }
 
+    // ========== DELETE ==========
+    // ===== DELETE =====
+    @Nested
+    @DisplayName( "HTTP DELETE" )
+    class DeleteMethod        // NOPMD
+    {
+    }
+
+
+    // ========== Administrative ==========
+    // ===== HEAD =====
     @Nested
     @DisplayName( "HTTP HEAD" )
     class HeadMethod        // NOPMD
     {
     }
 
+    // ===== INFO =====
+    @Nested
+    @DisplayName( "HTTP INFO" )
+    class InfoMethod        // NOPMD
+    {
+    }
+
+    // ===== OPTION =====
     @Nested
     @DisplayName( "HTTP OPT" )
     class OptionsMethod        // NOPMD
     {
     }
 
+    // ===== TRACE =====
 
 }
