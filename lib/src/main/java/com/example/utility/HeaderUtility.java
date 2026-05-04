@@ -6,9 +6,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.context.request.WebRequest;
 
+@Log4j2
 public final class HeaderUtility
 {
     public static final String TRACEID    = "TRACEPARENT";
@@ -77,6 +79,17 @@ public final class HeaderUtility
         newHeaders.putAll( filteredHeaders );
 
         return newHeaders;
+    }
+
+
+    /**
+     * Display HttpHeaders at info log level.
+     *
+     * @param headers the Http headers to display.
+     */
+    public static void printHeaders( final HttpHeaders headers )
+    {
+        headers.forEach(  ( name, value ) -> log.info( String.format( "%s : %s", name, value ) ) );
     }
 
 }

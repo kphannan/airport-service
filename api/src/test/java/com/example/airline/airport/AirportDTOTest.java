@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Test;
  * Unit tests for the {@code RegionDTO}.
  */
 @SuppressWarnings( "PMD.AvoidDuplicateLiterals" )
+@DisplayName( "Airport: DTO" )
 class AirportDTOTest
 {
     private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
@@ -34,231 +35,236 @@ class AirportDTOTest
     private final URI       testURI2  = URI.create( "https://en.wikipedia.org/wiki/Hartsfield–Jackson_Atlanta_International_Airport" );
 
     @Nested
-    @DisplayName( "constructor will" )
+    @DisplayName( "constructor" )
     class Constructor
     {
-        @Test
-        @DisplayName( "throw an exception when all arguments are null" )
-        void constructor_allArgsNull_throwsIllegalArgument()
+        @Nested
+        @DisplayName( "Throws exception when:" )
+        class ThrowException
         {
-            final Throwable thrown = assertThrows( IllegalArgumentException.class,
-                                                   () -> new AirportDTO( null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null )
-                                                 );
-            assertThat( thrown.getMessage() )
-                    .contains( "ident is marked non-null but is null" );
-        }
+            @Test
+            @DisplayName( "all arguments are null" )
+            void constructor_allArgsNull_throwsIllegalArgument()
+            {
+                final Throwable thrown = assertThrows( IllegalArgumentException.class,
+                                                       () -> new AirportDTO( null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null )
+                                                     );
+                assertThat( thrown.getMessage() )
+                        .contains( "ident is marked non-null but is null" );
+            }
 
-        @Test
-        @DisplayName( "throw an exception when all but first argument is null" )
-        void constructor_OneArgNotNullAllOtherArgsNull_throwsIllegalArgument()
-        {
-            final Throwable thrown = assertThrows( IllegalArgumentException.class,
-                                                   () -> new AirportDTO( null, "KATL", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null )
-                                                 );
-            assertEquals( "type is marked non-null but is null", thrown.getMessage() );
-        }
+            @Test
+            @DisplayName( "all but first argument is null" )
+            void constructor_OneArgNotNullAllOtherArgsNull_throwsIllegalArgument()
+            {
+                final Throwable thrown = assertThrows( IllegalArgumentException.class,
+                                                       () -> new AirportDTO( null, "KATL", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null )
+                                                     );
+                assertEquals( "type is marked non-null but is null", thrown.getMessage() );
+            }
 
-        @Test
-        @DisplayName( "throw an exception when all but first two arguments are null" )
-        void constructor_TwoArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
-        {
-            final Throwable thrown = assertThrows( IllegalArgumentException.class,
-                                                   () -> new AirportDTO( null, "KATL", "::TT::", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null )
-                                                 );
-            assertEquals( "name is marked non-null but is null", thrown.getMessage() );
-        }
+            @Test
+            @DisplayName( "all but first two arguments are null" )
+            void constructor_TwoArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
+            {
+                final Throwable thrown = assertThrows( IllegalArgumentException.class,
+                                                       () -> new AirportDTO( null, "KATL", "::TT::", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null )
+                                                     );
+                assertEquals( "name is marked non-null but is null", thrown.getMessage() );
+            }
 
-        @Test
-        @DisplayName( "throw an exception when all but first two arguments are null" )
-        void constructor_ThreeArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
-        {
-            final Throwable thrown = assertThrows( IllegalArgumentException.class,
-                                                   () -> new AirportDTO( null, "KATL", "::TT::", "::NAME::", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null )
-                                                 );
-            assertEquals( "latitude is marked non-null but is null", thrown.getMessage() );
-        }
+            @Test
+            @DisplayName( "all but first two arguments are null" )
+            void constructor_ThreeArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
+            {
+                final Throwable thrown = assertThrows( IllegalArgumentException.class,
+                                                       () -> new AirportDTO( null, "KATL", "::TT::", "::NAME::", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null )
+                                                     );
+                assertEquals( "latitude is marked non-null but is null", thrown.getMessage() );
+            }
 
-        @Test
-        @DisplayName( "throw an exception when all but first two arguments are null" )
-        void constructor_FourArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
-        {
-            final Throwable thrown = assertThrows( IllegalArgumentException.class,
-                                                   () -> new AirportDTO( null, "KATL", "::TT::", "::NAME::", BigDecimal.ONE, null, null, null, null, null, null, null, null, null, null, null, null, null, null )
-                                                 );
-            assertEquals( "longitude is marked non-null but is null", thrown.getMessage() );
-        }
+            @Test
+            @DisplayName( "all but first two arguments are null" )
+            void constructor_FourArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
+            {
+                final Throwable thrown = assertThrows( IllegalArgumentException.class,
+                                                       () -> new AirportDTO( null, "KATL", "::TT::", "::NAME::", BigDecimal.ONE, null, null, null, null, null, null, null, null, null, null, null, null, null, null )
+                                                     );
+                assertEquals( "longitude is marked non-null but is null", thrown.getMessage() );
+            }
 
-        @Test
-        @DisplayName( "throw an exception when all but first two arguments are null" )
-        void constructor_FiveArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
-        {
-            final Throwable thrown = assertThrows( IllegalArgumentException.class,
-                                                   () -> new AirportDTO( null,
-                                                                         "KATL",
-                                                                         "::TT::",
-                                                                         "::NAME::",
-                                                                         BigDecimal.ONE,
-                                                                         BigDecimal.TWO,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null )
-                                                 );
-            assertEquals( "continent is marked non-null but is null", thrown.getMessage() );
-        }
+            @Test
+            @DisplayName( "all but first two arguments are null" )
+            void constructor_FiveArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
+            {
+                final Throwable thrown = assertThrows( IllegalArgumentException.class,
+                                                       () -> new AirportDTO( null,
+                                                                             "KATL",
+                                                                             "::TT::",
+                                                                             "::NAME::",
+                                                                             BigDecimal.ONE,
+                                                                             BigDecimal.TWO,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null )
+                                                     );
+                assertEquals( "continent is marked non-null but is null", thrown.getMessage() );
+            }
 
-        @Test
-        @DisplayName( "throw an exception when all but first two arguments are null" )
-        void constructor_SixArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
-        {
-            final Throwable thrown = assertThrows( IllegalArgumentException.class,
-                                                   () -> new AirportDTO( null,
-                                                                         "KATL",
-                                                                         "::TT::",
-                                                                         "::NAME::",
-                                                                         BigDecimal.ONE,
-                                                                         BigDecimal.TWO,
-                                                                         null,
-                                                                         "NA",
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null )
-                                                 );
-            assertEquals( "isoCountry is marked non-null but is null", thrown.getMessage() );
-        }
+            @Test
+            @DisplayName( "all but first two arguments are null" )
+            void constructor_SixArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
+            {
+                final Throwable thrown = assertThrows( IllegalArgumentException.class,
+                                                       () -> new AirportDTO( null,
+                                                                             "KATL",
+                                                                             "::TT::",
+                                                                             "::NAME::",
+                                                                             BigDecimal.ONE,
+                                                                             BigDecimal.TWO,
+                                                                             null,
+                                                                             "NA",
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null )
+                                                     );
+                assertEquals( "isoCountry is marked non-null but is null", thrown.getMessage() );
+            }
 
-        @Test
-        @DisplayName( "throw an exception when all but first two arguments are null" )
-        void constructor_SevenArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
-        {
-            final Throwable thrown = assertThrows( IllegalArgumentException.class,
-                                                   () -> new AirportDTO( null,
-                                                                         "KATL",
-                                                                         "::TT::",
-                                                                         "::NAME::",
-                                                                         BigDecimal.ONE,
-                                                                         BigDecimal.TWO,
-                                                                         null,
-                                                                         "NA",
-                                                                         "PH",
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null )
-                                                 );
-            assertEquals( "isoRegion is marked non-null but is null", thrown.getMessage() );
-        }
+            @Test
+            @DisplayName( "all but first two arguments are null" )
+            void constructor_SevenArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
+            {
+                final Throwable thrown = assertThrows( IllegalArgumentException.class,
+                                                       () -> new AirportDTO( null,
+                                                                             "KATL",
+                                                                             "::TT::",
+                                                                             "::NAME::",
+                                                                             BigDecimal.ONE,
+                                                                             BigDecimal.TWO,
+                                                                             null,
+                                                                             "NA",
+                                                                             "PH",
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null )
+                                                     );
+                assertEquals( "isoRegion is marked non-null but is null", thrown.getMessage() );
+            }
 
-        @Test
-        @DisplayName( "throw an exception when all but first two arguments are null" )
-        void constructor_EightArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
-        {
-            final AirportDTO dto = assertDoesNotThrow(
-                                                   () -> new AirportDTO( null,                  // id
-                                                                         "KATL",                // ident
-                                                                         "::TT::",              // type
-                                                                         "::NAME::",            // name
-                                                                         BigDecimal.ONE,        // latitude
-                                                                         BigDecimal.TWO,        // longitude
-                                                                         null,                  // elevation
-                                                                         "NA",                  // continent
-                                                                         "PH",                  // country
-                                                                         "CB",                  // isoRegion
-                                                                         null,                  // municipality
-                                                                         "no",                  // scheduledService
-                                                                         null,                  // gpsCode
-                                                                         null,                  // icaoCode
-                                                                         null,                  // iataCode
-                                                                         null,                  // localCode
-                                                                         null,                  // homeLink
-                                                                         null,                  // wikiLink
-                                                                         null )                 // keywords
-                                                 );
-        }
+            @Test
+            @DisplayName( "all but first two arguments are null" )
+            void constructor_EightArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
+            {
+                final AirportDTO dto = assertDoesNotThrow(
+                        () -> new AirportDTO( null,                  // id
+                                              "KATL",                // ident
+                                              "::TT::",              // type
+                                              "::NAME::",            // name
+                                              BigDecimal.ONE,        // latitude
+                                              BigDecimal.TWO,        // longitude
+                                              null,                  // elevation
+                                              "NA",                  // continent
+                                              "PH",                  // country
+                                              "CB",                  // isoRegion
+                                              null,                  // municipality
+                                              "no",                  // scheduledService
+                                              null,                  // gpsCode
+                                              null,                  // icaoCode
+                                              null,                  // iataCode
+                                              null,                  // localCode
+                                              null,                  // homeLink
+                                              null,                  // wikiLink
+                                              null )                 // keywords
+                                                         );
+            }
 
-        @Test
-        @DisplayName( "throw an exception when all but first two arguments are null" )
-        void constructor_NineArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
-        {
-            final Throwable thrown = assertThrows( IllegalArgumentException.class,
-                                                   () -> new AirportDTO( null,
-                                                                         "KATL",
-                                                                         "::TT::",
-                                                                         "::NAME::",
-                                                                         BigDecimal.ONE,
-                                                                         BigDecimal.TWO,
-                                                                         null,
-                                                                         "NA",
-                                                                         "PH",
-                                                                         "CB",
-                                                                         "Some city",
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null,
-                                                                         null )
-                                                 );
-            assertEquals( "scheduledService is marked non-null but is null", thrown.getMessage() );
-        }
+            @Test
+            @DisplayName( "but first two arguments are null" )
+            void constructor_NineArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
+            {
+                final Throwable thrown = assertThrows( IllegalArgumentException.class,
+                                                       () -> new AirportDTO( null,
+                                                                             "KATL",
+                                                                             "::TT::",
+                                                                             "::NAME::",
+                                                                             BigDecimal.ONE,
+                                                                             BigDecimal.TWO,
+                                                                             null,
+                                                                             "NA",
+                                                                             "PH",
+                                                                             "CB",
+                                                                             "Some city",
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null,
+                                                                             null )
+                                                     );
+                assertEquals( "scheduledService is marked non-null but is null", thrown.getMessage() );
+            }
 
-        @Test
-        @DisplayName( "throw an exception when all but first two arguments are null" )
-        void constructor_withRequiredArgs_returnsInstance()
-        {
-            final AirportDTO dto = new AirportDTO( null,
-                                                   "KATL",
-                                                   "::TT::",
-                                                   "::NAME::",
-                                                   BigDecimal.ONE,
-                                                   BigDecimal.TWO,
-                                                   null,
-                                                   "NA",
-                                                   "PH",
-                                                   "CB",
-                                                   "Some city",
-                                                   "no",
-                                                   null,
-                                                   null,
-                                                   null,
-                                                   null,
-                                                   null,
-                                                   null,
-                                                   null
-                                                 );
-            assertNotNull( dto );
-        }
+            @Test
+            @DisplayName( "all but first two arguments are null" )
+            void constructor_withRequiredArgs_returnsInstance()
+            {
+                final AirportDTO dto = new AirportDTO( null,
+                                                       "KATL",
+                                                       "::TT::",
+                                                       "::NAME::",
+                                                       BigDecimal.ONE,
+                                                       BigDecimal.TWO,
+                                                       null,
+                                                       "NA",
+                                                       "PH",
+                                                       "CB",
+                                                       "Some city",
+                                                       "no",
+                                                       null,
+                                                       null,
+                                                       null,
+                                                       null,
+                                                       null,
+                                                       null,
+                                                       null
+                );
+                assertNotNull( dto );
+            }
 
+        }
     }
 
 
     @Nested
-    @DisplayName( "NewAirportDTO - Validation" )
+    @DisplayName( "Validation" )
     class ValidationGroup
     {
         @Test
@@ -294,11 +300,11 @@ class AirportDTOTest
         }
 
         @Nested
-        @DisplayName( "an IDENT conforms to" )
+        @DisplayName( "an IDENT" )
         class ValidationIdent
         {
             @Test
-            @DisplayName( "not blank" )
+            @DisplayName( "is not blank" )
             void airport_blankIdent_returnsViolation()
             {
                 final AirportDTO itemUnderTest = new AirportDTO( 1L,
@@ -329,9 +335,8 @@ class AirportDTOTest
                                                );
             }
 
-
             @Test
-            @DisplayName( "not too short" )
+            @DisplayName( "is not too short" )
             void airport_tooFewCharactersForIdent_returnsViolation()
             {
                 final AirportDTO itemUnderTest = new AirportDTO( 1L,
@@ -362,7 +367,7 @@ class AirportDTOTest
             }
 
             @Test
-            @DisplayName( "not numeric" )
+            @DisplayName( "is not numeric" )
             void airport_numericIdent_returnsViolation()
             {
                 final AirportDTO itemUnderTest = new AirportDTO( 1L,
@@ -512,7 +517,7 @@ class AirportDTOTest
         }
 
         @Nested
-        @DisplayName( "a continent code is" )
+        @DisplayName( "a continent code" )
         class ValidationContinent
         {
             @Test
@@ -542,8 +547,8 @@ class AirportDTOTest
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
-                                             tuple( "continent", "A 2-character continent code is required" ),
-                                             tuple( "continent", "Continent code must be 2 uppercase characters" )
+                                                 tuple( "continent", "A 2-character continent code is required" ),
+                                                 tuple( "continent", "Continent code must be 2 uppercase characters" )
                                                );
             }
 
@@ -673,7 +678,7 @@ class AirportDTOTest
         }
 
         @Nested
-        @DisplayName( "a country code is" )
+        @DisplayName( "a country code" )
         class ValidationCountry
         {
             @Test
@@ -681,30 +686,30 @@ class AirportDTOTest
             void airportCountry_blank_isRejected()
             {
                 final AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "ABCD",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428_101 ),
-                                                           1026,
-                                                           "NA",
-                                                           "  ",
-                                                           "US-GA",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "KATL",
-                                                           "ATL",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
+                                                                 "ABCD",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428_101 ),
+                                                                 1026,
+                                                                 "NA",
+                                                                 "  ",
+                                                                 "US-GA",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "KATL",
+                                                                 "ATL",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
                 final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
-                                             tuple( "isoCountry", "An ISO 3166:1-alpha2 country code is required" ),
-                                             tuple( "isoCountry", "Country code must a valid ISO 3166:1-alpha2" )
+                                                 tuple( "isoCountry", "An ISO 3166:1-alpha2 country code is required" ),
+                                                 tuple( "isoCountry", "Country code must a valid ISO 3166:1-alpha2" )
                                                );
             }
 
@@ -835,7 +840,7 @@ class AirportDTOTest
         }
 
         @Nested
-        @DisplayName( "a region code is" )
+        @DisplayName( "a region code" )
         class ValidationRegion
         {
             @Test
@@ -865,8 +870,8 @@ class AirportDTOTest
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
-                                             tuple( "isoRegion", "A unique region code is required" ),
-                                             tuple( "isoRegion", "Region code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" )
+                                                 tuple( "isoRegion", "A unique region code is required" ),
+                                                 tuple( "isoRegion", "Region code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" )
                                                );
             }
 
@@ -875,24 +880,24 @@ class AirportDTOTest
             void airportRegion_numeric_isRejected()
             {
                 final AirportDTO itemUnderTest = new AirportDTO( 1L,
-                                                           "ABCD",
-                                                           "large_airport",
-                                                           "Hartsfield Jackson Atlanta International Airport",
-                                                           BigDecimal.valueOf( 33.6367 ),
-                                                           BigDecimal.valueOf( -84.428_101 ),
-                                                           1026,
-                                                           "NA",
-                                                           "US",
-                                                           "1234",
-                                                           "Atlanta, Georgia",
-                                                           "yes",
-                                                           "KATL",
-                                                           "KATL",
-                                                           "ATL",
-                                                           "ATL",
-                                                           testURI1,
-                                                           testURI2,
-                                                           "Key1, key2" );
+                                                                 "ABCD",
+                                                                 "large_airport",
+                                                                 "Hartsfield Jackson Atlanta International Airport",
+                                                                 BigDecimal.valueOf( 33.6367 ),
+                                                                 BigDecimal.valueOf( -84.428_101 ),
+                                                                 1026,
+                                                                 "NA",
+                                                                 "US",
+                                                                 "1234",
+                                                                 "Atlanta, Georgia",
+                                                                 "yes",
+                                                                 "KATL",
+                                                                 "KATL",
+                                                                 "ATL",
+                                                                 "ATL",
+                                                                 testURI1,
+                                                                 testURI2,
+                                                                 "Key1, key2" );
                 final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility

@@ -30,7 +30,7 @@ import org.jspecify.annotations.Nullable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor  // required for Jackson mapping
-public class CountryDTO implements Serializable
+public class CountryDTO
 {
     // TODO convert to a Java record
 

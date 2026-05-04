@@ -23,7 +23,6 @@ import org.jspecify.annotations.NonNull;
 @Entity
 @Table( name = "iata_airportcode" )
 @Data
-//@Value
 @NoArgsConstructor( access = AccessLevel.PROTECTED ) // JPA best practice
 public class AirportCodeIataEntity
 {
@@ -32,6 +31,8 @@ public class AirportCodeIataEntity
     @Id
     // @Value("#{' matches [A-Z]{3}'}")
     @Column( name = "iata_code", length = 3, nullable = false, columnDefinition = "char(3)" )
+    @jakarta.validation.constraints.Pattern( regexp = "[A-Z]{3}", message = "IATA code has three alphabetic characters" )
+//    @NonNull private String iataCode;
     @NonNull private String iataCode = "ZZZ";
 
 
@@ -44,7 +45,11 @@ public class AirportCodeIataEntity
     {
         if ( isValidIataCode( value ) )
         {
-            iataCode = value.trim();
+            iataCode = value;
+        }
+        else
+        {
+            throw new IllegalArgumentException( String.format( "IATA code '%s' is invalid", value ) );
         }
     }
 
