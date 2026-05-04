@@ -54,10 +54,10 @@ class ContinentCreateServiceTest
         final Continent continent  = service.create( newContinent );
 
         // -- then
-        assertAll( () -> assertEquals( "North", continent.getName() ),
-                   () -> assertEquals( "NA", continent.getCode() ),
-                   () -> assertNull( continent.getWikiLink() ),
-                   () -> assertNull( continent.getKeywords() ),
+        assertAll( () -> assertEquals( "North", continent.name() ),
+                   () -> assertEquals( "NA", continent.code() ),
+                   () -> assertNull( continent.wikiLink() ),
+                   () -> assertNull( continent.keywords() ),
                    () -> verify( repository ).existsByCode( anyString() ),
                    () -> verify( repository ).save( any( ContinentEntity.class ) )
                  );

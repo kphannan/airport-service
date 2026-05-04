@@ -5,6 +5,8 @@ package com.example.airline.location.continent.model;
 
 import java.net.URI;
 
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.jspecify.annotations.NonNull;
@@ -14,28 +16,22 @@ import org.jspecify.annotations.Nullable;
 /**
  * Domain model object representing a single Continent.
  */
-@Data
-@AllArgsConstructor
-public class Continent //extends NewContinent
-{
-    @SuppressWarnings( "PMD.ShortVariable" )
-    private Integer id;
-    @NonNull
-    private String  code;     // TODO change code to a 2 character code...
-    @NonNull
-    private String  name;
-    @Nullable
-    private URI     wikiLink;
-    @Nullable
-    private String  keywords; // May not need to exchange this
+public record Continent(
+        @NonNull
+        Integer id,
 
+        @Pattern( regexp = "[A-Z]{2}", message = "Code must be 2 uppercase characters" )
+        @NonNull
+        String  code,     // TODO change code to a 2 character code...
 
-//    public Continent( final NewContinentDTO newContinent )
-//    {
-//        code = newContinent.getCode();
-//        name = newContinent.getName();
-//        wikiLink = newContinent.getWikiLink();
-//        keywords = newContinent.getKeywords();
-//    }
+        @Pattern( regexp = "[a-zA-Z][a-zA-Z ]{1,51}", message = "Continent name must be 2 to 52 characters" )
+        @NonNull
+        String  name,
 
-}
+        @Nullable
+        URI     wikiLink,
+
+        @Size( max = 255, message = "List of keywords may not exceed 255 characters" )
+        @Nullable
+        String  keywords // May not need to exchange this
+){};

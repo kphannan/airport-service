@@ -44,7 +44,7 @@ public class ContinentCreateService
     // TODO use a NewContinentDTO....
     public Continent create( final NewContinent entity )
     {
-        if ( repository.existsByCode( entity.getCode() ) )
+        if ( repository.existsByCode( entity.code() ) )
         {
             log.debug( "Continent already exists" );
             return null;
