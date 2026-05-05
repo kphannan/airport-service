@@ -28,10 +28,9 @@ import org.jspecify.annotations.Nullable;
 /**
  * API representation of a Region.
  */
-@Data
-@AllArgsConstructor
-public class RegionDTO
-{
+//@Data
+//@AllArgsConstructor
+public record RegionDTO(
     // TODO convert to a Java record
     /**
      * Internal integer identifier for the region. This will stay
@@ -43,7 +42,7 @@ public class RegionDTO
              description = "Unique identifier",
              requiredMode = Schema.RequiredMode.REQUIRED )
     @NotNull( message = "A Region id is required" )
-    private Integer id;
+   Integer id,
 
     /**
      * local_code prefixed with the country code to make a globally unique
@@ -66,7 +65,7 @@ public class RegionDTO
     // TODO also need to support 'U-A' for unassigned
     @Pattern( regexp = "[A-Z]{2}-[A-Z\\-]{1,4}",
               message = "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" )
-    private String code;
+   String code,
 
     /**
      * The local code for the administrative subdivision. Whenever possible, these
@@ -91,7 +90,7 @@ public class RegionDTO
     // TODO also need to support 'U-A' for unassigned
     @Pattern( regexp = "[A-Z0-9]{1,2}[A-Z\\-]{0,5}",
               message = "local code" )
-    private String localCode;
+   String localCode,
 
     /**
      * The common English-language name for the administrative subdivision. In some
@@ -113,7 +112,7 @@ public class RegionDTO
     @Size( min = 2, max = 52, message = "Region name must be between 7 and 80 characters" )
     @Pattern( regexp = "[a-zA-Z][a-zA-Z ]{1,51}", message = "Region name must be between 7 and 80 characters" )
     @NonNull
-    private String name;
+   String name,
 
     /**
      * The two-character ISO 3166:1-alpha2 code for the country containing the
@@ -131,7 +130,7 @@ public class RegionDTO
     @NotBlank( message = "An ISO 3166:1-alpha2 country code is required" )
     @NonNull
     @Pattern( regexp = "[A-Z]{2}", message = "Code must a valid ISO 3166:1-alpha2" )
-    private String country; // ! Create a domain-object for the country code
+   String country, // ! Create a domain-object for the country code
 
     /**
      * A code for the continent to which the region belongs. See the continent field
@@ -148,7 +147,7 @@ public class RegionDTO
     @NotBlank( message = "A 2-character continent code is required" )
     @NonNull
     @Pattern( regexp = "[A-Z]{2}", message = "Continent code must be 2 uppercase characters" )
-    private String continent; // ! Create a domain-object for continent code
+   String continent, // ! Create a domain-object for continent code
 
     /**
      * A link to the Wikipedia article describing the subdivision.
@@ -160,7 +159,7 @@ public class RegionDTO
              requiredMode = Schema.RequiredMode.NOT_REQUIRED,
              maxLength = 255 )
     @Nullable
-    private URI wikipediaLink;
+   URI wikipediaLink,
 
     /**
      * A comma-separated list of keywords for helping with search. May include former
@@ -173,5 +172,5 @@ public class RegionDTO
              maxLength = 255 )
     @Nullable
     @Size( max = 255, message = "List of keywords may not exceed 255 characters" )
-    private String keywords;
-}
+   String keywords
+){};

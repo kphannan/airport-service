@@ -11,6 +11,8 @@ import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -43,6 +45,8 @@ public class RegionEntity
      * local_code prefixed with the country code to make a globally unique
      * identifier.
      */
+    @Pattern( regexp = "[A-Z]{2}-[A-Z\\-]{1,4}",
+              message = "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" )
     @Column( name = "code", length = 7, nullable = false )
     @NonNull private String code;
 
@@ -54,6 +58,8 @@ public class RegionEntity
      * region (or perhaps can't be, as in the case of a deep-sea oil platform).
      */
     @Column( name = "local_code", length = 4, nullable = false )
+    @Pattern( regexp = "([A-Z]{2}-[A-Z\\-]{1,4}|U-A)",
+              message = "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" )
     @NonNull private String localCode;
 
     /**
@@ -61,6 +67,7 @@ public class RegionEntity
      * cases, the name in local languages will appear in the keyword field assist
      * search.
      */
+    @Pattern( regexp = "[a-zA-Z][a-zA-Z ]{1,51}", message = "Continent name must be 2 to 52 characters" )
     @Column( name = "name", length = 52, nullable = false )
     @NonNull private String name;
 
@@ -69,6 +76,7 @@ public class RegionEntity
      * administrative subdivision. A handful of unofficial, non-ISO codes are also
      * in use, such as "XK" for Kosovo.
      */
+    @Pattern( regexp = "[A-Z]{2}", message = "Country code must a valid ISO 3166:1-alpha2" )
     @Column( name = "iso_country", length = 2, nullable = false, columnDefinition = "char(2)" )
     @NonNull private String country; // ! Create a domain object for the country code
 
@@ -76,6 +84,7 @@ public class RegionEntity
      * A code for the continent to which the region belongs. See the continent field
      * in airports.csv for a list of codes.
      */
+    @Pattern( regexp = "[A-Z]{2}", message = "Continent code must be 2 uppercase characters" )
     @Column( name = "continent", length = 2, nullable = false, columnDefinition = "char(2)" )
     @NonNull private String continent; // ! Create a domain object for continent code
 
@@ -90,6 +99,7 @@ public class RegionEntity
      * A comma-separated list of keywords to help with search. May include former
      * names for the region, and/or the region name in other languages.
      */
+    @Size( max = 255, message = "List of keywords may not exceed 255 characters" )
     @Column( name = "keywords", length = 255 )
     @Nullable private String keywords;
 }

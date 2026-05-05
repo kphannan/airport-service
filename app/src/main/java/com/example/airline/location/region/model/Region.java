@@ -5,6 +5,8 @@ package com.example.airline.location.region.model;
 
 import java.net.URI;
 
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.jspecify.annotations.NonNull;
@@ -22,22 +24,22 @@ import org.jspecify.annotations.Nullable;
 /**
  * Domain model object representing a single geographic Region.
  */
-@Data
-@AllArgsConstructor
-public class Region
-{
+public record Region(
     /**
      * Internal integer identifier for the region. This will stay
      * persistent, even if the region code changes.
      */
-    @NonNull @SuppressWarnings( "PMD.ShortVariable" )
-    private Integer id;
+    @NonNull
+    @SuppressWarnings( "PMD.ShortVariable" )
+    Integer id,
 
     /**
      * local_code prefixed with the country code to make a globally unique
      * identifier.
      */
-    @NonNull private String code;
+    @Pattern( regexp = "[A-Z]{2}-[A-Z\\-]{1,4}",
+              message = "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" )
+    @NonNull String code,
 
     /**
      * The local code for the administrative subdivision. Whenever possible, these
@@ -46,36 +48,42 @@ public class Region
      * for each country, which means that the airport has not yet been assigned to a
      * region (or perhaps can't be, as in the case of a deep-sea oil platform).
      */
-    @NonNull private String localCode;
+    @Pattern( regexp = "([A-Z]{2}-[A-Z\\-]{1,4}|U-A)",
+              message = "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" )
+    @NonNull String localCode,
 
     /**
      * The common English-language name for the administrative subdivision. In some
      * cases, the name in local languages will appear in the keyword field assist
      * search.
      */
-    @NonNull private String name;
+    @Pattern( regexp = "[a-zA-Z][a-zA-Z ]{1,51}", message = "Continent name must be 2 to 52 characters" )
+    @NonNull String name,
 
     /**
      * The two-character ISO 3166:1-alpha2 code for the country containing the
      * administrative subdivision. A handful of unofficial, non-ISO codes are also
      * in use, such as "XK" for Kosovo.
      */
-    @NonNull private String country; // ! Create a domain object for the country code
+    @Pattern( regexp = "[A-Z]{2}", message = "Country code must a valid ISO 3166:1-alpha2" )
+    @NonNull String country, // ! Create a domain object for the country code
 
     /**
      * A code for the continent to which the region belongs. See the continent field
      * in airports.csv for a list of codes.
      */
-    @NonNull private String continent; // ! Create a domain object for continent code
+    @Pattern( regexp = "[A-Z]{2}", message = "Continent code must be 2 uppercase characters" )
+    @NonNull String continent, // ! Create a domain object for continent code
 
     /**
      * A link to the Wikipedia article describing the subdivision.
      */
-    @Nullable private URI wikipediaLink;
+    @Nullable URI wikipediaLink,
 
     /**
      * A comma-separated list of keywords to help with search. May include former
      * names for the region, and/or the region name in other languages.
      */
-    @Nullable private String keywords;
-}
+    @Size( max = 255, message = "List of keywords may not exceed 255 characters" )
+    @Nullable String keywords
+){};

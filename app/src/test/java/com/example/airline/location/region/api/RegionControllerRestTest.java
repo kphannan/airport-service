@@ -9,7 +9,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -21,9 +24,13 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.airline.location.region.mapper.RegionDtoMapper;
+import com.example.airline.location.region.model.Region;
 import com.example.airline.location.region.persistence.model.RegionEntity;
 import com.example.airline.location.region.persistence.repository.RegionRepository;
+import com.example.airline.location.region.service.RegionCreateService;
+import com.example.airline.location.region.service.RegionDeleteService;
 import com.example.airline.location.region.service.RegionReadService;
+import com.example.airline.location.region.service.RegionUpdateService;
 import com.example.rest.utility.PageableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -46,6 +53,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.ResultActions;
 
 @WebMvcTest( controllers = RegionController.class )
 @ComponentScan( basePackages = { "com.example.airline.location.region" } )
@@ -60,7 +68,13 @@ class RegionControllerRestTest //extends RestControllerTestBase
     protected RegionRepository  repository;
 
     @MockitoSpyBean
-    private   RegionReadService service;
+    private RegionCreateService createService;
+    @MockitoSpyBean
+    private RegionReadService   readService;
+    @MockitoSpyBean
+    private RegionUpdateService updateService;
+    @MockitoSpyBean
+    private RegionDeleteService deleteService;
 
     @MockitoSpyBean
     private   RegionDtoMapper   mapper;
@@ -94,29 +108,32 @@ class RegionControllerRestTest //extends RestControllerTestBase
                     .thenReturn( Optional.of( regionEntity ) );
 
             // --- when
-            final MvcResult result = mvc
-                    .perform( request )
-                    .andDo( print() )
-                    .andExpect( status().isOk() )
-                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
-                    // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
-                    //      don't complain about lack of assertions in tests
-                    .andExpect( jsonPath( "$.id" ).value( 1 ) )
-                    .andExpect( jsonPath( "$.code" ).value( "ZZZ" ) )
-                    .andExpect( jsonPath( "$.localCode" ).value( "LCL" ) )
-                    .andExpect( jsonPath( "$.name" ).value( "foo" ) )
-                    .andExpect( jsonPath( "$.country" ).value( "ZZ" ) )
-                    .andExpect( jsonPath( "$.continent" ).value( "NA" ) )
-                    .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
-                    .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
-                    .andReturn();
-            final MockHttpServletResponse response = result.getResponse();
+            final ResultActions resultActions = mvc
+                    .perform( request );
 
             // --- then
-            // TODO need to assert the resulting JSON....
+            resultActions.andDo(  print() );
 
-            assertThat( response.getContentType() )
-                    .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+            final MvcResult result = resultActions.andReturn();
+            final MockHttpServletResponse response = result.getResponse();
+
+            assertAll( () -> assertThat( response.getContentType() )
+                               .isEqualTo( MediaType.APPLICATION_JSON_VALUE ),
+                       () -> resultActions
+                               .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) ),
+                       // TODO need to assert the resulting JSON....
+                       () -> resultActions
+                               // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
+                               //      don't complain about lack of assertions in tests
+                               .andExpect( jsonPath( "$.id" ).value( 1 ) )
+                               .andExpect( jsonPath( "$.code" ).value( "ZZZ" ) )
+                               .andExpect( jsonPath( "$.localCode" ).value( "LCL" ) )
+                               .andExpect( jsonPath( "$.name" ).value( "foo" ) )
+                               .andExpect( jsonPath( "$.country" ).value( "ZZ" ) )
+                               .andExpect( jsonPath( "$.continent" ).value( "NA" ) )
+                               .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
+                               .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
+                     );
         }
 
         @Test
@@ -132,11 +149,12 @@ class RegionControllerRestTest //extends RestControllerTestBase
 
 
             // --- when
-            final MvcResult result = mvc
-                    .perform( request )
-                    .andDo( print() )
-                    .andExpect( status().isNoContent() )
-                    .andReturn();
+            final ResultActions resultActions = mvc
+                    .perform( request );
+
+            resultActions.andDo(  print() );
+
+            final MvcResult result = resultActions.andReturn();
             final MockHttpServletResponse response = result.getResponse();
 
             // --- then
@@ -157,37 +175,40 @@ class RegionControllerRestTest //extends RestControllerTestBase
             when( repository.findByCode( anyString() ) )
                     .thenReturn( Optional.of( regionEntity ) );
 
-
             // --- when
-            final MvcResult result = mvc
-                    .perform( request )
-                    .andDo( print() )
-                    .andExpect( status().isOk() )
-                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
-                    .andExpect( content().encoding( "UTF-8" ) )
-                    // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
-                    //      don't complain about lack of assertions in tests
-                    .andExpect( jsonPath( "$.id" ).value( 2 ) )
-                    .andExpect( jsonPath( "$.code" ).value( "CC-LCL" ) )
-                    .andExpect( jsonPath( "$.localCode" ).value( "LCL" ) )
-                    .andExpect( jsonPath( "$.name" ).value( "::NAME::" ) )
-                    .andExpect( jsonPath( "$.country" ).value( "CC" ) )
-                    .andExpect( jsonPath( "$.continent" ).value( "NA" ) )
-                    .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
-                    .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
-                    .andReturn();
+            final ResultActions resultActions = mvc
+                    .perform( request );
 
+            resultActions.andDo(  print() );
+
+            final MvcResult result = resultActions.andReturn();
             final MockHttpServletResponse response = result.getResponse();
+
+            // --- then
 
             // final String body = response.getContentAsString();
             // TODO need to assert the resulting JSON....
-
             assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
                     // () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" )),
                     // () -> assertEquals( "application/json;charset=UTF-8", response.getContentType()),
                        () -> assertEquals( "119", response.getHeader( "Content-Length" ) ),
                        () -> assertFalse( response.getHeaderNames().isEmpty() ),
-                       () -> assertEquals( 2, response.getHeaderNames().size() )
+                       () -> assertEquals( 2, response.getHeaderNames().size() ),
+                       () -> resultActions
+//                               .andExpect( status().isOk() )
+                               .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
+                               .andExpect( content().encoding( "UTF-8" ) ),
+                       () -> resultActions
+                               // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
+                               //      don't complain about lack of assertions in tests
+                               .andExpect( jsonPath( "$.id" ).value( 2 ) )
+                               .andExpect( jsonPath( "$.code" ).value( "CC-LCL" ) )
+                               .andExpect( jsonPath( "$.localCode" ).value( "LCL" ) )
+                               .andExpect( jsonPath( "$.name" ).value( "::NAME::" ) )
+                               .andExpect( jsonPath( "$.country" ).value( "CC" ) )
+                               .andExpect( jsonPath( "$.continent" ).value( "NA" ) )
+                               .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
+                               .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
                      );
         }
 
@@ -203,13 +224,22 @@ class RegionControllerRestTest //extends RestControllerTestBase
                     .thenReturn( Optional.empty() );
 
             // --- when
-            final MvcResult result = mvc
-                    .perform( request )
-                    .andDo( print() )
-                    .andExpect( status().isNoContent() )
-//                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
-//                    .andExpect( content().encoding( "UTF-8" ))
-                    .andReturn();
+            final ResultActions resultActions = mvc
+                    .perform( request );
+
+            // --- then
+            resultActions.andDo(  print() );
+
+            final MvcResult result = resultActions.andReturn();
+            final MockHttpServletResponse response = result.getResponse();
+
+            assertAll( () -> assertThat( response.getStatus() )
+                               .isEqualTo(  HttpStatus.NO_CONTENT.value() ),
+                       () -> resultActions
+                               .andExpect( status().isNoContent() )
+////                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
+////                    .andExpect( content().encoding( "UTF-8" ))
+                     );
         }
 
 
@@ -218,13 +248,20 @@ class RegionControllerRestTest //extends RestControllerTestBase
         void restGetAll_returnsSuccess() throws Exception
         {
             // --- given
-            // ContinentEntity continentEntity = new ContinentEntity( 1, "ZZ", "::NAME::", null, null  );
+            final ArgumentCaptor<Pageable> pageableCaptor =
+                    ArgumentCaptor.forClass( Pageable.class );
+            //  -- response
             final List<RegionEntity> entities =
                     List.of(
                             new RegionEntity( 1, "XXX", "YYY", "::X_NAME_X::", "ZZ", "NA", null, null ),
                             new RegionEntity( 2, "YYY", "YYY", "::Y_NAME_Y::", "ZZ", "NA", null, null ),
                             new RegionEntity( 3, "ZZZ", "LCL", "::Z_NAME_Z::", "ZZ", "NA", null, null )
                            );
+            final Page<RegionEntity> page = new PageImpl<>( entities );
+            when( repository.findAll( any( Pageable.class ) ) )
+                    .thenReturn( page );
+
+            //  -- request
             final RequestBuilder request = withHeaders( get( "/location/region" ) )
                     .param( "page", "5" )
                     .param( "size", "10" )
@@ -232,55 +269,59 @@ class RegionControllerRestTest //extends RestControllerTestBase
                     .param( "sort", "name,asc" )   // <-- no space after comma!
                     .characterEncoding( "UTR-8" );
 
-            final Page<RegionEntity> page = new PageImpl<>( entities );
-            when( repository.findAll( any( Pageable.class ) ) )
-                    .thenReturn( page );
 
             // --- when
-            final MvcResult result = mvc
-                    .perform( request )
-                    .andDo( print() )
-                    .andExpect( status().isOk() )
-                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
-                    // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
-                    //      don't complain about lack of assertions in tests
-                    .andExpect( jsonPath( "$.content[0].id" ).value( 1 ) )
-                    .andExpect( jsonPath( "$.content[0].code" ).value( "XXX" ) )
-                    .andExpect( jsonPath( "$.content[0].name" ).value( "::X_NAME_X::" ) )
-                    .andExpect( jsonPath( "$.content[0].wikipediaLink" ).doesNotExist() )
-                    .andExpect( jsonPath( "$.content[0].keywords" ).doesNotExist() )
-                    .andReturn();
-//            final MockHttpServletResponse response = result.getResponse();
+            final ResultActions resultActions = mvc
+                    .perform( request );
+
+            resultActions.andDo( print() );
 
             // --- then
-            // TODO need to assert the resulting JSON....
-            final ArgumentCaptor<Pageable> pageableCaptor =
-                    ArgumentCaptor.forClass( Pageable.class );
-            verify( repository ).findAll( pageableCaptor.capture() );
-            final PageRequest pageable = (PageRequest)pageableCaptor.getValue();
+//            verify( repository ).findAll( pageableCaptor.capture() );
+//            final PageRequest pageable = (PageRequest)pageableCaptor.getValue();
 
+//            final MvcResult result = resultActions.andReturn();
+//            final MockHttpServletResponse response = result.getResponse();
+            final MockHttpServletResponse response = resultActions
+                    .andReturn()
+                    .getResponse();
 
-            assertAll( () -> PageableAssert
-                               .assertThat( pageable )
+            assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
+                       // Response format
+                       () -> verify( repository )
+                               .findAll( pageableCaptor.capture() ),
+                       () -> PageableAssert
+//                               .assertThat( pageable )
+                               .assertThat( (PageRequest)pageableCaptor.getValue() )
                                .hasPageNumber( 5 )
                                .hasPageSize( 10 )
                                .hasSort( "name", Sort.Direction.ASC )
-                               .hasSort( "id", Sort.Direction.DESC )
-                     );
-//            assertThat( response.getContentType() )
-//                    .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
-//            final MockHttpServletResponse response = result.getResponse();
-//
-////            final String body = response.getContentAsString();
-//            // TODO need to assert the resulting JSON....
-//
-//            assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
-////                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" )),
-////                       () -> assertEquals( "application/json;charset=UTF-8", response.getContentType()),
+                               .hasSort( "id", Sort.Direction.DESC ),
+//                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" )),
 //                       () -> assertEquals( "119", response.getHeader( "Content-Length" )),
 //                       () -> assertFalse( response.getHeaderNames().isEmpty()),
-//                       () -> assertEquals( 2, response.getHeaderNames().size())
-//                     );
+//                       () -> assertEquals( 2, response.getHeaderNames().size()),
+                       () ->  resultActions
+                               .andExpect( status().isOk() )
+                               .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) ),
+                       // TODO need to assert the resulting JSON....
+                       () -> resultActions
+                               // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
+                               //      don't complain about lack of assertions in tests
+                               .andExpect( jsonPath( "$.content[0].id" ).value( 1 ) )
+                               .andExpect( jsonPath( "$.content[0].code" ).value( "XXX" ) )
+                               .andExpect( jsonPath( "$.content[0].name" ).value( "::X_NAME_X::" ) )
+                               .andExpect( jsonPath( "$.content[0].wikipediaLink" ).doesNotExist() )
+                               .andExpect( jsonPath( "$.content[0].keywords" ).doesNotExist() ),
+                       // Services / Persistence
+                       () -> verify( repository, atLeastOnce() ).findAll( any(Pageable.class) ),
+                       () -> verify( mapper, atLeastOnce() ).domainToApi( any( Region.class ) ),
+                       () -> verifyNoInteractions( createService ),
+                       () -> verify( readService, times( 1 ) )
+                               .findAll( any( Pageable.class ) ) ,
+                       () -> verifyNoInteractions( updateService ),
+                       () -> verifyNoInteractions( deleteService )
+                     );
         }
     }
 
@@ -313,24 +354,29 @@ class RegionControllerRestTest //extends RestControllerTestBase
     // ===== HEAD =====
     @Nested
     @DisplayName( "HTTP HEAD" )
-    class HeadMethod        // NOPMD
+    class HeadMethod         // NOPMD
     {
     }
 
     // ===== INFO =====
     @Nested
     @DisplayName( "HTTP INFO" )
-    class InfoMethod        // NOPMD
+    class InfoMethod         // NOPMD
     {
     }
 
     // ===== OPTION =====
     @Nested
     @DisplayName( "HTTP OPT" )
-    class OptionsMethod        // NOPMD
+    class OptionsMethod      // NOPMD
     {
     }
 
     // ===== TRACE =====
+    @Nested
+    @DisplayName( "HTTP TRACE" )
+    class TraceMethod        // NOPMD
+    {
+    }
 
 }
