@@ -3,7 +3,6 @@
 package com.example.airline.location.country;
 
 
-import java.io.Serializable;
 import java.net.URI;
 
 import com.fasterxml.jackson.annotation.JsonProperty;

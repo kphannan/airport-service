@@ -4,7 +4,6 @@ package com.example.airline.location.region.service;
 
 
 import com.example.airline.location.region.mapper.RegionEntityMapper;
-import com.example.airline.location.region.model.Region;
 import com.example.airline.location.region.persistence.repository.RegionRepository;
 import org.springframework.stereotype.Service;
 

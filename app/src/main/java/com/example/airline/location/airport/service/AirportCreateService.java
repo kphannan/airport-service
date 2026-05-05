@@ -4,7 +4,6 @@ package com.example.airline.location.airport.service;
 
 
 import com.example.airline.location.airport.mapper.AirportEntityMapper;
-import com.example.airline.location.airport.model.Airport;
 import com.example.airline.location.airport.persistence.repository.AirportRepository;
 import org.springframework.stereotype.Service;
 

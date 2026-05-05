@@ -6,7 +6,6 @@ package com.example.rest.exception;
 
 
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
