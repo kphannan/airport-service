@@ -94,7 +94,7 @@ class ContinentDTOTest
     {
         @Test
         @DisplayName( "reject a blank continent code" )
-        void continent_blankid_returnsViolation()
+        void continent_blankId_returnsViolation()
         {
             final ContinentDTO itemUnderTest = new ContinentDTO( null,
                                                                  "CC",

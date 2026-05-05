@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: "00010"
-      author: kevin
+      author: Kevin
       changes:
         - createSequence:
             sequenceName: seq_airport_frequencies_id

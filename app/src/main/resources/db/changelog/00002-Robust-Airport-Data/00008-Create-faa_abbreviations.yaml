@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: "00012"
-      author: kevin
+      author: Kevin
       changes:
         - createSequence:
             sequenceName: seq_faa_abbreviations_id

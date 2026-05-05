@@ -58,13 +58,6 @@ public class RegionController
     private final RegionDeleteService deleteService;
     private final RegionDtoMapper     mapper;
 
-    /**
-     * Constructor for the RegionController.
-     *
-     * @param service The service to use for region operations.
-     * @param mapper  The mapper to convert between domain and API objects.
-     */
-
 
     /**
      *
@@ -94,7 +87,7 @@ public class RegionController
     // ===== GET =====
     // --- Single ---
     /**
-     * Find a Region by Id.
+     * Find a Region by ID.
      *
      * @param id The primary key of the region.
      * @return A ResponseEntity containing the RegionDTO object if found, or no content if not found.

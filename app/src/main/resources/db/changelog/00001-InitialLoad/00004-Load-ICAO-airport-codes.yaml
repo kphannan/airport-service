@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: "00004"
-      author: kevin
+      author: Kevin
       changes:
         - loadData:
             tableName: icao_airportcode

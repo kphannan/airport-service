@@ -330,7 +330,7 @@ pitest {
 //         //       '|' to join group without blank line, and '\\#` prefix for static imports
 //         // importOrder( '\\#', 'java|javax', 'org', 'com.example' )
 //         importOrder( '\\#', 'java|javax', '' )
-//         // optional: instead of specifying import groups directly you can specifi a config file
+//         // optional: instead of specifying import groups directly you can specify a config file
 //         // export config file: https://github.com/diffplug/spotless/blob/main/ECLIPSE_SCREENSHOTS.md#creating-spotlessimportorder
 //         // importOrderFile( 'eclipse-import-order.txt' )  // import order file as exported from eclipse
 

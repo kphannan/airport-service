@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: "00037"
-      author: kevin
+      author: Kevin
       changes:
 
         # Fix missing municipality in Airports table

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  *
- * @author kevin
+ * @author Kevin
  * @since 2026-03-15
  * <p>
  * Copyright (c) 2020-2026

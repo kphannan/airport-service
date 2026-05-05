@@ -62,7 +62,7 @@ public class AirportDeleteService
     /**
      * Delete the given entity.
      *
-     * @param airportId the Id of the entity to delete.
+     * @param airportId the ID of the entity to delete.
      * @return true if the entity existed before delete.
      */
     public boolean deleteById( final Long airportId )

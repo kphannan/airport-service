@@ -68,11 +68,11 @@ Of special note, the term ___deploy___ is not used for the final stage of the pi
 
 Here the term ___deploy___ will be used to represent the installation of an artifact to its target platform.
 
-Deployments happen on every platform and are a prequisite for any form of test, staging or ultimately production use.
+Deployments happen on every platform and are a prerequisite for any form of test, staging or ultimately production use.
 
-A deployment is a generic reusable process not limited to the production platform.  It is desirable to have a repeatable deployment process for every environment.  The deployment process should be exercised early and often through the pipline.
+A deployment is a generic reusable process not limited to the production platform.  It is desirable to have a repeatable deployment process for every environment.  The deployment process should be exercised early and often through the pipeline.
 
-Nothing should happen for the first time during a production installtion.
+Nothing should happen for the first time during a production installation.
 
 - Source
 - Build
@@ -81,7 +81,7 @@ Nothing should happen for the first time during a production installtion.
 
 ## Source
 
-Typicallly developers write code, commit it to a source repository then promote (pull) the code which triggers the `Build` phase.
+Typically developers write code, commit it to a source repository then promote (pull) the code which triggers the `Build` phase.
 
 Often there are quality gates that must be satisfied prior to promotion.
 

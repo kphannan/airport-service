@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 
 
 /**
- * Unit test for ValidateUtiltyClass.
+ * Unit test for ValidateUtilityClass.
  */
 @SuppressWarnings( { "PMD.TooManyMethods" } )
 /* package */
@@ -336,7 +336,7 @@ class ValidateUtilityClassTest
                     assertAll( () -> assertFalse( isUtility ),
                                // log output
                                // n/a
-                               // constructor" ) ),
+                               // constructor
                                // reason text
                                () -> assertTrue( reason.toString().contains( "constructor is not private" ),
                                                  "Missing reason 'constructor is not private'" ) );
@@ -400,10 +400,10 @@ class ValidateUtilityClassTest
                                // log output
                                () -> assertTrue( logCaptor.getLogs().isEmpty() ),
                                // reason text
-                               // () -> assertTrue( isReasonBlank( reason ), REASON_NOT_NEEDED ) );
+                               // () -> assertTrue( isReasonBlank( reason ), REASON_NOT_NEEDED )
                                () -> assertTrue( reason.toString()
                                                        .contains( "ConstructorNotPrivate': Must prevent instantiation" ),
-                                                 "utiility constructor should be private" ) );
+                                                 "utility constructor should be private" ) );
                 }
 
             }
@@ -425,10 +425,10 @@ class ValidateUtilityClassTest
                                // log output
                                () -> assertTrue( logCaptor.getLogs().isEmpty() ),
                                // reason text
-                               // () -> assertTrue( isReasonBlank( reason ), REASON_NOT_NEEDED ) );
+                               // () -> assertTrue( isReasonBlank( reason ), REASON_NOT_NEEDED )
                                () -> assertTrue( reason.toString()
                                                        .contains( "ConstructorNotPrivate': Must prevent instantiation" ),
-                                                 "utiility constructor should be private" ) );
+                                                 "utility constructor should be private" ) );
                 }
 
 
@@ -762,7 +762,7 @@ class ValidateUtilityClassTest
     {
         // isClassFinal
         @Test
-        void utilty_classIsFinal_returnTrue()
+        void utility_classIsFinal_returnTrue()
         {
             final boolean isUtility = ValidateUtilityClass.isProperUtilityClass( ClassIsFinal.class, reason );
 
@@ -775,7 +775,7 @@ class ValidateUtilityClassTest
 
 
         @Test
-        void utilty_classIsNotFinal_returnFalse()
+        void utility_classIsNotFinal_returnFalse()
         {
             // --- when
             final boolean isUtility = ValidateUtilityClass.isProperUtilityClass( ClassNotFinal.class, reason );
@@ -792,7 +792,7 @@ class ValidateUtilityClassTest
 
         // hasOnlyOneConstructor
         @Test
-        void utilty_classHasMultipleConstructors_returnFalse()
+        void utility_classHasMultipleConstructors_returnFalse()
         {
             // There must only be one constructor
 
@@ -812,7 +812,7 @@ class ValidateUtilityClassTest
 
         // isConstructorPrivate
         @Test
-        void utilty_classConstructorNotPrivate_returnFalse()
+        void utility_classConstructorNotPrivate_returnFalse()
         {
             assertAll( () -> assertFalse( ValidateUtilityClass.isProperUtilityClass( ConstructorNotPrivate.class,
                                                                                      reason ) ),
@@ -827,7 +827,7 @@ class ValidateUtilityClassTest
 
         @Test
         @DisplayName( "reject constructor with arguments" )
-        void utilty_constructorWithArgs_returnFalse()
+        void utility_constructorWithArgs_returnFalse()
         {
             // --- when
             final boolean isUtility = ValidateUtilityClass.isProperUtilityClass( ConstructorWithArguments.class, reason );
@@ -847,7 +847,7 @@ class ValidateUtilityClassTest
 
         // isInstantiationDenied
         @Test
-        void utilty_constructorThrows_returnTrue()
+        void utility_constructorThrows_returnTrue()
         {
             // --- when
             final boolean      isUtility = ValidateUtilityClass.isProperUtilityClass( ConstructorThrows.class, reason );
@@ -865,7 +865,7 @@ class ValidateUtilityClassTest
 
 
         @Test
-        void utilty_abstractClass_returnFalse()
+        void utility_abstractClass_returnFalse()
         {
             // --- when
             final boolean isUtility = ValidateUtilityClass.isProperUtilityClass( AbstractForFailure.class, reason );
@@ -889,7 +889,7 @@ class ValidateUtilityClassTest
 
 
         @Test
-        void utilty_methodsAllStatic_returnTrue()
+        void utility_methodsAllStatic_returnTrue()
         {
             assertAll( () -> assertTrue( ValidateUtilityClass.isProperUtilityClass( IndividualCriteria
                                                                                             .ClassCriteriaMethods
@@ -904,7 +904,7 @@ class ValidateUtilityClassTest
 
 
         @Test
-        void utilty_methodsNotAllStatic_returnFalse()
+        void utility_methodsNotAllStatic_returnFalse()
         {
             // --- when
             final boolean      isUtility =

@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: "00021"
-      author: kevin
+      author: Kevin
       changes:
         - createIndex:
             columns:

@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: "00019"
-      author: kevin
+      author: Kevin
       changes:
         - loadData:
             tableName: runways

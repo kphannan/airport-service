@@ -62,7 +62,7 @@ public class RegionReadService
      * Find a region by its standard letter code.
      *
      * @param code the letter code.
-     * @return optionally, the reqion corresponding to the code.
+     * @return optionally, the region corresponding to the code.
      */
     public Optional<Region> findRegionByCode( final String code )
     {

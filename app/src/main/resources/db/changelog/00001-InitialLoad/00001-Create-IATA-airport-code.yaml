@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: "00001"
-      author: kevin
+      author: Kevin
       changes:
         - createTable:
             tableName: iata_airportcode

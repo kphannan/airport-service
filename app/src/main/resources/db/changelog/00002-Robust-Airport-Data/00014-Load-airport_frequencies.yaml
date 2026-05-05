@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: "00018"
-      author: kevin
+      author: Kevin
       changes:
         - loadData:
             tableName: airport_frequencies

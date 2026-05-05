@@ -134,5 +134,5 @@ run {
 
 
 // springBoot {
-//     builidInfo()
+//     buildInfo()
 // }

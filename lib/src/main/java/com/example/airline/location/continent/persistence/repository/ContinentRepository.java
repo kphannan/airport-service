@@ -79,7 +79,7 @@ public interface ContinentRepository extends JpaRepository<ContinentEntity, Inte
     Optional<List<ContinentEntity>> findByKeywordsLike( String keyword );
 
     // /**
-    // * Retrive all the countries on a given contintent.
+    // * Retrieve all the countries on a given continent.
     // *
     // * @param continent the continent code.
     // * @return the paged result of {@code Continent}s.

@@ -32,7 +32,7 @@ import org.springframework.web.context.request.WebRequest;
 
 /**
  *
- * @author kevin
+ * @author Kevin
  * @since 2026-03-15
  * <p>
  * Copyright (c) 2020-2026
@@ -159,7 +159,7 @@ class HeaderUtilityTest
     class LogOutput
     {
         @SuppressWarnings( "initialization.field.uninitialized" )
-        private static LogCaptor logCaptor; // will be set in @BeforeAll
+        private LogCaptor logCaptor; // will be set in @BeforeAll
         @SuppressWarnings( "initialization.field.uninitialized" )
         private StringJoiner     reason;    // will be set in @BeforeEach
 
@@ -173,7 +173,7 @@ class HeaderUtilityTest
         void logOutput_printHeaders()
         {
             // --- given
-            headersUnderTest.set( "TestPrint", "kilroy" );
+            headersUnderTest.set( "TestPrint", "Kilroy" );
 
             // --- when
             printHeaders( headersUnderTest );
@@ -181,7 +181,7 @@ class HeaderUtilityTest
             // --- then
             var logContent = logCaptor.getLogs();
 
-            assertThat( logContent ).contains( "TestPrint : [kilroy]" );
+            assertThat( logContent ).contains( "TestPrint : [Kilroy]" );
         }
 
     }
@@ -206,13 +206,13 @@ class HeaderUtilityTest
                 @Override
                 public void setAttribute( String name, Object value, int scope )
                 {
-
+                    // intentionly left blank
                 }
 
                 @Override
                 public void removeAttribute( String name, int scope )
                 {
-
+                    // intentionly left blank
                 }
 
                 @Override
@@ -224,7 +224,7 @@ class HeaderUtilityTest
                 @Override
                 public void registerDestructionCallback( String name, Runnable callback, int scope )
                 {
-
+                    // intentionly left blank
                 }
 
                 @Override

@@ -127,7 +127,7 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
     void delete( AirportEntity entity );
 
     /**
-     * Delete a Airport row by its primary key.
+     * Delete an Airport row by its primary key.
      *
      * @param airportId must not be {@literal null}.
      */

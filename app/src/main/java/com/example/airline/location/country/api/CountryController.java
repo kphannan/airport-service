@@ -98,7 +98,7 @@ public class CountryController
 
 
     /**
-     * Find a Country by Id.
+     * Find a Country by ID.
      *
      * @param id The primary key of the country to find.
      * @return A ResponseEntity containing the found CountryDTO or no content if not found.

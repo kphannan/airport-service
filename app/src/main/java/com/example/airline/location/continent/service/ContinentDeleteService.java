@@ -57,7 +57,7 @@ public class ContinentDeleteService
     /**
      * Delete the given entity.
      *
-     * @param continentId the Id of the entity to delete.
+     * @param continentId the ID of the entity to delete.
      * @return true if the entity existed before delete.
      */
     public boolean deleteById( final Integer continentId )

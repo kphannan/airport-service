@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: "00007"
-      author: kevin
+      author: Kevin
       changes:
         - createSequence:
             sequenceName: seq_regions_id

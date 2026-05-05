@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: "00036"
-      author: kevin
+      author: Kevin
       changes:
 
 
@@ -154,7 +154,7 @@ databaseChangeLog:
               UPDATE surface_kind_fixup
               SET normalized_kind = 'Asphalt / Dirt'
               WHERE lower(kind) IN ( 'asphalt dirt' );
-              
+
               # WHERE lower(kind) IN ( 'asphalt/dirt', 'asph-dirt' );
 
               # UPDATE surface_kind_fixup

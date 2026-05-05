@@ -14,7 +14,7 @@ import org.mapstruct.Mapper;
 /**
  * MapStruct configuration for Country, CountryEntity.
  *
- * <p>Mapstruct will generate the methods.
+ * <p>MapsSruct will generate the methods.
  */
 @Mapper( componentModel = "spring" )
 public interface CountryEntityMapper
@@ -57,7 +57,7 @@ public interface CountryEntityMapper
     /**
      * Map a list of domain instances to a list of API instances.
      */
-    List<CountryDTO> domainToApi( List<Country> countrys );
+    List<CountryDTO> domainToApi( List<Country> countries );
 
     // --- API --> Domain ---
     // --- Instance

@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: "00011"
-      author: kevin
+      author: Kevin
       changes:
         - createSequence:
             sequenceName: seq_runways_id

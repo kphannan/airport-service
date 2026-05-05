@@ -22,7 +22,7 @@ public final class StringUtility
 
 
     /**
-     * Null safe check if a {@code substring} is found within (@code target}.
+     * Null safe check if a {@code substring} is found within {@code target}.
      *
      * @param target   the string to examine.
      * @param criteria the possible substring.

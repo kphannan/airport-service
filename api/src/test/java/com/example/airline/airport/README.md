@@ -1,1 +1,1 @@
-Add tests for DTOs that verifies the valiadation.
+Add tests for DTOs that verifies the validation.

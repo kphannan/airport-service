@@ -1,7 +1,7 @@
 /*
  * Configuration necessary for spring boot java.  This may be used
  * for both library and applications.
- * This configuration is intended to be utilized in conjuction with
+ * This configuration is intended to be utilized in conjunction with
  * either an application or a library, not on its own.
  */
 

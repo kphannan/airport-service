@@ -1512,7 +1512,7 @@ class ContinentControllerRestTest
                                .anyMatch( location -> location.matches( "^.*/location/continent/123$" ) )
 //                               .contains( "/location/continent/123")
 //                               .matches( ".*/location/continent/123$" )
-//                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Locastion" ) )
+//                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Location" ) )
 
 //                       () -> assertThat( result.getResponse().getHeaderNames() )
 //                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )

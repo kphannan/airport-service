@@ -129,7 +129,7 @@ public class Stopwatch implements AutoCloseable
                        final String text )
     {
         // log.error( "Kilroy was here" );
-        // System.out.println( String.format( "logg: %s, %s, %s: '%s' - elapsed time: %d
+        // System.out.println( String.format( "log: %s, %s, %s: '%s' - elapsed time: %d
         // ms", context, service, method,
         // text == null ? "" : text, endTime - startTime ) );
         // log.debug( () -> String.format( "%s, %s, %s: '%s' - elapsed time: %d ms",

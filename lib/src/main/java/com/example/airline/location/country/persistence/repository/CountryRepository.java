@@ -40,7 +40,7 @@ public interface CountryRepository extends JpaRepository<CountryEntity, Integer>
     Optional<CountryEntity> findByCode( String countryCode );
 
     /**
-     * Retrive all the countries on a given contintent.
+     * Retrieve all the countries on a given continent.
      *
      * @param continent the continent code.
      *
