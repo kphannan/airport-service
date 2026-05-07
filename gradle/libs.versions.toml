@@ -9,6 +9,7 @@ springBootVersion = '4.0.3'
 
 # --- Persistence ---
 hibernateValidationVersion = '9.1.0.Final'
+postgresqlVersion = '42.7.11'
 
 lombokVersion = '9.2.0'
 versioningVersion = '3.1.0'
@@ -116,7 +117,7 @@ h2-console = { module = 'org.springframework.boot:spring-boot-h2console' }
 mariadb = { module = 'org.mariadb.jdbc:mariadb-java-client' }
 mysql = { module = 'com.mysql:mysql-connector-j' }
 oracle = { module = 'com.oracle.database.jdbc:ojdbc11' }
-postgresql = { module = 'org.postgresql:postgresql'}
+postgresql = { module = 'org.postgresql:postgresql', version.ref='postgresqlVersion'}
 
 
 # --- Security ---

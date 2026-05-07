@@ -186,19 +186,16 @@ class RegionControllerRestTest //extends RestControllerTestBase
 
             // --- then
 
-            // final String body = response.getContentAsString();
-            // TODO need to assert the resulting JSON....
             assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
-                    // () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" )),
-                    // () -> assertEquals( "application/json;charset=UTF-8", response.getContentType()),
-                       () -> assertEquals( "119", response.getHeader( "Content-Length" ) ),
-                       () -> assertFalse( response.getHeaderNames().isEmpty() ),
-                       () -> assertEquals( 2, response.getHeaderNames().size() ),
+                       () -> assertFalse( response.getHeaderNames()
+                                                  .isEmpty() ),
+                       () -> assertThat( response.getRedirectedUrl() )
+                               .matches( "^.*/location/region/code/ZZZ" ),
                        () -> resultActions
-//                               .andExpect( status().isOk() )
                                .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
                                .andExpect( content().encoding( "UTF-8" ) ),
                        () -> resultActions
+                               // TODO need to assert the resulting JSON....
                                // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
                                //      don't complain about lack of assertions in tests
                                .andExpect( jsonPath( "$.id" ).value( 2 ) )
@@ -208,7 +205,12 @@ class RegionControllerRestTest //extends RestControllerTestBase
                                .andExpect( jsonPath( "$.country" ).value( "CC" ) )
                                .andExpect( jsonPath( "$.continent" ).value( "NA" ) )
                                .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
-                               .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
+                               .andExpect( jsonPath( "$.keywords" ).doesNotExist() ),
+                       () -> verifyNoInteractions( createService ),
+                       () -> verify( readService, times( 1 ) )
+                               .findRegionByCode(  anyString() ) ,
+                       () -> verifyNoInteractions( updateService ),
+                       () -> verifyNoInteractions( deleteService )
                      );
         }
 
@@ -297,8 +299,6 @@ class RegionControllerRestTest //extends RestControllerTestBase
                                .hasPageSize( 10 )
                                .hasSort( "name", Sort.Direction.ASC )
                                .hasSort( "id", Sort.Direction.DESC ),
-//                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" )),
-//                       () -> assertEquals( "119", response.getHeader( "Content-Length" )),
 //                       () -> assertFalse( response.getHeaderNames().isEmpty()),
 //                       () -> assertEquals( 2, response.getHeaderNames().size()),
                        () ->  resultActions

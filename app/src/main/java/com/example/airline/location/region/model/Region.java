@@ -21,8 +21,23 @@ import org.jspecify.annotations.Nullable;
 
 /**
  * Domain model object representing a single geographic Region.
+ *
+ * @param id primary key assigned by the database.
+ * @param code local_code prefixed with the country code to make a globally unique identifier.
+ * @param localCode The local code for the administrative subdivision. Whenever possible, these
+ *                  are official ISO 3166:2, at the highest level available, but in some cases
+ *                  unofficial codes are used. There is also a pseudocode "U-A"
+ *                  for each country, which means that the airport has not yet been assigned to a
+ *                  region (or perhaps can't be, as in the case of a deep-sea oil platform).
+ * @param name common name of the Region.
+ * @param country country that contains the Region.
+ * @param continent continent where the Region exists.
+ * @param wikipediaLink Optional, URI to the Wikipedia page for the Region
+ * @param keywords A comma-separated list of keywords for helping with search. May include former
+ *                 names for the region, and/or the region name in other languages.
  */
 public record Region(
+
     /**
      * Internal integer identifier for the region. This will stay
      * persistent, even if the region code changes.
@@ -84,4 +99,4 @@ public record Region(
      */
     @Size( max = 255, message = "List of keywords may not exceed 255 characters" )
     @Nullable String keywords
-){};
+){}
