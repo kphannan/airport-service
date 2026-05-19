@@ -10,7 +10,6 @@ import com.example.airline.location.airport.persistence.model.AirportCountInCont
 import com.example.airline.location.airport.persistence.model.AirportCountInCountryEntity;
 import com.example.airline.location.airport.persistence.model.AirportCountInRegionEntity;
 import com.example.airline.location.airport.persistence.model.AirportEntity;
-import com.example.airline.location.airport.persistence.model.AirportSummaryEntity;
 import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,8 +31,24 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
 
     // ========== READ ==========
     // ----- Test for existence -----
+
+    /**
+     * Determine if an element is stored persistently.
+     *
+     * @param airportId the persistence key of the airport.
+     * @return {@code true} if the code corresponds to a {@see AirportEntity},
+     *         {@code false} if the code does not correspond to a known {@see AirportEntity}.
+     */
     boolean existsById( Long airportId );
-    boolean existsByCode( String airportCode );
+
+    /**
+     * Determine if an {@see AirportEntity} element is stored persistently.
+     *
+     * @param airportCode the unique code (predominantly ICAO) of the airport.
+     * @return {@code true} if the code corresponds to a {@see Airport},
+     *         {@code false} if the code does not correspond to a known {@see Airport}.
+     */
+    boolean existsByIdent( String airportCode );
 
     // ----- Single Entity -----
     /**
@@ -65,7 +80,8 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
      * @return the located page, whose body contains the found records.
      */
     @Override
-    @NonNull Page<AirportEntity> findAll( @NonNull Pageable paging );
+    @NonNull
+    Page<AirportEntity> findAll( @NonNull Pageable paging );
 
 
     /**
@@ -99,21 +115,41 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
                                        @Param( "ident" ) String ident,
                                        @Param( "name" ) String name,
                                        Pageable paging );
+
+    /**
+     * Find the number of airports contained within each continent.
+     *
+     * @return a collection of continents with the number of airports in the continent.
+     */
     List<AirportCountInContinentEntity> countAirportsByContinent();
 
+    /**
+     * Find the count of airports in all the {@see Region}s of a specific {@see Country}.
+     *
+     * @param continentCode the de facto continent code of the target continent.
+     * @return a collection of {@see AirporCountInCountryEntity} instances where each one represents
+     *         the number of airports in a single {@see Country}.
+     */
     List<AirportCountInCountryEntity> countCountryAirportsByContinent( String continentCode );
 
+    /**
+     * Find the count of airports in all the {@see Region}s of a specific {@see Country}.
+     *
+     * @param countryCode the ISO 3166 code of the target country.
+     * @return a collection of {@see AirporCountInReqionEntity} instances where each one represents
+     *         the number of airports in a single {@see Region}.
+     */
     List<AirportCountInRegionEntity> countRegionAirportsByCountry( String countryCode );
 
     List<AirportCountInRegionEntity> countAirportsByRegion( String regionCode );
 
     List<AirportCountInCountryEntity> countAirportsByCountry( String countryCode );
 
-    List<AirportSummaryEntity> findSummaryByContinent( String continentCode );
+    // List<AirportSummaryEntity> findSummaryByContinent( String continentCode );
 
-    List<AirportSummaryEntity> findSummaryByCountry( String isoCountry );
+    // List<AirportSummaryEntity> findSummaryByCountry( String isoCountry );
 
-    List<AirportSummaryEntity> findSummaryByRegion( String isoRegion );
+    // List<AirportSummaryEntity> findSummaryByRegion( String isoRegion );
 
     // ========== UPDATE ==========
 
@@ -123,7 +159,6 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
      *
      * @param entity must not be {@literal null}.
      */
-//    @Override
     void delete( AirportEntity entity );
 
     /**
@@ -131,19 +166,7 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
      *
      * @param airportId must not be {@literal null}.
      */
-//    @Override
     void deleteById( Long airportId );
-
-
-
-
-    /*
-        @Override
-        boolean existsById( Integer airportId );
-
-        boolean existsByCode( String airportCode );
-
-     */
 
 
     // Defined as NamedQueries
