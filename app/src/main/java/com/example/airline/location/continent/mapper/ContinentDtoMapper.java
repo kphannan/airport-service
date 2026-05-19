@@ -40,8 +40,21 @@ public interface ContinentDtoMapper
 
     // --- API --> Domain ---
     // --- Instance
+
+    /**
+     * REST API representation of a Continent.
+     *
+     * @param dto the API layer representation of a Continent.
+     * @return the service layer representation of the Continent.
+     */
     Continent apiToDomain( ContinentDTO dto );
 
+    /**
+     * Map a REST API dto to its internal representation.
+     *
+     * @param dto the API's DTO representation of a NewContient.
+     * @return the internal service layer representation of the new continent.
+     */
     NewContinent apiToDomain( NewContinentDTO dto );
     // --- Collection
 }

@@ -10,8 +10,13 @@ import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
 
-
-
+/**
+ * Count of the number of Airports in a specific Region.
+ *
+ * @param regionCode Region code of a single Region
+ * @param name name of the Region
+ * @param airportCount number of airports within the Region
+ */
 @IgnoreGeneratedCoverage
 public record AirportCountInRegionDTO(
         @JsonProperty( "isoRegion" )

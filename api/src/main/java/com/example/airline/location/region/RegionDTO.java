@@ -17,35 +17,36 @@ import org.jspecify.annotations.Nullable;
 //import org.jspecify.annotations.Nullable;
 
 // TODO change code to a 2 character code...
-// record RegionDTO( Integer id, String code, String localCode, String name, String  country, String continent, String wikiLink,
-// String keywords )
-// {}
-
-
-
 /**
- * API representation of a Region.
+ * High-level administrative subdivision of a country (e.g. province, governorate, state).
+ *
+ * @param id            Internal integer identifier for the region. This will stay persistent, even if the region code
+ *                      changes.
+ * @param code          local_code prefixed with the country code to make a globally unique identifier.
+ * @param localCode     The local code for the administrative subdivision. Whenever possible, these are official ISO
+ *                      3166:2, at the highest level available, but in some cases unofficial codes are used. There is
+ *                      also a pseudocode "U-A" for each country, which means that the airport has not yet been assigned
+ *                      to a region (or perhaps can't be, as in the case of a deep-sea oil platform).
+ * @param name          The common English-language name for the administrative subdivision. In some cases, the name in
+ *                      local languages will appear in the 'keywords' field assist search.
+ * @param country       The two-character ISO 3166:1-alpha2 code for the country containing the administrative
+ *                      subdivision. A handful of unofficial, non-ISO codes are also in use, such as "XK" for Kosovo.
+ * @param continent     A code for the continent to which the region belongs. See the continent field in airports.csv
+ *                      for a list of codes.
+ * @param wikipediaLink A link to the Wikipedia article describing the subdivision.
+ * @param keywords      A comma-separated list of keywords for helping with search. May include former names for the
+ *                      region, and/or the region name in other languages.
  */
-//@Data
-//@AllArgsConstructor
 public record RegionDTO(
-    // TODO convert to a Java record
-    /**
-     * Internal integer identifier for the region. This will stay
-     * persistent, even if the region code changes.
-     */
+
     @SuppressWarnings( "PMD.ShortVariable" )
     @JsonProperty( "id" )
     @Schema( name = "id",
              description = "Unique identifier",
              requiredMode = Schema.RequiredMode.REQUIRED )
     @NotNull( message = "A Region id is required" )
-   Integer id,
+    Integer id,
 
-    /**
-     * local_code prefixed with the country code to make a globally unique
-     * identifier.
-     */
     @JsonProperty( "code" )
     @Schema( name = "code",
              description =
@@ -60,18 +61,10 @@ public record RegionDTO(
              example = "IE-D" )
     @NotBlank( message = "A unique region code is required" )
     @NonNull
-    // TODO also need to support 'U-A' for unassigned
-    @Pattern( regexp = "[A-Z]{2}-[A-Z\\-]{1,4}",
+    @Pattern( regexp = "([A-Z]{2}-[A-Z\\-]{1,4})|(U-A)",
               message = "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" )
-   String code,
+    String code,  // ! Create a domain-object for the region code
 
-    /**
-     * The local code for the administrative subdivision. Whenever possible, these
-     * are official ISO 3166:2, at the highest level available, but in some cases
-     * unofficial codes are used. There is also a pseudocode "U-A"
-     * for each country, which means that the airport has not yet been assigned to a
-     * region (or perhaps can't be, as in the case of a deep-sea oil platform).
-     */
     @JsonProperty( "localCode" )
     @Schema( name = "localCode",
              description =
@@ -88,13 +81,8 @@ public record RegionDTO(
     // TODO also need to support 'U-A' for unassigned
     @Pattern( regexp = "[A-Z0-9]{1,2}[A-Z\\-]{0,5}",
               message = "local code" )
-   String localCode,
+    String localCode,
 
-    /**
-     * The common English-language name for the administrative subdivision. In some
-     * cases, the name in local languages will appear in the 'keywords' field assist
-     * search.
-     */
     @JsonProperty( "name" )
     @Schema( name = "name",
              description =
@@ -110,13 +98,8 @@ public record RegionDTO(
     @Size( min = 2, max = 52, message = "Region name must be between 7 and 80 characters" )
     @Pattern( regexp = "[a-zA-Z][a-zA-Z ]{1,51}", message = "Region name must be between 7 and 80 characters" )
     @NonNull
-   String name,
+    String name,
 
-    /**
-     * The two-character ISO 3166:1-alpha2 code for the country containing the
-     * administrative subdivision. A handful of unofficial, non-ISO codes are also
-     * in use, such as "XK" for Kosovo.
-     */
     @JsonProperty( "country" )
     @Schema( name = "country",
              description = "The two-character ISO 3166:1-alpha2 code for the country.",
@@ -128,12 +111,8 @@ public record RegionDTO(
     @NotBlank( message = "An ISO 3166:1-alpha2 country code is required" )
     @NonNull
     @Pattern( regexp = "[A-Z]{2}", message = "Code must a valid ISO 3166:1-alpha2" )
-   String country, // ! Create a domain-object for the country code
+    String country, // ! Create a domain-object for the country code
 
-    /**
-     * A code for the continent to which the region belongs. See the continent field
-     * in airports.csv for a list of codes.
-     */
     @JsonProperty( "continent" )
     @Schema( name = "continent",
              description = "Unique abbreviation, of the continent where this country is located.",
@@ -145,11 +124,8 @@ public record RegionDTO(
     @NotBlank( message = "A 2-character continent code is required" )
     @NonNull
     @Pattern( regexp = "[A-Z]{2}", message = "Continent code must be 2 uppercase characters" )
-   String continent, // ! Create a domain-object for continent code
+    String continent, // ! Create a domain-object for continent code
 
-    /**
-     * A link to the Wikipedia article describing the subdivision.
-     */
     @JsonProperty( "wikiLink" )
     @Schema( name = "wikiLink",
              description = "Link to the Wikipedia article about the country",
@@ -157,12 +133,8 @@ public record RegionDTO(
              requiredMode = Schema.RequiredMode.NOT_REQUIRED,
              maxLength = 255 )
     @Nullable
-   URI wikipediaLink,
+    URI wikipediaLink,
 
-    /**
-     * A comma-separated list of keywords for helping with search. May include former
-     * names for the region, and/or the region name in other languages.
-     */
     @JsonProperty( "keywords" )
     @Schema( name = "keywords",
              description = "Optional additional search terms",
@@ -170,5 +142,6 @@ public record RegionDTO(
              maxLength = 255 )
     @Nullable
     @Size( max = 255, message = "List of keywords may not exceed 255 characters" )
-   String keywords
-){};
+    String keywords
+)
+{}

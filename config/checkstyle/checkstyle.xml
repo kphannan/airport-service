@@ -227,6 +227,7 @@
       <property name="throwsIndent" value="4"/>
       <property name="lineWrappingIndentation" value="4"/>
       <property name="arrayInitIndent" value="4"/>
+      <property name="forceStrictCondition" value="false"/>
     </module>
 
     <!--
@@ -240,17 +241,19 @@
     -->
     <module name="AbbreviationAsWordInName">
       <property name="ignoreFinal" value="false"/>
-      <property name="allowedAbbreviationLength" value="1"/>
-      <property name="tokens" value="ENUM_DEF, ANNOTATION_DEF, ANNOTATION_FIELD_DEF,
-                    RECORD_DEF,
-                    RECORD_COMPONENT_DEF"/>
-    </module>
-    <module name="AbbreviationAsWordInName">
-      <property name="ignoreFinal" value="false"/>
       <property name="allowedAbbreviationLength" value="3"/>
       <property name="tokens" value="CLASS_DEF, INTERFACE_DEF,
                     METHOD_DEF,
                     PARAMETER_DEF, VARIABLE_DEF, PATTERN_VARIABLE_DEF"/>
+      <property name="allowedAbbreviations" value="DTO,IATA,ICAO" />
+    </module>
+    <module name="AbbreviationAsWordInName">
+      <property name="ignoreFinal" value="false"/>
+      <property name="allowedAbbreviationLength" value="1"/>
+      <property name="tokens" value="ENUM_DEF, ANNOTATION_DEF, ANNOTATION_FIELD_DEF,
+                    RECORD_DEF,
+                    RECORD_COMPONENT_DEF"/>
+      <property name="allowedAbbreviations" value="DTO,IATA,ICAO" />
     </module>
 
     <module name="NoWhitespaceBeforeCaseDefaultColon"/>

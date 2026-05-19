@@ -15,7 +15,10 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
-
+/**
+ * Defines a filter chain which is capable of being matched against an HttpServletRequest,
+ * in order to decide whether it applies to that request.
+ */
 @Configuration
 @EnableWebSecurity( debug = true )
 @Log4j2
@@ -26,34 +29,54 @@ public class SecurityConfig         // TODO create security tests
         log.error( "SecurityConfig.constructor...." );
     }
 
+    /**
+     * Define the Cross Origin security configuration.
+     *
+     * @return a configuration that allows access to any URI on the same domain.
+     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource()
     {
-        log.error( "SecurityConfig.corsConfigurationSource...." );
-        CorsConfiguration configuration = new CorsConfiguration();
+        log.debug( "SecurityConfig.corsConfigurationSource...." );
+
+        final CorsConfiguration configuration = new CorsConfiguration();
+
         configuration.setAllowedOrigins( Arrays.asList( "http://localhost:5173" ) );
         configuration.setAllowedMethods( Arrays.asList( "GET", "POST", "PUT", "DELETE", "INFO", "PATCH" ) );
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
         source.registerCorsConfiguration( "/**", configuration );
 
         return source;
     }
 
+    /**
+     * Configure security for all service endpoints.
+     *
+     * @param http https://docs.spring.io/spring-security/reference/servlet/architecture.html
+     * @return the updated {@see org.springframework.security.web.SecurityFilterChain}
+     * @throws Exception
+     */
     @Bean
-    public SecurityFilterChain securityFilterChain( HttpSecurity http ) throws Exception
+    public SecurityFilterChain securityFilterChain( final HttpSecurity http ) throws Exception
     {
         log.debug( () -> "SecurityConfig.securityFilterChain...." );
         http.headers( headers ->
                               headers.frameOptions( options ->
                                                             options.sameOrigin() ) )  // For H2 console access
+
 //                .headers( headers ->
 //                                  headers.frameOptions( frameOptions ->
 //                                                                frameOptions.mode(SAMEORIGIGN))
 //                        )
+
                                                        .cors( c ->
                                c.configurationSource( corsConfigurationSource() ) )
 //                .exceptionHandling( customizer ->
-//                                            customizer.authenticationEntryPoint( new HttpStatusEntryPoint( HttpStatus.UNAUTHORIZED ) ) )
+//                                            customizer
+//                                            .authenticationEntryPoint( new HttpStatusEntryPoint( HttpStatus.UNAUTHORIZED ) ) )
+
                                                        .csrf( AbstractHttpConfigurer::disable )
                                                        .sessionManagement( customizer ->
                                             customizer.sessionCreationPolicy( SessionCreationPolicy.STATELESS ) )

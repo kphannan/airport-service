@@ -30,6 +30,13 @@ public interface ContinentRepository extends JpaRepository<ContinentEntity, Inte
     @Override
     boolean existsById( Integer continentId );
 
+    /**
+     * Determine if an element is stored persistently.
+     *
+     * @param continentCode the unique de facto code of the continent.
+     * @return {@code true} if the code corresponds to a {@see Continent},
+     *         {@code false} if the code does not correspond to a known {@see Continent}.
+     */
     boolean existsByCode( String continentCode );
 
     /**
@@ -89,6 +96,13 @@ public interface ContinentRepository extends JpaRepository<ContinentEntity, Inte
 
 
     // ========== Create ==========
+
+    /**
+     * Update or Insert a {@see ContinentEntity} instance to a persistent store.
+     *
+     * @param entity the entity to insert/update.
+     * @return the newly stored entity.
+     */
     ContinentEntity save( NewContinentEntity entity );
 
     // ========== Update ==========

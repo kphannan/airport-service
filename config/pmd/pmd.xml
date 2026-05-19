@@ -93,12 +93,15 @@
     </rule>
     <rule ref="category/java/codestyle.xml/MethodNamingConventions">
         <properties>
-            <!-- <property name="methodPattern" value="[a-z][a-zA-Z0-9]*" /> -->
-            <!-- <property name="staticPattern" value="[a-z][a-zA-Z0-9]*" /> -->
-            <!-- <property name="nativePattern" value="[a-z][a-zA-Z0-9]*" /> -->
-            <!-- <property name="junit3TestPattern" value="test[A-Z0-9][a-zA-Z0-9]*" /> -->
-            <!-- <property name="junit4TestPattern" value="[a-z][a-zA-Z0-9]*" /> -->
-            <property name="junit5TestPattern" value="[a-z][a-zA-Z0-9_]*" />
+            <property name="methodPattern" value="[a-z][a-zA-Z0-9]*" />
+            <property name="staticPattern" value="[a-z][a-zA-Z0-9]*" />
+            <property name="nativePattern" value="[a-z][a-zA-Z0-9]*" />
+            <property name="junit3TestPattern" value="xtest[A-Z0-9][a-zA-Z0-9]*" />
+            <property name="junit4TestPattern" value="x[a-z][a-zA-Z0-9]*" />
+            <property name="junit5TestPattern" value="[a-z][a-zA-Z0-9]*(_[a-z][a-zA-Z0-9]*_[a-z][a-zA-Z0-9_]*)?" />
+<!--            <property name="junit3TestPattern" value="test[A-Z0-9][a-zA-Z0-9]*" />-->
+<!--            <property name="junit4TestPattern" value="[a-z][a-zA-Z0-9]*" />-->
+<!--            <property name="junit5TestPattern" value="test[a-z][a-zA-Z0-9]*" />-->
         </properties>
     </rule>
     <rule ref="category/java/codestyle.xml/PackageCase"/>
@@ -182,7 +185,11 @@
     <rule ref="category/java/design.xml/DataClass" />
     <rule ref="category/java/design.xml/DoNotExtendJavaLangError" />
     <rule ref="category/java/design.xml/ExceptionAsFlowControl" />
-    <rule ref="category/java/design.xml/ExcessiveImports" />
+    <rule ref="category/java/design.xml/ExcessiveImports">
+        <properties>
+            <property name="minimum" value="35" />
+        </properties>
+    </rule>/>
     <rule ref="category/java/design.xml/ExcessiveParameterList" />
     <rule ref="category/java/design.xml/ExcessivePublicCount" />
     <rule ref="category/java/design.xml/FinalFieldCouldBeStatic"/>

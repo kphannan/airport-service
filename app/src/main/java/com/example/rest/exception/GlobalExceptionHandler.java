@@ -52,6 +52,9 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
     "Exception": "org.springframework.web.bind.MissingPathVariableException"
 */
 
+// TODO split into multiple @ControllerAdvice classes
+// https://stackoverflow.com/questions/25495870/working-with-multiple-controlleradvice-classes
+
 
 /**
  * Exception handler to catch application-specific exceptions and format them consistently.
@@ -62,8 +65,8 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 @Log4j2
 public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
 {
-//    private final MediaType desiredContentType = new MediaType( MediaType.APPLICATION_JSON,
-//                                                                StandardCharsets.UTF_8 );
+    //    private final MediaType desiredContentType = new MediaType( MediaType.APPLICATION_JSON,
+    //                                                                StandardCharsets.UTF_8 );
 
     // ========== Type / Argument Mismatch ==========
     /**
@@ -315,7 +318,6 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
         handleMessageNotReadableException( final ServletWebRequest request,
                                            final HttpMessageNotReadableException exception )
     {
-//        log.debug( "message not readable", () -> exception );
         // TODO potentially a problem with the content-type or lack of mapping to/from the
         // requested format and the internal POJO.
         final ProblemDetail details = detailForException( HttpStatus.BAD_REQUEST, exception );
@@ -374,8 +376,6 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     {
         final ProblemDetail details = detailForException( exception );
 
-//        details.setProperty( "TraceId: ", UUID.randomUUID() );  // TODO change to pull the traceID from MDC
-
         return ResponseEntity
                 .status( HttpStatus.METHOD_NOT_ALLOWED )
                 .header( "Allow", exception.getSupportedMethods() )
@@ -404,7 +404,6 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
         // TODO the MDC should include the traceId (UUID) and log pattern should
 
         final ProblemDetail details = detailForException( exception );
-//        details.setProperty( "TraceId: ", UUID.randomUUID() );  // TODO change to pull the traceID from MDC
         details.setInstance( URI.create( exception.getResourcePath() ) );
 
         return ResponseEntity
@@ -475,11 +474,10 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     @ExceptionHandler( IllegalArgumentException.class )
     @ResponseStatus( HttpStatus.INTERNAL_SERVER_ERROR )
     public ResponseEntity<ProblemDetail>
-    handleIllegalArgumentException( final ServletWebRequest request,
-                                    final IllegalArgumentException exception )
+        handleIllegalArgumentException( final ServletWebRequest request,
+                                        final IllegalArgumentException exception )
     {
         // TODO the MDC should include the traceId (UUID) and log pattern should
-//        log.debug( "handleIllegalArgumentException", () -> exception );
 
         final ProblemDetail details = detailForException( HttpStatus.BAD_REQUEST, exception );
 
@@ -501,11 +499,10 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     @ExceptionHandler( IllegalStateException.class )
     @ResponseStatus( HttpStatus.INTERNAL_SERVER_ERROR )
     public ResponseEntity<ProblemDetail>
-    handleIllegalStateException( final ServletWebRequest request,
-                                 final IllegalStateException exception )
+        handleIllegalStateException( final ServletWebRequest request,
+                                     final IllegalStateException exception )
     {
         // TODO the MDC should include the traceId (UUID) and log pattern should
-//        log.debug( "handleIllegalStateException", () -> exception );
 
         final ProblemDetail details = detailForException( HttpStatus.BAD_REQUEST, exception );
 
@@ -532,7 +529,6 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     {
         // TODO the MDC should include the traceId (UUID) and log pattern should
 
-//        log.debug( "--UnsupportedOperation--", () -> exception );
         final ProblemDetail details = detailForException( HttpStatus.INTERNAL_SERVER_ERROR, exception );
 
         details.setProperty( "x-logref", UUID.randomUUID() );
@@ -583,23 +579,21 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
     }
 
 
-//    private static <T extends ServletException & ErrorResponse> ProblemDetail details( Exception arg )
-//    {
-//        log.error( String.format( "Got exception implementing ErrorResponse '%s'", arg ) );
-//
-//        return detailForException( ((ErrorResponse)arg).getBody().getStatus(), arg );
-//    }
+    //    private static <T extends ServletException & ErrorResponse> ProblemDetail details( Exception arg )
+    //    {
+    //        log.error( String.format( "Got exception implementing ErrorResponse '%s'", arg ) );
+    //
+    //        return detailForException( ((ErrorResponse)arg).getBody().getStatus(), arg );
+    //    }
 
     private static ProblemDetail detailForException( final Exception exception )
     {
-//        if ( exception instanceof ErrorResponse )
-//        {
-//            ErrorResponse errorResponse = ( ErrorResponse ) exception;
+        final ErrorResponse errorResponse = (ErrorResponse)exception;
 
-            return detailForException( ((ErrorResponse)exception).getBody().getStatus(), exception );
-//        }
-//
-//        return detailForException( HttpStatus.INTERNAL_SERVER_ERROR, exception );
+        return detailForException( errorResponse
+                                       .getBody()
+                                       .getStatus(),
+                                   exception );
     }
 
 
@@ -620,7 +614,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
 
     private static void setDetailProperties( final ProblemDetail details, final Throwable exception )
     {
-        Throwable cause = exception.getCause();
+        final Throwable cause = exception.getCause();
         details.setProperty( "Exception", exception.toString() );
         if ( null != cause )
         {

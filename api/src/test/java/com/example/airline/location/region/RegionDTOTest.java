@@ -31,6 +31,9 @@ class RegionDTOTest
     private final URI       testURI   = URI.create( "http://test.domain/with/a/path" );
 
 
+    /**
+     * Verify class invariants are enforced.
+     */
     @Nested
     @DisplayName( "constructor will" )
     class Constructor
@@ -48,7 +51,7 @@ class RegionDTOTest
 
         @Test
         @DisplayName( "reject null for the continent code" )
-        void constructor_NullArgs_throwsNullPointer()
+        void constructor_nullArgs_throwsNullPointer()
         {
             final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                    () -> new RegionDTO( 1, null, null, null, null, null, null, null )
@@ -58,7 +61,7 @@ class RegionDTOTest
 
         @Test
         @DisplayName( "accept minimum required arguments" )
-        void constructor_withArgs_DoesNotCrash()
+        void constructor_withArgs_doesNotCrash()
         {
             final RegionDTO dto = new RegionDTO( null, "IE-D", "D", "County Dublin", "IE", "EU", null, null );
 
@@ -67,17 +70,19 @@ class RegionDTOTest
 
         @Test
         @DisplayName( "reject null for the continent code" )
-        void constructor_CodeNull_throwsNullPointer()
+        void constructor_codeNull_throwsNullPointer()
         {
             final Throwable thrown = assertThrows( IllegalArgumentException.class,
-                                                   () -> new RegionDTO( null, null, "D", "County Dublin", "IE", "EU", null, null )
+                                                   () -> new RegionDTO( null, null, "D",
+                                                                        "County Dublin", "IE", "EU",
+                                                                        null, null )
                                                  );
             assertEquals( "code is marked non-null but is null", thrown.getMessage() );
         }
 
         @Test
         @DisplayName( "reject null for the continent name" )
-        void constructor_NameNull_throws()
+        void constructor_nameNull_throws()
         {
             final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                    () -> new RegionDTO( null, "IE-D", "D", null, "IE", "EU", null, null )
@@ -87,6 +92,9 @@ class RegionDTOTest
     }
 
 
+    /**
+     * Verify operation of field validation rules.
+     */
     @Nested
     @DisplayName( "NewRegionDTO - Validation" )
     class ValidationGroup
@@ -107,9 +115,9 @@ class RegionDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "code", "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" ),
-                                             tuple( "id", "A Region id is required" )
-                                           );
+                                             tuple( "code",
+                                                    "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" ),
+                                             tuple( "id", "A Region id is required" ) );
         }
 
         @Test
@@ -129,8 +137,8 @@ class RegionDTOTest
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
                                              tuple( "code", "A unique region code is required" ),
-                                             tuple( "code", "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" )
-                                           );
+                                             tuple( "code",
+                                                    "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" ) );
         }
 
         @Test
@@ -149,8 +157,8 @@ class RegionDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "code", "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" )
-                                           );
+                                             tuple( "code",
+                                                    "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" ) );
         }
 
         @Test
@@ -169,8 +177,8 @@ class RegionDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "code", "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" )
-                                           );
+                                             tuple( "code",
+                                                    "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" ) );
         }
 
         @Test
@@ -190,7 +198,8 @@ class RegionDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "code", "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" ),
+                                             tuple( "code",
+                                                    "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" ),
                                              tuple( "name", "Region name is required" ),
                                              tuple( "name", "Region name must be between 7 and 80 characters" ) );
         }
@@ -212,13 +221,13 @@ class RegionDTOTest
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
                                              tuple( "id", "A Region id is required" ),
-                                             tuple( "code", "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" ),
+                                             tuple( "code",
+                                                    "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" ),
                                              tuple( "code", "A unique region code is required" ),
                                              tuple( "localCode", "A unique local code is required" ),
                                              tuple( "localCode", "local code" ),
                                              tuple( "name", "Region name is required" ),
-                                             tuple( "name", "Region name must be between 7 and 80 characters" )
-                                           );
+                                             tuple( "name", "Region name must be between 7 and 80 characters" ) );
         }
     }
 

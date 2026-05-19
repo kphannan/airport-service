@@ -41,17 +41,22 @@ public class ContinentCreateService
 
 
     // ========== Create ==========
-    // TODO use a NewContinentDTO....
-    public Continent create( final NewContinent entity )
+
+    /**
+     * Create a new Continent instance in the persistent store.
+     *
+     * @param newContinent a NewContinent request object.
+     * @return A new Continent object or null if the entity already exists.
+     */
+    public Continent create( final NewContinent newContinent )
     {
-        if ( repository.existsByCode( entity.code() ) )
+        if ( repository.existsByCode( newContinent.code() ) )
         {
-            log.debug( "Continent already exists" );
             return null;
         }
 
-        final ContinentEntity result = repository.save( mapper.domainToEntity( entity ) );
-        log.debug( "created continent " );
+        final ContinentEntity result = repository.save( mapper.domainToEntity( newContinent ) );
+
         return mapper.entityToDomain( result );
     }
 

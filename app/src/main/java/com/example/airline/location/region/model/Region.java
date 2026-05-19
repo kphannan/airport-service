@@ -20,7 +20,7 @@ import org.jspecify.annotations.Nullable;
 // https://unstats.un.org/unsd/methodology/m49/overview/
 
 /**
- * Domain model object representing a single geographic Region.
+ * High-level administrative subdivision of a country (e.g. province, governorate, state).
  *
  * @param id primary key assigned by the database.
  * @param code local_code prefixed with the country code to make a globally unique identifier.
@@ -52,7 +52,8 @@ public record Region(
      */
     @Pattern( regexp = "[A-Z]{2}-[A-Z\\-]{1,4}",
               message = "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" )
-    @NonNull String code,
+    @NonNull
+    String code,
 
     /**
      * The local code for the administrative subdivision. Whenever possible, these
@@ -63,7 +64,8 @@ public record Region(
      */
     @Pattern( regexp = "([A-Z]{2}-[A-Z\\-]{1,4}|U-A)",
               message = "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" )
-    @NonNull String localCode,
+    @NonNull
+    String localCode,
 
     /**
      * The common English-language name for the administrative subdivision. In some
@@ -71,7 +73,8 @@ public record Region(
      * search.
      */
     @Pattern( regexp = "[a-zA-Z][a-zA-Z ]{1,51}", message = "Continent name must be 2 to 52 characters" )
-    @NonNull String name,
+    @NonNull
+    String name,
 
     /**
      * The two-character ISO 3166:1-alpha2 code for the country containing the
@@ -79,24 +82,28 @@ public record Region(
      * in use, such as "XK" for Kosovo.
      */
     @Pattern( regexp = "[A-Z]{2}", message = "Country code must a valid ISO 3166:1-alpha2" )
-    @NonNull String country, // ! Create a domain object for the country code
+    @NonNull
+    String country, // ! Create a domain object for the country code
 
     /**
      * A code for the continent to which the region belongs. See the continent field
      * in airports.csv for a list of codes.
      */
     @Pattern( regexp = "[A-Z]{2}", message = "Continent code must be 2 uppercase characters" )
-    @NonNull String continent, // ! Create a domain object for continent code
+    @NonNull
+    String continent, // ! Create a domain object for continent code
 
     /**
      * A link to the Wikipedia article describing the subdivision.
      */
-    @Nullable URI wikipediaLink,
+    @Nullable
+    URI wikipediaLink,
 
     /**
      * A comma-separated list of keywords to help with search. May include former
      * names for the region, and/or the region name in other languages.
      */
     @Size( max = 255, message = "List of keywords may not exceed 255 characters" )
-    @Nullable String keywords
+    @Nullable
+    String keywords
 ){}

@@ -29,21 +29,34 @@ public interface ContinentEntityMapper
     /**
      * Map a single db entity instance to a domain instance.
      */
-    Continent entityToDomain( final ContinentEntity entity );
+    Continent entityToDomain( ContinentEntity entity );
 
     // --- Collection
 
     /**
      * Map a list of domain instances to a list of db entity instances.
      */
-    List<Continent> entityToDomain( final List<ContinentEntity> entities );
+    List<Continent> entityToDomain( List<ContinentEntity> entities );
 
     // --- Domain --> Persistence ---
     // --- Instance
-    ContinentEntity domainToEntity( final Continent domain );
 
+    /**
+     * Convert a service layer representation into a persistent layer representation of a Continent.
+     *
+     * @param domain Service layer representation of a Continent.
+     * @return the persistent layer representation of a Continent.
+     */
+    ContinentEntity domainToEntity( Continent domain );
+
+    /**
+     * Map a NewContient service layer representation to a persistent store representation.
+     *
+     * @param domain service layer representation of a NewContinent request.
+     * @return a persistent layer representation of the NewContinent object.
+     */
     @Mapping( target = "id", ignore = true )
-    ContinentEntity domainToEntity( final NewContinent domain );
+    ContinentEntity domainToEntity( NewContinent domain );
     // --- Collection
 
 }

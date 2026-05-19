@@ -14,7 +14,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 
-
+/**
+ * Global configuration of API security violations.
+ */
 @Retention( RetentionPolicy.RUNTIME )
 @Target( ElementType.TYPE )
 @ApiResponses( value =

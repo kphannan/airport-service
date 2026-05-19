@@ -14,7 +14,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 
-
+/**
+ * Centralized definition of REST reponse objects.
+ */
 @Retention( RetentionPolicy.RUNTIME )
 @Target( ElementType.TYPE )
 @ApiResponses(
@@ -40,7 +42,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
                                     schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) ),
                           @Content( mediaType = "application/xml",
                                     schema = @Schema( implementation = org.springframework.http.ProblemDetail.class ) )
-                        }
+                      }
         ),
         @ApiResponse( description = "Method Not Allowed",
                       responseCode = "405",

@@ -37,6 +37,9 @@ class CountryDTOTest
     private final URI       testURI   = URI.create( "http://test.domain/with/a/path" );
 
 
+    /**
+     * Unit test suite for the {@see CountryDTO} class.
+     */
     @Nested
     @DisplayName( "constructor will" )
     class Constructor
@@ -55,7 +58,7 @@ class CountryDTOTest
 
         @Test
         @DisplayName( "reject null for the continent code" )
-        void constructor_NullArgs_throwsNullPointer()
+        void constructor_nullArgs_throwsNullPointer()
         {
             final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                    () -> new CountryDTO( null, null, null, null, null, null )
@@ -65,7 +68,7 @@ class CountryDTOTest
 
         @Test
         @DisplayName( "accept minimum required arguments" )
-        void constructor_withArgs_DoesNotCrash()
+        void constructor_withArgs_doesNotCrash()
         {
             final CountryDTO dto = new CountryDTO( null, "EE", "::NAME::", "AS", null, null );
 
@@ -74,7 +77,7 @@ class CountryDTOTest
 
         @Test
         @DisplayName( "reject null for the continent code" )
-        void constructor_CodeNull_throwsNullPointer()
+        void constructor_codeNull_throwsNullPointer()
         {
             final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                    () -> new CountryDTO( null, null, ";;NAME;;", null, null, null )
@@ -84,7 +87,7 @@ class CountryDTOTest
 
         @Test
         @DisplayName( "reject null for the continent name" )
-        void constructor_NameNull_throws()
+        void constructor_nameNull_throws()
         {
             final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                    () -> new CountryDTO( null, "NN", null, null, null, null )
@@ -94,6 +97,9 @@ class CountryDTOTest
     }
 
 
+    /**
+     * Verify field level validation rules.
+     */
     @Nested
     @DisplayName( "NewCountryDTO - Validation" )
     class ValidationGroup
@@ -112,8 +118,7 @@ class CountryDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "id", "A country id is required" )
-                                           );
+                                             tuple( "id", "A country id is required" ) );
         }
 
         @Test
@@ -131,8 +136,7 @@ class CountryDTOTest
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
                                              tuple( "code", "An ISO 3166:1-alpha2 country code is required" ),
-                                             tuple( "code", "Code must a valid ISO 3166:1-alpha2" )
-                                           );
+                                             tuple( "code", "Code must a valid ISO 3166:1-alpha2" ) );
         }
 
         @Test
@@ -149,8 +153,7 @@ class CountryDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "code", "Code must a valid ISO 3166:1-alpha2" )
-                                           );
+                                             tuple( "code", "Code must a valid ISO 3166:1-alpha2" ) );
         }
 
         @Test
@@ -167,8 +170,7 @@ class CountryDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "code", "Code must a valid ISO 3166:1-alpha2" )
-                                           );
+                                             tuple( "code", "Code must a valid ISO 3166:1-alpha2" ) );
         }
 
         @Test
@@ -210,13 +212,14 @@ class CountryDTOTest
                                              tuple( "name", "Name is required" ),
                                              tuple( "name", "Country name must be between 2 and 52 characters" ),
                                              tuple( "code", "An ISO 3166:1-alpha2 country code is required" ),
-                                             tuple( "code", "Code must a valid ISO 3166:1-alpha2" )
-                                           );
+                                             tuple( "code", "Code must a valid ISO 3166:1-alpha2" ) );
         }
-
-
     }
 
+
+    /**
+     * Verify mapping between Java instance and JSON.
+     */
     @Nested
     @DisplayName( "JSON mapping" )
     class JsonMapping
@@ -229,6 +232,9 @@ class CountryDTOTest
             objectMapper = new ObjectMapper();
         }
 
+        /**
+         * Verify conversion from JSON to Java instance.
+         */
         @Nested
         @DisplayName( "JSON to object" )
         class FromJson
@@ -262,6 +268,9 @@ class CountryDTOTest
         }
 
 
+        /**
+         * Verify JSON from Java instance conversion.
+         */
         @Nested
         @DisplayName( "Object to JSON" )
         class ToJson
@@ -293,11 +302,6 @@ class CountryDTOTest
 
                 // --- then
                 JSONAssert.assertEquals( json, result, JSONCompareMode.LENIENT );
-//                assertThat( object ).isNotNull();
-//                assertThat( object.getCode() ).isEqualTo( "AB" );
-//                assertThat( object.getName() ).isEqualTo( "::NAME::" );
-//                assertThat( object.getWikipediaLink() ).isEqualTo( URI.create( "http://some.domain/path" ) );
-//                assertThat( object.getKeywords() ).isEqualTo( "k1, k2, k3" );
             }
         }
     }

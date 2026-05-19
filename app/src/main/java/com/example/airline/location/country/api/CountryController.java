@@ -108,16 +108,16 @@ public class CountryController
             description = "Find a Continent by Id",
             requestBody = @RequestBody( required = false ),
             responses = { @ApiResponse( description = "Success",
-                    responseCode = "200",
-                    content = {
-                        @Content( mediaType = "application/json",
-                                  schema = @Schema( implementation = CountryDTO.class ) ),
-                        @Content( mediaType = "application/yaml",
-                                  schema = @Schema( implementation = CountryDTO.class ) ),
-                        @Content( mediaType = "application/xml",
-                                  schema = @Schema( implementation = CountryDTO.class ) )
-                    }
-            )
+                                        responseCode = "200",
+                                        content = {
+                                            @Content( mediaType = "application/json",
+                                                      schema = @Schema( implementation = CountryDTO.class ) ),
+                                            @Content( mediaType = "application/yaml",
+                                                      schema = @Schema( implementation = CountryDTO.class ) ),
+                                            @Content( mediaType = "application/xml",
+                                                      schema = @Schema( implementation = CountryDTO.class ) )
+                                        }
+                    )
             },
             parameters = {
                 @Parameter( name = "id",

@@ -10,6 +10,13 @@ import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
 
+/**
+ * Count of the number of Airports in a specific Country.
+ *
+ * @param countryCode Alpha code of the country.
+ * @param name name of the Country.
+ * @param airportCount number of airports within the country.
+ */
 @IgnoreGeneratedCoverage
 public record AirportCountInCountryDTO(
         @JsonProperty( "isoCountry" )

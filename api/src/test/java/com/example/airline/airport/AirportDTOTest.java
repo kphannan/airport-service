@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 
 
 /**
- * Unit tests for the {@code RegionDTO}.
+ * Unit tests for the {@code AirportDTO}.
  */
 @SuppressWarnings( "PMD.AvoidDuplicateLiterals" )
 @DisplayName( "Airport: DTO" )
@@ -34,10 +34,17 @@ class AirportDTOTest
     private final URI       testURI1  = URI.create( "http://www.atlanta-airport.com" );
     private final URI       testURI2  = URI.create( "https://en.wikipedia.org/wiki/Hartsfield–Jackson_Atlanta_International_Airport" );
 
+
+    /**
+     * Verify class invariants are enforced.
+     */
     @Nested
     @DisplayName( "constructor" )
     class Constructor
     {
+        /**
+         * Verify exceptions are thrown when class invariants are violated.
+         */
         @Nested
         @DisplayName( "Throws exception when:" )
         class ThrowException
@@ -55,7 +62,7 @@ class AirportDTOTest
 
             @Test
             @DisplayName( "all but first argument is null" )
-            void constructor_OneArgNotNullAllOtherArgsNull_throwsIllegalArgument()
+            void constructor_oneArgNotNullAllOtherArgsNull_throwsIllegalArgument()
             {
                 final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                        () -> new AirportDTO( null, "KATL", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null )
@@ -65,7 +72,7 @@ class AirportDTOTest
 
             @Test
             @DisplayName( "all but first two arguments are null" )
-            void constructor_TwoArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
+            void constructor_twoArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
             {
                 final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                        () -> new AirportDTO( null, "KATL", "::TT::", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null )
@@ -75,7 +82,7 @@ class AirportDTOTest
 
             @Test
             @DisplayName( "all but first two arguments are null" )
-            void constructor_ThreeArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
+            void constructor_threeArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
             {
                 final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                        () -> new AirportDTO( null, "KATL", "::TT::", "::NAME::", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null )
@@ -85,7 +92,7 @@ class AirportDTOTest
 
             @Test
             @DisplayName( "all but first two arguments are null" )
-            void constructor_FourArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
+            void constructor_fourArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
             {
                 final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                        () -> new AirportDTO( null, "KATL", "::TT::", "::NAME::", BigDecimal.ONE, null, null, null, null, null, null, null, null, null, null, null, null, null, null )
@@ -95,7 +102,7 @@ class AirportDTOTest
 
             @Test
             @DisplayName( "all but first two arguments are null" )
-            void constructor_FiveArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
+            void constructor_fiveArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
             {
                 final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                        () -> new AirportDTO( null,
@@ -123,7 +130,7 @@ class AirportDTOTest
 
             @Test
             @DisplayName( "all but first two arguments are null" )
-            void constructor_SixArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
+            void constructor_sixArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
             {
                 final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                        () -> new AirportDTO( null,
@@ -151,7 +158,7 @@ class AirportDTOTest
 
             @Test
             @DisplayName( "all but first two arguments are null" )
-            void constructor_SevenArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
+            void constructor_sevenArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
             {
                 final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                        () -> new AirportDTO( null,
@@ -179,34 +186,35 @@ class AirportDTOTest
 
             @Test
             @DisplayName( "all but first two arguments are null" )
-            void constructor_EightArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
+            void constructor_eightArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
             {
                 final AirportDTO dto = assertDoesNotThrow(
-                        () -> new AirportDTO( null,                  // id
-                                              "KATL",                // ident
-                                              "::TT::",              // type
-                                              "::NAME::",            // name
-                                              BigDecimal.ONE,        // latitude
-                                              BigDecimal.TWO,        // longitude
-                                              null,                  // elevation
-                                              "NA",                  // continent
-                                              "PH",                  // country
-                                              "CB",                  // isoRegion
-                                              null,                  // municipality
-                                              "no",                  // scheduledService
-                                              null,                  // gpsCode
-                                              null,                  // icaoCode
-                                              null,                  // iataCode
-                                              null,                  // localCode
-                                              null,                  // homeLink
-                                              null,                  // wikiLink
-                                              null )                 // keywords
+                    () -> new AirportDTO( null,                  // id
+                                          "KATL",                // ident
+                                          "::TT::",              // type
+                                          "::NAME::",            // name
+                                          BigDecimal.ONE,        // latitude
+                                          BigDecimal.TWO,        // longitude
+                                          null,                  // elevation
+                                          "NA",                  // continent
+                                          "PH",                  // country
+                                          "CB",                  // isoRegion
+                                          null,                  // municipality
+                                          "no",                  // scheduledService
+                                          null,                  // gpsCode
+                                          null,                  // icaoCode
+                                          null,                  // iataCode
+                                          null,                  // localCode
+                                          null,                  // homeLink
+                                          null,                  // wikiLink
+                                          null )                 // keywords
                                                          );
+                assertThat( dto.getIdent() ).matches( "KATL" );
             }
 
             @Test
             @DisplayName( "but first two arguments are null" )
-            void constructor_NineArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
+            void constructor_nineArgsNotNullAllOtherArgsNull_throwsIllegalArgument()
             {
                 final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                        () -> new AirportDTO( null,
@@ -258,11 +266,13 @@ class AirportDTOTest
                 );
                 assertNotNull( dto );
             }
-
         }
     }
 
 
+    /**
+     * Verify field validations.
+     */
     @Nested
     @DisplayName( "Validation" )
     class ValidationGroup
@@ -295,10 +305,13 @@ class AirportDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "id", "An airport id is required" )
-                                           );
+                                             tuple( "id", "An airport id is required" ) );
         }
 
+
+        /**
+         * Verify validation of the airport identifier.
+         */
         @Nested
         @DisplayName( "an IDENT" )
         class ValidationIdent
@@ -331,8 +344,8 @@ class AirportDTOTest
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
                                                  tuple( "ident", "A 4 to 7 character airport ident code is required" ),
-                                                 tuple( "ident", "Airport ident must a unique 4 to 7 character code following a specific pattern" )
-                                               );
+                                                 tuple( "ident",
+                                                        "Airport ident must a unique 4 to 7 character code following a specific pattern" ) );
             }
 
             @Test
@@ -362,8 +375,8 @@ class AirportDTOTest
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
-                                                 tuple( "ident", "Airport ident must a unique 4 to 7 character code following a specific pattern" )
-                                               );
+                                                 tuple( "ident",
+                                                        "Airport ident must a unique 4 to 7 character code following a specific pattern" ) );
             }
 
             @Test
@@ -393,8 +406,8 @@ class AirportDTOTest
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
-                                                 tuple( "ident", "Airport ident must a unique 4 to 7 character code following a specific pattern" )
-                                               );
+                                                 tuple( "ident",
+                                                        "Airport ident must a unique 4 to 7 character code following a specific pattern" ) );
             }
 
             @Test
@@ -453,8 +466,8 @@ class AirportDTOTest
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
-                                                 tuple( "ident", "Airport ident must a unique 4 to 7 character code following a specific pattern" )
-                                               );
+                                                 tuple( "ident",
+                                                        "Airport ident must a unique 4 to 7 character code following a specific pattern" ) );
             }
 
             @Test
@@ -516,6 +529,10 @@ class AirportDTOTest
             }
         }
 
+
+        /**
+         * Verify validation of the continent code.
+         */
         @Nested
         @DisplayName( "a continent code" )
         class ValidationContinent
@@ -548,8 +565,7 @@ class AirportDTOTest
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
                                                  tuple( "continent", "A 2-character continent code is required" ),
-                                                 tuple( "continent", "Continent code must be 2 uppercase characters" )
-                                               );
+                                                 tuple( "continent", "Continent code must be 2 uppercase characters" ) );
             }
 
 
@@ -580,8 +596,7 @@ class AirportDTOTest
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
-                                                 tuple( "continent", "Continent code must be 2 uppercase characters" )
-                                               );
+                                                 tuple( "continent", "Continent code must be 2 uppercase characters" ) );
             }
 
             @Test
@@ -611,8 +626,7 @@ class AirportDTOTest
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
-                                                 tuple( "continent", "Continent code must be 2 uppercase characters" )
-                                               );
+                                                 tuple( "continent", "Continent code must be 2 uppercase characters" ) );
             }
 
             @Test
@@ -671,12 +685,15 @@ class AirportDTOTest
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
-                                                 tuple( "continent", "Continent code must be 2 uppercase characters" )
-                                               );
+                                                 tuple( "continent", "Continent code must be 2 uppercase characters" ) );
             }
 
         }
 
+
+        /**
+         * Verify validation of Country Code.
+         */
         @Nested
         @DisplayName( "a country code" )
         class ValidationCountry
@@ -709,8 +726,7 @@ class AirportDTOTest
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
                                                  tuple( "isoCountry", "An ISO 3166:1-alpha2 country code is required" ),
-                                                 tuple( "isoCountry", "Country code must a valid ISO 3166:1-alpha2" )
-                                               );
+                                                 tuple( "isoCountry", "Country code must a valid ISO 3166:1-alpha2" ) );
             }
 
             @Test
@@ -740,8 +756,7 @@ class AirportDTOTest
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
-                                                 tuple( "isoCountry", "Country code must a valid ISO 3166:1-alpha2" )
-                                               );
+                                                 tuple( "isoCountry", "Country code must a valid ISO 3166:1-alpha2" ) );
             }
 
             @Test
@@ -771,8 +786,7 @@ class AirportDTOTest
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
-                                                 tuple( "isoCountry", "Country code must a valid ISO 3166:1-alpha2" )
-                                               );
+                                                 tuple( "isoCountry", "Country code must a valid ISO 3166:1-alpha2" ) );
             }
 
 
@@ -832,13 +846,14 @@ class AirportDTOTest
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
-                                                 tuple( "isoCountry", "Country code must a valid ISO 3166:1-alpha2" )
-                                               );
+                                                 tuple( "isoCountry", "Country code must a valid ISO 3166:1-alpha2" ) );
             }
-
-
         }
 
+
+        /**
+         * Verify validation rules for Region code.
+         */
         @Nested
         @DisplayName( "a region code" )
         class ValidationRegion
@@ -871,8 +886,8 @@ class AirportDTOTest
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
                                                  tuple( "isoRegion", "A unique region code is required" ),
-                                                 tuple( "isoRegion", "Region code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" )
-                                               );
+                                                 tuple( "isoRegion",
+                                                        "Region code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" ) );
             }
 
             @Test
@@ -902,8 +917,8 @@ class AirportDTOTest
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
-                                                 tuple( "isoRegion", "Region code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" )
-                                               );
+                                                 tuple( "isoRegion",
+                                                        "Region code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" ) );
             }
 
             @Test
@@ -933,8 +948,8 @@ class AirportDTOTest
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
-                                                 tuple( "isoRegion", "Region code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" )
-                                               );
+                                                 tuple( "isoRegion",
+                                                        "Region code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" ) );
             }
 
             @Test
@@ -968,6 +983,10 @@ class AirportDTOTest
 
         }
 
+
+        /**
+         * Verify validation of ICAO code.
+         */
         @Nested
         @DisplayName( "a icao code" )
         class ValidationIcao
@@ -999,13 +1018,12 @@ class AirportDTOTest
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
-                                                 tuple( "icaoCode", "IACO code has four alpha-numeric characters" )
-                                               );
+                                                 tuple( "icaoCode", "IACO code has four alpha-numeric characters" ) );
             }
 
             @Test
             @DisplayName( "<aaaa> is accepted" )
-            void airportIcao_aaa_isAccpeted()
+            void airportIcao_aaa_isAccepted()
             {
                 final AirportDTO itemUnderTest = new AirportDTO( 1L,
                                                                  "ABCD",
@@ -1059,8 +1077,7 @@ class AirportDTOTest
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
-                                                 tuple( "icaoCode", "IACO code has four alpha-numeric characters" )
-                                               );
+                                                 tuple( "icaoCode", "IACO code has four alpha-numeric characters" ) );
             }
 
             @Test
@@ -1090,12 +1107,15 @@ class AirportDTOTest
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
-                                                 tuple( "icaoCode", "IACO code has four alpha-numeric characters" )
-                                               );
+                                                 tuple( "icaoCode", "IACO code has four alpha-numeric characters" ) );
             }
 
         }
 
+
+        /**
+         * Verify validation of IATA code.
+         */
         @Nested
         @DisplayName( "a iata code" )
         class ValidationIata
@@ -1127,8 +1147,7 @@ class AirportDTOTest
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
-                                                 tuple( "iataCode", "IATA code has three alphabetic characters" )
-                                               );
+                                                 tuple( "iataCode", "IATA code has three alphabetic characters" ) );
             }
 
             @Test
@@ -1187,8 +1206,7 @@ class AirportDTOTest
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
-                                                 tuple( "iataCode", "IATA code has three alphabetic characters" )
-                                               );
+                                                 tuple( "iataCode", "IATA code has three alphabetic characters" ) );
             }
 
             @Test
@@ -1218,8 +1236,7 @@ class AirportDTOTest
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
-                                                 tuple( "iataCode", "IATA code has three alphabetic characters" )
-                                               );
+                                                 tuple( "iataCode", "IATA code has three alphabetic characters" ) );
             }
 
         }

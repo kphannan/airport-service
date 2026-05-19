@@ -42,8 +42,8 @@ class ContinentUpdateServiceTest
     void update_existing_returnChanged()
     {
         // --- given
-        Continent       continent       = new Continent( 1, "code", "name", null, null );
-        ContinentEntity continentEntity = new ContinentEntity( 1, "code", "name", null, null );
+        final Continent       continent       = new Continent( 1, "code", "name", null, null );
+        final ContinentEntity continentEntity = new ContinentEntity( 1, "code", "name", null, null );
 
         when( repository.existsById( anyInt() ) ).thenReturn( true );
         when( repository.existsByCode( anyString() ) ).thenReturn( true );
@@ -58,7 +58,7 @@ class ContinentUpdateServiceTest
                    () -> verify( repository, atMost( 1 ) ).existsById( anyInt() ),
                    () -> verify( repository, atMost( 1 ) ).existsByCode( anyString() ),
                    () -> verify( repository ).save( any( ContinentEntity.class ) )
-                 );
+        );
     }
 
     @Test
@@ -66,7 +66,7 @@ class ContinentUpdateServiceTest
     void update_notExisting_returnNull()
     {
         // --- given
-        Continent       continent       = new Continent( 1, "code", "name", null, null );
+        final Continent       continent       = new Continent( 1, "code", "name", null, null );
 
         when( repository.existsById( anyInt() ) ).thenReturn( false );
         when( repository.existsByCode( anyString() ) ).thenReturn( false );
@@ -79,7 +79,7 @@ class ContinentUpdateServiceTest
                    () -> verify( repository, atMost( 1 ) ).existsById( anyInt() ),
                    () -> verify( repository, atMost( 1 ) ).existsByCode( anyString() ),
                    () -> verify( repository, never() ).save( any( ContinentEntity.class ) )
-                 );
+        );
     }
 
 }

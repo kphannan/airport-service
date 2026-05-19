@@ -31,6 +31,9 @@ class ContinentDTOTest
     private final URI       testURI   = URI.create( "http://test.domain/with/a/path" );
 
 
+    /**
+     * Verify enforcement of class invariants.
+     */
     @Nested
     @DisplayName( "constructor will" )
     class Constructor           // NOPMD
@@ -49,7 +52,7 @@ class ContinentDTOTest
 
         @Test
         @DisplayName( "reject null for the continent code" )
-        void constructor_NullArgs_throwsNullPointer()
+        void constructor_nullArgs_throwsNullPointer()
         {
             final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                    () -> new ContinentDTO( null, null, null, null, null )
@@ -59,7 +62,7 @@ class ContinentDTOTest
 
         @Test
         @DisplayName( "accept minimum required arguments" )
-        void constructor_withArgs_DoesNotCrash()
+        void constructor_withArgs_doesNotCrash()
         {
             final ContinentDTO dto = new ContinentDTO( null, "EE", "::NAME::", null, null );
 
@@ -68,7 +71,7 @@ class ContinentDTOTest
 
         @Test
         @DisplayName( "reject null for the continent code" )
-        void constructor_CodeNull_throwsNullPointer()
+        void constructor_codeNull_throwsNullPointer()
         {
             final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                    () -> new ContinentDTO( null, null, ";;NAME;;", null, null )
@@ -78,7 +81,7 @@ class ContinentDTOTest
 
         @Test
         @DisplayName( "reject null for the continent name" )
-        void constructor_NameNull_throws()
+        void constructor_nameNull_throws()
         {
             final Throwable thrown = assertThrows( IllegalArgumentException.class,
                                                    () -> new ContinentDTO( null, "NN", null, null, null )
@@ -88,6 +91,9 @@ class ContinentDTOTest
     }
 
 
+    /**
+     * Verify field level validations.
+     */
     @Nested
     @DisplayName( "NewContinentDTO - Validation" )
     class ValidationGroup
@@ -105,8 +111,7 @@ class ContinentDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "id", "A continent id is required" )
-                                           );
+                                             tuple( "id", "A continent id is required" ) );
         }
 
         @Test
@@ -122,8 +127,7 @@ class ContinentDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "code", "Code must be 2 uppercase characters" )
-                                           );
+                                             tuple( "code", "Code must be 2 uppercase characters" ) );
         }
 
         @Test
@@ -139,8 +143,7 @@ class ContinentDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "code", "Code must be 2 uppercase characters" )
-                                           );
+                                             tuple( "code", "Code must be 2 uppercase characters" ) );
         }
 
         @Test
@@ -156,8 +159,7 @@ class ContinentDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "code", "Code must be 2 uppercase characters" )
-                                           );
+                                             tuple( "code", "Code must be 2 uppercase characters" ) );
         }
 
         @Test
@@ -192,10 +194,8 @@ class ContinentDTOTest
                     .assertConstraintErrors( constraintViolations,
                                              tuple( "id", "A continent id is required" ),
                                              tuple( "code", "Code must be 2 uppercase characters" ),
-                                             tuple( "name", "Continent name must be 2 to 52 characters" )
-                                           );
+                                             tuple( "name", "Continent name must be 2 to 52 characters" ) );
         }
-
 
     }
 

@@ -23,6 +23,10 @@ import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
+
+/**
+ * Test for service layer Delete methods.
+ */
 @WebMvcTest( controllers = ContinentController.class )
 @ComponentScan( basePackages = { "com.example.airline.location.continent" } )
 @AutoConfigureMockMvc( addFilters = false /*, secure = false */ )
@@ -36,17 +40,12 @@ class ContinentDeleteServiceTest
     private ContinentDeleteService service;
 
 
-//    @Test
-//    void constructor()
-//    {
-//        new ContinentDeleteService( null, null );
-//    }
 
     @Test
     @DisplayName( "by ID" )
-    void withID_invokesDelete()
+    void delete_withID_invokesDelete()
     {
-        Continent continent = new Continent( 1, "code", "name", null, null );
+        final Continent continent = new Continent( 1, "code", "name", null, null );
 
         // --- given
         when( repository.existsById( anyInt() ) ).thenReturn( true );
@@ -60,15 +59,15 @@ class ContinentDeleteServiceTest
                    () -> verify( repository, atMost( 1 ) ).existsById( anyInt() ),
                    () -> verify( repository, atMost( 1 ) ).existsByCode( anyString() ),
                    () -> verify( repository ).delete( any( ContinentEntity.class ) )
-                 );
+        );
     }
 
 
     @Test
     @DisplayName( "by Code" )
-    void withoutID_invokesDelete()
+    void delete_withoutID_invokesDelete()
     {
-        Continent continent = new Continent( 2, "code", "name", null, null );
+        final Continent continent = new Continent( 2, "code", "name", null, null );
 
         // --- given
         when( repository.existsById( anyInt() ) ).thenReturn( false );
@@ -82,15 +81,15 @@ class ContinentDeleteServiceTest
                    () -> verify( repository, atMost( 1 ) ).existsById( anyInt() ),
                    () -> verify( repository, atMost( 1 ) ).existsByCode( anyString() ),
                    () -> verify( repository ).delete( any( ContinentEntity.class ) )
-                 );
+        );
     }
 
 
     @Test
     @DisplayName( "neither id nor code" )
-    void withoutCodeAndId_doesNotInvokeDelete()
+    void delete_withoutCodeAndId_doesNotInvokeDelete()
     {
-        Continent continent = new Continent( 3, "code", "name", null, null );
+        final Continent continent = new Continent( 3, "code", "name", null, null );
 
         // --- given
         when( repository.existsById( anyInt() ) ).thenReturn( false );
@@ -104,6 +103,6 @@ class ContinentDeleteServiceTest
                    () -> verify( repository, atMost( 1 ) ).existsById( anyInt() ),
                    () -> verify( repository, atMost( 1 ) ).existsByCode( anyString() ),
                    () -> verify( repository, times( 1 ) ).delete( any( ContinentEntity.class ) )
-                 );
+        );
     }
 }

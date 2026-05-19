@@ -80,7 +80,7 @@ class AirportDeleteServiceTest
 
         @Test
         @DisplayName( "by ID" )
-        void withID_invokesDelete()
+        void delete_withID_invokesDelete()
         {
             Continent continent = new Continent( 1, "code", "name", null, null );
 
@@ -89,7 +89,6 @@ class AirportDeleteServiceTest
             when( repository.existsByCode( anyString() ) ).thenReturn( true );
 
             // --- when
-//            final boolean isExisting = service.delete( 1L );
             final boolean isExisting = service.deleteById( 1L );
 
             // --- then
@@ -97,12 +96,12 @@ class AirportDeleteServiceTest
                        () -> verify( repository, atMost( 1 ) ).existsById( anyLong() ),
                        () -> verify( repository, atMost( 1 ) ).existsByCode( anyString() ),
                        () -> verify( repository ).deleteById( anyLong() )
-                     );
+            );
         }
 
         @Test
         @DisplayName( "without valid ID" )
-        void withoutCodeAndId_doesNotInvokeDelete()
+        void delete_withoutCodeAndId_doesNotInvokeDelete()
         {
             // --- given
             when( repository.existsById( anyLong() ) ).thenReturn( false );
@@ -119,14 +118,32 @@ class AirportDeleteServiceTest
                                .deleteById( anyLong() ),
                        () -> verify( repository, never() )
                                .delete( any( AirportEntity.class ) )
-                     );
+            );
         }
 
         @Test
         @DisplayName( "entity without valid ID" )
         void delete_entityWithId_invokesDelete()
         {
-            final Airport airport = new Airport( 2L, "ident", "type", "::YYNAME::", BigDecimal.valueOf( 12.34 ), BigDecimal.valueOf( 56.78 ), 50, "continent", "country", "region", "municiipality", "NO", "foo", "icao", "iata", "local", null, null, null );
+            final Airport airport = new Airport( 2L,
+                                                 "ident",
+                                                 "type",
+                                                 "::YYNAME::",
+                                                 BigDecimal.valueOf( 12.34 ),
+                                                 BigDecimal.valueOf( 56.78 ),
+                                                 50,
+                                                 "continent",
+                                                 "country",
+                                                 "region",
+                                                 "municipality",
+                                                 "NO",
+                                                 "foo",
+                                                 "icao",
+                                                 "iata",
+                                                 "local",
+                                                 null,
+                                                 null,
+                                                 null );
 
             // --- given
             when( repository.existsById( anyLong() ) ).thenReturn( true );
@@ -143,14 +160,22 @@ class AirportDeleteServiceTest
                                .delete( any( AirportEntity.class ) ),
                        () -> verify( repository, never() )
                                .deleteById( anyLong() )
-                     );
+            );
         }
 
         @Test
         @DisplayName( "entity without valid ID" )
         void delete_entityWithoutId_doesNotInvokeDelete()
         {
-            final Airport airport = new Airport( 2L, "ident", "type", "::YYNAME::", BigDecimal.valueOf( 12.34 ), BigDecimal.valueOf( 56.78 ), 50, "continent", "country", "region", "municiipality", "NO", "foo", "icao", "iata", "local", null, null, null );
+            final Airport airport = new Airport( 2L, "ident",
+                                                 "type", "::YYNAME::",
+                                                 BigDecimal.valueOf( 12.34 ),
+                                                 BigDecimal.valueOf( 56.78 ),
+                                                 50,
+                                                 "continent", "country", "region",
+                                                 "municiipality", "NO",
+                                                 "foo", "icao", "iata", "local",
+                                                 null, null, null );
 
             // --- given
             when( repository.existsById( anyLong() ) ).thenReturn( false );
@@ -167,7 +192,7 @@ class AirportDeleteServiceTest
                                .delete( any( AirportEntity.class ) ),
                        () -> verify( repository, never() )
                                .deleteById( anyLong() )
-                     );
+            );
         }
 
     }

@@ -15,6 +15,9 @@ import io.swagger.v3.oas.annotations.security.SecuritySchemes;
 import io.swagger.v3.oas.annotations.servers.Server;
 
 
+/**
+ * Global configuration of REST API documentation for the OpenAPI framework.
+ */
 @OpenAPIDefinition( info = @Info( contact = @Contact( name = "Kevin", email = "kphannan@gmail.com" ),
                                   description = "OpenAPI documentation for the Airport Information REST service",
                                   title = "Airport Information Service",
@@ -29,7 +32,14 @@ import io.swagger.v3.oas.annotations.servers.Server;
                     },
                     security = @SecurityRequirement( name = "bearerAuth" )
 )
-@SecuritySchemes( @SecurityScheme( name = "bearerAuth", description = "JWT auth token", scheme = "bearer", type = SecuritySchemeType.HTTP, bearerFormat = "JWT", in = SecuritySchemeIn.HEADER ) )
+@SecuritySchemes( @SecurityScheme( name = "bearerAuth",
+                                   description = "JWT auth token",
+                                   scheme = "bearer",
+                                   type = SecuritySchemeType.HTTP,
+                                   bearerFormat = "JWT",
+                                   in = SecuritySchemeIn.HEADER
+                )
+)
 public class OpenApiConfig
 {
 }

@@ -37,6 +37,13 @@ public class ContinentUpdateService
 
 
     // ========== Update ==========
+
+    /**
+     * Write changed attributes to the persistent store.
+     *
+     * @param continent the modified Continent.
+     * @return The updated Continent instance.
+     */
     public @Nullable Continent update( @NonNull final Continent continent )
     {
         if ( repository.existsById( continent.id() ) )

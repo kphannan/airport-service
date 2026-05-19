@@ -23,6 +23,10 @@ import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
+
+/**
+ * Tests of ContinentCreateService.  Does not utilize REST layer.
+ */
 @WebMvcTest( controllers = ContinentController.class )
 @ComponentScan( basePackages = { "com.example.airline.location.continent" } )
 @AutoConfigureMockMvc( addFilters = false /*, secure = false */ )
@@ -38,7 +42,7 @@ class ContinentCreateServiceTest
 
     @Test
     @DisplayName( "Create Continent" )
-    void createContinent_NotExisting_isCreated()
+    void createContinent_notExisting_isCreated()
     {
         // -- given
         final ContinentEntity    continentEntity = new ContinentEntity( 1, "NA", "North", null, null );
@@ -59,12 +63,12 @@ class ContinentCreateServiceTest
                    () -> assertNull( continent.keywords() ),
                    () -> verify( repository ).existsByCode( anyString() ),
                    () -> verify( repository ).save( any( ContinentEntity.class ) )
-                 );
+        );
     }
 
     @Test
     @DisplayName( "Don't Create Continent" )
-    void createContinent_Existing_notCreated()
+    void createContinent_existing_notCreated()
     {
         // -- given
         when( repository.existsByCode( anyString() ) )
@@ -78,7 +82,7 @@ class ContinentCreateServiceTest
         assertAll( () -> assertNull( continent ),
                    () -> verify( repository ).existsByCode( anyString() ),
                    () -> verify( repository, never() ).save( any( ContinentEntity.class ) )
-                 );
+        );
     }
 
 

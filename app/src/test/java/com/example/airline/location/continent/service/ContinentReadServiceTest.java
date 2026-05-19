@@ -36,7 +36,7 @@ class ContinentReadServiceTest
     @DisplayName( "find all" )
     void read_findAll()
     {
-        Continent continent = new Continent( 1, "code", "name", null, null );
+        // Continent continent = new Continent( 1, "code", "name", null, null );
 
         // --- given
         when( repository.existsById( anyInt() ) ).thenReturn( true );
@@ -49,7 +49,7 @@ class ContinentReadServiceTest
         assertAll( () -> verify( repository, atMost( 1 ) ).existsById( anyInt() ),
                    () -> verify( repository, atMost( 1 ) ).existsByCode( anyString() ),
                    () -> verify( repository ).findAll()
-                 );
+        );
     }
 
 

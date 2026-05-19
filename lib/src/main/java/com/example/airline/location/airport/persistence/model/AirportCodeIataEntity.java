@@ -3,6 +3,7 @@
 package com.example.airline.location.airport.persistence.model;
 
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,9 +11,10 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.proxy.HibernateProxy;
 import org.jspecify.annotations.NonNull;
 
 
@@ -21,19 +23,26 @@ import org.jspecify.annotations.NonNull;
  */
 @Entity
 @Table( name = "iata_airportcode" )
-@Data
-@NoArgsConstructor( access = AccessLevel.PROTECTED ) // JPA best practice
+@Getter
+@Setter
+@ToString
 public class AirportCodeIataEntity
 {
-    private static final Pattern regex   = Pattern.compile( "[A-Z]{3}" );
+    private static final Pattern REGEX = Pattern.compile( "[A-Z]{3}" );
 
     @Id
-    // @Value("#{' matches [A-Z]{3}'}")
     @Column( name = "iata_code", length = 3, nullable = false, columnDefinition = "char(3)" )
     @jakarta.validation.constraints.Pattern( regexp = "[A-Z]{3}", message = "IATA code has three alphabetic characters" )
-//    @NonNull private String iataCode;
-    @NonNull private String iataCode = "ZZZ";
+    @NonNull private String iataCode;
 
+
+    /**
+     * Limited access default constructor are needed by JPA.
+     */
+    protected AirportCodeIataEntity()
+    {
+        iataCode = "ZZZ";
+    }
 
     /**
      * Instantiate a IATA airport code record.
@@ -52,11 +61,52 @@ public class AirportCodeIataEntity
         }
     }
 
-    public static boolean isValidIataCode( final String value )
+    /**
+     * Verify the code conforms to the format of a IATA geocode of 3 uppercase letters.
+     * {@liknk https://en.wikipedia.org/wiki/International_Air_Transport_Association}
+     *
+     * @param value the string to validate as an IATA code.
+     * @return {@code true} if the input contains only 3 uppercase characters,
+     *         {@code false} otherwise.
+     */
+    protected static boolean isValidIataCode( final String value )
     {
-        Matcher matcher = regex.matcher( value );
+        final Matcher matcher = REGEX.matcher( value );
 
         return matcher.matches();
     }
 
+    @Override
+    public final boolean equals( final Object object )
+    {
+        if ( null == object || this == object )
+        {
+            return true;
+        }
+
+        final Class<?> oEffectiveClass =
+            object instanceof HibernateProxy ? ( (HibernateProxy)object )
+                                              .getHibernateLazyInitializer().getPersistentClass()
+                                        : object.getClass();
+        final Class<?> thisEffectiveClass =
+            this instanceof HibernateProxy ? ( (HibernateProxy)this )
+                                                 .getHibernateLazyInitializer().getPersistentClass()
+                                           : this.getClass();
+        if ( thisEffectiveClass != oEffectiveClass )
+        {
+            return false;
+        }
+
+        final AirportCodeIataEntity that = (AirportCodeIataEntity)object;
+
+        return getIataCode() != null && Objects.equals( getIataCode(), that.getIataCode() );
+    }
+
+    @Override
+    public final int hashCode()
+    {
+        return this instanceof HibernateProxy ? ( (HibernateProxy)this ).getHibernateLazyInitializer()
+                                                                      .getPersistentClass()
+                                                                      .hashCode() : getClass().hashCode();
+    }
 }

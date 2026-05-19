@@ -12,7 +12,7 @@ import org.assertj.core.groups.Tuple;
 /**
  * Utility class for validating constraint violations.
  *
- * <p> This class is not intended to be instantiated. It contains static methods for
+ * <p>This class is not intended to be instantiated. It contains static methods for
  * validating constraint violations and asserting that they match expected values.
  */
 @Log4j2
@@ -27,6 +27,7 @@ public final class ConstraintValidationUtility
 
     /**
      * Prints the constraint violations to the log.
+     *
      * @param <T> the type of the object being validated
      * @param constraints the set of constraint violations
      */

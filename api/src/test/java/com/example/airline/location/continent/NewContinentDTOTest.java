@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Unit tests for the NewContinentDTO class.
  *
- * <p> This class contains unit tests for the NewContinentDTO class, which is used to represent a new continent
+ * <p>This class contains unit tests for the NewContinentDTO class, which is used to represent a new continent
  * in the system. The tests cover various scenarios, including validation of input parameters and JSON mapping.
  */
 @Log4j2
@@ -35,6 +35,10 @@ class NewContinentDTOTest
     private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     private final URI       testURI   = URI.create( "http://test.domain/with/a/path" );
 
+
+    /**
+     * Verify class invariants are enforced on construction.
+     */
     @Nested
     @DisplayName( "constructor will" )
     class Constructor
@@ -71,12 +75,15 @@ class NewContinentDTOTest
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
                                              tuple( "code", "A 2-character code is required" ),
-                                             tuple( "name", "Name is required" )
-                                           );
+                                             tuple( "name", "Name is required" ) );
         }
 
     }
 
+
+    /**
+     * Verify field level validation rules.
+     */
     @Nested
     @DisplayName( "NewContinentDTO - Validation" )
     class ValidationGroup
@@ -93,8 +100,7 @@ class NewContinentDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "code", "Code must be 2 uppercase characters" )
-                                           );
+                                             tuple( "code", "Code must be 2 uppercase characters" ) );
         }
 
         @Test
@@ -109,8 +115,7 @@ class NewContinentDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "code", "Code must be 2 uppercase characters" )
-                                           );
+                                             tuple( "code", "Code must be 2 uppercase characters" ) );
         }
 
         @Test
@@ -125,8 +130,7 @@ class NewContinentDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "code", "Code must be 2 uppercase characters" )
-                                           );
+                                             tuple( "code", "Code must be 2 uppercase characters" ) );
         }
 
         @Test
@@ -146,6 +150,10 @@ class NewContinentDTOTest
         }
     }
 
+
+    /**
+     * Verify mapping between JSON and Java instance.
+     */
     @Nested
     @DisplayName( "JSON mapping" )
     class JsonMapping

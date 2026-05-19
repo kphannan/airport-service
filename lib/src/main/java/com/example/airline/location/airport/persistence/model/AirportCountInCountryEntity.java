@@ -6,14 +6,24 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
+
+/**
+ * Number of airports within a country.
+ *
+ * @param countryCode ISO 3166 country code.
+ * @param name common name of the country.
+ * @param airportCount number of airports in the country.
+ */
 @IgnoreGeneratedCoverage
 public record AirportCountInCountryEntity(
     @NotBlank( message = "An ISO 3166:1-alpha2 country code is required" )
     @Pattern( regexp = "[A-Z]{2}", message = "Country code must a valid ISO 3166:1-alpha2" )
     String countryCode,
+
     @NotBlank
     @Size( max = 52 )
     String name,
+
     @PositiveOrZero
     Long   airportCount
 )

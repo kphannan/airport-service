@@ -96,6 +96,12 @@ public class AirportReadService
         return mapEntityToDomain( airportEntity );
     }
 
+    /**
+     * Find all airports within a specified Region.
+     *
+     * @param code the unique identifying code for the desired reqion.
+     * @return the list of Airports within the region or an empty list.
+     */
     public List<Airport> findAirportsByRegion( final String code )
     {
         final List<AirportEntity> airportEntity = repository.findByIsoRegion( code );
@@ -106,6 +112,12 @@ public class AirportReadService
 
     // ===== Counts =====
     // --- by Continent ---
+
+    /**
+     * Get a list of continents including a count of the number of airports in that continent.
+     *
+     * @return list of continents with the number of airports on the continent.
+     */
     public List<AirportCountInContinent> countAirportsByContinent()
     {
         final List<AirportCountInContinentEntity> entities = repository.countAirportsByContinent();
@@ -123,8 +135,9 @@ public class AirportReadService
 
     /**
      * Get the number of airports in a country.
-     * @param countryCode
-     * @return
+     *
+     * @param countryCode unique ISO 3166 code of the country.
+     * @return a collection of Airport count in a country
      */
     public List<AirportCountInCountry> countAirportsByCountry( final String countryCode )
     {
@@ -144,7 +157,8 @@ public class AirportReadService
 
     // --- by Region ---
 
-    /** Get the number of airports in a specific region
+    /**
+     * Get the number of airports in a specific region.
      *
      * @param regionCode the desired region
      * @return list of airport counts.

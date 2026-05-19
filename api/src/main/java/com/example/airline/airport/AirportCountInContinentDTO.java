@@ -8,8 +8,13 @@ import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
 
-
-
+/**
+ * Count of the number of Airports in a specific Continent.
+ *
+ * @param continentCode alpha code for the Continent.
+ * @param name common name of the Continent.
+ * @param airportCount number of Airports within the Continent.
+ */
 @IgnoreGeneratedCoverage
 public record AirportCountInContinentDTO(
     @Pattern( regexp = "[A-Z]{2}", message = "Continent code must be 2 uppercase characters" )

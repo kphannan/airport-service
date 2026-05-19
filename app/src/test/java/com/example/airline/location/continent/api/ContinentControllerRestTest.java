@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.airline.location.continent.mapper.ContinentDtoMapper;
+import com.example.airline.location.continent.mapper.ContinentEntityMapper;
 import com.example.airline.location.continent.model.Continent;
 import com.example.airline.location.continent.model.NewContinent;
 import com.example.airline.location.continent.persistence.model.ContinentEntity;
@@ -80,33 +81,35 @@ import tools.jackson.databind.ObjectMapper;
 @DisplayName( "Continent: API (/continent)" )
 class ContinentControllerRestTest
 {
-    private static final MediaType desiredContentType = new MediaType( MediaType.APPLICATION_JSON,
-                                                                            StandardCharsets.UTF_8 );
+    private static final MediaType DESIRED_CONTENT_TYPE = new MediaType( MediaType.APPLICATION_JSON,
+                                                                         StandardCharsets.UTF_8 );
     @Autowired
-    protected MockMvc mvc;
+    protected MockMvc              mvc;
 
     @MockitoSpyBean
-    private ContinentCreateService createService;
+    private ContinentCreateService  createService;
     @MockitoSpyBean
-    private ContinentReadService   readService;
+    private ContinentReadService    readService;
     @MockitoSpyBean
-    private ContinentUpdateService updateService;
+    private ContinentUpdateService  updateService;
     @MockitoSpyBean
-    private ContinentDeleteService deleteService;
+    private ContinentDeleteService  deleteService;
 
-//    @Autowired
-//    @SuppressWarnings( "unused" )
-//    private ContinentDtoMapper mapperReal;
+    // @Autowired
+    // @SuppressWarnings( "unused" )
+    // private ContinentDtoMapper mapperReal;
     @MockitoSpyBean
-    private ContinentDtoMapper mapper;
+    private ContinentDtoMapper    mapper;
+    @MockitoSpyBean
+    private ContinentEntityMapper entityMapper;
 
     @MockitoBean
-    private ContinentRepository repository;
+    private ContinentRepository     repository;
 
-//    @Autowired
-//    private TransactionTemplate transactionTemplate;
+    private HttpHeaders             requestHeaders;
 
-    private HttpHeaders requestHeaders;
+    //    @Autowired
+    // private TransactionTemplate transactionTemplate;
 
     @BeforeEach
     void init()
@@ -115,7 +118,7 @@ class ContinentControllerRestTest
         requestHeaders.set( HeaderUtility.TRACESTATE, "testState" );
         requestHeaders.set( HeaderUtility.TRACEID, "testParent" );
         requestHeaders.set( "NoWay", "Should not exist" );
-        requestHeaders.setContentType( desiredContentType );
+        requestHeaders.setContentType( DESIRED_CONTENT_TYPE );
     }
 
 
@@ -155,7 +158,7 @@ class ContinentControllerRestTest
                     .perform( request )
                     .andDo( print() )
                     .andExpect( status().isConflict() )
-//                    .andExpect( jsonPath( "$[0].id" ).value( 1 ) )
+                    // .andExpect( jsonPath( "$[0].id" ).value( 1 ) )
                     .andReturn();
 
             // --- then
@@ -169,7 +172,7 @@ class ContinentControllerRestTest
                                .contains( "TRACESTATE" )
                                .contains( "Content-Type" )
                                .doesNotContain( "NoWay" ),
-                    // TODO should response include problem details indicating existing entity with same ID
+                       // TODO should response include problem details indicating existing entity with same ID
                        () -> verify( createService ).create( any( NewContinent.class ) ),
                        () -> verifyNoInteractions( readService ),
                        () -> verifyNoInteractions( updateService ),
@@ -177,26 +180,24 @@ class ContinentControllerRestTest
                        () -> verify( repository ).existsByCode( anyString() ),
                        () -> verify( repository, never() ).save( any( NewContinentEntity.class ) ),
                        () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
-                     );
+            );
         }
 
 
-/*
-        //            final HttpHeadersAssert  headersAssert = new HttpHeadersAssert( response.getHeaders() );
-        final Collection<String> headerNames   = response.getHeaderNames();
-        assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
-            () -> assertThat( headerNames )
-                               .contains( "TRACEPARENT" )
-                               .contains( "TRACESTATE" )
-                               .contains( "Content-Type" )
-                               .doesNotContain( "NoWay" ),
-//                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
-//                       () -> assertThat( result.getResponse().getHeaderNames() )
-//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
-                       () -> verify( readService ).findAll(),
-                       () -> verify( repository ).findAll()
-                     );
-*/
+        // //            final HttpHeadersAssert  headersAssert = new HttpHeadersAssert( response.getHeaders() );
+        // final Collection<String> headerNames   = response.getHeaderNames();
+        // assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
+        //     () -> assertThat( headerNames )
+        //                        .contains( "TRACEPARENT" )
+        //                        .contains( "TRACESTATE" )
+        //                        .contains( "Content-Type" )
+        //                        .doesNotContain( "NoWay" ),
+        //!                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
+        //!                       () -> assertThat( result.getResponse().getHeaderNames() )
+        //!                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+        //                () -> verify( readService ).findAll(),
+        //                () -> verify( repository ).findAll()
+        //              );
 
 
         @Test
@@ -243,23 +244,23 @@ class ContinentControllerRestTest
                                .contains( "Content-Type" )
                                .contains( "Location" )
                                .doesNotContain( "NoWay" ),
-                    // The newly created resource's address is returned
-                    // - only verify the end since the host and context root may vary by environment
-                    // - final number (22) is the id of the created row
+                       // The newly created resource's address is returned
+                       // - only verify the end since the host and context root may vary by environment
+                       // - final number (22) is the id of the created row
                        () -> assertThat( response.getRedirectedUrl() )
                                .matches( "^.*/location/continent/22" ),
                        () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
                                .anyMatch( location -> location.matches( "^.*/location/continent/22$" ) ),
-                    //
+                       //
                        () -> verify( createService ).create( any( NewContinent.class ) ),
                        () -> verifyNoInteractions( readService ),
                        () -> verifyNoInteractions( updateService ),
                        () -> verifyNoInteractions( deleteService ),
-                    //
+                       //
                        () -> verify( repository ).existsByCode( anyString() ),
                        () -> verify( repository ).save( any( ContinentEntity.class ) ),
                        () -> verify( mapper ).domainToApi( any( Continent.class ) )
-                     );
+            );
         }
 
 
@@ -296,23 +297,23 @@ class ContinentControllerRestTest
                 // --- then
                 // final MockHttpServletResponse response = result.getResponse();
                 final String body = result.getResponse().getContentAsString();
-//                final Gson gson = new Gson();
-//                final ProblemDetail details = gson.fromJson( body );
-//                final ObjectMapper  mapper  = buildMapper();
-//                final ProblemDetail details = mapper.readValue( body, ProblemDetail.class );
+                // final Gson gson = new Gson();
+                // final ProblemDetail details = gson.fromJson( body );
+                // final ObjectMapper  mapper  = buildMapper();
+                // final ProblemDetail details = mapper.readValue( body, ProblemDetail.class );
                 // TODO verify the JSON is the created entity
 
                 // It is desired to have all 'asserts' as soft asserts.
                 assertAll( () -> assertEquals( HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus() ),
-                        // TODO Use a JSON assertion instead of a plain string
-//                           () -> assertThat( details.getTitle() )
-//                                   .isEqualTo( "Validation failed on 'newContinentDTO'" ),
-//                           () -> assertThat( details.getDetail() )
-//                                   .isEqualTo( "Invalid request content." ),
+                           // TODO Use a JSON assertion instead of a plain string
+                           // () -> assertThat( details.getTitle() )
+                           //           .isEqualTo( "Validation failed on 'newContinentDTO'" ),
+                           // () -> assertThat( details.getDetail() )
+                           //           .isEqualTo( "Invalid request content." ),
                            () -> assertThatJson( body )
                                    .isObject()
                                    .containsOnly( entry( "title", "Validation failed on 'newContinentDTO'" ),
-                                                  entry( "status", 400),
+                                                  entry( "status", 400 ),
                                                   entry( "detail",  "Invalid request content." ),
                                                   entry( "instance", "/location/continent" ),
                                                   entry( "name", "Name is required, provided: [null]"  ),
@@ -320,34 +321,34 @@ class ContinentControllerRestTest
                                                 ),
                            () -> assertThat( result.getResponse().getHeaderNames() )
                                    .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
-                         );
+                );
             }
 
 
-        /*
-        () -> assertThat( result.getResponse().getRedirectedUrl() )
-                               .matches( "^.* /location/continent/123$" ),
-        () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
-            .anyMatch( location -> location.matches( "^.* /location/continent/123$" ) )
-
-        final MockHttpServletResponse response = result.getResponse();
-        // TODO verify the JSON is the created entity
-        final Collection<String> headerNames   = response.getHeaderNames();
-        //            final HttpHeadersAssert  headersAssert = new HttpHeadersAssert( response.getHeaders() );
-        final Collection<String> headerNames   = response.getHeaderNames();
-        assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
-            () -> assertThat( headerNames )
-                               .contains( "TRACEPARENT" )
-                               .contains( "TRACESTATE" )
-                               .contains( "Content-Type" )
-                               .doesNotContain( "NoWay" ),
-//                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
-//                       () -> assertThat( result.getResponse().getHeaderNames() )
-//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
-                       () -> verify( readService ).findAll(),
-                       () -> verify( repository ).findAll()
-                     );
-*/
+            // () -> assertThat( result.getResponse().getRedirectedUrl() )
+            //                        .matches( "^.* /location/continent/123$" ),
+            // () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
+            //     .anyMatch( location -> location.matches( "^.* /location/continent/123$" ) )
+            //
+            // final MockHttpServletResponse response = result.getResponse();
+            // // TODO verify the JSON is the created entity
+            // final Collection<String> headerNames   = response.getHeaderNames();
+            // //            final HttpHeadersAssert  headersAssert = new HttpHeadersAssert( response.getHeaders() );
+            // final Collection<String> headerNames   = response.getHeaderNames();
+            // assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
+            //     () -> assertThat( headerNames )
+            //                        .contains( "TRACEPARENT" )
+            //                        .contains( "TRACESTATE" )
+            //                        .contains( "Content-Type" )
+            //                        .doesNotContain( "NoWay" ),
+            //!                       () -> assertEquals( "application/json;charset=UTF-8",
+            //!                                           response.getHeader( "Content-Type" ) ),
+            //!                       () -> assertThat( result.getResponse().getHeaderNames() )
+            //!                               .contains( "Content-Type",
+            //!                                          HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+            //                () -> verify( readService ).findAll(),
+            //                () -> verify( repository ).findAll()
+            //              );
 
 
             @Disabled
@@ -384,44 +385,43 @@ class ContinentControllerRestTest
                 assertAll( () -> assertEquals( HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus() ),
                            () -> assertThat( result.getResponse().getHeaderNames() )
                                    .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
-                        // TODO Use a JSON assertion instead of a plain string
+                           // TODO Use a JSON assertion instead of a plain string
                            () -> assertThatJson( body )
                                    .isObject()
                                    .containsOnly( entry( "title", "Validation failed on 'newContinentDTO'" ),
-                                                  entry( "status", 400),
+                                                  entry( "status", 400 ),
                                                   entry( "detail",  "Invalid request content." ),
                                                   entry( "instance", "/location/continent" ),
-                                                  entry( "name", "Name must be between 2 and 52 characters, provided: [     ]"  ),
+                                                  entry( "name",
+                                                         "Name must be between 2 and 52 characters, provided: [     ]"  ),
                                                   entry( "code", "Code must be 2 uppercase characters, provided: [  ]"  )
                                                 )
-                         );
+                );
             }
 
 
-        /*
-        () -> assertThat( result.getResponse().getRedirectedUrl() )
-                               .matches( "^.* /location/continent/123$" ),
-        () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
-            .anyMatch( location -> location.matches( "^.* /location/continent/123$" ) )
-
-        final MockHttpServletResponse response = result.getResponse();
-        // TODO verify the JSON is the created entity
-        final Collection<String> headerNames   = response.getHeaderNames();
-        //            final HttpHeadersAssert  headersAssert = new HttpHeadersAssert( response.getHeaders() );
-        final Collection<String> headerNames   = response.getHeaderNames();
-        assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
-            () -> assertThat( headerNames )
-                               .contains( "TRACEPARENT" )
-                               .contains( "TRACESTATE" )
-                               .contains( "Content-Type" )
-                               .doesNotContain( "NoWay" ),
-//                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
-//                       () -> assertThat( result.getResponse().getHeaderNames() )
-//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
-                       () -> verify( readService ).findAll(),
-                       () -> verify( repository ).findAll()
-                     );
-*/
+            // () -> assertThat( result.getResponse().getRedirectedUrl() )
+            //                        .matches( "^.* /location/continent/123$" ),
+            // () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
+            //     .anyMatch( location -> location.matches( "^.* /location/continent/123$" ) )
+            //
+            // final MockHttpServletResponse response = result.getResponse();
+            // // TODO verify the JSON is the created entity
+            // final Collection<String> headerNames   = response.getHeaderNames();
+            // //            final HttpHeadersAssert  headersAssert = new HttpHeadersAssert( response.getHeaders() );
+            // final Collection<String> headerNames   = response.getHeaderNames();
+            // assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
+            //     () -> assertThat( headerNames )
+            //                        .contains( "TRACEPARENT" )
+            //                        .contains( "TRACESTATE" )
+            //                        .contains( "Content-Type" )
+            //                        .doesNotContain( "NoWay" ),
+            //!                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
+            //!                       () -> assertThat( result.getResponse().getHeaderNames() )
+            //!                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+            //                () -> verify( readService ).findAll(),
+            //                () -> verify( repository ).findAll()
+            //              );
 
 
 
@@ -462,35 +462,33 @@ class ContinentControllerRestTest
                                    .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
                            () -> assertThat( result.getResponse().getContentAsString() )
                                    .contains( "Cannot deserialize value of type `java.net.URI` from String" )
-                         );
-
+                );
             }
 
-        /*
-        () -> assertThat( result.getResponse().getRedirectedUrl() )
-                               .matches( "^.* /location/continent/123$" ),
-        () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
-            .anyMatch( location -> location.matches( "^.* /location/continent/123$" ) )
-
-        final MockHttpServletResponse response = result.getResponse();
-        // TODO verify the JSON is the created entity
-        final Collection<String> headerNames   = response.getHeaderNames();
-        //            final HttpHeadersAssert  headersAssert = new HttpHeadersAssert( response.getHeaders() );
-        final Collection<String> headerNames   = response.getHeaderNames();
-        assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
-            () -> assertThat( headerNames )
-                               .contains( "TRACEPARENT" )
-                               .contains( "TRACESTATE" )
-                               .contains( "Content-Type" )
-                               .doesNotContain( "NoWay" ),
-//                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
-//                       () -> assertThat( result.getResponse().getHeaderNames() )
-//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
-                       () -> verify( readService ).findAll(),
-                       () -> verify( repository ).findAll()
-                     );
-*/
-
+            // () -> assertThat( result.getResponse().getRedirectedUrl() )
+            //                        .matches( "^.* /location/continent/123$" ),
+            // () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
+            //     .anyMatch( location -> location.matches( "^.* /location/continent/123$" ) )
+            //
+            // final MockHttpServletResponse response = result.getResponse();
+            // // TODO verify the JSON is the created entity
+            // final Collection<String> headerNames   = response.getHeaderNames();
+            // //            final HttpHeadersAssert  headersAssert = new HttpHeadersAssert( response.getHeaders() );
+            // final Collection<String> headerNames   = response.getHeaderNames();
+            // assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
+            //     () -> assertThat( headerNames )
+            //                        .contains( "TRACEPARENT" )
+            //                        .contains( "TRACESTATE" )
+            //                        .contains( "Content-Type" )
+            //                        .doesNotContain( "NoWay" ),
+            //!                       () -> assertEquals( "application/json;charset=UTF-8",
+            //!                                           response.getHeader( "Content-Type" ) ),
+            //!                       () -> assertThat( result.getResponse().getHeaderNames() )
+            //!                               .contains( "Content-Type",
+            //!                                          HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+            //                () -> verify( readService ).findAll(),
+            //                () -> verify( repository ).findAll()
+            //              );
         }
     }
 
@@ -546,15 +544,15 @@ class ContinentControllerRestTest
                                .contains( "Content-Type" )
                                .doesNotContain( "NoWay" ),
                        () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
-//                       () -> assertThat( response.getHeaderNames() )
-//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+                       // () -> assertThat( response.getHeaderNames() )
+                       //           .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
                        () -> verifyNoInteractions( createService ),
                        () -> verify( readService ).findById( anyInt() ),
                        () -> verifyNoInteractions( updateService ),
                        () -> verifyNoInteractions( deleteService ),
                        () -> verify( repository ).findById( anyInt() ),
                        () -> verify( mapper ).domainToApi( any( Continent.class ) )
-                     );
+            );
         }
 
 
@@ -584,15 +582,15 @@ class ContinentControllerRestTest
                                .contains( "TRACESTATE" )
                                .contains( "Content-Type" )
                                .doesNotContain( "NoWay" ),
-//                       () -> assertThat( result.getResponse().getHeaderNames() )
-//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
+                       // () -> assertThat( result.getResponse().getHeaderNames() )
+                       //           .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
                        () -> verifyNoInteractions( createService ),
                        () -> verify( readService ).findById( anyInt() ),
                        () -> verifyNoInteractions( updateService ),
                        () -> verifyNoInteractions( deleteService ),
                        () -> verify( repository ).findById( anyInt() ),
                        () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
-                     );
+            );
         }
 
 
@@ -634,7 +632,7 @@ class ContinentControllerRestTest
                        () -> verifyNoInteractions( deleteService ),
                        () -> verify( repository, never()  ).findById( anyInt() ),
                        () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
-                     );
+            );
         }
 
 
@@ -677,14 +675,14 @@ class ContinentControllerRestTest
                                .contains( "TRACESTATE" )
                                .contains( "Content-Type" )
                                .doesNotContain( "NoWay" ),
-//                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
+                       // () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
                        () -> verifyNoInteractions( createService ),
                        () -> verify( readService ).findByCode( anyString() ),
                        () -> verifyNoInteractions( updateService ),
                        () -> verifyNoInteractions( deleteService ),
                        () -> verify( repository ).findByCode( anyString() ),
                        () -> verify( mapper ).domainToApi( any( Continent.class ) )
-                     );
+            );
         }
 
         @Test
@@ -706,7 +704,7 @@ class ContinentControllerRestTest
                     .andExpect( status().isNoContent() )
                     .andReturn();
             final MockHttpServletResponse response = result.getResponse();
-//            final String body = response.getContentAsString();
+            // final String body = response.getContentAsString();
 
             // --- then
             final Collection<String> headerNames   = result.getResponse().getHeaderNames();
@@ -716,14 +714,14 @@ class ContinentControllerRestTest
                                .contains( "TRACESTATE" )
                                .contains( "Content-Type" )
                                .doesNotContain( "NoWay" ),
-//                       () -> assertThat( body ).isNullOrEmpty(),
+                       // () -> assertThat( body ).isNullOrEmpty(),
                        () -> verifyNoInteractions( createService ),
                        () -> verify( readService ).findByCode( anyString() ),
                        () -> verifyNoInteractions( updateService ),
                        () -> verifyNoInteractions( deleteService ),
                        () -> verify( repository ).findByCode( anyString() ),
                        () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
-                     );
+            );
         }
 
         @Test
@@ -759,13 +757,13 @@ class ContinentControllerRestTest
                                .contains( "Content-Type" )
                                .doesNotContain( "NoWay" ),
                        () -> assertThat( body ).isNotBlank(),
-                    //
+                       //
                        () -> verifyNoInteractions( createService ),
                        () -> verifyNoInteractions( readService ),
                        () -> verifyNoInteractions( updateService ),
                        () -> verifyNoInteractions( deleteService )
-                    // TODO mapper check
-                     );
+                       // TODO mapper check
+            );
         }
 
 
@@ -834,13 +832,13 @@ class ContinentControllerRestTest
                                .contains( "TRACESTATE" )
                                .contains( "Content-Type" )
                                .doesNotContain( "NoWay" ),
-//                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
+                       // () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
                        () -> verifyNoInteractions( createService ),
                        () -> verify( readService ).findAll(),
                        () -> verifyNoInteractions( updateService ),
                        () -> verifyNoInteractions( deleteService ),
                        () -> verify( repository ).findAll()
-                     );
+            );
         }
     }
 
@@ -858,7 +856,7 @@ class ContinentControllerRestTest
         void patchContinent_withKeywords_returnsOk() throws Exception
         {
             // --- given
-//            String x = "[{\"op\":\"move\",\"from\":\"/a\",\"path\":\"/b/2\"}]";
+            // String x = "[{\"op\":\"move\",\"from\":\"/a\",\"path\":\"/b/2\"}]";
             final String json = "[{\"op\": \"replace\", \"path\": \'/keywords\", \"value\": \"Key 7, Key 8\"}]";
 
             final ContinentEntity continentEntity = new ContinentEntity( 1, "NA", "North", null, null );
@@ -874,7 +872,7 @@ class ContinentControllerRestTest
 
             final RequestBuilder request = withHeaders( patch( "/location/continent/{id}", 1 ) )
                     .characterEncoding( "UTF-8" )
-//                    .contentType( "application/json-patch+json" )
+                    // .contentType( "application/json-patch+json" )
                     .headers( requestHeaders )
                     .content( json );
 
@@ -883,7 +881,7 @@ class ContinentControllerRestTest
             final MvcResult result = mvc
                     .perform( request )
                     .andDo( print() )
-//                    .andExpect( status().isOk() )
+                    // .andExpect( status().isOk() )
                     .andExpect( status().isNotImplemented() )
                     .andExpect( content().encoding( "UTF-8" ) )
                     // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
@@ -891,7 +889,7 @@ class ContinentControllerRestTest
                     .andExpect( jsonPath( "$.id" ).value( 1 ) )
                     .andExpect( jsonPath( "$.code" ).value( "NA" ) )
                     .andExpect( jsonPath( "$.name" ).value( "North" ) )
-//                    .andExpect( jsonPath( "$.keywords" ).value( "North" ) )
+                    // .andExpect( jsonPath( "$.keywords" ).value( "North" ) )
                     .andReturn();
 
             // --- then
@@ -902,35 +900,35 @@ class ContinentControllerRestTest
                                .contains( "TRACESTATE" )
                                .contains( "Content-Type" )
                                .doesNotContain( "NoWay" ),
-//                       () -> assertThat( result.getResponse().getHeaderNames() )
-//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
-                       () -> verify( readService ).findById(  anyInt() ) ,
+                       // () -> assertThat( result.getResponse().getHeaderNames() )
+                       //           .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
+                       () -> verify( readService ).findById(  anyInt() ),
                        () -> verify( repository ).findById( anyInt() ),
-//                       () -> verify( repository ).save( any( ContinentEntity.class ) ),
+                       // () -> verify( repository ).save( any( ContinentEntity.class ) ),
                        () -> verify( mapper ).domainToApi( any( Continent.class ) )
-                     );
+            );
 
-//            final Optional<Continent> original = readService.findById( 7 );
-//
-//            final Optional<Continent> updated = applyPatchEntity( json, original );
+            // final Optional<Continent> original = readService.findById( 7 );
+            //
+            // final Optional<Continent> updated = applyPatchEntity( json, original );
 
 
         }
-/*
-            final Collection<String> headerNames   = result.getResponse().getHeaderNames();
-            assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() ),
-                       () -> assertThat( headerNames )
-                               .contains( "TRACEPARENT" )
-                               .contains( "TRACESTATE" )
-                               .contains( "Content-Type" )
-                               .doesNotContain( "NoWay" ),
-//                       () -> assertThat( result.getResponse().getHeaderNames() )
-//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
-                       () -> verify( readService ).findAll(),
-                       () -> verify( repository ).findAll(),
-                       () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
-                     );
-*/
+
+        // final Collection<String> headerNames   = result.getResponse().getHeaderNames();
+        // assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() ),
+        //            () -> assertThat( headerNames )
+        //                    .contains( "TRACEPARENT" )
+        //                    .contains( "TRACESTATE" )
+        //                    .contains( "Content-Type" )
+        //                    .doesNotContain( "NoWay" ),
+        // //                       () -> assertThat( result.getResponse().getHeaderNames() )
+        // //                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
+        //            () -> verify( readService ).findAll(),
+        //            () -> verify( repository ).findAll(),
+        //            () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
+        //          );
+
 
     }
 
@@ -983,9 +981,9 @@ class ContinentControllerRestTest
                                .doesNotContain( "NoWay" ),
                        () -> verify( updateService ).update( any( Continent.class ) ),
                        () -> verify( repository ).existsById( anyInt() ),
-                       () -> verify( repository, never() ).save( any( ContinentEntity.class) ),
+                       () -> verify( repository, never() ).save( any( ContinentEntity.class ) ),
                        () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
-                     );
+            );
         }
 
         @Test
@@ -1034,17 +1032,17 @@ class ContinentControllerRestTest
                                .contains( "TRACESTATE" )
                                .contains( "Content-Type" )
                                .doesNotContain( "NoWay" ),
-//                       () -> assertThat( result.getResponse().getHeaderNames() )
-//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
-//                       () -> verify( repository )
-//                               .existsById( eq( 77 ) ),
+                      () -> assertThat( result.getResponse().getHeaderNames() )
+                              .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+                       // () -> verify( repository )
+                       //           .existsById( eq( 77 ) ),
                        () -> verify( updateService ).update( any( Continent.class ) ),
                        () -> verify( repository ).existsById( anyInt() ),
-                       () -> verify( repository ).save( any( ContinentEntity.class) ),
+                       () -> verify( repository ).save( any( ContinentEntity.class ) ),
                        () -> verify( mapper ).domainToApi( any( Continent.class ) )
-//                       () -> verify( repository, times( 1 ) )
-//                               .save( any( ContinentEntity.class ) )
-                     );
+                       // () -> verify( repository, times( 1 ) )
+                       //           .save( any( ContinentEntity.class ) )
+            );
         }
     }
 
@@ -1085,11 +1083,11 @@ class ContinentControllerRestTest
                                .contains( "TRACESTATE" )
                                .contains( "Content-Type" )
                                .doesNotContain( "NoWay" ),
-//                       () -> assertThat( result.getResponse().getHeaderNames() )
-//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+                       // () -> assertThat( result.getResponse().getHeaderNames() )
+                       //           .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
                        () -> verify( deleteService ).deleteById( anyInt() ),
                        () -> verify( repository ).deleteById( anyInt() )
-                     );
+            );
         }
 
         @Test
@@ -1116,29 +1114,29 @@ class ContinentControllerRestTest
                        () -> assertThat( result.getResponse().getHeaderNames() )
                                .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
                        () -> verify( repository ).deleteById( anyInt() )
-                     );
+            );
         }
 
-        //        @Test
-//        @DisplayName( "by ID - 204: No Content - empty body" )
-//        void restDeleteById_withId_returnsGone() throws Exception
-//        {
-//            // --- given
-//            final RequestBuilder request = withHeaders( delete( "/location/continent/{id}", 99 ) );
-//
-//            // --- when
-//            final MvcResult result = mvc
-//                    .perform( request )
-//                    .andDo( print() )
-//                    .andReturn();
-//
-//            // --- then
-//            // final MockHttpServletResponse response = result.getResponse();
-//
-//            assertAll( () -> assertEquals( HttpStatus.GONE.value(), result.getResponse().getStatus() ),
-//                       () -> verify( repository ).deleteById( anyInt() )
-//                     );
-//        }
+        // @Test
+        // @DisplayName( "by ID - 204: No Content - empty body" )
+        // void restDeleteById_withId_returnsGone() throws Exception
+        // {
+        //    // --- given
+        //    final RequestBuilder request = withHeaders( delete( "/location/continent/{id}", 99 ) );
+        //
+        //    // --- when
+        //    final MvcResult result = mvc
+        //            .perform( request )
+        //            .andDo( print() )
+        //            .andReturn();
+        //
+        //    // --- then
+        //    // final MockHttpServletResponse response = result.getResponse();
+        //
+        //    assertAll( () -> assertEquals( HttpStatus.GONE.value(), result.getResponse().getStatus() ),
+        //               () -> verify( repository ).deleteById( anyInt() )
+        //             );
+        // }
 
         @Test
         @DisplayName( "by entity - 204: No Content - empty body" )
@@ -1177,11 +1175,11 @@ class ContinentControllerRestTest
                                .contains( "TRACESTATE" )
                                .contains( "Content-Type" )
                                .doesNotContain( "NoWay" ),
-//                       () -> assertThat( result.getResponse().getHeaderNames() )
-//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+                       // () -> assertThat( result.getResponse().getHeaderNames() )
+                       //           .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
                        () -> verify( deleteService ).delete( any( Continent.class ) ),
                        () -> verify( repository ).delete( any( ContinentEntity.class ) )
-                     );
+            );
         }
 
         @Test
@@ -1217,7 +1215,7 @@ class ContinentControllerRestTest
                        () -> assertThat( result.getResponse().getHeaderNames() )
                                .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
                        () -> verify( repository ).delete( any( ContinentEntity.class ) )
-                     );
+            );
         }
     }
 
@@ -1232,7 +1230,7 @@ class ContinentControllerRestTest
     {
         @Test
         @DisplayName( "no parameters - 200: empty body" )
-        void restHead_returnsNoContent() throws Exception
+        void restHead_withoutId_returnsNoContent() throws Exception
         {
             // --- given
             final RequestBuilder request = withHeaders( head( "/location/continent" ) )
@@ -1255,14 +1253,14 @@ class ContinentControllerRestTest
                        () -> verify( readService ).findAll(),
                        () -> verify( repository ).findAll(),
                        () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
-                     );
+            );
 
 
         }
 
         @Test
         @DisplayName( "with ID - 200: No body - has headers" )
-        void restHeadWithId_returnsHeaders() throws Exception
+        void restHead_withId_returnsHeaders() throws Exception
         {
             // --- given
             final RequestBuilder request = withHeaders( head( "/location/continent/{continentId}", 123 ) )
@@ -1291,15 +1289,15 @@ class ContinentControllerRestTest
                        () -> assertTrue( response.getContentAsString().isEmpty() ),
                        () -> verify( readService ).findById( anyInt() ),
                        () -> verify( repository ).findById(  anyInt() )
-//                       () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
-                     );
+                       // () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
+            );
 
         }
 
 
         @Test
         @DisplayName( "with ID - 204: No Content - has headers" )
-        void restHeadWithBadId_returnsHeaders() throws Exception
+        void restHead_withBadId_returnsHeaders() throws Exception
         {
             // --- given
             final RequestBuilder request = withHeaders( head( "/location/continent/{continentId}", 123 ) )
@@ -1321,38 +1319,38 @@ class ContinentControllerRestTest
             final Collection<String> headerNames   = response.getHeaderNames();
             assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
                        () -> assertThat( headerNames )
-                               .contains( "TRACEPARENT" )
-                               .contains( "TRACESTATE" )
-                               .contains( "Content-Type" )
-                               .doesNotContain( "NoWay" ),
+                                 .contains( "TRACEPARENT" )
+                                 .contains( "TRACESTATE" )
+                                 .contains( "Content-Type" )
+                                 .doesNotContain( "NoWay" ),
                        () -> assertTrue( response.getContentAsString().isEmpty() ),
                        () -> verify( readService ).findById( anyInt() ),
-                       () -> verify( repository ).findById(  anyInt() )
-//                       () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
-                     );
+                       () -> verify( repository ).findById(  anyInt() ),
+                       () -> verify( entityMapper, never() ).entityToDomain( any( ContinentEntity.class ) )
+            );
         }
+        // final Continent continent = MAPPER.entityToDomain( from.get() );
 
 
-
-//        final ContinentEntity entity = new ContinentEntity( 22, "ZZ", "::ZNAMEZ::", null, null );
-//        final String jsonString =
-//                """
-//                        {
-//                           "id": 77,
-//                           "code": "CC",
-//                           "name": "foo"
-//                        }
-//                        """;
-//        final RequestBuilder request = withHeaders( put( "/location/continent" ) )
-//                .characterEncoding( "UTF-8" )
-//                .content( jsonString );
-//
-//        when( repository.existsById( anyInt() ) )
-//            .thenReturn( false );
-//        when( repository.getReferenceById( anyInt() ) )
-//            .thenReturn( entity );
-//
-//
+        // final ContinentEntity entity = new ContinentEntity( 22, "ZZ", "::ZNAMEZ::", null, null );
+        // final String jsonString =
+        //        """
+        //                {
+        //                   "id": 77,
+        //                   "code": "CC",
+        //                   "name": "foo"
+        //                }
+        //                """;
+        // final RequestBuilder request = withHeaders( put( "/location/continent" ) )
+        //        .characterEncoding( "UTF-8" )
+        //        .content( jsonString );
+        //
+        // when( repository.existsById( anyInt() ) )
+        //    .thenReturn( false );
+        // when( repository.getReferenceById( anyInt() ) )
+        //    .thenReturn( entity );
+        //
+        //
 
 
 
@@ -1429,9 +1427,9 @@ class ContinentControllerRestTest
                        () -> assertThat( headerNames )
                                .contains( "TRACEPARENT" )
                                .contains( "TRACESTATE" )
-//                               .contains( "Content-Type" )
+                               .contains( "Content-Type" )
                                .doesNotContain( "NoWay" )
-                     );
+            );
         }
     }
 
@@ -1448,8 +1446,10 @@ class ContinentControllerRestTest
         void restTrace_returnsOk() throws Exception
         {
             // --- given
-            final RequestBuilder request = withHeaders( MockMvcRequestBuilders.request( HttpMethod.TRACE,
-                                                                                        "/location/continent" ) )
+            final RequestBuilder request =
+                withHeaders( MockMvcRequestBuilders
+                                 .request( HttpMethod.TRACE,
+                                           "/location/continent" ) )
                     .headers( requestHeaders );
 
             // --- when
@@ -1472,21 +1472,21 @@ class ContinentControllerRestTest
                                .matches( "^.*/location/continent$" ),
                        () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
                                .anyMatch( location -> location.matches( "^.*/location/continent$" ) )
-                     );
-
-
+            );
         }
 
 
         @Test
         @DisplayName( "no args - 200: OK - empty body" )
-        void restTraceWithId_returnsOk() throws Exception
+        void restTrace_withId_returnsOk() throws Exception
         {
             // --- given
-            final RequestBuilder request = withHeaders( MockMvcRequestBuilders.request( HttpMethod.TRACE,
-                                                                                        "/location/continent/{continentId}",
-                                                                                        123
-                                                                                      ) )
+            final RequestBuilder request =
+                withHeaders( MockMvcRequestBuilders
+                                 .request( HttpMethod.TRACE,
+                                           "/location/continent/{continentId}",
+                                           123
+                                         ) )
                     .headers( requestHeaders );
 
             // --- when
@@ -1496,7 +1496,6 @@ class ContinentControllerRestTest
                     .andReturn();
 
             // --- then
-//            var response = result.getResponse();
             final MockHttpServletResponse response = result.getResponse();
             final Collection<String> headerNames   = result.getResponse().getHeaderNames();
             assertAll( () -> assertEquals( HttpStatus.OK.value(), result.getResponse().getStatus() ),
@@ -1510,28 +1509,13 @@ class ContinentControllerRestTest
                                .matches( "^.*/location/continent/123$" ),
                        () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
                                .anyMatch( location -> location.matches( "^.*/location/continent/123$" ) )
-//                               .contains( "/location/continent/123")
-//                               .matches( ".*/location/continent/123$" )
-//                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Location" ) )
+            );
 
-//                       () -> assertThat( result.getResponse().getHeaderNames() )
-//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
-                     );
-/*
-            final Collection<String> headerNames   = result.getResponse().getHeaderNames();
-            assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() ),
-                       () -> assertThat( headerNames )
-                               .contains( "TRACEPARENT" )
-                               .contains( "TRACESTATE" )
-                               .contains( "Content-Type" )
-                               .doesNotContain( "NoWay" ),
-//                       () -> assertThat( result.getResponse().getHeaderNames() )
-//                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
-                       () -> verify( readService ).findAll(),
-                       () -> verify( repository ).findAll(),
-                       () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
-                     );
-*/
+            // assertAll(
+            //            () -> verify( readService ).findAll(),
+            //            () -> verify( repository ).findAll(),
+            //            () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
+            //          );
 
 
 
@@ -1542,24 +1526,30 @@ class ContinentControllerRestTest
     }
 
 
-//    public static String asJsonString(final Object obj) {
-//        try {
-//            return new ObjectMapper().writeValueAsString(obj);
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
 
 
 
+    // ========== Support Methods ==========
 
+    private static String asJsonString( final Object obj )
+    {
+        try
+        {
+            return new ObjectMapper().writeValueAsString( obj );
+        }
+        catch ( Exception e )
+        {
+            throw new RuntimeException( e );
+        }
+    }
 
 
     private static ObjectMapper buildMapper()
     {
         ObjectMapper mapper = new ObjectMapper();
-//        mapper.deserializationConfig().
-//                mapper.configure( DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false );
+        //mapper
+        //    .deserializationConfig()
+        //    .configure( DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false );
 
         return mapper;
     }

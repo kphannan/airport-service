@@ -1,5 +1,6 @@
 package com.example.airline.location.continent.api;
 
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,12 +31,16 @@ import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import org.mockito.Mockito;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.http.HttpHeadersAssert;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+/**
+ * Test suite for the Continent REST controller.
+ */
 @DisplayName( "Continent: Controller" )
 class ContinentControllerTest
 {
@@ -125,26 +130,33 @@ class ContinentControllerTest
     {
         @Test
         @DisplayName( "Continent By Id" )
-        void methodGet_ContinentById()
+        void methodGet_byId_returnsInstance()
         {
-            final ContinentController controller = new ContinentController( readService, createService, updateService, deleteService, dtoMapper );
+            final ContinentController controller = new ContinentController( readService,
+                                                                            createService,
+                                                                            updateService,
+                                                                            deleteService,
+                                                                            dtoMapper );
 
-            final Continent continent = new Continent( 1, "NA", "North", null, null );
+            final Continent continent = new Continent( 1,
+                                                       "NA", "North",
+                                                       null, null );
 
             when( readService.findById( anyInt() ) )
                     .thenReturn( Optional.of( continent ) );
 
-            ResponseEntity<ContinentDTO> response = controller.restFindContinentById( 100, requestHeader );
+            final ResponseEntity<ContinentDTO> response = controller.restFindContinentById( 100, requestHeader );
             final HttpHeaders headers = response.getHeaders();
 
+            // TODO check response body.
             assertAll( () -> assertNotNull( response.getBody() ),
                        () -> assertEquals( "application/json;charset=UTF-8", headers.getFirst( "Content-Type" )  ),
                        () -> verifyNoInteractions( createService ),
                        () -> verify( readService, times( 1 ) )
-                               .findById(  anyInt() ) ,
+                               .findById(  anyInt() ),
                        () -> verifyNoInteractions( updateService ),
                        () -> verifyNoInteractions( deleteService )
-                     );
+            );
         }
 
     }   // end of Get class group
@@ -174,22 +186,45 @@ class ContinentControllerTest
     {
         @Test
         @DisplayName( "Continent By Id" )
-        void methodDelete_ContinentById()
+        void methodDelete_existingById_returnsNoContent()
         {
-            final ContinentController controller = new ContinentController( readService, createService, updateService, deleteService, dtoMapper );
+            final ContinentController controller = new ContinentController( readService,
+                                                                            createService,
+                                                                            updateService,
+                                                                            deleteService,
+                                                                            dtoMapper );
 
             when( deleteService.deleteById( anyInt() ) )
                     .thenReturn( true );
 
-            ResponseEntity<ContinentDTO> response = controller.restDeleteContinentById( 100, requestHeader );
-            final HttpHeaders headers = response.getHeaders();
+            final ResponseEntity<ContinentDTO> response = controller.restDeleteContinentById( 100, requestHeader );
+            final HttpHeadersAssert headersAssert = new HttpHeadersAssert( response.getHeaders() );
 
-            assertAll( () -> assertEquals( "application/json;charset=UTF-8", headers.getFirst( "Content-Type" )  ),
+            assertAll( () -> assertThat( response.getStatusCode() )
+                                 .isEqualTo( HttpStatus.NO_CONTENT ),
+                       // Response
+                       () -> headersAssert
+                                 // .doesNoHaveSe
+                                 // .hasHeaderSatisfying( HttpHeaders.CONTENT_TYPE,
+                                 //                       values ->
+                                 //                           // assertThat( values )
+                                 //                           //     .satisfiesAnyOf( v -> assertThat( v, matches( "application/json " ) ) )
+                                 //                       {
+                                 //                            assertThat( values )
+                                 //                                .matches( "application" );
+                                 //
+                                 //                                // .anyMatch( "foo", "bar" );
+                                 //                       }
+                                 //                     )
+                                 .hasValue( HttpHeaders.CONTENT_TYPE, "application/json;charset=UTF-8" ),
+                       () -> assertThat( response.getBody() )
+                                 .isNull(),
+                       // Service layer
                        () -> verifyNoInteractions( createService ),
                        () -> verifyNoInteractions( readService ),
                        () -> verifyNoInteractions( updateService ),
                        () -> verify( deleteService ).deleteById( anyInt() )
-                     );
+            );
         }
     }   // end of Delete class group
 
@@ -224,7 +259,12 @@ class ContinentControllerTest
 
 
             // --- then
-            List<String>      expectedMethods = Arrays.asList( "DELETE", "GET", "HEAD", "OPTIONS", "PATCH",  "POST", "PUT", "PATCH", "TRACE"  );
+            final List<String>      expectedMethods = Arrays.asList( "DELETE",
+                                                                     "GET",
+                                                                     "HEAD",
+                                                                     "OPTIONS",
+                                                                     "PATCH",  "POST", "PUT",
+                                                                     "TRACE"  );
             final HttpHeaders headers         = response.getHeaders();
 
             final HttpHeadersAssert headersAssert = new HttpHeadersAssert( headers );
@@ -239,18 +279,21 @@ class ContinentControllerTest
                                .hasValue( "TRACESTATE", "testState" )
                                .hasValue( HttpHeaders.CONTENT_TYPE, "application/json;charset=UTF-8" ),
                        () -> assertThat( headers.get( HttpHeaders.ALLOW ) )
-                               .anySatisfy( element -> {
-                                   for( String expected : expectedMethods ) {
-                                       assertThat( element ).contains( expected );
+                               .anySatisfy( element ->
+                                   {
+                                       for ( final String expected : expectedMethods )
+                                       {
+                                           assertThat( element ).contains( expected );
+                                       }
                                    }
-                               } ),
+                               ),
                        () -> assertThat( headers.get( HttpHeaders.ACCEPT ) )
                                .contains( "application/json,application/yaml,application/xml" ),
                        () -> verifyNoInteractions( createService ),
                        () -> verifyNoInteractions( readService ),
                        () -> verifyNoInteractions( updateService ),
                        () -> verifyNoInteractions( deleteService )
-                       );
+            );
         }
 
 
@@ -265,7 +308,10 @@ class ContinentControllerTest
 
 
             // --- then
-            List<String>      expectedMethods = Arrays.asList( "DELETE", "GET", "HEAD", "OPTIONS", "PATCH",  "POST", "PUT", "PATCH", "TRACE"  );
+            final List<String> expectedMethods = Arrays.asList( "DELETE", "GET",
+                                                                "HEAD", "OPTIONS",
+                                                                "PATCH", "POST", "PUT",
+                                                                "TRACE" );
             final HttpHeaders headers         = response.getHeaders();
 
             final HttpHeadersAssert headersAssert = new HttpHeadersAssert( headers );
@@ -274,14 +320,17 @@ class ContinentControllerTest
                                .containsHeader( HttpHeaders.ALLOW )
                                .doesNotContainHeader( "NoWay" ),
                        () -> assertThat( headers.get( HttpHeaders.ALLOW ) )
-                               .anySatisfy( element -> {
-                                   for( String expected : expectedMethods ) {
-                                       assertThat( element ).contains( expected );
-                                   }
-                               } ),
+                               .anySatisfy( element ->
+                                            {
+                                                for ( final String expected : expectedMethods )
+                                                {
+                                                    assertThat( element ).contains( expected );
+                                                }
+                                            }
+                               ),
                        () -> assertThat( headers.get( HttpHeaders.ACCEPT ) )
                                .contains( "application/json,application/yaml,application/xml" )
-                     );
+            );
         }
 
     }   // end of Put class group

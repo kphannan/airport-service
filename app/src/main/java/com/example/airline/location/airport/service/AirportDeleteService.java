@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AirportDeleteService
 {
-    private final AirportRepository repository;
+    private final AirportRepository   repository;
 
     private final AirportEntityMapper mapper;
 
@@ -33,14 +33,20 @@ public class AirportDeleteService
 
 
 
-    // ========== Create ==========
+    // ========== CREATE ==========
+    // ===== POST =====
 
-    // ========== Read ==========
+    // ========== READ ==========
+    // ===== GET =====
+    // --- Single ---
+    // --- Multiple ---
 
-    // ========== Update ==========
+    // ========== UPDATE ==========
+    // ===== PATCH =====
+    // ===== PUT =====
 
-    // ========== Delete ==========
-
+    // ========== DELETE ==========
+    // ===== DELETE =====
     /**
      * Delete the given entity.
      *
@@ -76,5 +82,13 @@ public class AirportDeleteService
 
         return existing;
     }
+    // ========== Administrative ==========
+    // ===== HEAD =====
+    // ===== INFO =====
+    // ===== OPTION =====
+    // ===== TRACE =====
+
+
+
 
 }

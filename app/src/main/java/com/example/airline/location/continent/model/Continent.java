@@ -32,4 +32,4 @@ public record Continent(
         @Size( max = 255, message = "List of keywords may not exceed 255 characters" )
         @Nullable
         String  keywords // May not need to exchange this
-){};
+){}

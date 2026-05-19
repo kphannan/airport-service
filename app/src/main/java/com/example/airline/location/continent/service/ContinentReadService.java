@@ -26,6 +26,12 @@ public class ContinentReadService
 
     private final ContinentEntityMapper mapper;
 
+    //    // private final TransactionTemplate transactionTemplate;
+    //
+    //    public ContinentReadService( final ContinentRepository repository,
+    //                                 final ContinentEntityMapper mapper
+    //                                 // final TransactionTemplate transactionTemplate
+    //                               )
     // private final TransactionTemplate transactionTemplate;
 
     /**
@@ -36,8 +42,7 @@ public class ContinentReadService
      */
     public ContinentReadService( final ContinentRepository repository,
                                  final ContinentEntityMapper mapper
-                                 // final TransactionTemplate transactionTemplate
-                               )
+    )
     {
         this.repository          = repository;
         this.mapper              = mapper;

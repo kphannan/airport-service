@@ -6,10 +6,10 @@ package com.example.airline.location.region.persistence.repository;
 import java.util.Optional;
 
 import com.example.airline.location.region.persistence.model.RegionEntity;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Repository;
 
 
