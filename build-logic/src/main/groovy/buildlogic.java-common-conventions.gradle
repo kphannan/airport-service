@@ -407,11 +407,11 @@ pmd {
     ignoreFailures = true       // Don't interrupt the build
 
     pmdMain {
-        excludes = [ '**/generated/**' ]
+        excludes = [ '**/*generated*/**' ]
     }
 
     pmdTest {
-        excludes = [ '**/build/*generated*/**' ]
+        excludes = [ '**/*generated*/**' ]
     }
 }
 
@@ -523,6 +523,11 @@ pmd {
 // println "Version Number:"
 // println versioning.info.versionNumber.major + "." + versioning.info.versionNumber.minor
 // version = versioning.info.display
+
+javadoc {
+    excludes = [ "**/*.javaX" ]
+    failOnError = false
+}
 
 
 jar {
