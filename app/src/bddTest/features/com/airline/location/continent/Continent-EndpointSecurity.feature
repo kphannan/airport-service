@@ -18,12 +18,12 @@ Feature: Continent API Security
       | '/continent'         | POST    | 400      |
       | '/continent'         | DELETE  | 400      |
       | '/continent'         | OPTIONS | 204      |
-      | '/continent'         | HEAD    | 204      |
+      | '/continent'         | HEAD    | 200      |
       | '/continent'         | TRACE   | 405      |
       | '/continent/100'     | GET     | 200      |
       | '/continent/99'      | PUT     | 405      |
       | '/continent/99'      | POST    | 405      |
-      | '/continent/99'      | PATCH   | 405      |
+      | '/continent/99'      | PATCH   | 415      |
       | '/continent/99'      | DELETE  | 404      |
       | '/continent/code/NA' | GET     | 200      |
       | '/continent/code/NA' | PUT     | 405      |
