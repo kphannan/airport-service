@@ -1,7 +1,7 @@
 package com.example.airline.location.continent.api;
 
 
-import static com.example.rest.utility.HeaderUtility.withHeaders;
+import static com.example.rest.utility.HeaderTestingSupport.withHeaders;
 import static java.util.Map.entry;
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -194,7 +194,7 @@ class ContinentControllerRestTest
         //                        .doesNotContain( "NoWay" ),
         //!                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
         //!                       () -> assertThat( result.getResponse().getHeaderNames() )
-        //!                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+        //!                               .contains( "Content-Type", HeaderTestingSupport.TRACESTATE, HeaderTestingSupport.TRACEID ),
         //                () -> verify( readService ).findAll(),
         //                () -> verify( repository ).findAll()
         //              );
@@ -345,7 +345,7 @@ class ContinentControllerRestTest
             //!                                           response.getHeader( "Content-Type" ) ),
             //!                       () -> assertThat( result.getResponse().getHeaderNames() )
             //!                               .contains( "Content-Type",
-            //!                                          HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+            //!                                          HeaderTestingSupport.TRACESTATE, HeaderTestingSupport.TRACEID ),
             //                () -> verify( readService ).findAll(),
             //                () -> verify( repository ).findAll()
             //              );
@@ -418,7 +418,7 @@ class ContinentControllerRestTest
             //                        .doesNotContain( "NoWay" ),
             //!                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
             //!                       () -> assertThat( result.getResponse().getHeaderNames() )
-            //!                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+            //!                               .contains( "Content-Type", HeaderTestingSupport.TRACESTATE, HeaderTestingSupport.TRACEID ),
             //                () -> verify( readService ).findAll(),
             //                () -> verify( repository ).findAll()
             //              );
@@ -485,7 +485,7 @@ class ContinentControllerRestTest
             //!                                           response.getHeader( "Content-Type" ) ),
             //!                       () -> assertThat( result.getResponse().getHeaderNames() )
             //!                               .contains( "Content-Type",
-            //!                                          HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+            //!                                          HeaderTestingSupport.TRACESTATE, HeaderTestingSupport.TRACEID ),
             //                () -> verify( readService ).findAll(),
             //                () -> verify( repository ).findAll()
             //              );
@@ -545,7 +545,7 @@ class ContinentControllerRestTest
                                .doesNotContain( "NoWay" ),
                        () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
                        // () -> assertThat( response.getHeaderNames() )
-                       //           .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+                       //           .contains( "Content-Type", HeaderTestingSupport.TRACESTATE, HeaderTestingSupport.TRACEID ),
                        () -> verifyNoInteractions( createService ),
                        () -> verify( readService ).findById( anyInt() ),
                        () -> verifyNoInteractions( updateService ),
@@ -583,7 +583,7 @@ class ContinentControllerRestTest
                                .contains( "Content-Type" )
                                .doesNotContain( "NoWay" ),
                        // () -> assertThat( result.getResponse().getHeaderNames() )
-                       //           .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
+                       //           .contains( "Content-Type", HeaderTestingSupport.TRACESTATE, HeaderTestingSupport.TRACEID )
                        () -> verifyNoInteractions( createService ),
                        () -> verify( readService ).findById( anyInt() ),
                        () -> verifyNoInteractions( updateService ),
@@ -901,7 +901,7 @@ class ContinentControllerRestTest
                                .contains( "Content-Type" )
                                .doesNotContain( "NoWay" ),
                        // () -> assertThat( result.getResponse().getHeaderNames() )
-                       //           .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
+                       //           .contains( "Content-Type", HeaderTestingSupport.TRACESTATE, HeaderTestingSupport.TRACEID )
                        () -> verify( readService ).findById(  anyInt() ),
                        () -> verify( repository ).findById( anyInt() ),
                        // () -> verify( repository ).save( any( ContinentEntity.class ) ),
@@ -923,7 +923,7 @@ class ContinentControllerRestTest
         //                    .contains( "Content-Type" )
         //                    .doesNotContain( "NoWay" ),
         // //                       () -> assertThat( result.getResponse().getHeaderNames() )
-        // //                               .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID )
+        // //                               .contains( "Content-Type", HeaderTestingSupport.TRACESTATE, HeaderTestingSupport.TRACEID )
         //            () -> verify( readService ).findAll(),
         //            () -> verify( repository ).findAll(),
         //            () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
@@ -1084,7 +1084,7 @@ class ContinentControllerRestTest
                                .contains( "Content-Type" )
                                .doesNotContain( "NoWay" ),
                        // () -> assertThat( result.getResponse().getHeaderNames() )
-                       //           .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+                       //           .contains( "Content-Type", HeaderTestingSupport.TRACESTATE, HeaderTestingSupport.TRACEID ),
                        () -> verify( deleteService ).deleteById( anyInt() ),
                        () -> verify( repository ).deleteById( anyInt() )
             );
@@ -1176,7 +1176,7 @@ class ContinentControllerRestTest
                                .contains( "Content-Type" )
                                .doesNotContain( "NoWay" ),
                        // () -> assertThat( result.getResponse().getHeaderNames() )
-                       //           .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+                       //           .contains( "Content-Type", HeaderTestingSupport.TRACESTATE, HeaderTestingSupport.TRACEID ),
                        () -> verify( deleteService ).delete( any( Continent.class ) ),
                        () -> verify( repository ).delete( any( ContinentEntity.class ) )
             );
@@ -1254,8 +1254,6 @@ class ContinentControllerRestTest
                        () -> verify( repository ).findAll(),
                        () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
             );
-
-
         }
 
         @Test

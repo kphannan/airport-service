@@ -1,7 +1,7 @@
 package com.example.airline.location.airport.api;
 
 
-import static com.example.rest.utility.HeaderUtility.withHeaders;
+import static com.example.rest.utility.HeaderTestingSupport.withHeaders;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
@@ -21,7 +21,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.airline.airport.AirportDTO;
 import com.example.airline.location.airport.mapper.AirportDtoMapper;
 import com.example.airline.location.airport.model.Airport;
 import com.example.airline.location.airport.model.AirportCountInRegion;
@@ -54,22 +53,31 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import tools.jackson.databind.ObjectMapper;
 
 
 /**
  * REST Controller for Airport entities.
  *
- * Paged list of all airports
- * By Continent
- *    List of all airports within the continent.
- *    List of Count of airports by Country.
- * By Country
- *    List of all airports within the Country.
- *    List of airport counts grouped by Region.
- * By Region
- *    List of all airports within the Region.
- *
+ * <ul>Paged list of all airports
+ * <li>By Continent
+ *    <ul>
+ *    <li>List of all airports within the continent.</li>
+ *    <li>List of Count of airports by Country.</li>
+ *    </ul>
+ * </li>
+ * <li>By Country
+ *    <ul>
+ *    <li>List of all airports within the Country.</li>
+ *    <li>List of airport counts grouped by Region.</li>
+ *    </ul>
+ * </li>
+ * <li>By Region
+ *    <ul>
+ *    <li>List of all airports within the Region.</li>
+ *    </ul>
+ * </li>
+ * </ul>
+ * <pre>
  *    Continent
  *       - List of all airports.
  *       - Count of airports by country.
@@ -79,6 +87,7 @@ import tools.jackson.databind.ObjectMapper;
  *          Region (state/province)
  *             - List of airports in the Region.
  *             Airport
+ * </pre>
  */
 @DisplayName( "Airport: API (/airport)" )
 @WebMvcTest( controllers = AirportController.class )
@@ -86,6 +95,7 @@ import tools.jackson.databind.ObjectMapper;
 @AutoConfigureMockMvc( addFilters = false )
 class AirportControllerRestTest //extends RestControllerTestBase
 {
+    // ===== Fixture =====
     @Autowired
     protected MockMvc mvc;
     @MockitoBean
@@ -110,39 +120,36 @@ class AirportControllerRestTest //extends RestControllerTestBase
     */
 
 
-    private AirportEntity buildEntity()
+
+    // ========== CREATE ==========
+    // ===== POST =====
+    /**
+     * Tests for POST Http Methods.
+     */
+    @Nested
+    @DisplayName( "HTTP POST" )
+    class PostMethod            // NOPMD
     {
-        return AirportEntity.builder()
-                            .id( 1L )
-                            .ident( "KATL" )
-                            .type( "large_airport" )
-                            .name( "::NAME::" )
-                            .latitude( BigDecimal.valueOf( 123.456 ) )
-                            .longitude( BigDecimal.valueOf( 987.654 ) )
-                            .elevation( 55 )
-                            .continent( "NA" )
-                            .isoCountry( "USA" )
-                            .isoRegion( "GA" )
-                            .municipality( "Atlanta" )
-                            .scheduledService( "yes" )
-                            .gpsCode( "KATL" )
-                            .iataCode( "KATL" )
-                            .icaoCode( "ATL" )
-                            .localCode( "KATL" )
-                            .build();
     }
 
-
+    // ========== READ ==========
+    // ===== GET =====
+    /**
+     * Tests for GET Http Methods.
+     */
     @Nested
     @DisplayName( "HTTP GET" )
     class GetMethod
     {
+        // --- Single ---
 
+        /**
+         * Find airport by database key.
+         */
         @Nested
         @DisplayName( "by Key" )
         class ByIdTest
         {
-
             @Test
             void restGetById_withValidId_returnsItem() throws Exception
             {
@@ -151,30 +158,30 @@ class AirportControllerRestTest //extends RestControllerTestBase
                 final RequestBuilder request       = withHeaders( get( "/location/airport/{id}", 1 ) );
 
                 when( repository.findById( any() ) )
-                        .thenReturn( Optional.of( airportEntity ) );
+                    .thenReturn( Optional.of( airportEntity ) );
 
 
                 // --- when
                 final MvcResult result = mvc
-                        .perform( request )
-                        .andExpect( status().isOk() )
-                        .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
-                        // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
-                        //      don't complain about lack of assertions in tests
-                        .andExpect( jsonPath( "$.id" ).value( 1 ) )
-                        .andExpect( jsonPath( "$.ident" ).value( "KATL" ) )
-                        .andExpect( jsonPath( "$.name" ).value( "::NAME::" ) )
-                        .andExpect( jsonPath( "$.continent" ).value( "NA" ) )
-                        .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
-                        .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
-                        .andReturn();
-                MockHttpServletResponse response = result.getResponse();
+                    .perform( request )
+                    .andExpect( status().isOk() )
+                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
+                    // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
+                    //      don't complain about lack of assertions in tests
+                    .andExpect( jsonPath( "$.id" ).value( 1 ) )
+                    .andExpect( jsonPath( "$.ident" ).value( "KATLident" ) )
+                    .andExpect( jsonPath( "$.name" ).value( "::NAME::" ) )
+                    .andExpect( jsonPath( "$.continent" ).value( "NA" ) )
+                    .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
+                    .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
+                    .andReturn();
+                final MockHttpServletResponse response = result.getResponse();
 
                 // --- then
                 // TODO need to assert the resulting JSON....
 
                 assertThat( response.getContentType() )
-                        .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+                    .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
             }
 
             @Test
@@ -184,24 +191,27 @@ class AirportControllerRestTest //extends RestControllerTestBase
                 final RequestBuilder request = withHeaders( get( "/location/airport/{id}", 99 ) );
 
                 when( repository.findById( anyLong() ) )
-                        .thenReturn( Optional.empty() );
+                    .thenReturn( Optional.empty() );
 
 
                 // --- when
                 final MvcResult result = mvc
-                        .perform( request )
-                        .andExpect( status().isNoContent() )
-                        .andReturn();
-                MockHttpServletResponse response = result.getResponse();
+                    .perform( request )
+                    .andExpect( status().isNoContent() )
+                    .andReturn();
+                final MockHttpServletResponse response = result.getResponse();
 
                 // --- then
                 assertThat( response.getStatus() )
-                        .isEqualTo( HttpStatus.NO_CONTENT.value() );
+                    .isEqualTo( HttpStatus.NO_CONTENT.value() );
                 //        assertThat( response.getContentType() )
                 //                .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
             }
         }
 
+        /**
+         * Find Airport by code (IATA or ICAO).
+         */
         @Nested
         @DisplayName( "by Identifier" )
         class ByIdentifierTest
@@ -214,32 +224,32 @@ class AirportControllerRestTest //extends RestControllerTestBase
                 final RequestBuilder request       = withHeaders( get( "/location/airport/code/{code}", 1 ) );
 
                 when( repository.findByIdent( anyString() ) )
-                        .thenReturn( Optional.of( airportEntity ) );
+                    .thenReturn( Optional.of( airportEntity ) );
 
 
                 // --- when
                 final MvcResult result = mvc
-                        .perform( request )
-                        .andExpect( status().isOk() )
-                        .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
-                        // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
-                        //      don't complain about lack of assertions in tests
-                        .andExpect( jsonPath( "$.id" ).value( 1 ) )
-                        .andExpect( jsonPath( "$.ident" ).value( "KATL" ) )
-                        .andExpect( jsonPath( "$.name" ).value( "::NAME::" ) )
-                        .andExpect( jsonPath( "$.continent" ).value( "NA" ) )
-                        .andExpect( jsonPath( "$.isoCountry" ).value( "USA" ) )
-                        .andExpect( jsonPath( "$.isoRegion" ).value( "GA" ) )
-                        .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
-                        .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
-                        .andReturn();
-                MockHttpServletResponse response = result.getResponse();
+                    .perform( request )
+                    .andExpect( status().isOk() )
+                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
+                    // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
+                    //      don't complain about lack of assertions in tests
+                    .andExpect( jsonPath( "$.id" ).value( 1 ) )
+                    .andExpect( jsonPath( "$.ident" ).value( "KATLident" ) )
+                    .andExpect( jsonPath( "$.name" ).value( "::NAME::" ) )
+                    .andExpect( jsonPath( "$.continent" ).value( "NA" ) )
+                    .andExpect( jsonPath( "$.isoCountry" ).value( "USA" ) )
+                    .andExpect( jsonPath( "$.isoRegion" ).value( "GA" ) )
+                    .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
+                    .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
+                    .andReturn();
+                final MockHttpServletResponse response = result.getResponse();
 
                 // --- then
                 // TODO need to assert the resulting JSON....
 
                 assertThat( response.getContentType() )
-                        .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+                    .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
             }
 
             @Test
@@ -250,24 +260,29 @@ class AirportControllerRestTest //extends RestControllerTestBase
                                                                  "ZZ" ) );
 
                 when( repository.findByIdent( anyString() ) )
-                        .thenReturn( Optional.empty() );
+                    .thenReturn( Optional.empty() );
 
                 // --- when
                 final MvcResult result = mvc
-                        .perform( request )
-                        .andExpect( status().isNoContent() )
-                        // .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ))
-                        .andReturn();
-                MockHttpServletResponse response = result.getResponse();
+                    .perform( request )
+                    .andExpect( status().isNoContent() )
+                    // .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ))
+                    .andReturn();
+                final MockHttpServletResponse response = result.getResponse();
 
                 // --- then
                 assertThat( response.getStatus() )
-                        .isEqualTo( HttpStatus.NO_CONTENT.value() );
+                    .isEqualTo( HttpStatus.NO_CONTENT.value() );
                 //        assertThat( response.getContentType() )
                 //                .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
             }
         }
 
+        // --- Multiple ---
+
+        /**
+         * All airports as paged groups.
+         */
         @Nested
         @DisplayName( " all" )
         class AllTest
@@ -278,64 +293,57 @@ class AirportControllerRestTest //extends RestControllerTestBase
                 // --- given
                 // ContinentEntity continentEntity = new ContinentEntity( 1, "ZZ", "::NAME::", null, null  );
                 final List<AirportEntity> entities =
-                        List.of(
-                                buildEntity(),
-                                buildEntity(),
-                                buildEntity()
-                               );
+                    List.of(
+                        buildEntity(),
+                        buildEntity(),
+                        buildEntity()
+                           );
                 final RequestBuilder request = withHeaders( get( "/location/airport" ) )
-                        .param( "page", "5" )
-                        .param( "size", "10" )
-                        .param( "sort", "id,desc" )    // <-- no space after comma!
-                        .param( "sort", "name,asc" );  // <-- no space after comma!
+                    .param( "page", "5" )
+                    .param( "size", "10" )
+                    .param( "sort", "id,desc" )    // <-- no space after comma!
+                    .param( "sort", "name,asc" );  // <-- no space after comma!
 
-                Page<AirportEntity> page = new PageImpl<>( entities );
+                final Page<AirportEntity> page = new PageImpl<>( entities );
                 when( repository.findAll( any( Pageable.class ) ) )
-                        .thenReturn( page );
+                    .thenReturn( page );
 
 
 
                 // --- when
                 final MvcResult result = mvc
-                        .perform( request )
-                        .andExpect( status().isOk() )
-                        .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
-                        // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
-                        //      don't complain about lack of assertions in tests
-                        .andDo( print() )
-                        .andExpect( jsonPath( "$.content[0].id" ).value( 1 ) )
-                        .andExpect( jsonPath( "$.content[0].ident" ).value( "KATL" ) )
-                        .andExpect( jsonPath( "$.content[0].name" ).value( "::NAME::" ) )
-                        .andExpect( jsonPath( "$.content[0].wikipediaLink" ).doesNotExist() )
-                        .andExpect( jsonPath( "$.content[0].keywords" ).doesNotExist() )
-                        .andReturn();
+                    .perform( request )
+                    .andExpect( status().isOk() )
+                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
+                    // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
+                    //      don't complain about lack of assertions in tests
+                    .andDo( print() )
+                    .andExpect( jsonPath( "$.content[0].id" ).value( 1 ) )
+                    .andExpect( jsonPath( "$.content[0].ident" ).value( "KATLident" ) )
+                    .andExpect( jsonPath( "$.content[0].name" ).value( "::NAME::" ) )
+                    .andExpect( jsonPath( "$.content[0].wikipediaLink" ).doesNotExist() )
+                    .andExpect( jsonPath( "$.content[0].keywords" ).doesNotExist() )
+                    .andReturn();
                 final MockHttpServletResponse response = result.getResponse();
 
                 // --- then
                 final ArgumentCaptor<Pageable> pageableCaptor =
-                        ArgumentCaptor.forClass( Pageable.class );
-//                final PageRequest pageable = (PageRequest)pageableCaptor.getValue();
-//                PageableAssert
-//                        .assertThat( pageable )
-//                        .hasPageNumber( 5 )
-//                        .hasPageSize( 10 )
-//                        .hasSort( "name", Sort.Direction.ASC )
-//                        .hasSort( "id", Sort.Direction.DESC );
+                    ArgumentCaptor.forClass( Pageable.class );
 
                 // TODO need to assert the resulting JSON....
                 assertAll( () -> verify( repository )
-                                   .findAll( pageableCaptor.capture() ),
+                               .findAll( pageableCaptor.capture() ),
                            () -> verify( mapper, times( 3 ) )
-                                   .domainToApi( any( Airport.class) ),
-//                           () -> PageableAssert
-//                                   .assertThat( pageable )
-//                                   .hasPageNumber( 5 )
-//                                   .hasPageSize( 10 )
-//                                   .hasSort( "name", Sort.Direction.ASC )
-//                                   .hasSort( "id", Sort.Direction.DESC ),
+                               .domainToApi( any( Airport.class ) ),
+                           () -> PageableAssert
+                                     .assertThat( pageableCaptor.getValue() )
+                                     .pageNumberMatches( 5 )
+                                     .pageSizeMatches( 10 )
+                                     .sortCriteriaMatches( "name", Sort.Direction.ASC )
+                                     .sortCriteriaMatches( "id", Sort.Direction.DESC ),
                            () -> assertThat( response.getContentType() )
-                                   .isEqualTo( MediaType.APPLICATION_JSON_VALUE )
-                         );
+                               .isEqualTo( MediaType.APPLICATION_JSON_VALUE )
+                );
             }
         }
 
@@ -351,19 +359,19 @@ class AirportControllerRestTest //extends RestControllerTestBase
             @BeforeEach
             void init()
             {
-                List<AirportEntity> entities =
-                        List.of(
-                                buildEntity(),
-                                buildEntity(),
-                                buildEntity()
-                               );
+                final List<AirportEntity> entities =
+                    List.of(
+                        buildEntity(),
+                        buildEntity(),
+                        buildEntity()
+                           );
                 request = withHeaders( get( "/location/airport/search" ) )
-                        .param( "page", "1" )
-                        .param( "size", "10" )
-                        .param( "sort", "id,desc" )    // <-- no space after comma!
-                        .param( "sort", "name,asc" );  // <-- no space after comma!
+                    .param( "page", "1" )
+                    .param( "size", "10" )
+                    .param( "sort", "id,desc" )    // <-- no space after comma!
+                    .param( "sort", "name,asc" );  // <-- no space after comma!
 
-                Page<AirportEntity> page = new PageImpl<>( entities );
+                final Page<AirportEntity> page = new PageImpl<>( entities );
                 when( repository.advancedQuery( anyString(),    // iataCode
                                                 anyString(),    // icaoCode
                                                 anyString(),    // ident
@@ -380,28 +388,28 @@ class AirportControllerRestTest //extends RestControllerTestBase
 
                 // --- when
                 final MvcResult result = mvc
-                        .perform( request )
-                        .andDo( print() )
-                        .andExpect( status().isOk() )
-                        .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
-                        // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
-                        //      don't complain about lack of assertions in tests
-                        .andExpect( jsonPath( "$.content[0].id" ).value( 1 ) )
-                        .andExpect( jsonPath( "$.content[0].ident" ).value( "KATL" ) )
-                        .andExpect( jsonPath( "$.content[0].name" ).value( "::NAME::" ) )
-                        .andExpect( jsonPath( "$.content[0].wikipediaLink" ).doesNotExist() )
-                        .andExpect( jsonPath( "$.content[0].keywords" ).doesNotExist() )
-                        .andReturn();
+                    .perform( request )
+                    .andDo( print() )
+                    .andExpect( status().isOk() )
+                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
+                    // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
+                    //      don't complain about lack of assertions in tests
+                    .andExpect( jsonPath( "$.content[0].id" ).value( 1 ) )
+                    .andExpect( jsonPath( "$.content[0].ident" ).value( "KATLident" ) )
+                    .andExpect( jsonPath( "$.content[0].name" ).value( "::NAME::" ) )
+                    .andExpect( jsonPath( "$.content[0].wikipediaLink" ).doesNotExist() )
+                    .andExpect( jsonPath( "$.content[0].keywords" ).doesNotExist() )
+                    .andReturn();
 
                 // --- then
                 final MockHttpServletResponse response = result.getResponse();
                 // TODO need to assert the resulting JSON....
                 assertAll( () -> assertThat( response.getContentType() )
-                                   .isEqualTo( MediaType.APPLICATION_JSON_VALUE ),
+                               .isEqualTo( MediaType.APPLICATION_JSON_VALUE ),
                            () -> verifyPagedResponse(),
                            () -> verify( mapper, times( 3 ) )
-                                   .domainToApi( any( Airport.class ) )
-                         );
+                               .domainToApi( any( Airport.class ) )
+                );
             }
 
 
@@ -409,22 +417,22 @@ class AirportControllerRestTest //extends RestControllerTestBase
             void restGetSearch_identifier_returnsSuccess() throws Exception
             {
                 // --- given
-                request.param( "ident", "KATL" );
+                request.param( "ident", "KATLident" );
 
                 // --- when
                 final MvcResult result = mvc
-                        .perform( request )
-                        .andExpect( status().isOk() )
-                        .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
-                        // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
-                        //      don't complain about lack of assertions in tests
-                        .andDo( print() )
-                        .andExpect( jsonPath( "$.content[0].id" ).value( 1 ) )
-                        .andExpect( jsonPath( "$.content[0].ident" ).value( "KATL" ) )
-                        .andExpect( jsonPath( "$.content[0].name" ).value( "::NAME::" ) )
-                        .andExpect( jsonPath( "$.content[0].wikipediaLink" ).doesNotExist() )
-                        .andExpect( jsonPath( "$.content[0].keywords" ).doesNotExist() )
-                        .andReturn();
+                    .perform( request )
+                    .andExpect( status().isOk() )
+                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
+                    // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
+                    //      don't complain about lack of assertions in tests
+                    .andDo( print() )
+                    .andExpect( jsonPath( "$.content[0].id" ).value( 1 ) )
+                    .andExpect( jsonPath( "$.content[0].ident" ).value( "KATLident" ) )
+                    .andExpect( jsonPath( "$.content[0].name" ).value( "::NAME::" ) )
+                    .andExpect( jsonPath( "$.content[0].wikipediaLink" ).doesNotExist() )
+                    .andExpect( jsonPath( "$.content[0].keywords" ).doesNotExist() )
+                    .andReturn();
 
                 // --- then
                 verifyPagedResponse();
@@ -432,7 +440,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
                 final MockHttpServletResponse response = result.getResponse();
                 // TODO need to assert the resulting JSON....
                 assertThat( response.getContentType() )
-                        .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+                    .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
             }
 
 
@@ -440,22 +448,22 @@ class AirportControllerRestTest //extends RestControllerTestBase
             void restGetSearch_icaoCode_returnsSuccess() throws Exception
             {
                 // --- given
-                request.param( "icaoCode", "KATL" );
+                request.param( "icaoCode", "KATLident" );
 
                 // --- when
                 final MvcResult result = mvc
-                        .perform( request )
-                        .andExpect( status().isOk() )
-                        .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
-                        // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
-                        //      don't complain about lack of assertions in tests
-                        .andDo( print() )
-                        .andExpect( jsonPath( "$.content[0].id" ).value( 1 ) )
-                        .andExpect( jsonPath( "$.content[0].ident" ).value( "KATL" ) )
-                        .andExpect( jsonPath( "$.content[0].name" ).value( "::NAME::" ) )
-                        .andExpect( jsonPath( "$.content[0].wikipediaLink" ).doesNotExist() )
-                        .andExpect( jsonPath( "$.content[0].keywords" ).doesNotExist() )
-                        .andReturn();
+                    .perform( request )
+                    .andExpect( status().isOk() )
+                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
+                    // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
+                    //      don't complain about lack of assertions in tests
+                    .andDo( print() )
+                    .andExpect( jsonPath( "$.content[0].id" ).value( 1 ) )
+                    .andExpect( jsonPath( "$.content[0].ident" ).value( "KATLident" ) )
+                    .andExpect( jsonPath( "$.content[0].name" ).value( "::NAME::" ) )
+                    .andExpect( jsonPath( "$.content[0].wikipediaLink" ).doesNotExist() )
+                    .andExpect( jsonPath( "$.content[0].keywords" ).doesNotExist() )
+                    .andReturn();
 
                 // --- then
                 verifyPagedResponse();
@@ -463,12 +471,17 @@ class AirportControllerRestTest //extends RestControllerTestBase
                 final MockHttpServletResponse response = result.getResponse();
                 // TODO need to assert the resulting JSON....
                 assertThat( response.getContentType() )
-                        .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+                    .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
             }
 
         }
 
-
+        /**
+         * Counts of Airports. By hierarchy:
+         *     Continent
+         *     Country
+         *     Region
+         */
         @Nested
         @DisplayName( " airport counts.." )
         class AirportCounts
@@ -477,135 +490,150 @@ class AirportControllerRestTest //extends RestControllerTestBase
             @DisplayName( "by Continent" )
             void restGet_countAirportsByContinent_returnsSuccess() throws Exception
             {
-                List<AirportCountInContinentEntity> entities =
-                        List.of( new AirportCountInContinentEntity( "YY", "::YYNAME::", 42L ),
-                                 new AirportCountInContinentEntity( "ZZ", "::ZZNAME::", 21L )
-                               );
+                final List<AirportCountInContinentEntity> entities =
+                    List.of( new AirportCountInContinentEntity( "YY", "::YYNAME::", 42L ),
+                             new AirportCountInContinentEntity( "ZZ", "::ZZNAME::", 21L )
+                           );
 
                 when( repository.countAirportsByContinent() )
-                        .thenReturn( entities );
+                    .thenReturn( entities );
 
                 final RequestBuilder request       = withHeaders( get( "/location/airport/summary/continent/code" ) );
 
 
                 final MvcResult result = mvc
-                        .perform( request )
-                        .andExpect( status().isOk() )
-                        .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
-                        // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
-                        //      don't complain about lack of assertions in tests
-                        .andExpect( jsonPath( "$[0].continentCode" ).value( "YY" ) )
-                        .andExpect( jsonPath( "$[0].name" ).value( "::YYNAME::" ) )
-                        .andExpect( jsonPath( "$[0].airportCount" ).value( 42 ) )
-                        .andExpect( jsonPath( "$[1].continentCode" ).value( "ZZ" ) )
-                        .andExpect( jsonPath( "$[1].name" ).value( "::ZZNAME::" ) )
-                        .andExpect( jsonPath( "$[1].airportCount" ).value( 21 ) )
-                        .andReturn();
-                MockHttpServletResponse response = result.getResponse();
+                    .perform( request )
+                    .andExpect( status().isOk() )
+                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
+                    // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
+                    //      don't complain about lack of assertions in tests
+                    .andExpect( jsonPath( "$[0].continentCode" ).value( "YY" ) )
+                    .andExpect( jsonPath( "$[0].name" ).value( "::YYNAME::" ) )
+                    .andExpect( jsonPath( "$[0].airportCount" ).value( 42 ) )
+                    .andExpect( jsonPath( "$[1].continentCode" ).value( "ZZ" ) )
+                    .andExpect( jsonPath( "$[1].name" ).value( "::ZZNAME::" ) )
+                    .andExpect( jsonPath( "$[1].airportCount" ).value( 21 ) )
+                    .andReturn();
+                final MockHttpServletResponse response = result.getResponse();
 
                 // --- then
                 // TODO need to assert the resulting JSON....
 
                 assertThat( response.getContentType() )
-                        .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+                    .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
             }
 
             @Test
             @DisplayName( "per Country by Continent" )
             void restGet_countAirportsByCountry_returnsSuccess() throws Exception
             {
-                List<AirportCountInCountryEntity> entities =
-                        List.of( new AirportCountInCountryEntity( "YY", "::YYNAME::", 42L ),
-                                 new AirportCountInCountryEntity( "ZZ", "::ZZNAME::", 21L )
-                               );
+                final List<AirportCountInCountryEntity> entities =
+                    List.of( new AirportCountInCountryEntity( "YY", "::XYNAME::", 42L ),
+                             new AirportCountInCountryEntity( "ZZ", "::YZNAME::", 21L )
+                           );
 
                 when( repository.countCountryAirportsByContinent( eq( "CC" ) ) )
-                        .thenReturn( entities );
+                    .thenReturn( entities );
 
-                final RequestBuilder request       = withHeaders( get( "/location/airport/summary/continent/code/{continentCode}", "CC" ) );
-
+                final RequestBuilder request = withHeaders( get( "/location/airport/summary/continent/code/{continentCode}",
+                                                                 "CC" ) );
 
                 final MvcResult result = mvc
-                        .perform( request )
-                        .andExpect( status().isOk() )
-                        .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
-                        // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
-                        //      don't complain about lack of assertions in tests
-                        .andExpect( jsonPath( "$[0].isoCountry" ).value( "YY" ) )
-                        .andExpect( jsonPath( "$[0].name" ).value( "::YYNAME::" ) )
-                        .andExpect( jsonPath( "$[0].airportCount" ).value( 42 ) )
-                        .andExpect( jsonPath( "$[1].isoCountry" ).value( "ZZ" ) )
-                        .andExpect( jsonPath( "$[1].name" ).value( "::ZZNAME::" ) )
-                        .andExpect( jsonPath( "$[1].airportCount" ).value( 21 ) )
-                        .andReturn();
-                MockHttpServletResponse response = result.getResponse();
+                    .perform( request )
+                    .andExpect( status().isOk() )
+                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
+                    // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
+                    //      don't complain about lack of assertions in tests
+                    .andExpect( jsonPath( "$[0].isoCountry" ).value( "YY" ) )
+                    .andExpect( jsonPath( "$[0].name" ).value( "::XYNAME::" ) )
+                    .andExpect( jsonPath( "$[0].airportCount" ).value( 42 ) )
+                    .andExpect( jsonPath( "$[1].isoCountry" ).value( "ZZ" ) )
+                    .andExpect( jsonPath( "$[1].name" ).value( "::YZNAME::" ) )
+                    .andExpect( jsonPath( "$[1].airportCount" ).value( 21 ) )
+                    .andReturn();
+                final MockHttpServletResponse response = result.getResponse();
 
                 // --- then
                 // TODO need to assert the resulting JSON....
 
                 assertThat( response.getContentType() )
-                        .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
+                    .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
             }
-
 
             @Test
             @DisplayName( "by Region" )
             void restGet_countAirportsByRegion_returnsSuccess() throws Exception
             {
-                List<AirportCountInRegion> entities =
-                        List.of( new AirportCountInRegion( "YY", "::YYNAME::", 42L ),
-                                 new AirportCountInRegion( "ZZ", "::ZZNAME::", 21L )
-                               );
+                final List<AirportCountInRegion> entities =
+                    List.of( new AirportCountInRegion( "YY", "::YYNAMEY::", 42L ),
+                             new AirportCountInRegion( "ZZ", "::ZZNAMEZ::", 21L )
+                           );
 
                 when( service.countRegionAirportsByCountry( anyString() ) )
-                        .thenReturn( entities );
+                    .thenReturn( entities );
 
 
                 final RequestBuilder request = withHeaders( get( "/location/airport/summary/region/code/{regionCode}",
-                                                                "RE" ) );
+                                                                 "RE" ) );
 
                 final MvcResult mvcResult = mvc
-                        .perform( request )
-                        .andDo( print() )
-                        .andExpect( status().isOk() )
-                        .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
-                        // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
-                        //      don't complain about lack of assertions in tests
-                        // TODO test for an empty result body (empty list)
-                        .andReturn();
-                MockHttpServletResponse response = mvcResult.getResponse();
-                ObjectMapper mapper = new ObjectMapper();
-//                List<AirportDTO> result = mapper.readValue( response.getContentAsString(), new TypeReference<List<AirportDTO>>() );
-                AirportDTO[] resultA = mapper.readValue( response.getContentAsString(), AirportDTO[].class );
-                List<AirportDTO> result = List.of( resultA );
+                    .perform( request )
+                    .andDo( print() )
+                    .andExpect( status().isOk() )
+                    .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
+                    // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
+                    //      don't complain about lack of assertions in tests
+                    // TODO test for an empty result body (empty list)
+                    .andReturn();
+                final MockHttpServletResponse response = mvcResult.getResponse();
+                // final ObjectMapper mapper = new ObjectMapper();
+                // final AirportDTO[] resultA = mapper.readValue( response.getContentAsString(), AirportDTO[].class );
+                // final List<AirportDTO> result = List.of( resultA );
 
                 // --- then
                 // TODO need to assert the resulting JSON....
 
-//                assertThat( response.getContentType() )
-//                        .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
                 assertAll( () -> assertThat( response.getContentType() )
-                        .contains( MediaType.APPLICATION_JSON_VALUE )
+                               .contains( MediaType.APPLICATION_JSON_VALUE )
 
-//                           () -> assertThat( result )
-//                                   .isNotNull()
-//                                   .hasSize( 2 )
+                           // () -> assertThat( result )
+                           //           .isNotNull()
+                           //           .hasSize( 2 )
 
-//                           () -> assertEquals( "YY", result.get(0).getRegionCode() ),
-//                           () -> assertEquals( "::YYNAME::", result.get(0).getName() ),
-//                           () -> assertEquals( 42, result.get(0).getAirportCount() )
-                         );
+                           // () -> assertEquals( "YY", result.get(0).getRegionCode() ),
+                           // () -> assertEquals( "::YYNAMEY::", result.get(0).getName() ),
+                           // () -> assertEquals( 42, result.get(0).getAirportCount() )
+                );
             }
-
-
         }
 
+        // ----- Support methods -----
+        private AirportEntity buildEntity()
+        {
+            return AirportEntity.builder()
+                                .id( 1L )
+                                .ident( "KATLident" )
+                                .type( "large_airport" )
+                                .name( "::NAME::" )
+                                .latitude( BigDecimal.valueOf( 123.456 ) )
+                                .longitude( BigDecimal.valueOf( 987.654 ) )
+                                .elevation( 55 )
+                                .continent( "NA" )
+                                .isoCountry( "USA" )
+                                .isoRegion( "GA" )
+                                .municipality( "Atlanta" )
+                                .scheduledService( "yes" )
+                                .gpsCode( "KATLgps" )
+                                .iataCode( "KATLiata" )
+                                .icaoCode( "ATL" )
+                                .localCode( "KATLlocal" )
+                                .build();
+        }
 
-
-        void verifyPagedResponse()
+        private void verifyPagedResponse()
         {
             final ArgumentCaptor<Pageable> pageableCaptor =
-                    ArgumentCaptor.forClass( Pageable.class );
+                ArgumentCaptor.forClass( Pageable.class );
             verify( repository ).advancedQuery( anyString(),
                                                 anyString(),
                                                 anyString(),
@@ -614,56 +642,78 @@ class AirportControllerRestTest //extends RestControllerTestBase
             final PageRequest pageable = (PageRequest)pageableCaptor.getValue();
 
             PageableAssert
-                    .assertThat( pageable )
-                    .hasPageNumber( 1 )
-                    .hasPageSize( 10 )
-                    .hasSort( "name", Sort.Direction.ASC )
-                    .hasSort( "id", Sort.Direction.DESC );
+                .assertThat( pageable )
+                .pageNumberMatches( 1 )
+                .pageSizeMatches( 10 )
+                .sortCriteriaMatches( "name", Sort.Direction.ASC )
+                .sortCriteriaMatches( "id", Sort.Direction.DESC );
         }
-
     }
 
-
-    @Nested
-    @DisplayName( "HTTP POST" )
-    class PostMethod
-    {
-    }
-
-    @Nested
-    @DisplayName( "HTTP PUT" )
-    class PutMethod
-    {
-    }
-
-    @Nested
-    @DisplayName( "HTTP DELETE" )
-    class DeleteMethod
-    {
-    }
-
+    // ========== UPDATE ==========
+    // ===== PATCH =====
+    /**
+     * Tests for PATCH Http Methods.
+     */
     @Nested
     @DisplayName( "HTTP PATCH" )
-    class PatchMethod
+    class PatchMethod           // NOPMD
     {
     }
 
+    // ===== PUT =====
+    /**
+     * Tests for PUT Http Methods.
+     */
     @Nested
-    @DisplayName( "HTTP INFO" )
-    class InfoMethod
+    @DisplayName( "HTTP PUT" )
+    class PutMethod             // NOPMD
     {
     }
 
+    // ========== DELETE ==========
+    // ===== DELETE =====
+    /**
+     * Tests for DELETE Http Methods.
+     */
+    @Nested
+    @DisplayName( "HTTP DELETE" )
+    class DeleteMethod          // NOPMD
+    {
+    }
+
+
+    // ========== Administrative ==========
+    // ===== HEAD =====
+    /**
+     * Tests for HEAD Http Methods.
+     */
     @Nested
     @DisplayName( "HTTP HEAD" )
-    class HeadMethod
+    class HeadMethod            // NOPMD
     {
     }
 
+    // ===== INFO =====
+    /**
+     * Tests for INFO Http Methods.
+     */
     @Nested
-    @DisplayName( "HTTP OPT" )
-    class OptionsMethod
+    @DisplayName( "HTTP INFO" )
+    class InfoMethod            // NOPMD
     {
     }
+
+    // ===== OPTION =====
+    /**
+     * Tests for OPTIONS Http Methods.
+     */
+    @Nested
+    @DisplayName( "HTTP OPT" )
+    class OptionsMethod         // NOPMD
+    {
+    }
+
+    // ===== TRACE =====
 
 }

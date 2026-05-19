@@ -1,7 +1,7 @@
 package com.example.airline.location.country.api;
 
 
-import static com.example.rest.utility.HeaderUtility.withHeaders;
+import static com.example.rest.utility.HeaderTestingSupport.withHeaders;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;

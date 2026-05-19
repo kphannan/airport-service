@@ -1,7 +1,7 @@
 package com.example.airline.location.region.api;
 
 
-import static com.example.rest.utility.HeaderUtility.withHeaders;
+import static com.example.rest.utility.HeaderTestingSupport.withHeaders;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
