@@ -48,7 +48,7 @@ pitVersion = '1.22.1'
 # --- Coding practices (static analysis) ---
 # --- Coding style
 # --- Checkstyle ---
-checkstyleVersion = '13.1.0'
+checkstyleVersion = '13.4.2'
 # --- Common Coding flaws
 # --- PMD ---
 pmdVersion = '7.21.0'
@@ -218,7 +218,8 @@ spring-boot-persistence = [
 ]
 
 bindings = [
-    'mapstruct'
+    'mapstruct',
+    'mapstruct-processor'
 ]
 
 persistence = [

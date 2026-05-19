@@ -19,6 +19,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 
+//  TODO Convert to Java Record.
 /**
  * API representation of an Airport.
  */
@@ -29,7 +30,7 @@ import org.jspecify.annotations.Nullable;
 public class AirportDTO
 {
     /**
-     * T Internal integer identifier for the airport. This will stay
+     * Internal integer identifier for the airport. This will stay
      * persistent, even if the airport code changes.
      */
     @SuppressWarnings( "PMD.ShortVariable" )
@@ -57,7 +58,8 @@ public class AirportDTO
              example = "KORD" )
     @NotBlank( message = "A 4 to 7 character airport ident code is required" )
     @lombok.NonNull
-    @Pattern( regexp = "(([A-Z]{3,4})|([A-Z]{2}\\d{2})|([A-Z]{2}-\\d{4}))",
+    // @Pattern( regexp = "(([A-Z]{3,4})|([A-Z]{2}\\d{2})|([A-Z]{2}-\\d{4}))",
+    @Pattern( regexp = "^(([0-9]{1,2}[A-Z]{1,2}[0-9]?)|([A-Z]{3,4}[0-9]?)|([A-Z]{1,2}-([0-9]{2,5}|[A-Z]{3,4}))|([A-Z]{1,2}[0-9]{1,2}[A-Z]{1,2}?[0-9]?)|([A-Z]{1,2}[0-9]{1,2})|([A-Z]{1,2}-(([0-9]{1,2}[A-Z]{1,2}[0-9]?)|([A-Z]{2,3}[0-9]{1,2}))))$",
               message = "Airport ident must a unique 4 to 7 character code following a specific pattern" )
     private String ident;  // char-8
 
@@ -92,6 +94,7 @@ public class AirportDTO
      * The code for the continent where the airport is (primarily) located. Allowed
      * values are "AF" (Africa), "AN" (Antarctica), "AS" (Asia), "EU" (Europe), "NA"
      * (North America), "OC" (Oceania), or "SA" (South America).
+     * {@see ContinentDTO}
      */
     @JsonProperty( "continent" )
     @Schema( name = "continent",
@@ -107,7 +110,7 @@ public class AirportDTO
     private String continent;  // char-2
 
     /**
-     * The two-character ISO 3166:1-alpha2 code for the country where the airport is
+     * The two-character ISO 3166:1-alpha2 code for the {@see CountryDTO} where the airport is
      * (primarily) located. A handful of unofficial, non-ISO codes are also in use,
      * such as "XK" for Kosovo. Points to the code column in countries.csv.
      */
@@ -125,13 +128,14 @@ public class AirportDTO
     private String isoCountry;
 
     /**
-     * 'An alphanumeric code for the high-level administrative subdivision of a
+     * An alphanumeric code for the high-level administrative subdivision of a
      * country where the airport is primarily located (e.g., province, governorate),
      * prefixed by the ISO2 country code and a hyphen.
      *
-     * ISO 3166:2 codes are used whenever possible, preferring higher
+     * <p>ISO 3166:2 codes are used whenever possible, preferring higher
      * administrative levels, but also includes some custom codes. See the
-     * documentation for regions.csv.'
+     * documentation for regions.csv.
+     * {@see RegionDTO}
      */
     @JsonProperty( "isoRegion" )
     @Schema( name = "isoRegion",

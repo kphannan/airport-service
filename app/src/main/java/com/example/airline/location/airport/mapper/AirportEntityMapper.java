@@ -43,14 +43,39 @@ public interface AirportEntityMapper
     /** Map a list of domain instances to a list of db entity instances. */
     List<Airport> entityToDomain( List<AirportEntity> entities );
 
+    /**
+     * Map Airport counts by continent persistence layer entities to service layer entities.
+     *
+     * @param entities list of persistence entities
+     * @return equivalent list of service layer entities.
+     */
     List<AirportCountInContinent> entityToDomainAirportsInContinent( List<AirportCountInContinentEntity> entities );
 
+    /**
+     * Map Airport counts within a country persistence layer entities to service layer entities.
+     *
+     * @param entities list of persistence entities
+     * @return equivalent list of service layer entities.
+     */
     List<AirportCountInCountry> entityToDomainAirportsInCountry( List<AirportCountInCountryEntity> entities );
 
+    /**
+     * Map airport counts in a region persistence layer entities to service layer entities.
+     *
+     * @param entities list of persistence entities
+     * @return equivalent list of service layer entities.
+     */
     List<AirportCountInRegion> entityToDomainAirportsInRegion( List<AirportCountInRegionEntity> entities );
 
     // --- Domain --> Persistence ---
     // --- Instance
+
+    /**
+     * Map a service layer {@see Airport} instance to an equivalent {@see AirportEntity}.
+     *
+     * @param entity the {@see Airport} domain instance
+     * @return the {@see AirportEntity} persistence layer instance.
+     */
     AirportEntity domainToEntity( Airport entity );
     // --- Collection
 }

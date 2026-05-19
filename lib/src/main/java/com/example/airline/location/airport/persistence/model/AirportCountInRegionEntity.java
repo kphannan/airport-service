@@ -1,5 +1,6 @@
 package com.example.airline.location.airport.persistence.model;
 
+
 import com.example.utility.IgnoreGeneratedCoverage;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -10,9 +11,9 @@ import jakarta.validation.constraints.Size;
 /**
  * Number of airports within a {@see Region}.
  *
- * @param regionCode An alphanumeric code for the high-level administrative subdivision of a
- *                   country where the airport is primarily located
- * @param name       Common name of the region.
+ * @param regionCode   An alphanumeric code for the high-level administrative subdivision of a country where the airport
+ *                     is primarily located
+ * @param name         Common name of the region.
  * @param airportCount total number of airports within the region.
  */
 @IgnoreGeneratedCoverage

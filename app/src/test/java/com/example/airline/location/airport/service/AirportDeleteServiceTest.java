@@ -86,7 +86,7 @@ class AirportDeleteServiceTest
 
             // --- given
             when( repository.existsById( anyLong() ) ).thenReturn( true );
-            when( repository.existsByCode( anyString() ) ).thenReturn( true );
+            when( repository.existsByIdent( anyString() ) ).thenReturn( true );
 
             // --- when
             final boolean isExisting = service.deleteById( 1L );
@@ -94,7 +94,7 @@ class AirportDeleteServiceTest
             // --- then
             assertAll( () -> assertThat( isExisting ).isTrue(),
                        () -> verify( repository, atMost( 1 ) ).existsById( anyLong() ),
-                       () -> verify( repository, atMost( 1 ) ).existsByCode( anyString() ),
+                       () -> verify( repository, atMost( 1 ) ).existsByIdent( anyString() ),
                        () -> verify( repository ).deleteById( anyLong() )
             );
         }

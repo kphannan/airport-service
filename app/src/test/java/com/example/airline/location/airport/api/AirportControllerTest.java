@@ -12,6 +12,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,12 +21,13 @@ import com.example.airline.airport.AirportDTO;
 import com.example.airline.location.airport.mapper.AirportDtoMapper;
 import com.example.airline.location.airport.model.Airport;
 import com.example.airline.location.airport.model.AirportCountInRegion;
-import com.example.airline.location.airport.persistence.model.AirportEntity;
 import com.example.airline.location.airport.persistence.repository.AirportRepository;
 import com.example.airline.location.airport.service.AirportCreateService;
 import com.example.airline.location.airport.service.AirportDeleteService;
 import com.example.airline.location.airport.service.AirportReadService;
 import com.example.airline.location.airport.service.AirportUpdateService;
+import com.example.utility.HeaderUtility;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -33,15 +35,20 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
+import org.springframework.test.http.HttpHeadersAssert;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 
 /**
  * REST Controller for Airport entities.
  *
- * Paged list of all airports
+ * <p>Paged list of all airports
+ * <pre>
  * By Continent
  *    List of all airports within the continent.
  *    List of Count of airports by Country.
@@ -60,6 +67,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
  *          Region (state/province)
  *             - List of airports in the Region.
  *             Airport
+ * </pre>
  */
 @DisplayName( "Airport: API (/airport)" )
 @WebMvcTest( controllers = AirportController.class )
@@ -67,12 +75,16 @@ import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 @AutoConfigureMockMvc( addFilters = false )
 class AirportControllerTest //extends RestControllerTestBase
 {
+    private static final String    TEST_PARENT    = "testParent";
+    private static final String    TEST_STATE     = "testState";
+
     @MockitoBean
     protected AirportRepository    repository;
 
     @MockitoSpyBean
     private AirportController      controller;
 
+    // Service layer support classes
     @MockitoSpyBean
     private AirportCreateService   createService;
     @MockitoSpyBean
@@ -85,94 +97,104 @@ class AirportControllerTest //extends RestControllerTestBase
     @MockitoSpyBean
     private   AirportDtoMapper     dtoMapper;
 
+    private HttpHeaders            requestHeader;
 
-    /*
     @BeforeEach
     void init()
     {
-        mvc = MockMvcBuilders.standaloneSetup( service )
-                             .setCustomArgumentResolvers( new PageableHandlerMethodArgumentResolver() )
-                             // .setControllerAdvice(new SuperHeroExceptionHandler())
-                             // .addFilters(new SuperHeroFilter())
-                             .build();
+        requestHeader = buildDefaultHeaders();
     }
-    */
 
 
-    private AirportEntity buildEntity()
+
+    // ========== CREATE ==========
+    // ===== POST =====
+
+    /**
+     * Verify Create (HTTP POST) methods directly without making a REST call.
+     */
+    @Nested
+    @DisplayName( "HTTP POST" )
+    class PostMethod            // NOPMD
     {
-        return AirportEntity.builder()
-                            .id( 1L )
-                            .ident( "KATL" )
-                            .type( "large_airport" )
-                            .name( "::NAME::" )
-                            .latitude( BigDecimal.valueOf( 123.456 ) )
-                            .longitude( BigDecimal.valueOf( 987.654 ) )
-                            .elevation( 55 )
-                            .continent( "NA" )
-                            .isoCountry( "USA" )
-                            .isoRegion( "GA" )
-                            .municipality( "Atlanta" )
-                            .scheduledService( "yes" )
-                            .gpsCode( "KATL" )
-                            .iataCode( "KATL" )
-                            .icaoCode( "ATL" )
-                            .localCode( "KATL" )
-                            .build();
     }
 
 
+    // ========== READ ==========
+    // ===== GET =====
+    /**
+     * Verify Read (HTTP GET) methods directly without making a REST call.
+     */
     @Nested
     @DisplayName( "HTTP GET" )
-    class GetMethod
+    class GetMethod             // NOPMD
     {
 
         @Nested
         @DisplayName( "by Key" )
-        class ByIdTest
+        class ByIdTest          // NOPMD
         {
-
         }
 
         @Nested
         @DisplayName( "by Identifier" )
-        class ByIdentifierTest
+        class ByIdentifierTest  // NOPMD
         {
         }
 
+        /**
+         * Test for collections of airports by particular geopolitical division.
+         */
         @Nested
         @DisplayName( "Lists of Airports" )
         class ListsOfAirports
         {
 
+            /**
+             * Verify a collection of airports within a specific continent.
+             */
             @Nested
             @DisplayName( "by Continent" )
-            class ByContinent
+            class ByContinent   // NOPMD
             {
             }
 
+            /**
+             * Verify a collection of airports within a specific country.
+             */
             @Nested
             @DisplayName( "by Country" )
-            class ByCountry
+            class ByCountry     // NOPMD
             {
             }
 
+            /**
+             * Verify collections of Airports within a single Region.
+             */
             @Nested
             @DisplayName( "by Region" )
-            class ByRegion
+            class ByRegion      // NOPMD
             {
                 @Test
                 @DisplayName( "valid region code" )
-                void methodGetAirport_ByRegionId_returnsList()
+                void methodGetAirport_byRegionId_returnsList()
                 {
                     // --- given
-                    final Airport airport = new Airport( 1L, "ATL", "Large", "Hartsfield",
-                                                         BigDecimal.valueOf( 1.23 ), BigDecimal.TWO, 5, "NA", "US", "US-GA", "Atlanta",
+                    final Airport airport = new Airport( 1L, "ATL",
+                                                         "Large",
+                                                         "Hartsfield",
+                                                         BigDecimal.valueOf( 1.23 ),
+                                                         BigDecimal.TWO,
+                                                         5,
+                                                         "NA",
+                                                         "US",
+                                                         "US-GA",
+                                                         "Atlanta",
                                                          "Atlanta",
                                                          null,
                                                          null,
-                                                         null,null,
-                                                         null,null,
+                                                         null, null,
+                                                         null, null,
                                                          "Key"
                     );
 
@@ -180,23 +202,29 @@ class AirportControllerTest //extends RestControllerTestBase
                     listOfAirports.add( airport );
 
                     when( readService.findAirportsByRegion( anyString() ) )
-                            .thenReturn( listOfAirports );
+                        .thenReturn( listOfAirports );
 
                     // --- when
-                    ResponseEntity<List<AirportDTO>> response = controller.restGetAirportsByRegion( "NA" );
+                    final ResponseEntity<List<AirportDTO>> response = controller.restGetAirportsByRegion( "NA", requestHeader );
 
                     // --- then
                     final HttpHeaders            headers  = response.getHeaders();
+                    final HttpHeadersAssert headersAssert = new HttpHeadersAssert( headers );
 
-                    assertAll( () -> assertNotNull( response.getBody() ),
-//                               () -> assertEquals( "application/json;charset=UTF-8", headers.getFirst( "Content-Type" )  ),
+
+                    assertAll( () -> headersAssert
+                                   .doesNotContainHeader( "NoWay" )
+                                   .hasValue( HeaderUtility.TRACEID, TEST_PARENT )
+                                   .hasValue( HeaderUtility.TRACESTATE, TEST_STATE )
+                                   .hasValue( HttpHeaders.CONTENT_TYPE, "application/json;charset=UTF-8" ),
+                               () -> assertNotNull( response.getBody() ),
                                () -> verifyNoInteractions( createService ),
                                () -> verify( readService, times( 1 ) )
-                                       .findAirportsByRegion(  anyString() ),
+                                   .findAirportsByRegion(  anyString() ),
                                () -> verifyNoInteractions( updateService ),
                                () -> verifyNoInteractions( deleteService ),
                                () -> verify( dtoMapper ).domainToApi( any( Airport.class ) )
-                             );
+                    );
                 }
             }
 
@@ -205,7 +233,7 @@ class AirportControllerTest //extends RestControllerTestBase
 
         @Nested
         @DisplayName( " all" )
-        class AllTest
+        class AllTest           // NOPMD
         {
         }
 
@@ -214,18 +242,21 @@ class AirportControllerTest //extends RestControllerTestBase
          */
         @Nested
         @DisplayName( "by Query (search)" )
-        class SearchTest
+        class SearchTest        // NOPMD
         {
         }
 
 
+        /**
+         * Collection of tests for counts of airports within a Continent, Country or Region.
+         */
         @Nested
         @DisplayName( " airport counts.." )
-        class AirportCounts
+        class AirportCounts     // NOPMD
         {
             @Test
             @DisplayName( "by country grouped by region" )
-            void methodGetAirportCount_ByCountryCode_returnsList()
+            void methodGetAirportCount_byCountryCode_returnsList()
             {
                 // --- given
                 final AirportCountInRegion airport = new AirportCountInRegion( "US-GA", "Georgia", 5
@@ -236,23 +267,32 @@ class AirportControllerTest //extends RestControllerTestBase
                 listOfAirports.add( airport );
 
                 when( readService.countRegionAirportsByCountry( anyString() ) )
-                        .thenReturn( listOfAirports );
+                    .thenReturn( listOfAirports );
 
                 // --- when
-                ResponseEntity<List<AirportCountInRegionDTO>> response = controller.restGetCountAirportsByRegion( "NA" );
+                final ResponseEntity<List<AirportCountInRegionDTO>> response =
+                    controller.restGetCountAirportsByRegion( "NA", requestHeader );
 
                 // --- then
-//                final HttpHeaders            headers  = response.getHeaders();
+                final HttpHeaders            headers  = response.getHeaders();
+                final HttpHeadersAssert headersAssert = new HttpHeadersAssert( headers );
 
-                assertAll( () -> assertNotNull( response.getBody() ),
-//                               () -> assertEquals( "application/json;charset=UTF-8", headers.getFirst( "Content-Type" )  ),
+                assertAll( () -> headersAssert
+                               .doesNotContainHeader( "NoWay" )
+                               .hasValue( "TRACEPARENT", "testParent" )
+                               .hasValue( "TRACESTATE", "testState" )
+                               .hasValue( HttpHeaders.CONTENT_TYPE, "application/json;charset=UTF-8" ),
+                           // TODO validate the body
+                           () -> assertNotNull( response.getBody() ),
+                           // Check use of service layer classes
                            () -> verifyNoInteractions( createService ),
                            () -> verify( readService, times( 1 ) )
-                                   .countRegionAirportsByCountry(  anyString() ),
+                               .countRegionAirportsByCountry(  anyString() ),
                            () -> verifyNoInteractions( updateService ),
                            () -> verifyNoInteractions( deleteService ),
+                           // With response body, make sure it is converted to a DTO
                            () -> verify( dtoMapper ).domainToApiAirportsInRegion( anyList() )
-                         );
+                );
             }
 
 
@@ -260,94 +300,151 @@ class AirportControllerTest //extends RestControllerTestBase
             @DisplayName( "by Region" )
             void restGet_countAirportsByRegion_returnsSuccess() throws Exception
             {
-                List<AirportCountInRegion> entities =
-                        List.of( new AirportCountInRegion( "YY", "::YYNAME::", 42L ),
-                                 new AirportCountInRegion( "ZZ", "::ZZNAME::", 21L )
-                               );
-
+                // --- given
+                final List<AirportCountInRegion> entities =
+                    List.of( new AirportCountInRegion( "YY", "::YYNAME::", 42L ),
+                             new AirportCountInRegion( "ZZ", "::ZZNAME::", 21L )
+                           );
                 when( readService.countRegionAirportsByCountry( anyString() ) )
-                        .thenReturn( entities );
+                    .thenReturn( entities );
 
-
-//                final RequestBuilder request = withHeaders( get( "/location/airport/summary/region/code/{regionCode}",
-//                                                                "RE" ) );
-//
-//                final MvcResult mvcResult = mvc
-//                        .perform( request )
-//                        .andDo( print() )
-//                        .andExpect( status().isOk() )
-//                        .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
-//                        // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
-//                        //      don't complain about lack of assertions in tests
-//                        // TODO test for an empty result body (empty list)
-//                        .andReturn();
-//                MockHttpServletResponse response = mvcResult.getResponse();
-//                ObjectMapper mapper = new ObjectMapper();
-////                List<AirportDTO> result = mapper.readValue( response.getContentAsString(), new TypeReference<List<AirportDTO>>() );
-//                AirportDTO[] resultA = mapper.readValue( response.getContentAsString(), AirportDTO[].class );
-//                List<AirportDTO> result = List.of( resultA );
+                // --- when
+                final ResponseEntity<List<AirportCountInRegionDTO>> response =
+                    controller
+                        .restGetCountAirportsByRegion( "NA", requestHeader );
 
                 // --- then
-                // TODO need to assert the resulting JSON....
+                final HttpHeaders            headers  = response.getHeaders();
+                final HttpHeadersAssert headersAssert = new HttpHeadersAssert( headers );
 
-//                assertThat( response.getContentType() )
-//                        .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
-//                assertAll( () -> assertThat( response.getContentType() )
-//                        .contains( MediaType.APPLICATION_JSON_VALUE )
-
-//                           () -> assertThat( result )
-//                                   .isNotNull()
-//                                   .hasSize( 2 )
-
-//                           () -> assertEquals( "YY", result.get(0).getRegionCode() ),
-//                           () -> assertEquals( "::YYNAME::", result.get(0).getName() ),
-//                           () -> assertEquals( 42, result.get(0).getAirportCount() )
-//                         );
+                assertAll( () -> headersAssert
+                               .doesNotContainHeader( "NoWay" )
+                               .hasValue( HeaderUtility.TRACEID, TEST_PARENT )
+                               .hasValue( HeaderUtility.TRACESTATE, TEST_STATE )
+                               .hasValue( HttpHeaders.CONTENT_TYPE, "application/json;charset=UTF-8" ),
+                           () -> assertNotNull( response.getBody() ),
+                           () -> verifyNoInteractions( createService ),
+                           () -> verify( readService, times( 1 ) )
+                               .countRegionAirportsByCountry(  anyString() ),
+                           () -> verifyNoInteractions( updateService ),
+                           () -> verifyNoInteractions( deleteService ),
+                           () -> verify( dtoMapper ).domainToApiAirportsInRegion( anyList() )
+                );
             }
         }
     }
 
+    // --- Single ---
+    // --- Multiple ---
 
-    @Nested
-    @DisplayName( "HTTP POST" )
-    class PostMethod
-    {
-    }
-
-    @Nested
-    @DisplayName( "HTTP PUT" )
-    class PutMethod
-    {
-    }
-
-    @Nested
-    @DisplayName( "HTTP DELETE" )
-    class DeleteMethod
-    {
-    }
-
+    // ========== UPDATE ==========
+    // ===== PATCH =====
+    /**
+     * Verify Update (HTTP PATCH) methods directly without making a REST call.
+     */
     @Nested
     @DisplayName( "HTTP PATCH" )
-    class PatchMethod
+    class PatchMethod           // NOPMD
     {
     }
 
+    // ===== PUT =====
+    /**
+     * Verify Update (HTTP PUT) methods directly without making a REST call.
+     */
     @Nested
-    @DisplayName( "HTTP INFO" )
-    class InfoMethod
+    @DisplayName( "HTTP PUT" )
+    class PutMethod             // NOPMD
     {
     }
 
+
+    // ========== DELETE ==========
+    // ===== DELETE =====
+    /**
+     * Verify Delete (HTTP DELETE) methods directly without making a REST call.
+     */
+    @Nested
+    @DisplayName( "HTTP DELETE" )
+    class DeleteMethod          // NOPMD
+    {
+    }
+
+
+    // ========== Administrative ==========
+    // ===== HEAD =====
+    /**
+     * Verify Head (HTTP HEAD) methods directly without making a REST call.
+     */
     @Nested
     @DisplayName( "HTTP HEAD" )
-    class HeadMethod
+    class HeadMethod            // NOPMD
     {
     }
 
+    // ===== INFO =====
+    /**
+     * Verify Info (HTTP INFO) methods directly without making a REST call.
+     */
     @Nested
-    @DisplayName( "HTTP OPT" )
-    class OptionsMethod
+    @DisplayName( "HTTP INFO" )
+    class InfoMethod            // NOPMD
     {
     }
+
+    // ===== OPTION =====
+    /**
+     * Verify Options (HTTP OPTIONS) methods directly without making a REST call.
+     */
+    @Nested
+    @DisplayName( "HTTP OPT" )
+    class OptionsMethod         // NOPMD
+    {
+    }
+
+    // ===== TRACE =====
+
+    // ========== Test support ==========
+
+    private HttpHeaders buildDefaultHeaders()
+    {
+        final MediaType desiredContentType = new MediaType( MediaType.APPLICATION_JSON,
+                                                            StandardCharsets.UTF_8 );
+        final MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.set( "Accept", MediaType.APPLICATION_JSON_VALUE );
+        headers.set( "Content-Type", desiredContentType.toString() );
+        headers.set( HttpHeaders.ACCEPT_LANGUAGE, "en-US" );
+        headers.set( HttpHeaders.ACCEPT_CHARSET, "utf-8" );
+        headers.set( HttpHeaders.ACCEPT_ENCODING, "gzip" );
+        headers.set( HeaderUtility.TRACESTATE, "testState" );
+        headers.set( HeaderUtility.TRACEID, "testParent" );
+        headers.set( "NoWay", "Should not exist" );
+
+        return new HttpHeaders( headers );
+    }
+
+    // private AirportEntity buildEntity()
+    // {
+    //     return AirportEntity.builder()
+    //                         .id( 1L )
+    //                         .ident( "KATL" )
+    //                         .type( "large_airport" )
+    //                         .name( "::NAME::" )
+    //                         .latitude( BigDecimal.valueOf( 123.456 ) )
+    //                         .longitude( BigDecimal.valueOf( 987.654 ) )
+    //                         .elevation( 55 )
+    //                         .continent( "NA" )
+    //                         .isoCountry( "USA" )
+    //                         .isoRegion( "GA" )
+    //                         .municipality( "Atlanta" )
+    //                         .scheduledService( "yes" )
+    //                         .gpsCode( "KATL" )
+    //                         .iataCode( "KATL" )
+    //                         .icaoCode( "ATL" )
+    //                         .localCode( "KATL" )
+    //                         .build();
+    // }
+
+
 
 }

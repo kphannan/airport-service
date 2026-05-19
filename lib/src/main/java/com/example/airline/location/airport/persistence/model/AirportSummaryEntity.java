@@ -22,12 +22,34 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+
+/**
+ * Commonly used subset of the Airport attributes.
+ *
+ * @param ident            unique identifier of an airport.  This is not the persistence id.
+ * @param name             common name of the airport.
+ * @param continentCode    de facto continent code where the airport exists.
+ * @param continentName    common name of the continent.
+ * @param countryCode      ISO 3166 code for the country where the airport exists.
+ * @param countryName      name of the country where the airport exists.
+ * @param regionCode       ISO 3166 code of the high-level administrative subdivision of the country where the airport
+ *                         is primarily located.
+ * @param regionName       geopolitical division within the country where the airport exists.
+ * @param municipality     The primary municipality that the airport serves. {@see AirportEntity#municipality}
+ * @param type             The type of the airport. Allowed values are "closed_airport", "heliport", "large_airport",
+ *                         "medium_airport", "seaplane_base", and "small_airport".
+ * @param scheduledService {@code yes} if the airport has regularly scheduled flights, {@code no} if there is no
+ *                         scheduled service.
+ */
 // TODO add validations @Pattern, @Size, @NonBlank
 @IgnoreGeneratedCoverage
 public record AirportSummaryEntity(
     @NotBlank
-    @Size( max = 7 )
+    // @Size( max = 7 )
+    @Pattern( regexp = "^(([0-9]{1,2}[A-Z]{1,2}[0-9]?)|([A-Z]{3,4}[0-9]?)|([A-Z]{1,2}-([0-9]{2,5}|[A-Z]{3,4}))|([A-Z]{1,2}[0-9]{1,2}[A-Z]{1,2}?[0-9]?)|([A-Z]{1,2}[0-9]{1,2})|([A-Z]{1,2}-(([0-9]{1,2}[A-Z]{1,2}[0-9]?)|([A-Z]{2,3}[0-9]{1,2}))))$",
+              message = "Airport ident must a unique 4 to 7 character code following a specific pattern" )
     String ident,
+
     @NotBlank
     @Size( max = 90 )
     String name,
@@ -35,10 +57,10 @@ public record AirportSummaryEntity(
     @NotBlank
     @Pattern( regexp = "[A-Z]{2}", message = "Continent code must be 2 uppercase characters" )
     String continentCode,
+
     @NotBlank
     @Size( max = 52 )
     String continentName,
-
 
     @NotBlank( message = "An ISO 3166:1-alpha2 country code is required" )
     @Pattern( regexp = "[A-Z]{2}", message = "Country code must a valid ISO 3166:1-alpha2" )
@@ -52,6 +74,7 @@ public record AirportSummaryEntity(
     @Pattern( regexp = "[A-Z]{2}-[A-Z\\-]{1,4}",
               message = "Region code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" )
     String regionCode,
+
     @NotBlank
     @Size( max = 80 )
     String regionName,
