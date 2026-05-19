@@ -1,23 +1,27 @@
 package com.example.airline.location.airport.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+
+import com.example.utility.IgnoreGeneratedCoverage;
 import org.jspecify.annotations.NonNull;
 
+
 /**
- * Count of the number of Airports within a given Country.
+ * C
+ *
+ * @param countryCode  ISO 3166 country code.
+ * @param name         common name of the country.
+ * @param airportCount number of airports in the country.
  */
-@Data
-@AllArgsConstructor
-public class AirportCountInCountry
-{
-    /**
-     * The code for the continent where the airport is (primarily) located. Allowed
-     * values are "AF" (Africa), "AN" (Antarctica), "AS" (Asia), "EU" (Europe), "NA"
-     * (North America), "OC" (Oceania), or "SA" (South America).
-     */
+@IgnoreGeneratedCoverage
+public record AirportCountInCountry(
+
     @NonNull
-    private String countryCode;
-    private String name;
-    private long   airportCount;
+    String countryCode,
+
+    String name,
+
+    long airportCount
+)
+{
 }
+

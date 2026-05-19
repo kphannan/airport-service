@@ -256,9 +256,9 @@ class AirportReadServiceTest
                     assertAll( () -> assertThat( result )
                                        .isNotNull()
                                        .hasSize( 2 ),
-                               () -> assertEquals( "YY", result.get( 0 ).getCountryCode() ),
-                               () -> assertEquals( "::YYNAME::", result.get( 0 ).getName() ),
-                               () -> assertEquals( 42, result.get( 0 ).getAirportCount() )
+                               () -> assertEquals( "YY", result.get( 0 ).countryCode() ),
+                               () -> assertEquals( "::YYNAME::", result.get( 0 ).name() ),
+                               () -> assertEquals( 42, result.get( 0 ).airportCount() )
                     );
                 }
 
