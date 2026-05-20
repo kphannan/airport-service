@@ -136,11 +136,18 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
      * Find the count of airports in all the {@see Region}s of a specific {@see Country}.
      *
      * @param countryCode the ISO 3166 code of the target country.
-     * @return a collection of {@see AirporCountInReqionEntity} instances where each one represents
-     *         the number of airports in a single {@see Region}.
+     *
+     * @return a collection of {@see AirporCountInReqionEntity} instances where each one represents the number of
+     *     airports in a single {@see Region}.
      */
     List<AirportCountInRegionEntity> countRegionAirportsByCountry( String countryCode );
 
+    /**
+     * Find the list of the number airports in a specific Region.
+     *
+     * @param regionCode the target region.
+     * @return
+     */
     List<AirportCountInRegionEntity> countAirportsByRegion( String regionCode );
 
     List<AirportCountInCountryEntity> countAirportsByCountry( String countryCode );

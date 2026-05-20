@@ -4,6 +4,7 @@ package com.example.airline.location.airport.service;
 
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import com.example.airline.location.airport.mapper.AirportEntityMapper;
@@ -22,7 +23,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 
-
 /**
  * Spring Service (business logic) supporting the {@code Airport} domain object.
  */
@@ -38,14 +38,13 @@ public class AirportReadService
      * Create an AirportService supported by autowire.
      *
      * @param repository jpa repository of Airports
-     * @param mapper maps entities to/from the domain model
+     * @param mapper     maps entities to/from the domain model
      */
     public AirportReadService( final AirportRepository repository, final AirportEntityMapper mapper )
     {
         this.repository = repository;
         this.mapper     = mapper;
     }
-
 
 
     /**
@@ -61,7 +60,6 @@ public class AirportReadService
 
         return airports.map( mapper::entityToDomain );
     }
-
 
 
     /**
@@ -80,10 +78,8 @@ public class AirportReadService
     }
 
 
-
     /**
-     * Find an airport from its commonly used identifier, often this is the iata
-     * airport code.
+     * Find an airport from its commonly used identifier, often this is the iata airport code.
      *
      * @param code the airport identifier.
      *
@@ -100,6 +96,7 @@ public class AirportReadService
      * Find all airports within a specified Region.
      *
      * @param code the unique identifying code for the desired reqion.
+     *
      * @return the list of Airports within the region or an empty list.
      */
     public List<Airport> findAirportsByRegion( final String code )
@@ -137,6 +134,7 @@ public class AirportReadService
      * Get the number of airports in a country.
      *
      * @param countryCode unique ISO 3166 code of the country.
+     *
      * @return a collection of Airport count in a country
      */
     public List<AirportCountInCountry> countAirportsByCountry( final String countryCode )
@@ -147,7 +145,8 @@ public class AirportReadService
     /**
      * Get the number of airports by region within a country.
      *
-     * @param countryCode  the target country.
+     * @param countryCode the target country.
+     *
      * @return list of counts of airports in a region.
      */
     public List<AirportCountInRegion> countRegionAirportsByCountry( final String countryCode )
@@ -161,6 +160,7 @@ public class AirportReadService
      * Get the number of airports in a specific region.
      *
      * @param regionCode the desired region
+     *
      * @return list of airport counts.
      */
     public List<AirportCountInRegion> countAirportsByRegion( final String regionCode )
@@ -173,16 +173,26 @@ public class AirportReadService
 
     // ===== Counts =====
     // --- by Continent ---
+
+    /**
+     * Find all the airports on a Continent.
+     *
+     * @param continent de facto 2 letter continent abbreviation
+     *
+     * @return collection of all the airports located primarily on the requested continent.
+     */
     public List<AirportSummaryEntity> findSummaryByContinent( String continent )
     {
         return List.of();
     }
 
     // --- by Country ---
+
     /**
      * Find all the airports in a Country.
      *
      * @param isoCountry ISO 3166 code for the Country.
+     *
      * @return collection of airports in the country.
      */
     public List<AirportSummaryEntity> findSummaryByCountry( String isoCountry )
@@ -196,14 +206,13 @@ public class AirportReadService
      * Find all the airports in a Region.
      *
      * @param isoRegion ISO 3166 code for the Region.
+     *
      * @return collection of airports in the region.
      */
     public List<AirportSummaryEntity> findSummaryByRegion( String isoRegion )
     {
         return List.of();
     }
-
-
 
 
     /**
@@ -215,8 +224,7 @@ public class AirportReadService
      * @param name     optional airport name string.
      * @param paging   current {@code Page} specification.
      *
-     * @return the target page with {@code Airport} records if any match the
-     *         criteria.
+     * @return the target page with {@code Airport} records if any match the criteria.
      */
     public Page<Airport> advancedQuery( final String iataCode,
                                         final String icaoCode,
@@ -224,25 +232,20 @@ public class AirportReadService
                                         final String name,
                                         final Pageable paging )
     {
-        final String criteriaIataCode = null == iataCode ? "" : iataCode.toUpperCase();
-        final String criteriaIcaoCode = null == icaoCode ? "" : icaoCode.toUpperCase();
-        final String criteriaIdent    = null == ident    ? "" : ident.toUpperCase();
-        final String criteriaName     = null == name     ? "" : name.toUpperCase();
+        final String criteriaIataCode = null == iataCode ? "" : iataCode.toUpperCase( Locale.US );
+        final String criteriaIcaoCode = null == icaoCode ? "" : icaoCode.toUpperCase( Locale.US );
+        final String criteriaIdent    = null == ident    ? "" : ident.toUpperCase( Locale.US );
+        final String criteriaName     = null == name     ? "" : name.toUpperCase( Locale.US );
 
-        final Page<AirportEntity> entities = repository.advancedQuery( criteriaIataCode,
-                                                                       criteriaIcaoCode,
-                                                                       criteriaIdent,
-                                                                       criteriaName,
-                                                                       paging );
+        final Page<AirportEntity> entities =
+            repository.advancedQuery( criteriaIataCode, criteriaIcaoCode, criteriaIdent, criteriaName, paging );
 
         // TODO should probably think about handling null here though it shouldn't ever happen.
         return entities.map( mapper::entityToDomain );
     }
 
 
-
-
-
+    // ========== Supporting methods ==========
 
     private Optional<Airport> mapEntityToDomain( final Optional<AirportEntity> entity )
     {
