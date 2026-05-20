@@ -134,6 +134,7 @@ WHERE r.code = 'US-GA'
 )
 
 
+//!  This query really doesn't make sense given the name.  The result set would only be 1 row.
 @NamedQuery( name = "AirportEntity.countAirportsByCountry",
              query = """
                     SELECT new com.example.airline.location.airport.persistence.model.AirportCountInCountryEntity(

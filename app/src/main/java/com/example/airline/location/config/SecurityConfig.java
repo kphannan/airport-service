@@ -66,16 +66,16 @@ public class SecurityConfig         // TODO create security tests
                               headers.frameOptions( options ->
                                                             options.sameOrigin() ) )  // For H2 console access
 
-//                .headers( headers ->
-//                                  headers.frameOptions( frameOptions ->
-//                                                                frameOptions.mode(SAMEORIGIGN))
-//                        )
+                               // .headers( headers ->
+                               //                   headers.frameOptions( frameOptions ->
+                               //                                                 frameOptions.mode(SAMEORIGIGN))
+                               //         )
 
                                                        .cors( c ->
                                c.configurationSource( corsConfigurationSource() ) )
-//                .exceptionHandling( customizer ->
-//                                            customizer
-//                                            .authenticationEntryPoint( new HttpStatusEntryPoint( HttpStatus.UNAUTHORIZED ) ) )
+                              // .exceptionHandling( customizer ->
+                              //                             customizer
+                              //                             .authenticationEntryPoint( new HttpStatusEntryPoint( HttpStatus.UNAUTHORIZED ) ) )
 
                                                        .csrf( AbstractHttpConfigurer::disable )
                                                        .sessionManagement( customizer ->

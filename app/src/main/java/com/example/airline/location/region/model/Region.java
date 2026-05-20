@@ -42,7 +42,7 @@ import org.jspecify.annotations.Nullable;
 public record Region(
 
     @NonNull
-    @SuppressWarnings( "PMD.ShortVariable")
+    @SuppressWarnings( "PMD.ShortVariable" )
     Integer id,
 
     @Pattern( regexp = "[A-Z]{2}-[A-Z\\-]{1,4}",
@@ -57,22 +57,22 @@ public record Region(
     @NonNull
     String localCode,
 
-    @Pattern( regexp = "[a-zA-Z][a-zA-Z ]{1,51}", message = "Continent name must be 2 to 52 characters")
+    @Pattern( regexp = "[a-zA-Z][a-zA-Z ]{1,51}", message = "Continent name must be 2 to 52 characters" )
     @NonNull
     String name,
 
-    @Pattern( regexp = "[A-Z]{2}", message = "Country code must a valid ISO 3166:1-alpha2")
+    @Pattern( regexp = "[A-Z]{2}", message = "Country code must a valid ISO 3166:1-alpha2" )
     @NonNull
     String country, // ! Create a domain object for the country code
 
-    @Pattern( regexp = "[A-Z]{2}", message = "Continent code must be 2 uppercase characters")
+    @Pattern( regexp = "[A-Z]{2}", message = "Continent code must be 2 uppercase characters" )
     @NonNull
     String continent, // ! Create a domain object for continent code
 
     @Nullable
     URI wikipediaLink,
 
-    @Size( max = 255, message = "List of keywords may not exceed 255 characters")
+    @Size( max = 255, message = "List of keywords may not exceed 255 characters" )
     @Nullable
     String keywords
 )

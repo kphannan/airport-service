@@ -17,11 +17,11 @@ import jakarta.validation.constraints.Size;
  */
 @IgnoreGeneratedCoverage
 public record AirportCountInContinentEntity(
-    @Pattern( regexp = "[A-Z]{2}", message = "Continent code must be 2 uppercase characters")
+    @Pattern( regexp = "[A-Z]{2}", message = "Continent code must be 2 uppercase characters"
     String continentCode,
 
     @NotBlank
-    @Size( max = 52)
+    @Size( max = 52 )
     String name,
 
     @PositiveOrZero

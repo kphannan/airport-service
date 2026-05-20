@@ -6,7 +6,7 @@ import org.jspecify.annotations.NonNull;
 
 
 /**
- * C
+ * Represents the number of airports in the identified country.
  *
  * @param countryCode  ISO 3166 country code.
  * @param name         common name of the country.

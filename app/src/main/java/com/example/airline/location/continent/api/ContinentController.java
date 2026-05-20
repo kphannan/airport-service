@@ -474,9 +474,9 @@ public class ContinentController
                 .body( dto );
     }
 
-    private Optional<Continent> applyPatchToContinent( Optional<Continent> original, JsonPatch jsonPatch )
+    private Optional<Continent> applyPatchToContinent( final Optional<Continent> original, final JsonPatch jsonPatch )
     {
-        Optional<Continent> updated = original;
+        final Optional<Continent> updated = original;
         if ( original.isPresent() )
         {
             // TODO setup ObjectMapper

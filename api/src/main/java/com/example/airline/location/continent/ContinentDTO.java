@@ -16,7 +16,14 @@ import org.springframework.validation.annotation.Validated;
 
 
 /**
- * API representation of a Continent.
+ * API model object representing a single Continent.
+ *
+ * @param id       persistence key of the continent.
+ * @param code     de facto abbreviation for the continent.
+ * @param name     common name of the continent.
+ * @param wikiLink Optional, URI to the Wikipedia page for the Continent
+ * @param keywords Optional comma-separated list of keywords for helping with search. May include former names for the
+ *                 continent, and/or the continent name in other languages.
  */
 @IgnoreGeneratedCoverage
 @Validated
@@ -40,7 +47,7 @@ public record ContinentDTO(
     @NotNull( message = "A continent code is required" )
     @Pattern( regexp = "[A-Z]{2}", message = "Code must be 2 uppercase characters" )
     @NonNull
-    String code,
+    String code,        // TODO create an enum for continent codes.
 
     @JsonProperty( value = "name", required = true )
     @Schema( name = "name",
