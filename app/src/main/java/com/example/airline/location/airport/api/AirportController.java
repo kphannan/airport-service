@@ -152,7 +152,9 @@ public class AirportController
     /**
      * Get a paged subset of airports.
      *
-     * @param pageable the subset {@link org.springframework.data.domain.Pageable}
+     * @param pageable       the subset {@link org.springframework.data.domain.Pageable}
+     * @param requestHeaders HttpHeaders primarily for call tracing, optional.
+     *
      * @return the desired page of Airports.
      */
     // TODO add OpenAPI spec
@@ -168,10 +170,13 @@ public class AirportController
 
 
     // --- Single entity ---
+
     /**
      * Find an airport by its ID in the persistent store.
      *
-     * @param id the unique persistence id of the airport (ICAO or IATA)
+     * @param id             the unique persistence id of the airport (ICAO or IATA)
+     * @param requestHeaders HttpHeaders primarily for call tracing, optional.
+     *
      * @return the airport.
      */
     @Operation( method = "GET",
@@ -289,7 +294,9 @@ public class AirportController
     /**
      * get a list of countries in the continent, with counts of airports in each country.
      *
-     * @param continentCode the 2 character continent code.
+     * @param continentCode  the 2 character continent code.
+     * @param requestHeaders HttpHeaders primarily for call tracing, optional.
+     *
      * @return List of countries including the number of airports in that country.
      */
     // TODO add OpenAPI spec
@@ -313,8 +320,9 @@ public class AirportController
     /**
      * Get the count of all airports in a specific country.
      *
-     * @param countryCode the desired country code, required.
+     * @param countryCode    the desired country code, required.
      * @param requestHeaders HttpHeaders primarily for call tracing, optional.
+     *
      * @return collection of Country names and the number of airports within that country.
      */
     @GetMapping( "/summary/country/code/{countryCode}" )
@@ -371,6 +379,7 @@ public class AirportController
      * Find number of airports in each region within a country.
      *
      * @param regionCode unique ISO 3166 code of the country.
+     *
      * @return list of regions and the number of airports in that region.
      */
     // TODO add OpenAPI spec
@@ -401,10 +410,12 @@ public class AirportController
     // }
 
     // --- by specific Region  ---
+
     /**
      * REST method to retrieve a list of {@link AirportDTO} within the specified @see Region.
      *
      * @param regionCode the desired {@link AirportDTO#isoRegion}.
+     *
      * @return A list of {@link AirportDTO} entities found withing the desired @see Region.
      */
     // TODO add OpenAPI spec
@@ -423,6 +434,7 @@ public class AirportController
 
 
     // --- Advanced Search ---
+
     /**
      * Search for {@code Airport} records that contain any of the query parameters.
      *
@@ -432,8 +444,7 @@ public class AirportController
      * @param name     optional airport name string.
      * @param paging   current {@code Page} specification.
      *
-     * @return the target page with {@code Airport} records if any match the
-     *         criteria.
+     * @return the target page with {@code Airport} records if any match the criteria.
      */
     // TODO add OpenAPI spec
     @GetMapping( path = "/search" )

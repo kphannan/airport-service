@@ -19,91 +19,62 @@ import org.jspecify.annotations.Nullable;
 // https://www.statoids.com
 // https://unstats.un.org/unsd/methodology/m49/overview/
 
+
 /**
  * High-level administrative subdivision of a country (e.g. province, governorate, state).
  *
- * @param id primary key assigned by the database.
- * @param code local_code prefixed with the country code to make a globally unique identifier.
- * @param localCode The local code for the administrative subdivision. Whenever possible, these
- *                  are official ISO 3166:2, at the highest level available, but in some cases
- *                  unofficial codes are used. There is also a pseudocode "U-A"
- *                  for each country, which means that the airport has not yet been assigned to a
- *                  region (or perhaps can't be, as in the case of a deep-sea oil platform).
- * @param name common name of the Region.
- * @param country country that contains the Region.
- * @param continent continent where the Region exists.
- * @param wikipediaLink Optional, URI to the Wikipedia page for the Region
- * @param keywords A comma-separated list of keywords for helping with search. May include former
- *                 names for the region, and/or the region name in other languages.
+ * @param id            primary key assigned by the database.
+ * @param code          local_code prefixed with the country code to make a globally unique identifier.
+ * @param localCode     The local code for the administrative subdivision. Whenever possible, these are official ISO
+ *                      3166:2, at the highest level available, but in some cases unofficial codes are used. There is
+ *                      also a pseudocode "U-A" for each country, which means that the airport has not yet been assigned
+ *                      to a region (or perhaps can't be, as in the case of a deep-sea oil platform).
+ * @param name          The common English-language name for the administrative subdivision. In some cases, the name in
+ *                      local languages will appear in the keyword field assist search.
+ * @param country       The two-character ISO 3166:1-alpha2 code for the country containing the administrative
+ *                      subdivision. A handful of unofficial, non-ISO codes are also in use, such as "XK" for Kosovo.
+ * @param continent     A code for the continent to which the region belongs. See the continent field in airports.csv
+ *                      for a list of codes.
+ * @param wikipediaLink Optional, link to the Wikipedia article describing the subdivision.
+ * @param keywords      Optional, A comma-separated list of keywords to help with search. May include former names for
+ *                      the region, and/or the region name in other languages.
  */
 public record Region(
 
-    /**
-     * Internal integer identifier for the region. This will stay
-     * persistent, even if the region code changes.
-     */
     @NonNull
-    @SuppressWarnings( "PMD.ShortVariable" )
+    @SuppressWarnings( "PMD.ShortVariable")
     Integer id,
 
-    /**
-     * local_code prefixed with the country code to make a globally unique
-     * identifier.
-     */
     @Pattern( regexp = "[A-Z]{2}-[A-Z\\-]{1,4}",
-              message = "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" )
+              message = "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code"
+    )
     @NonNull
     String code,
 
-    /**
-     * The local code for the administrative subdivision. Whenever possible, these
-     * are official ISO 3166:2, at the highest level available, but in some cases
-     * unofficial codes are used. There is also a pseudocode "U-A"
-     * for each country, which means that the airport has not yet been assigned to a
-     * region (or perhaps can't be, as in the case of a deep-sea oil platform).
-     */
     @Pattern( regexp = "([A-Z]{2}-[A-Z\\-]{1,4}|U-A)",
-              message = "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" )
+              message = "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code"
+    )
     @NonNull
     String localCode,
 
-    /**
-     * The common English-language name for the administrative subdivision. In some
-     * cases, the name in local languages will appear in the keyword field assist
-     * search.
-     */
-    @Pattern( regexp = "[a-zA-Z][a-zA-Z ]{1,51}", message = "Continent name must be 2 to 52 characters" )
+    @Pattern( regexp = "[a-zA-Z][a-zA-Z ]{1,51}", message = "Continent name must be 2 to 52 characters")
     @NonNull
     String name,
 
-    /**
-     * The two-character ISO 3166:1-alpha2 code for the country containing the
-     * administrative subdivision. A handful of unofficial, non-ISO codes are also
-     * in use, such as "XK" for Kosovo.
-     */
-    @Pattern( regexp = "[A-Z]{2}", message = "Country code must a valid ISO 3166:1-alpha2" )
+    @Pattern( regexp = "[A-Z]{2}", message = "Country code must a valid ISO 3166:1-alpha2")
     @NonNull
     String country, // ! Create a domain object for the country code
 
-    /**
-     * A code for the continent to which the region belongs. See the continent field
-     * in airports.csv for a list of codes.
-     */
-    @Pattern( regexp = "[A-Z]{2}", message = "Continent code must be 2 uppercase characters" )
+    @Pattern( regexp = "[A-Z]{2}", message = "Continent code must be 2 uppercase characters")
     @NonNull
     String continent, // ! Create a domain object for continent code
 
-    /**
-     * A link to the Wikipedia article describing the subdivision.
-     */
     @Nullable
     URI wikipediaLink,
 
-    /**
-     * A comma-separated list of keywords to help with search. May include former
-     * names for the region, and/or the region name in other languages.
-     */
-    @Size( max = 255, message = "List of keywords may not exceed 255 characters" )
+    @Size( max = 255, message = "List of keywords may not exceed 255 characters")
     @Nullable
     String keywords
-){}
+)
+{
+}

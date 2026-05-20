@@ -179,12 +179,25 @@ public class AirportReadService
     }
 
     // --- by Country ---
+    /**
+     * Find all the airports in a Country.
+     *
+     * @param isoCountry ISO 3166 code for the Country.
+     * @return collection of airports in the country.
+     */
     public List<AirportSummaryEntity> findSummaryByCountry( String isoCountry )
     {
         return List.of();
     }
 
     // --- by Region ---
+
+    /**
+     * Find all the airports in a Region.
+     *
+     * @param isoRegion ISO 3166 code for the Region.
+     * @return collection of airports in the region.
+     */
     public List<AirportSummaryEntity> findSummaryByRegion( String isoRegion )
     {
         return List.of();

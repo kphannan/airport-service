@@ -28,6 +28,9 @@ public interface ContinentEntityMapper
 
     /**
      * Map a single db entity instance to a domain instance.
+     *
+     * @param entity persistence entity.
+     * @return the domain representation of a continent.
      */
     Continent entityToDomain( ContinentEntity entity );
 
@@ -35,6 +38,9 @@ public interface ContinentEntityMapper
 
     /**
      * Map a list of domain instances to a list of db entity instances.
+     *
+     * @param entities collection of Continent persistence entities.
+     * @return collection of domain layer Continent instances.
      */
     List<Continent> entityToDomain( List<ContinentEntity> entities );
 
