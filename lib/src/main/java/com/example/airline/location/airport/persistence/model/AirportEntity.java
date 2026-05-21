@@ -133,6 +133,37 @@ WHERE r.code = 'US-GA'
                     """
 )
 
+@NamedQuery( name = "AirportEntity.countRegionAirportsByContinentAndIsoCountry",
+             query = """
+                    SELECT new com.example.airline.location.airport.persistence.model.AirportCountInRegionEntity(
+                        r.code AS regionCode,
+                        r.name AS name,
+                        COUNT(a.id) AS airportCount
+                        )
+                      FROM AirportEntity a
+                    INNER JOIN RegionEntity r ON r.code = a.isoRegion
+                    WHERE r.continent = :continentCode
+                          AND r.country = :countryCode
+                    GROUP BY a.isoRegion
+                    """
+)
+
+@NamedQuery( name = "AirportEntity.countRegionAirportsByContinentAndIsoCountryAndIsoRegion",
+             query = """
+                    SELECT new com.example.airline.location.airport.persistence.model.AirportCountInRegionEntity(
+                        r.code AS regionCode,
+                        r.name AS name,
+                        COUNT(a.id) AS airportCount
+                        )
+                      FROM AirportEntity a
+                    INNER JOIN RegionEntity r ON r.code = a.isoRegion
+                    WHERE r.continent = :continentCode
+                          AND r.country = :countryCode
+                          AND r.localCode = :regionCode
+                    GROUP BY a.isoRegion
+                    """
+)
+
 
 //!  This query really doesn't make sense given the name.  The result set would only be 1 row.
 @NamedQuery( name = "AirportEntity.countAirportsByCountry",
@@ -145,6 +176,19 @@ WHERE r.code = 'US-GA'
                       FROM AirportEntity a
                     INNER JOIN CountryEntity c ON c.code = a.isoCountry
                     WHERE c.code  = :countryCode
+                    GROUP BY a.isoCountry
+                    """
+)
+
+@NamedQuery( name = "AirportEntity.countAirportsGroupedByCountry",
+             query = """
+                    SELECT new com.example.airline.location.airport.persistence.model.AirportCountInCountryEntity(
+                           c.code AS countryCode,
+                           c.name AS name,
+                           COUNT(a.id) AS airportCount
+                           )
+                      FROM AirportEntity a
+                      INNER JOIN CountryEntity c on c.code = a.isoCountry
                     GROUP BY a.isoCountry
                     """
 )
@@ -290,6 +334,7 @@ public class AirportEntity // extends Auditable<String>
      */
     @Column( name = "latitude_deg", precision = 20, scale = 14, nullable = false )
     @NonNull private BigDecimal latitude;
+
     /**
      * The airport longitude in decimal degrees (positive for east).
      */

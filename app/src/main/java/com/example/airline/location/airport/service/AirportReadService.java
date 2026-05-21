@@ -3,6 +3,7 @@
 package com.example.airline.location.airport.service;
 
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -108,6 +109,7 @@ public class AirportReadService
 
 
     // ===== Counts =====
+
     // --- by Continent ---
 
     /**
@@ -122,13 +124,43 @@ public class AirportReadService
         return mapper.entityToDomainAirportsInContinent( entities );
     }
 
-
-    public List<AirportCountInCountry> countCountryAirportsByContinent( final String countryCode )
+    public List<AirportCountInCountry> countCountryAirportsByContinent( final String continentCode )
     {
-        return mapper.entityToDomainAirportsInCountry( repository.countCountryAirportsByContinent( countryCode ) );
+        return mapper.entityToDomainAirportsInCountry( repository.countCountryAirportsByContinent( continentCode ) );
     }
 
+    public List<AirportCountInRegion> countCountryAirportsByContinent( final String continentCode, final String countryCode )
+    {
+        // var entity = repository.countRegionAirportsByContinentAndIsoCountry( continentCode, countryCode );
+        // var domain = mapper.entityToDomainAirportsInRegion( entity );
+        //
+        // return domain;
+        return mapper.entityToDomainAirportsInRegion( repository.countRegionAirportsByContinentAndIsoCountry( continentCode, countryCode ) );
+    }
+
+    public AirportCountInRegion countCountryAirportsByContinent( final String continentCode,
+                                                                 final String countryCode,
+                                                                 final String regionCode )
+    {
+        // var entity = repository.countRegionAirportsByContinentAndIsoCountryAndIsoRegion( continentCode, countryCode, regionCode );
+        // var domain = mapper.entityToDomain( entity );
+        //
+        // return domain;
+        return mapper.entityToDomain( repository.countRegionAirportsByContinentAndIsoCountryAndIsoRegion( continentCode, countryCode, regionCode ) );
+    }
+
+
     // --- by Country ---
+
+    /**
+     * Get the number of airports in a country.
+     *
+     * @return a collection of Airport count in a country
+     */
+    public List<AirportCountInCountry> countAirportsByCountry()
+    {
+        return mapper.entityToDomainAirportsInCountry( repository.countAirportsGroupedByCountry() );
+    }
 
     /**
      * Get the number of airports in a country.
@@ -151,6 +183,8 @@ public class AirportReadService
      */
     public List<AirportCountInRegion> countRegionAirportsByCountry( final String countryCode )
     {
+        // var entity = repository.countRegionAirportsByCountry( countryCode );
+        // return mapper.entityToDomainAirportsInRegion( entity );
         return mapper.entityToDomainAirportsInRegion( repository.countRegionAirportsByCountry( countryCode ) );
     }
 
@@ -261,4 +295,11 @@ public class AirportReadService
     {
         return mapper.entityToDomain( entity );
     }
+
+    private static <T> void printList( final String msg, final Collection<T> collection )
+    {
+        log.error( "Display collection {}", msg );
+        collection.forEach( log::error );
+    }
+
 }

@@ -132,6 +132,10 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
      */
     List<AirportCountInCountryEntity> countCountryAirportsByContinent( String continentCode );
 
+    List<AirportCountInRegionEntity> countRegionAirportsByContinentAndIsoCountry( String continentCode, String countryCode );
+
+    AirportCountInRegionEntity countRegionAirportsByContinentAndIsoCountryAndIsoRegion( String continentCode, String countryCode, String regionCode );
+
     /**
      * Find the count of airports in all the {@see Region}s of a specific {@see Country}.
      *
@@ -151,6 +155,8 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
     List<AirportCountInRegionEntity> countAirportsByRegion( String regionCode );
 
     List<AirportCountInCountryEntity> countAirportsByCountry( String countryCode );
+
+    List<AirportCountInCountryEntity> countAirportsGroupedByCountry();
 
     // List<AirportSummaryEntity> findSummaryByContinent( String continentCode );
 

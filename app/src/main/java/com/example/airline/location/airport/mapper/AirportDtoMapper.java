@@ -42,6 +42,15 @@ public interface AirportDtoMapper
      */
     AirportCountInContinentDTO domainToApi( AirportCountInContinent airport );
 
+    /**
+     * Map a domain instance to DTO instance.
+     *
+     * @param entity domain instance to map.
+     *
+     * @return DTO instance.
+     */
+    AirportCountInRegionDTO domainToApiAirportsInRegion( AirportCountInRegion entity );
+
     // --- Collection
     /**
      * Map a list of domain instances to a list of API instances.

@@ -3,7 +3,7 @@ Feature: Continent Read Operations
   Background:
     * url baseUrl + '/location/continent'
 
-  @Functional @Foo
+  @Functional
   Scenario: Create, Read, Update and Delete a test-only continent
              # Create a test continent
        Given request

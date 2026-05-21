@@ -26,6 +26,7 @@ import com.example.airline.location.airport.model.Airport;
 import com.example.airline.location.airport.model.AirportCountInRegion;
 import com.example.airline.location.airport.persistence.model.AirportCountInContinentEntity;
 import com.example.airline.location.airport.persistence.model.AirportCountInCountryEntity;
+import com.example.airline.location.airport.persistence.model.AirportCountInRegionEntity;
 import com.example.airline.location.airport.persistence.model.AirportEntity;
 import com.example.airline.location.airport.persistence.repository.AirportRepository;
 import com.example.airline.location.airport.service.AirportReadService;
@@ -52,6 +53,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 
@@ -100,7 +102,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
     protected MockMvc mvc;
     @MockitoBean
     protected AirportRepository  repository;
-    @Autowired
+    @MockitoSpyBean
     private   AirportReadService service;
 
     @MockitoSpyBean
@@ -486,9 +488,14 @@ class AirportControllerRestTest //extends RestControllerTestBase
         @DisplayName( " airport counts.." )
         class AirportCounts
         {
+            // --- Continent ---
+            // /count/continent                                                 -> List<continents>
+            // /count/continent/{continentCode}                                 -> List<countries>
+            // /count/continent/{continentCode}/{countryCode}                   -> List<regions>
+            // /count/continent/{continentCode}/{countryCode}/{regionCode}      -> region
             @Test
             @DisplayName( "by Continent" )
-            void restGet_countAirportsByContinent_returnsSuccess() throws Exception
+            void restGet_countContinents_returnsListOfContinents() throws Exception
             {
                 final List<AirportCountInContinentEntity> entities =
                     List.of( new AirportCountInContinentEntity( "YY", "::YYNAME::", 42L ),
@@ -498,11 +505,12 @@ class AirportControllerRestTest //extends RestControllerTestBase
                 when( repository.countAirportsByContinent() )
                     .thenReturn( entities );
 
-                final RequestBuilder request       = withHeaders( get( "/location/airport/summary/continent/code" ) );
+                final RequestBuilder request       = withHeaders( get( "/location/airport/count/continent" ) );
 
 
                 final MvcResult result = mvc
                     .perform( request )
+                    .andDo( print() )
                     .andExpect( status().isOk() )
                     .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) )
                     // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
@@ -524,6 +532,107 @@ class AirportControllerRestTest //extends RestControllerTestBase
             }
 
             @Test
+            @DisplayName( "by Continent" )
+            void restGet_countByContinents_returnsListOfCountries() throws Exception
+            {
+                // --- given
+                final List<AirportCountInCountryEntity> entities =
+                    List.of( new AirportCountInCountryEntity( "YY", "::YYNAME::", 42L ),
+                             new AirportCountInCountryEntity( "ZZ", "::ZZNAME::", 21L )
+                           );
+
+                when( repository.countCountryAirportsByContinent( anyString() ) )
+                    .thenReturn( entities );
+
+                final RequestBuilder request       = withHeaders( get( "/location/airport/count/continent/{continentCode}", "NA" ) );
+
+                // --- when
+                final ResultActions resultActions =
+                    mvc
+                        .perform( request );
+
+                // --- then
+                resultActions.andDo(  print() );
+
+                final MvcResult result = resultActions.andReturn();
+                final MockHttpServletResponse response = result.getResponse();
+
+                assertAll( () -> assertThat( response.getStatus() )
+                                     .isEqualTo( HttpStatus.OK.value() ) ,
+                           // () -> assertThat( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) ),
+                           // // () -> assertThat( response.getContentType() )
+                           //           .isEqualTo( MediaType.APPLICATION_JSON_VALUE ),
+                           () -> resultActions
+                                     .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) ),
+                           // TODO need to assert the resulting JSON....
+                           () -> resultActions
+                                     // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
+                                     //      don't complain about lack of assertions in tests
+                                     .andExpect( jsonPath( "$[0].isoCountry" ).value( "YY" ) )
+                                     .andExpect( jsonPath( "$[0].name" ).value( "::YYNAME::" ) )
+                                     .andExpect( jsonPath( "$[0].airportCount" ).value( 42 ) )
+                                     .andExpect( jsonPath( "$[1].isoCountry" ).value( "ZZ" ) )
+                                     .andExpect( jsonPath( "$[1].name" ).value( "::ZZNAME::" ) )
+                                     .andExpect( jsonPath( "$[1].airportCount" ).value( 21 ) )
+                                     // .andExpect( jsonPath( "$.id" ).value( 1 ) )
+                                     // .andExpect( jsonPath( "$.code" ).value( "ZZZ" ) )
+                                     // .andExpect( jsonPath( "$.localCode" ).value( "LCL" ) )
+                                     // .andExpect( jsonPath( "$.name" ).value( "foo" ) )
+                                     // .andExpect( jsonPath( "$.country" ).value( "ZZ" ) )
+                                     // .andExpect( jsonPath( "$.continent" ).value( "NA" ) )
+                                     // .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
+                                     // .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
+                         );
+            }
+
+            @Test
+            @DisplayName( "by Continent and Country" )
+            void restGet_countByContinentAndCountry_returnsListOfRegions() throws Exception
+            {
+                // --- given
+                final List<AirportCountInRegionEntity> entities =
+                    List.of( new AirportCountInRegionEntity( "YY", "::YYNAME::", 42L ),
+                             new AirportCountInRegionEntity( "ZZ", "::ZZNAME::", 21L )
+                           );
+
+                when( repository.countRegionAirportsByContinentAndIsoCountry( anyString(), anyString() ) )
+                    .thenReturn( entities );
+
+                final RequestBuilder request      =
+                    withHeaders( get( "/location/airport/count/continent/{continentCode}/{countryCode}",
+                                      "NA", "US" ) );
+
+                // --- when
+                final ResultActions resultActions =
+                    mvc
+                        .perform( request );
+
+                // --- then
+                resultActions.andDo(  print() );
+
+                final MvcResult result = resultActions.andReturn();
+                final MockHttpServletResponse response = result.getResponse();
+
+                assertAll( () -> assertThat( response.getStatus() )
+                                     .isEqualTo( HttpStatus.OK.value() ) ,
+                           () -> resultActions
+                                     .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) ),
+                    // TODO need to assert the resulting JSON....
+                           () -> resultActions
+                                     // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
+                                     //      don't complain about lack of assertions in tests
+                                     .andExpect( jsonPath( "$[0].isoRegion" ).value( "YY" ) )
+                                     .andExpect( jsonPath( "$[0].name" ).value( "::YYNAME::" ) )
+                                     .andExpect( jsonPath( "$[0].airportCount" ).value( 42 ) )
+                                     .andExpect( jsonPath( "$[1].isoRegion" ).value( "ZZ" ) )
+                                     .andExpect( jsonPath( "$[1].name" ).value( "::ZZNAME::" ) )
+                                     .andExpect( jsonPath( "$[1].airportCount" ).value( 21 ) )
+                         );
+            }
+
+
+            // --- Country ---
+            @Test
             @DisplayName( "per Country by Continent" )
             void restGet_countAirportsByCountry_returnsSuccess() throws Exception
             {
@@ -535,7 +644,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
                 when( repository.countCountryAirportsByContinent( eq( "CC" ) ) )
                     .thenReturn( entities );
 
-                final RequestBuilder request = withHeaders( get( "/location/airport/summary/continent/code/{continentCode}",
+                final RequestBuilder request = withHeaders( get( "/location/airport/count/continent/{continentCode}",
                                                                  "CC" ) );
 
                 final MvcResult result = mvc
@@ -560,6 +669,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
                     .isEqualTo( MediaType.APPLICATION_JSON_VALUE );
             }
 
+            // --- Region ---
             @Test
             @DisplayName( "by Region" )
             void restGet_countAirportsByRegion_returnsSuccess() throws Exception
@@ -573,7 +683,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
                     .thenReturn( entities );
 
 
-                final RequestBuilder request = withHeaders( get( "/location/airport/summary/region/code/{regionCode}",
+                final RequestBuilder request = withHeaders( get( "/location/airport/count/region/{regionCode}",
                                                                  "RE" ) );
 
                 final MvcResult mvcResult = mvc

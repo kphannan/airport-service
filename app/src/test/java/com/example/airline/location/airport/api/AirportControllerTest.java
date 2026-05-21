@@ -16,10 +16,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.airline.airport.AirportCountInContinentDTO;
+import com.example.airline.airport.AirportCountInCountryDTO;
 import com.example.airline.airport.AirportCountInRegionDTO;
 import com.example.airline.airport.AirportDTO;
 import com.example.airline.location.airport.mapper.AirportDtoMapper;
+import com.example.airline.location.airport.mapper.AirportEntityMapper;
 import com.example.airline.location.airport.model.Airport;
+import com.example.airline.location.airport.model.AirportCountInContinent;
+import com.example.airline.location.airport.model.AirportCountInCountry;
 import com.example.airline.location.airport.model.AirportCountInRegion;
 import com.example.airline.location.airport.persistence.repository.AirportRepository;
 import com.example.airline.location.airport.service.AirportCreateService;
@@ -69,7 +74,7 @@ import org.springframework.util.MultiValueMap;
  *             Airport
  * </pre>
  */
-@DisplayName( "Airport: API (/airport)" )
+@DisplayName( "Airport: controller (/airport)" )
 @WebMvcTest( controllers = AirportController.class )
 @ComponentScan( basePackages = { "com.example.airline.location.airport" } )
 @AutoConfigureMockMvc( addFilters = false )
@@ -96,6 +101,9 @@ class AirportControllerTest //extends RestControllerTestBase
 
     @MockitoSpyBean
     private   AirportDtoMapper     dtoMapper;
+
+    @MockitoSpyBean
+    private AirportEntityMapper    entityMapper;
 
     private HttpHeaders            requestHeader;
 
@@ -254,6 +262,142 @@ class AirportControllerTest //extends RestControllerTestBase
         @DisplayName( " airport counts.." )
         class AirportCounts     // NOPMD
         {
+            // ----- Continent
+            // /count/continent                                                 -> List<continents>
+            // /count/continent/{continentCode}                                 -> List<countries>
+            // /count/continent/{continentCode}/{countryCode}                   -> List<regions>
+            // /count/continent/{continentCode}/{countryCode}/{regionCode}      -> region
+            @Test
+            @DisplayName( "all Continents" )
+            void methodGetAirportCount_continent_returnsList()
+            {
+                // --- given
+                final AirportCountInContinent airport = new AirportCountInContinent( "AS", "Asia", 5 );
+
+                final List<AirportCountInContinent> listOfAirports = new ArrayList<>();
+                listOfAirports.add( airport );
+
+                when( readService.countAirportsByContinent() )
+                    .thenReturn( listOfAirports );
+
+                // --- when
+                final ResponseEntity<List<AirportCountInContinentDTO>>response =
+                    controller.restGetCountAirportsInAllContinents( requestHeader );
+
+                // --- then
+                final HttpHeaders            headers  = response.getHeaders();
+                final HttpHeadersAssert headersAssert = new HttpHeadersAssert( headers );
+
+                assertAll( () -> headersAssert
+                                     .doesNotContainHeader( "NoWay" )
+                                     .hasValue( "TRACEPARENT", "testParent" )
+                                     .hasValue( "TRACESTATE", "testState" )
+                                     .hasValue( HttpHeaders.CONTENT_TYPE, "application/json;charset=UTF-8" ),
+                    // TODO validate the body
+                           () -> assertNotNull( response.getBody() ),
+                    // Check use of service layer classes
+                           () -> verifyNoInteractions( createService ),
+                           () -> verify( readService, times( 1 ) )
+                                     .countAirportsByContinent(),
+                           () -> verifyNoInteractions( updateService ),
+                           () -> verifyNoInteractions( deleteService ),
+                    // With response body, make sure it is converted to a DTO
+                           () -> verify( entityMapper ).entityToDomainAirportsInContinent( anyList() )
+                         );
+            }
+
+            @Test
+            @DisplayName( "by continent" )
+            void methodGetAirportCount_byContinent_returnsList()
+            {
+                // --- given
+                final AirportCountInCountry airport =
+                    new AirportCountInCountry( "AS", "Asia", 5 );
+
+                final List<AirportCountInCountry> listOfAirports = new ArrayList<>();
+                listOfAirports.add( airport );
+
+                when( readService.countCountryAirportsByContinent( anyString()) )
+                    .thenReturn( listOfAirports );
+
+                // --- when
+                final ResponseEntity<List<AirportCountInCountryDTO>>response =
+                    controller.restGetCountCountryAirportsByContinent( "AS", requestHeader );
+
+                // --- then
+                final HttpHeaders            headers  = response.getHeaders();
+                final HttpHeadersAssert headersAssert = new HttpHeadersAssert( headers );
+
+                assertAll( () -> headersAssert
+                                     .doesNotContainHeader( "NoWay" )
+                                     .hasValue( "TRACEPARENT", "testParent" )
+                                     .hasValue( "TRACESTATE", "testState" )
+                                     .hasValue( HttpHeaders.CONTENT_TYPE, "application/json;charset=UTF-8" ),
+                           // TODO validate the body
+                           () -> assertNotNull( response.getBody() ),
+                           // Check use of service layer classes
+                           () -> verifyNoInteractions( createService ),
+                           () -> verify( readService, times( 1 ) )
+                                     .countCountryAirportsByContinent( anyString() ),
+                           () -> verifyNoInteractions( updateService ),
+                           () -> verifyNoInteractions( deleteService ),
+                           // With response body, make sure it is converted to a DTO
+                           () -> verify( dtoMapper ).domainToApiAirportsInCountry( anyList() ),
+                           () -> verify( entityMapper ).entityToDomainAirportsInCountry( anyList() )
+                         );
+            }
+
+            @Test
+            @DisplayName( "by continent and country" )
+            void methodGetAirportCount_byContinentAndCountry_returnsList()
+            {
+                // --- given
+                final AirportCountInRegion airport =
+                    new AirportCountInRegion( "AS", "Asia", 5 );
+
+                final List<AirportCountInRegion> listOfAirports = new ArrayList<>();
+                listOfAirports.add( airport );
+
+                when( readService.countCountryAirportsByContinent( anyString(), anyString() ) )
+                    .thenReturn( listOfAirports );
+
+                // --- when
+                final ResponseEntity<List<AirportCountInRegionDTO>>response =
+                    controller.restGetCountRegionAirportsByContinentAndCountry( "AS", "PH", requestHeader );
+
+                // --- then
+                final HttpHeaders            headers  = response.getHeaders();
+                final HttpHeadersAssert headersAssert = new HttpHeadersAssert( headers );
+
+                assertAll( () -> headersAssert
+                                     .doesNotContainHeader( "NoWay" )
+                                     .hasValue( "TRACEPARENT", "testParent" )
+                                     .hasValue( "TRACESTATE", "testState" )
+                                     .hasValue( HttpHeaders.CONTENT_TYPE, "application/json;charset=UTF-8" ),
+                    // TODO validate the body
+                           () -> assertNotNull( response.getBody() ),
+                    // Check use of service layer classes
+                           () -> verifyNoInteractions( createService ),
+                           () -> verify( readService, times( 1 ) )
+                                     .countCountryAirportsByContinent( anyString(), anyString() ),
+                           () -> verifyNoInteractions( updateService ),
+                           () -> verifyNoInteractions( deleteService ),
+                    // With response body, make sure it is converted to a DTO
+                           () -> verify( dtoMapper ).domainToApiAirportsInRegion( anyList() ),
+                           () -> verify( entityMapper ).entityToDomainAirportsInRegion( anyList() )
+                         );
+            }
+
+
+
+
+
+
+
+            // ----- Country
+            // /count/country
+            // /count/country/{countryCode}
+            // /count/country/{countryCode}/{regionCode}
             @Test
             @DisplayName( "by country grouped by region" )
             void methodGetAirportCount_byCountryCode_returnsList()
@@ -295,7 +439,47 @@ class AirportControllerTest //extends RestControllerTestBase
                 );
             }
 
+            @Test
+            @DisplayName( "by county and Region" )
+            void restGet_countAirportsByCountryAndRegion_returnsSuccess() throws Exception
+            {
+                // --- given
+                final List<AirportCountInRegion> entities =
+                    List.of( new AirportCountInRegion( "YY", "::YYNAME::", 42L ),
+                             new AirportCountInRegion( "ZZ", "::ZZNAME::", 21L )
+                           );
+                when( readService.countRegionAirportsByCountry( anyString() ) )
+                    .thenReturn( entities );
 
+                // --- when
+                final ResponseEntity<List<AirportCountInRegionDTO>> response =
+                    controller
+                        .restGetCountAirportsByCountryAndRegion( "US", "SC", requestHeader );
+
+                // --- then
+                final HttpHeaders            headers  = response.getHeaders();
+                final HttpHeadersAssert headersAssert = new HttpHeadersAssert( headers );
+
+                assertAll( () -> headersAssert
+                                     .doesNotContainHeader( "NoWay" )
+                                     .hasValue( HeaderUtility.TRACEID, TEST_PARENT )
+                                     .hasValue( HeaderUtility.TRACESTATE, TEST_STATE )
+                                     .hasValue( HttpHeaders.CONTENT_TYPE, "application/json;charset=UTF-8" ),
+                           () -> assertNotNull( response.getBody() ),
+                           () -> verifyNoInteractions( createService ),
+                           () -> verify( readService, times( 1 ) )
+                                     .countRegionAirportsByCountry(  anyString() ),
+                           () -> verifyNoInteractions( updateService ),
+                           () -> verifyNoInteractions( deleteService ),
+                           () -> verify( dtoMapper ).domainToApiAirportsInRegion( anyList() )
+                         );
+            }
+
+
+
+            // ----- Region
+            // /count/region
+            // /count/region/{regionCode}
             @Test
             @DisplayName( "by Region" )
             void restGet_countAirportsByRegion_returnsSuccess() throws Exception
