@@ -10,6 +10,23 @@ datasource:
 
 
 spring:
+  # Datasource is defined in a profile-specific application-<profile>.yaml
+  datasource:
+#    driverClassName: ${datasource.driver.classname}
+#    url: ${datasource.url}
+#    username: ${datasource.username}
+#    password: ${datasource.password}
+    hikari:
+      autoCommit: false
+      poolName: hikari-airport
+      leakDetectionThreshold: 2000
+      keepAliveTime: 30000
+      maximum-pool-size: 20
+      minimumIdle: 10
+#      maxLifetime: 120000
+#      idleTimeout: 15000
+
+
   # Specify behavior of Serialization
   # and Deserialization of JSON
   # Jackson is the default JSON library

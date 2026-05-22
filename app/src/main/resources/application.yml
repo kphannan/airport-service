@@ -64,6 +64,10 @@ spring:
     hikari:
       autoCommit: false
       poolName: hikari-airport
+#      maximum-pool-size: 20
+#      minimumIdle: 10
+#      maxLifetime: 120000
+#      idleTimeout: 15000
 
 
 
