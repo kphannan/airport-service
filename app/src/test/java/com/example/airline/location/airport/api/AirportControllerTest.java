@@ -283,7 +283,7 @@ class AirportControllerTest //extends RestControllerTestBase
                     .thenReturn( listOfAirports );
 
                 // --- when
-                final ResponseEntity<List<AirportCountInContinentDTO>>response =
+                final ResponseEntity<List<AirportCountInContinentDTO>> response =
                     controller.restGetCountAirportsInAllContinents( requestHeader );
 
                 // --- then
@@ -295,17 +295,17 @@ class AirportControllerTest //extends RestControllerTestBase
                                      .hasValue( "TRACEPARENT", "testParent" )
                                      .hasValue( "TRACESTATE", "testState" )
                                      .hasValue( HttpHeaders.CONTENT_TYPE, "application/json;charset=UTF-8" ),
-                    // TODO validate the body
+                           // TODO validate the body
                            () -> assertNotNull( response.getBody() ),
-                    // Check use of service layer classes
+                           // Check use of service layer classes
                            () -> verifyNoInteractions( createService ),
                            () -> verify( readService, times( 1 ) )
                                      .countAirportsByContinent(),
                            () -> verifyNoInteractions( updateService ),
                            () -> verifyNoInteractions( deleteService ),
-                    // With response body, make sure it is converted to a DTO
+                           // With response body, make sure it is converted to a DTO
                            () -> verify( entityMapper ).entityToDomainAirportsInContinent( anyList() )
-                         );
+                );
             }
 
             @Test
@@ -323,7 +323,7 @@ class AirportControllerTest //extends RestControllerTestBase
                     .thenReturn( listOfAirports );
 
                 // --- when
-                final ResponseEntity<List<AirportCountInCountryDTO>>response =
+                final ResponseEntity<List<AirportCountInCountryDTO>> response =
                     controller.restGetCountCountryAirportsByContinent( "AS", requestHeader );
 
                 // --- then
@@ -346,7 +346,7 @@ class AirportControllerTest //extends RestControllerTestBase
                            // With response body, make sure it is converted to a DTO
                            () -> verify( dtoMapper ).domainToApiAirportsInCountry( anyList() ),
                            () -> verify( entityMapper ).entityToDomainAirportsInCountry( anyList() )
-                         );
+                );
             }
 
             @Test
@@ -364,7 +364,7 @@ class AirportControllerTest //extends RestControllerTestBase
                     .thenReturn( listOfAirports );
 
                 // --- when
-                final ResponseEntity<List<AirportCountInRegionDTO>>response =
+                final ResponseEntity<List<AirportCountInRegionDTO>> response =
                     controller.restGetCountCountryAirportsByContinent( "AS", "PH", requestHeader );
 
                 // --- then
@@ -376,18 +376,18 @@ class AirportControllerTest //extends RestControllerTestBase
                                      .hasValue( "TRACEPARENT", "testParent" )
                                      .hasValue( "TRACESTATE", "testState" )
                                      .hasValue( HttpHeaders.CONTENT_TYPE, "application/json;charset=UTF-8" ),
-                    // TODO validate the body
+                           // TODO validate the body
                            () -> assertNotNull( response.getBody() ),
-                    // Check use of service layer classes
+                           // Check use of service layer classes
                            () -> verifyNoInteractions( createService ),
                            () -> verify( readService, times( 1 ) )
                                      .countAirportsByContinent( anyString(), anyString() ),
                            () -> verifyNoInteractions( updateService ),
                            () -> verifyNoInteractions( deleteService ),
-                    // With response body, make sure it is converted to a DTO
+                           // With response body, make sure it is converted to a DTO
                            () -> verify( dtoMapper ).domainToApiAirportsInRegion( anyList() ),
                            () -> verify( entityMapper ).entityToDomainAirportsInRegion( anyList() )
-                         );
+                );
             }
 
             @Test
@@ -405,7 +405,7 @@ class AirportControllerTest //extends RestControllerTestBase
                     .thenReturn( airport );
 
                 // --- when
-                final ResponseEntity<AirportCountInRegionDTO>response =
+                final ResponseEntity<AirportCountInRegionDTO> response =
                     controller.restGetCountCountryAirportsByContinent( "AS", "PH", "CEB", requestHeader );
 
                 // --- then
@@ -417,19 +417,19 @@ class AirportControllerTest //extends RestControllerTestBase
                                      .hasValue( "TRACEPARENT", "testParent" )
                                      .hasValue( "TRACESTATE", "testState" )
                                      .hasValue( HttpHeaders.CONTENT_TYPE, "application/json;charset=UTF-8" ),
-                    // TODO validate the body
+                           // TODO validate the body
                            () -> assertNotNull( response.getBody() ),
-                    // Check use of service layer classes
+                           // Check use of service layer classes
                            () -> verifyNoInteractions( createService ),
                            () -> verify( readService, times( 1 ) )
                                      .countAirportsByContinent( anyString(), anyString(), anyString() ),
                            () -> verifyNoInteractions( updateService ),
                            () -> verifyNoInteractions( deleteService ),
-                    // With response body, make sure it is converted to a DTO
+                           // With response body, make sure it is converted to a DTO
                            () -> verify( dtoMapper ).domainToApi( any( AirportCountInRegion.class ) )
                            // Mock of the repository is not used.
                            // () -> verify( entityMapper ).entityToDomain( any( AirportCountInRegionEntity.class ) )
-                         );
+                );
             }
 
 
@@ -468,17 +468,17 @@ class AirportControllerTest //extends RestControllerTestBase
                                      .hasValue( "TRACEPARENT", "testParent" )
                                      .hasValue( "TRACESTATE", "testState" )
                                      .hasValue( HttpHeaders.CONTENT_TYPE, "application/json;charset=UTF-8" ),
-                    // TODO validate the body
+                           // TODO validate the body
                            () -> assertNotNull( response.getBody() ),
-                    // Check use of service layer classes
+                           // Check use of service layer classes
                            () -> verifyNoInteractions( createService ),
                            () -> verify( readService, times( 1 ) )
                                      .countAirportsByCountry(),
                            () -> verifyNoInteractions( updateService ),
                            () -> verifyNoInteractions( deleteService ),
-                    // With response body, make sure it is converted to a DTO
+                           // With response body, make sure it is converted to a DTO
                            () -> verify( dtoMapper ).domainToApiAirportsInCountry( anyList() )
-                         );
+                );
             }
 
             @Test
@@ -552,8 +552,8 @@ class AirportControllerTest //extends RestControllerTestBase
                                      .countAirportsByCountry(  anyString(), anyString() ),
                            () -> verifyNoInteractions( updateService ),
                            () -> verifyNoInteractions( deleteService ),
-                           () -> verify( dtoMapper ).domainToApi( any( AirportCountInRegion.class) )
-                         );
+                           () -> verify( dtoMapper ).domainToApi( any( AirportCountInRegion.class ) )
+                );
             }
 
 
@@ -631,7 +631,7 @@ class AirportControllerTest //extends RestControllerTestBase
                            () -> verifyNoInteractions( updateService ),
                            () -> verifyNoInteractions( deleteService ),
                            () -> verify( dtoMapper ).domainToApi( any(  AirportCountInRegion.class ) )
-                         );
+                );
             }
 
         }

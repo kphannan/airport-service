@@ -544,7 +544,8 @@ class AirportControllerRestTest //extends RestControllerTestBase
                 when( repository.countCountryAirportsByContinent( anyString() ) )
                     .thenReturn( entities );
 
-                final RequestBuilder request       = withHeaders( get( "/location/airport/count/continent/{continentCode}", "NA" ) );
+                final RequestBuilder request       = withHeaders( get( "/location/airport/count/continent/{continentCode}",
+                                                                       "NA" ) );
 
                 // --- when
                 final ResultActions resultActions =
@@ -558,7 +559,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
                 final MockHttpServletResponse response = result.getResponse();
 
                 assertAll( () -> assertThat( response.getStatus() )
-                                     .isEqualTo( HttpStatus.OK.value() ) ,
+                                     .isEqualTo( HttpStatus.OK.value() ),
                            // () -> assertThat( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) ),
                            // // () -> assertThat( response.getContentType() )
                            //           .isEqualTo( MediaType.APPLICATION_JSON_VALUE ),
@@ -582,7 +583,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
                                      // .andExpect( jsonPath( "$.continent" ).value( "NA" ) )
                                      // .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
                                      // .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
-                         );
+                );
             }
 
             @Test
@@ -614,10 +615,10 @@ class AirportControllerRestTest //extends RestControllerTestBase
                 final MockHttpServletResponse response = result.getResponse();
 
                 assertAll( () -> assertThat( response.getStatus() )
-                                     .isEqualTo( HttpStatus.OK.value() ) ,
+                                     .isEqualTo( HttpStatus.OK.value() ),
                            () -> resultActions
                                      .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) ),
-                    // TODO need to assert the resulting JSON....
+                           // TODO need to assert the resulting JSON....
                            () -> resultActions
                                      // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
                                      //      don't complain about lack of assertions in tests
@@ -627,7 +628,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
                                      .andExpect( jsonPath( "$[1].isoRegion" ).value( "ZZ" ) )
                                      .andExpect( jsonPath( "$[1].name" ).value( "::ZZNAME::" ) )
                                      .andExpect( jsonPath( "$[1].airportCount" ).value( 21 ) )
-                         );
+                );
             }
 
 

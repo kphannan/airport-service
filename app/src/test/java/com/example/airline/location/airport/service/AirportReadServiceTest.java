@@ -191,7 +191,7 @@ class AirportReadServiceTest
         class Counts           // NOPMD
         {
             @Nested
-            @DisplayName( "Continent")
+            @DisplayName( "Continent" )
             class Continent
             {
                 // count by
@@ -201,7 +201,7 @@ class AirportReadServiceTest
                 //   cities by region
 
                 // --- airports in continents
-                @DisplayName( "all continents")
+                @DisplayName( "all continents" )
                 @Test
                 void airportCounts_allContinent_returnsList()
                 {
@@ -224,10 +224,10 @@ class AirportReadServiceTest
                                () -> assertEquals( "YY", result.get( 0 ).getContinentCode() ),
                                () -> assertEquals( "::YYNAME::", result.get( 0 ).getName() ),
                                () -> assertEquals( 42, result.get( 0 ).getAirportCount() )
-                             );
+                    );
                 }
 
-                @DisplayName( "by continent")
+                @DisplayName( "by continent" )
                 @Test
                 void airportCounts_byContinent_returnsList()
                 {
@@ -250,10 +250,10 @@ class AirportReadServiceTest
                                () -> assertEquals( "YY", result.get( 0 ).countryCode() ),
                                () -> assertEquals( "::YYNAME::", result.get( 0 ).name() ),
                                () -> assertEquals( 42, result.get( 0 ).airportCount() )
-                             );
+                    );
                 }
 
-                @DisplayName( "by continent, country")
+                @DisplayName( "by continent, country" )
                 @Test
                 void airportCounts_byContinentCountry_returnsList()
                 {
@@ -276,10 +276,10 @@ class AirportReadServiceTest
                                () -> assertEquals( "YY", result.get( 0 ).getRegionCode() ),
                                () -> assertEquals( "::YYNAME::", result.get( 0 ).getName() ),
                                () -> assertEquals( 42, result.get( 0 ).getAirportCount() )
-                             );
+                    );
                 }
 
-                @DisplayName( "by continent, country")
+                @DisplayName( "by continent, country" )
                 @Test
                 void airportCounts_byContinentCountryRegion_returnsRegionCount()
                 {
@@ -289,7 +289,9 @@ class AirportReadServiceTest
                                  new AirportCountInRegionEntity( "ZZ", "::ZZNAME::", 21L )
                                );
 
-                    when( repository.countRegionAirportsByContinentAndIsoCountryAndIsoRegion( anyString(), anyString(), anyString() ) )
+                    when( repository.countRegionAirportsByContinentAndIsoCountryAndIsoRegion( anyString(),
+                                                                                              anyString(),
+                                                                                              anyString() ) )
                         .thenReturn( entities.getFirst() );
 
                     // --- when
@@ -301,7 +303,7 @@ class AirportReadServiceTest
                                () -> assertEquals( "YY", result.getRegionCode() ),
                                () -> assertEquals( "::YYNAME::", result.getName() ),
                                () -> assertEquals( 42, result.getAirportCount() )
-                             );
+                    );
                 }
             }
 
@@ -314,10 +316,10 @@ class AirportReadServiceTest
              * Tests for finding Airports within a Continent, country or Region.
              */
             @Nested
-            @DisplayName( "by Country")
+            @DisplayName( "by Country" )
             class ByCountry
             {
-                @DisplayName( "by country")
+                @DisplayName( "by country" )
                 @Test
                 void airportCounts_byCountry_returnsList()
                 {
@@ -341,10 +343,10 @@ class AirportReadServiceTest
                                () -> assertEquals( "YY", result.get( 0 ).countryCode() ),
                                () -> assertEquals( "::YYNAME::", result.get( 0 ).name() ),
                                () -> assertEquals( 42, result.get( 0 ).airportCount() )
-                             );
+                    );
                 }
 
-                @DisplayName( "by country / region")
+                @DisplayName( "by country / region" )
                 @Test
                 void airportCounts_byCountryRegion_returnsList()
                 {
@@ -368,7 +370,7 @@ class AirportReadServiceTest
                                () -> assertEquals( "YY", result.get( 0 ).getRegionCode() ),
                                () -> assertEquals( "::YYNAME::", result.get( 0 ).getName() ),
                                () -> assertEquals( 42, result.get( 0 ).getAirportCount() )
-                             );
+                    );
                 }
             }
 
@@ -378,9 +380,9 @@ class AirportReadServiceTest
             @DisplayName( "Region" )
             class Region
             {
-                @DisplayName( "all region")
+                @DisplayName( "all region" )
                 @Test
-                void airportCounts_allRegion_returnsList ()
+                void airportCounts_allRegion_returnsList()
                 {
                     final List<AirportCountInRegionEntity> entities =
                         List.of( new AirportCountInRegionEntity( "YY", "::YYNAME::", 42L ),
@@ -401,21 +403,21 @@ class AirportReadServiceTest
                                () -> assertEquals( "::YYNAME::", result.get( 0 ).getName() ),
                                () -> assertEquals( 42, result.get( 0 ).getAirportCount() ),
                                () -> verify( mapper ).entityToDomainAirportsInRegion( anyList() )
-                             );
+                    );
                 }
 
 
 
-                @DisplayName( "all region")
+                @DisplayName( "all region" )
                 @Test
-                void airportCounts_byRegion_returnsList ()
+                void airportCounts_byRegion_returnsList()
                 {
                     final List<AirportCountInRegionEntity> entities =
                         List.of( new AirportCountInRegionEntity( "YY", "::YYNAME::", 42L ),
                                  new AirportCountInRegionEntity( "ZZ", "::ZZNAME::", 21L )
-                               );
+                        );
 
-                    when( repository.countAirportsByRegion( anyString()) )
+                    when( repository.countAirportsByRegion( anyString() ) )
                         .thenReturn( entities.getFirst() );
 
                     final AirportCountInRegion
@@ -424,12 +426,11 @@ class AirportReadServiceTest
                     // --- then
                     assertAll( () -> assertThat( result )
                                          .isNotNull(),
-                                         // .hasSize( 2 ),
                                () -> assertEquals( "YY", result.getRegionCode() ),
                                () -> assertEquals( "::YYNAME::", result.getName() ),
                                () -> assertEquals( 42, result.getAirportCount() ),
                                () -> verify( mapper ).entityToDomain( any( AirportCountInRegionEntity.class ) )
-                             );
+                    );
                 }
 
             }

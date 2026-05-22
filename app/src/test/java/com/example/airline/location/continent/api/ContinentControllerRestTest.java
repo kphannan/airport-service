@@ -915,21 +915,6 @@ class ContinentControllerRestTest
 
         }
 
-        // final Collection<String> headerNames   = result.getResponse().getHeaderNames();
-        // assertAll( () -> assertEquals( HttpStatus.NO_CONTENT.value(), result.getResponse().getStatus() ),
-        //            () -> assertThat( headerNames )
-        //                    .contains( "TRACEPARENT" )
-        //                    .contains( "TRACESTATE" )
-        //                    .contains( "Content-Type" )
-        //                    .doesNotContain( "NoWay" ),
-        // //                       () -> assertThat( result.getResponse().getHeaderNames() )
-        // //                               .contains( "Content-Type", HeaderTestingSupport.TRACESTATE, HeaderTestingSupport.TRACEID )
-        //            () -> verify( readService ).findAll(),
-        //            () -> verify( repository ).findAll(),
-        //            () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
-        //          );
-
-
     }
 
     // ===== PUT =====
