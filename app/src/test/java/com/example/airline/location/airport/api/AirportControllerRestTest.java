@@ -679,7 +679,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
                              new AirportCountInRegion( "ZZ", "::ZZNAMEZ::", 21L )
                            );
 
-                when( service.countRegionAirportsByCountry( anyString() ) )
+                when( service.countAirportsByCountry( anyString() ) )
                     .thenReturn( entities );
 
 

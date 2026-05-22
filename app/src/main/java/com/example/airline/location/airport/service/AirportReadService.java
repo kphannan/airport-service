@@ -3,7 +3,6 @@
 package com.example.airline.location.airport.service;
 
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -124,25 +123,29 @@ public class AirportReadService
         return mapper.entityToDomainAirportsInContinent( entities );
     }
 
-    public List<AirportCountInCountry> countCountryAirportsByContinent( final String continentCode )
+    public List<AirportCountInCountry> countAirportsByContinent( final String continentCode )
     {
         return mapper.entityToDomainAirportsInCountry( repository.countCountryAirportsByContinent( continentCode ) );
     }
 
-    public List<AirportCountInRegion> countCountryAirportsByContinent( final String continentCode, final String countryCode )
+    public List<AirportCountInRegion> countAirportsByContinent( final String continentCode, final String countryCode )
     {
         return mapper.entityToDomainAirportsInRegion( repository.countRegionAirportsByContinentAndIsoCountry( continentCode, countryCode ) );
     }
 
-    public AirportCountInRegion countCountryAirportsByContinent( final String continentCode,
-                                                                 final String countryCode,
-                                                                 final String regionCode )
+    public AirportCountInRegion countAirportsByContinent( final String continentCode,
+                                                          final String countryCode,
+                                                          final String regionCode )
     {
         return mapper.entityToDomain( repository.countRegionAirportsByContinentAndIsoCountryAndIsoRegion( continentCode, countryCode, regionCode ) );
     }
 
 
     // --- by Country ---
+
+    // /country
+    // /country/{countryCode}
+    // /country/{countryCode}/{regionCode}
 
     /**
      * Get the number of airports in a country.
@@ -161,9 +164,9 @@ public class AirportReadService
      *
      * @return a collection of Airport count in a country
      */
-    public List<AirportCountInCountry> countAirportsByCountry( final String countryCode )
+    public List<AirportCountInRegion> countAirportsByCountry( final String countryCode )
     {
-        return mapper.entityToDomainAirportsInCountry( repository.countAirportsByCountry( countryCode ) );
+        return mapper.entityToDomainAirportsInRegion( repository.countRegionAirportsByCountry( countryCode ) );
     }
 
     /**
@@ -173,9 +176,9 @@ public class AirportReadService
      *
      * @return list of counts of airports in a region.
      */
-    public List<AirportCountInRegion> countRegionAirportsByCountry( final String countryCode )
+    public AirportCountInRegion countAirportsByCountry( final String countryCode, final String regionCode )
     {
-        return mapper.entityToDomainAirportsInRegion( repository.countRegionAirportsByCountry( countryCode ) );
+        return mapper.entityToDomain( repository.countAirportsByIsoCountryAndIsoRegion( countryCode, regionCode ) );
     }
 
     // --- by Region ---
@@ -200,11 +203,11 @@ public class AirportReadService
      *
      * @return list of airport counts.
      */
-    public List<AirportCountInRegion> countAirportsByRegion( final String regionCode )
+    public AirportCountInRegion countAirportsByRegion( final String regionCode )
     {
-        final List<AirportCountInRegionEntity> entities = repository.countAirportsByRegion( regionCode );
+        final AirportCountInRegionEntity entities = repository.countAirportsByRegion( regionCode );
 
-        return mapper.entityToDomainAirportsInRegion( entities );
+        return mapper.entityToDomain( entities );
     }
 
 

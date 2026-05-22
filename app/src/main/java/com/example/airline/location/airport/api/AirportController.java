@@ -3,7 +3,6 @@
 package com.example.airline.location.airport.api;
 
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -268,6 +267,7 @@ public class AirportController
 
 
     // ----- Count of airports -----
+
     // --- grouped by Continent ---
 
     // /count/continent                                                 -> List<continents>
@@ -311,7 +311,7 @@ public class AirportController
         restGetCountCountryAirportsByContinent( @PathVariable final String continentCode,
                                                 @RequestHeader final HttpHeaders requestHeaders )
     {
-        final List<AirportCountInCountry> counts = readService.countCountryAirportsByContinent( continentCode );
+        final List<AirportCountInCountry> counts = readService.countAirportsByContinent( continentCode );
 
         final List<AirportCountInCountryDTO> dto = mapper.domainToApiAirportsInCountry( counts );
 
@@ -333,12 +333,12 @@ public class AirportController
     // TODO add OpenAPI spec
     @GetMapping( "/count/continent/{continentCode}/{countryCode}")
     public ResponseEntity<List<AirportCountInRegionDTO>>
-        restGetCountRegionAirportsByContinentAndCountry( @PathVariable final String continentCode,
-                                                         @PathVariable final String countryCode,
-                                                         @RequestHeader final HttpHeaders requestHeaders )
+        restGetCountCountryAirportsByContinent( @PathVariable final String continentCode,
+                                                @PathVariable final String countryCode,
+                                                @RequestHeader final HttpHeaders requestHeaders )
     {
         final List<AirportCountInRegion> counts =
-            readService.countCountryAirportsByContinent( continentCode, countryCode );
+            readService.countAirportsByContinent( continentCode, countryCode );
 
         final List<AirportCountInRegionDTO> dto = mapper.domainToApiAirportsInRegion( counts );
 
@@ -360,15 +360,15 @@ public class AirportController
     // TODO add OpenAPI spec
     @GetMapping( "/count/continent/{continentCode}/{countryCode}/{regionCode}")
     public ResponseEntity<AirportCountInRegionDTO>
-        restGetCountRegionAirportsByContinentAndCountryAndRegion( @PathVariable  final String continentCode,
-                                                                  @PathVariable  final String countryCode,
-                                                                  @PathVariable  final String regionCode,
-                                                                  @RequestHeader final HttpHeaders requestHeaders )
+        restGetCountCountryAirportsByContinent( @PathVariable  final String continentCode,
+                                                                      @PathVariable  final String countryCode,
+                                                                      @PathVariable  final String regionCode,
+                                                                      @RequestHeader final HttpHeaders requestHeaders )
     {
         final AirportCountInRegion counts =
-            readService.countCountryAirportsByContinent( continentCode, countryCode, regionCode );
+            readService.countAirportsByContinent( continentCode, countryCode, regionCode );
 
-        final AirportCountInRegionDTO dto = mapper.domainToApiAirportsInRegion( counts );
+        final AirportCountInRegionDTO dto = mapper.domainToApi( counts );
 
         return ResponseEntity
                    .status( HttpStatus.OK )
@@ -382,29 +382,6 @@ public class AirportController
     /**
      * Get the count of all airports in a specific country.
      *
-     * @param countryCode    the desired country code, required.
-     * @param requestHeaders HttpHeaders primarily for call tracing, optional.
-     *
-     * @return collection of Country names and the number of airports within that country.
-     */
-    @GetMapping( "/count/country/{countryCode}" )
-    public ResponseEntity<List<AirportCountInCountryDTO>>
-        restGetCountAirportsByCountry( @PathVariable final String countryCode,
-                                       @RequestHeader final HttpHeaders requestHeaders )
-    {
-        final List<AirportCountInCountry> counts = readService.countAirportsByCountry( countryCode );
-
-        final List<AirportCountInCountryDTO> dto = mapper.domainToApiAirportsInCountry( counts );
-
-        return ResponseEntity
-            .status( HttpStatus.OK )
-            .headers( HeaderUtility.copyNeededHeaders( requestHeaders ) )
-            .body( dto );
-    }
-
-    /**
-     * Get the count of all airports in a specific country.
-     *
      * @param requestHeaders HttpHeaders primarily for call tracing, optional.
      *
      * @return collection of Country names and the number of airports within that country.
@@ -412,7 +389,7 @@ public class AirportController
     @GetMapping( "/count/country" )
     public ResponseEntity<List<AirportCountInCountryDTO>>
         restGetCountAirportsByCountry(
-                                       @RequestHeader final HttpHeaders requestHeaders )
+            @RequestHeader final HttpHeaders requestHeaders )
     {
         final List<AirportCountInCountry> counts = readService.countAirportsByCountry();
 
@@ -423,6 +400,30 @@ public class AirportController
                    .headers( HeaderUtility.copyNeededHeaders( requestHeaders ) )
                    .body( dto );
     }
+
+    /**
+     * Get the count of all airports in a specific country.
+     *
+     * @param countryCode    the desired country code, required.
+     * @param requestHeaders HttpHeaders primarily for call tracing, optional.
+     *
+     * @return collection of Country names and the number of airports within that country.
+     */
+    @GetMapping( "/count/country/{countryCode}" )
+    public ResponseEntity<List<AirportCountInRegionDTO>>
+        restGetCountAirportsByCountry( @PathVariable final String countryCode,
+                                       @RequestHeader final HttpHeaders requestHeaders )
+    {
+        final List<AirportCountInRegion> counts = readService.countAirportsByCountry( countryCode );
+
+        final List<AirportCountInRegionDTO> dto = mapper.domainToApiAirportsInRegion( counts );
+
+        return ResponseEntity
+            .status( HttpStatus.OK )
+            .headers( HeaderUtility.copyNeededHeaders( requestHeaders ) )
+            .body( dto );
+    }
+
 
 
 
@@ -435,15 +436,15 @@ public class AirportController
      * @return collection of Country names and the number of airports within that country.
      */
     @GetMapping( "/count/country/{countryCode}/{regionCode}" )
-    public ResponseEntity<List<AirportCountInRegionDTO>>
-        restGetCountAirportsByCountryAndRegion( @PathVariable final String countryCode,
-                                                @PathVariable final String regionCode,
-                                                @RequestHeader final HttpHeaders requestHeaders )
+    public ResponseEntity<AirportCountInRegionDTO>
+        restGetCountAirportsByCountry( @PathVariable final String countryCode,
+                                       @PathVariable final String regionCode,
+                                       @RequestHeader final HttpHeaders requestHeaders )
     {
         final String region = String.format( "%s-%s", countryCode, regionCode );
-        final List<AirportCountInRegion> counts = readService.countRegionAirportsByCountry( region );
+        final AirportCountInRegion counts = readService.countAirportsByCountry( countryCode, regionCode );
 
-        final List<AirportCountInRegionDTO> dto = mapper.domainToApiAirportsInRegion( counts );
+        final AirportCountInRegionDTO dto = mapper.domainToApi( counts );
 
         return ResponseEntity
                    .status( HttpStatus.OK )
@@ -478,16 +479,8 @@ public class AirportController
 
     // --- Region ---
 
-
-    // @GetMapping( "/summary/region/code/{code}" )
-    // public ResponseEntity<List<AirportCountInRegionDTO>> restGetCountAirportsByRegion( @PathVariable final String code )
-    // {
-    //    final List<AirportCountInRegion> counts = service.countAirportsByRegion();
-    //
-    //    final List<AirportCountInRegionDTO> dto = mapper.domainToApiAirportsInRegion( counts );
-    //
-    //    return ResponseEntity.ok( dto );
-    // }
+    // /count/region                        list of all regions with counts
+    // /count/region/{regionCode}           count of airports in the specified region
 
     // --- by Region within a country
     //     Grouped/counted by region within a specific country
@@ -516,13 +509,14 @@ public class AirportController
      */
     // TODO add OpenAPI spec
     @GetMapping( "/count/region/{regionCode}" )
-    public ResponseEntity<List<AirportCountInRegionDTO>>
+    public ResponseEntity<AirportCountInRegionDTO>
         restGetCountAirportsByRegion( @PathVariable final String regionCode,
                                       @RequestHeader final HttpHeaders requestHeaders )
     {
-        final List<AirportCountInRegion> counts = readService.countRegionAirportsByCountry( regionCode );
+        // TODO change to return a single region
+        final AirportCountInRegion counts = readService.countAirportsByRegion( regionCode );
 
-        final List<AirportCountInRegionDTO> dto = mapper.domainToApiAirportsInRegion( counts );
+        final AirportCountInRegionDTO dto = mapper.domainToApi( counts );
 
         return ResponseEntity
             .status( HttpStatus.OK )
@@ -530,16 +524,9 @@ public class AirportController
             .body( dto );
     }
 
-    // @GetMapping( "/summary/region/code/{regionCode}" )
-    // public ResponseEntity<List<AirportSummaryDTO>>
-    // restGetAirportsSummariesByRegion( @PathVariable final String regionCode )
-    // {
-    //    final List<AirportSummary> counts = service.countRegionAirportsByCountry( regionCode );
-    //
-    //    final List<AirportSummaryDTO> dto = mapper.domainToApiAirportsInRegion( counts );
-    //
-    //    return ResponseEntity.ok( dto );
-    // }
+
+
+
 
     // --- by specific Region  ---
 

@@ -190,132 +190,249 @@ class AirportReadServiceTest
         @DisplayName( "Counts" )
         class Counts           // NOPMD
         {
-            // count by
-            //   continent
-            //   countries in a continent
-            //   regions in a country
-            //   cities by region
-
-            // --- airports in continents
-            @DisplayName( "by continent" )
-            @Test
-            void airportCounts_byContinent_returnsList()
+            @Nested
+            @DisplayName( "Continent")
+            class Continent
             {
-                // --- given
-                final List<AirportCountInContinentEntity> entities =
+                // count by
+                //   continent
+                //   countries in a continent
+                //   regions in a country
+                //   cities by region
+
+                // --- airports in continents
+                @DisplayName( "all continents")
+                @Test
+                void airportCounts_allContinent_returnsList()
+                {
+                    // --- given
+                    final List<AirportCountInContinentEntity> entities =
                         List.of( new AirportCountInContinentEntity( "YY", "::YYNAME::", 42L ),
                                  new AirportCountInContinentEntity( "ZZ", "::ZZNAME::", 21L )
                                );
 
-                when( repository.countAirportsByContinent() )
+                    when( repository.countAirportsByContinent() )
                         .thenReturn( entities );
 
-                // --- when
-                final List<AirportCountInContinent>
+                    // --- when
+                    final List<AirportCountInContinent>
                         result = readService.countAirportsByContinent();
 
-                // --- then
-                assertAll( () -> assertNotNull( result ),
-                           () -> assertEquals( 2, result.size() ),
-                           () -> assertEquals( "YY", result.get( 0 ).getContinentCode() ),
-                           () -> assertEquals( "::YYNAME::", result.get( 0 ).getName() ),
-                           () -> assertEquals( 42, result.get( 0 ).getAirportCount() )
-                );
-            }
+                    // --- then
+                    assertAll( () -> assertNotNull( result ),
+                               () -> assertEquals( 2, result.size() ),
+                               () -> assertEquals( "YY", result.get( 0 ).getContinentCode() ),
+                               () -> assertEquals( "::YYNAME::", result.get( 0 ).getName() ),
+                               () -> assertEquals( 42, result.get( 0 ).getAirportCount() )
+                             );
+                }
 
+                @DisplayName( "by continent")
+                @Test
+                void airportCounts_byContinent_returnsList()
+                {
+                    // --- given
+                    final List<AirportCountInCountryEntity> entities =
+                        List.of( new AirportCountInCountryEntity( "YY", "::YYNAME::", 42L ),
+                                 new AirportCountInCountryEntity( "ZZ", "::ZZNAME::", 21L )
+                               );
+
+                    when( repository.countCountryAirportsByContinent( anyString() ) )
+                        .thenReturn( entities );
+
+                    // --- when
+                    final List<AirportCountInCountry>
+                        result = readService.countAirportsByContinent( anyString() );
+
+                    // --- then
+                    assertAll( () -> assertNotNull( result ),
+                               () -> assertEquals( 2, result.size() ),
+                               () -> assertEquals( "YY", result.get( 0 ).countryCode() ),
+                               () -> assertEquals( "::YYNAME::", result.get( 0 ).name() ),
+                               () -> assertEquals( 42, result.get( 0 ).airportCount() )
+                             );
+                }
+
+                @DisplayName( "by continent, country")
+                @Test
+                void airportCounts_byContinentCountry_returnsList()
+                {
+                    // --- given
+                    final List<AirportCountInRegionEntity> entities =
+                        List.of( new AirportCountInRegionEntity( "YY", "::YYNAME::", 42L ),
+                                 new AirportCountInRegionEntity( "ZZ", "::ZZNAME::", 21L )
+                               );
+
+                    when( repository.countRegionAirportsByContinentAndIsoCountry( anyString(), anyString() ) )
+                        .thenReturn( entities );
+
+                    // --- when
+                    final List<AirportCountInRegion>
+                        result = readService.countAirportsByContinent( "NA", "US" );
+
+                    // --- then
+                    assertAll( () -> assertNotNull( result ),
+                               () -> assertEquals( 2, result.size() ),
+                               () -> assertEquals( "YY", result.get( 0 ).getRegionCode() ),
+                               () -> assertEquals( "::YYNAME::", result.get( 0 ).getName() ),
+                               () -> assertEquals( 42, result.get( 0 ).getAirportCount() )
+                             );
+                }
+
+                @DisplayName( "by continent, country")
+                @Test
+                void airportCounts_byContinentCountryRegion_returnsRegionCount()
+                {
+                    // --- given
+                    final List<AirportCountInRegionEntity> entities =
+                        List.of( new AirportCountInRegionEntity( "YY", "::YYNAME::", 42L ),
+                                 new AirportCountInRegionEntity( "ZZ", "::ZZNAME::", 21L )
+                               );
+
+                    when( repository.countRegionAirportsByContinentAndIsoCountryAndIsoRegion( anyString(), anyString(), anyString() ) )
+                        .thenReturn( entities.getFirst() );
+
+                    // --- when
+                    final AirportCountInRegion
+                        result = readService.countAirportsByContinent( "NA", "US", "GA" );
+
+                    // --- then
+                    assertAll( () -> assertNotNull( result ),
+                               () -> assertEquals( "YY", result.getRegionCode() ),
+                               () -> assertEquals( "::YYNAME::", result.getName() ),
+                               () -> assertEquals( 42, result.getAirportCount() )
+                             );
+                }
+            }
 
             // --- airports in a continent grouped by country
 
             // --- airports in a specific country grouped by region
 
+
             /**
              * Tests for finding Airports within a Continent, country or Region.
              */
             @Nested
-            @DisplayName( "by Country" )
+            @DisplayName( "by Country")
             class ByCountry
             {
-                @DisplayName( "by country" )
+                @DisplayName( "by country")
                 @Test
                 void airportCounts_byCountry_returnsList()
                 {
                     // --- given
                     final List<AirportCountInCountryEntity> entities =
-                            List.of( new AirportCountInCountryEntity( "YY", "::YYNAME::", 42L ),
-                                     new AirportCountInCountryEntity( "ZZ", "::ZZNAME::", 21L )
-                                   );
+                        List.of( new AirportCountInCountryEntity( "YY", "::YYNAME::", 42L ),
+                                 new AirportCountInCountryEntity( "ZZ", "::ZZNAME::", 21L )
+                               );
 
-                    when( repository.countAirportsByCountry( anyString() ) )
-                            .thenReturn( entities );
+                    when( repository.countAirportsGroupedByCountry() )
+                        .thenReturn( entities );
 
                     // --- when
                     final List<AirportCountInCountry>
-                            result = readService.countAirportsByCountry( anyString() );
+                        result = readService.countAirportsByCountry();
 
                     // --- then
                     assertAll( () -> assertThat( result )
-                                       .isNotNull()
-                                       .hasSize( 2 ),
+                                         .isNotNull()
+                                         .hasSize( 2 ),
                                () -> assertEquals( "YY", result.get( 0 ).countryCode() ),
                                () -> assertEquals( "::YYNAME::", result.get( 0 ).name() ),
                                () -> assertEquals( 42, result.get( 0 ).airportCount() )
-                    );
+                             );
                 }
 
-                @DisplayName( "by country / region" )
+                @DisplayName( "by country / region")
                 @Test
                 void airportCounts_byCountryRegion_returnsList()
                 {
                     // --- given
                     final List<AirportCountInRegionEntity> entities =
-                            List.of( new AirportCountInRegionEntity( "YY", "::YYNAME::", 42L ),
-                                     new AirportCountInRegionEntity( "ZZ", "::ZZNAME::", 21L )
-                                   );
+                        List.of( new AirportCountInRegionEntity( "YY", "::YYNAME::", 42L ),
+                                 new AirportCountInRegionEntity( "ZZ", "::ZZNAME::", 21L )
+                               );
 
                     when( repository.countRegionAirportsByCountry( anyString() ) )
-                            .thenReturn( entities );
+                        .thenReturn( entities );
 
                     // --- when
                     final List<AirportCountInRegion>
-                            result = readService.countRegionAirportsByCountry( anyString() );
+                        result = readService.countAirportsByCountry( anyString() );
 
                     // --- then
                     assertAll( () -> assertThat( result )
-                                       .isNotNull()
-                                       .hasSize( 2 ),
+                                         .isNotNull()
+                                         .hasSize( 2 ),
                                () -> assertEquals( "YY", result.get( 0 ).getRegionCode() ),
                                () -> assertEquals( "::YYNAME::", result.get( 0 ).getName() ),
                                () -> assertEquals( 42, result.get( 0 ).getAirportCount() )
-                    );
+                             );
                 }
             }
 
-            @DisplayName( "by region" )
-            @Test
-            void airportCounts_byRegion_returnsList()
+
+
+            @Nested
+            @DisplayName( "Region" )
+            class Region
             {
-                final List<AirportCountInRegionEntity> entities =
+                @DisplayName( "all region")
+                @Test
+                void airportCounts_allRegion_returnsList ()
+                {
+                    final List<AirportCountInRegionEntity> entities =
                         List.of( new AirportCountInRegionEntity( "YY", "::YYNAME::", 42L ),
                                  new AirportCountInRegionEntity( "ZZ", "::ZZNAME::", 21L )
-                        );
+                               );
 
-                when( repository.countAirportsByRegion( anyString() ) )
+                    when( repository.countAirportsGroupedByRegion() )
                         .thenReturn( entities );
 
-                final List<AirportCountInRegion>
-                        result = readService.countAirportsByRegion( anyString() );
+                    final List<AirportCountInRegion>
+                        result = readService.countAirportsByRegion();
 
-                // --- then
-                assertAll( () -> assertThat( result )
-                                   .isNotNull()
-                                   .hasSize( 2 ),
-                           () -> assertEquals( "YY", result.get( 0 ).getRegionCode() ),
-                           () -> assertEquals( "::YYNAME::", result.get( 0 ).getName() ),
-                           () -> assertEquals( 42, result.get( 0 ).getAirportCount() ),
-                           () -> verify( mapper ).entityToDomainAirportsInRegion( anyList() )
-                );
+                    // --- then
+                    assertAll( () -> assertThat( result )
+                                         .isNotNull()
+                                         .hasSize( 2 ),
+                               () -> assertEquals( "YY", result.get( 0 ).getRegionCode() ),
+                               () -> assertEquals( "::YYNAME::", result.get( 0 ).getName() ),
+                               () -> assertEquals( 42, result.get( 0 ).getAirportCount() ),
+                               () -> verify( mapper ).entityToDomainAirportsInRegion( anyList() )
+                             );
+                }
+
+
+
+                @DisplayName( "all region")
+                @Test
+                void airportCounts_byRegion_returnsList ()
+                {
+                    final List<AirportCountInRegionEntity> entities =
+                        List.of( new AirportCountInRegionEntity( "YY", "::YYNAME::", 42L ),
+                                 new AirportCountInRegionEntity( "ZZ", "::ZZNAME::", 21L )
+                               );
+
+                    when( repository.countAirportsByRegion( anyString()) )
+                        .thenReturn( entities.getFirst() );
+
+                    final AirportCountInRegion
+                        result = readService.countAirportsByRegion( "NA" );
+
+                    // --- then
+                    assertAll( () -> assertThat( result )
+                                         .isNotNull(),
+                                         // .hasSize( 2 ),
+                               () -> assertEquals( "YY", result.getRegionCode() ),
+                               () -> assertEquals( "::YYNAME::", result.getName() ),
+                               () -> assertEquals( 42, result.getAirportCount() ),
+                               () -> verify( mapper ).entityToDomain( any( AirportCountInRegionEntity.class ) )
+                             );
+                }
+
             }
-
         }
 
         /**

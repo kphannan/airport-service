@@ -119,6 +119,10 @@ WHERE r.code = 'US-GA'
                     """
 )
 
+// --- grouped by Continent ---
+
+// /count/continent                                                 -> List<continents>
+// /count/continent/{continentCode}                                 -> List<countries>
 @NamedQuery( name = "AirportEntity.countCountryAirportsByContinent",
              query = """
                     SELECT new com.example.airline.location.airport.persistence.model.AirportCountInCountryEntity(
@@ -133,6 +137,7 @@ WHERE r.code = 'US-GA'
                     """
 )
 
+// /count/continent/{continentCode}/{countryCode}                   -> List<regions>
 @NamedQuery( name = "AirportEntity.countRegionAirportsByContinentAndIsoCountry",
              query = """
                     SELECT new com.example.airline.location.airport.persistence.model.AirportCountInRegionEntity(
@@ -148,6 +153,7 @@ WHERE r.code = 'US-GA'
                     """
 )
 
+// /count/continent/{continentCode}/{countryCode}/{regionCode}      -> region
 @NamedQuery( name = "AirportEntity.countRegionAirportsByContinentAndIsoCountryAndIsoRegion",
              query = """
                     SELECT new com.example.airline.location.airport.persistence.model.AirportCountInRegionEntity(
@@ -165,6 +171,25 @@ WHERE r.code = 'US-GA'
 )
 
 
+
+
+
+// --- Country
+//    all countries         List<Country>
+@NamedQuery( name = "AirportEntity.countAirportsGroupedByCountry",
+             query = """
+                    SELECT new com.example.airline.location.airport.persistence.model.AirportCountInCountryEntity(
+                           c.code AS countryCode,
+                           c.name AS name,
+                           COUNT(a.id) AS airportCount
+                           )
+                      FROM AirportEntity a
+                      INNER JOIN CountryEntity c on c.code = a.isoCountry
+                    GROUP BY a.isoCountry
+                    """
+)
+
+//    by country            List<Region>
 //!  This query really doesn't make sense given the name.  The result set would only be 1 row.
 @NamedQuery( name = "AirportEntity.countAirportsByCountry",
              query = """
@@ -180,19 +205,62 @@ WHERE r.code = 'US-GA'
                     """
 )
 
-@NamedQuery( name = "AirportEntity.countAirportsGroupedByCountry",
+//    by country, region    Region
+// /count/country/{countryCode}/{regionCode}                   -> RegionCount
+@NamedQuery( name = "AirportEntity.countAirportsByIsoCountryAndIsoRegion",
              query = """
-                    SELECT new com.example.airline.location.airport.persistence.model.AirportCountInCountryEntity(
-                           c.code AS countryCode,
-                           c.name AS name,
-                           COUNT(a.id) AS airportCount
-                           )
+                    SELECT new com.example.airline.location.airport.persistence.model.AirportCountInRegionEntity(
+                        r.code AS regionCode,
+                        r.name AS name,
+                        COUNT(a.id) AS airportCount
+                        )
                       FROM AirportEntity a
-                      INNER JOIN CountryEntity c on c.code = a.isoCountry
-                    GROUP BY a.isoCountry
+                    INNER JOIN RegionEntity r ON r.code = a.isoRegion
+                    WHERE r.localCode = :regionCode
+                          AND r.country = :countryCode
+                    GROUP BY a.isoRegion
                     """
 )
 
+
+
+
+// --- Region ---
+
+// /count/region                        list of all regions with counts
+@NamedQuery( name = "AirportEntity.countAirportsGroupedByRegion",
+             query = """
+                SELECT new com.example.airline.location.airport.persistence.model.AirportCountInRegionEntity(
+                           r.code AS regionCode,
+                           r.name AS name,
+                           COUNT(a.id) AS airportCount
+                       )
+                  FROM AirportEntity a
+                INNER JOIN RegionEntity r ON r.code = a.isoRegion
+                GROUP BY a.isoRegion
+                """
+)
+
+// /count/region/{regionCode}           count of airports in the specified region
+@NamedQuery( name = "AirportEntity.countAirportsByRegion",
+             query = """
+                SELECT new com.example.airline.location.airport.persistence.model.AirportCountInRegionEntity(
+                           r.code AS regionCode,
+                           r.name AS name,
+                           COUNT(a.id) AS airportCount
+                       )
+                  FROM AirportEntity a
+                INNER JOIN RegionEntity r ON r.code = a.isoRegion
+                WHERE r.code = :regionCode
+                GROUP BY a.isoRegion
+                """
+)
+
+
+
+
+
+// -- in country
 @NamedQuery( name = "AirportEntity.countRegionAirportsByCountry",
              query = """
                 SELECT new com.example.airline.location.airport.persistence.model.AirportCountInRegionEntity(
@@ -207,32 +275,11 @@ WHERE r.code = 'US-GA'
                 """
 )
 
-@NamedQuery( name = "AirportEntity.countAirportsGroupedByRegion",
-             query = """
-                SELECT new com.example.airline.location.airport.persistence.model.AirportCountInRegionEntity(
-                           r.code AS regionCode,
-                           r.name AS name,
-                           COUNT(a.id) AS airportCount
-                       )
-                  FROM AirportEntity a
-                INNER JOIN RegionEntity r ON r.code = a.isoRegion
-                GROUP BY a.isoRegion
-                """
-)
 
-@NamedQuery( name = "AirportEntity.countAirportsByRegion",
-             query = """
-                SELECT new com.example.airline.location.airport.persistence.model.AirportCountInRegionEntity(
-                           a.isoRegion AS regionCode,
-                           r.name AS name,
-                           COUNT(a.id) AS airportCount
-                       )
-                  FROM AirportEntity a
-                INNER JOIN RegionEntity r ON r.code = a.isoRegion
-                    WHERE a.continent = :continentCode
-                GROUP BY a.isoRegion
-                """
-)
+
+
+// ---------- Summary ----------
+
 
 @NamedQuery( name = "AirportEntity.findSummaryByContinent",
              query = """
@@ -303,6 +350,13 @@ WHERE r.code = 'US-GA'
                      """
 )
 //List<AirportSummaryEntity> findSummaryByRegion( String isoRegion );
+
+
+
+
+
+
+
 public class AirportEntity // extends Auditable<String>
 {
     /**

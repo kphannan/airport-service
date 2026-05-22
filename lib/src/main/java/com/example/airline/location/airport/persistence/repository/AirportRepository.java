@@ -132,9 +132,58 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
      */
     List<AirportCountInCountryEntity> countCountryAirportsByContinent( String continentCode );
 
+    /**
+     * Find the counts of airports by region of a country.
+     *
+     * @param continentCode continent where country exists.
+     * @param countryCode   the ISO 3166 country code.
+     *
+     * @return List of regions of the country with the number of airports in the region.
+     */
     List<AirportCountInRegionEntity> countRegionAirportsByContinentAndIsoCountry( String continentCode, String countryCode );
 
+    /**
+     * Find a specific Region and the number of airports in that region.
+     *
+     * @param continentCode continent where the region exists.
+     * @param countryCode   country where the region exists.
+     * @param regionCode    local abbreviation of the region.
+     *
+     * @return region with number of airports.
+     */
     AirportCountInRegionEntity countRegionAirportsByContinentAndIsoCountryAndIsoRegion( String continentCode, String countryCode, String regionCode );
+
+    // --- Country
+    //    all countries         List<Country>
+    //    by country            List<Region>
+    //    by country, region    Region
+    /**
+     * Find the counts of airports by region.
+     *
+     * @return List of all regions with the number of airports in the region.
+     */
+    List<AirportCountInCountryEntity> countAirportsGroupedByCountry();
+
+    /**
+     * Find the counts of airports by region of a country.
+     *
+     * @param countryCode   the ISO 3166 country code.
+     *
+     * @return List of regions of the country with the number of airports in the region.
+     */
+    List<AirportCountInRegionEntity> countAirportsByCountry( String countryCode );
+
+    /**
+     * Find a specific Region and the number of airports in that region.
+     *
+     * @param countryCode   country where the region exists.
+     * @param regionCode    local abbreviation of the region.
+     *
+     * @return region with number of airports.
+     */
+    // uses named query
+    AirportCountInRegionEntity countAirportsByIsoCountryAndIsoRegion( String countryCode, String regionCode );
+
 
     /**
      * Find the count of airports in all the {@see Region}s of a specific {@see Country}.
@@ -159,11 +208,10 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
      * @param regionCode the target region.
      * @return
      */
-    List<AirportCountInRegionEntity> countAirportsByRegion( String regionCode );
+    // uses named query
+    AirportCountInRegionEntity countAirportsByRegion( String regionCode );
 
-    List<AirportCountInCountryEntity> countAirportsByCountry( String countryCode );
 
-    List<AirportCountInCountryEntity> countAirportsGroupedByCountry();
 
     // List<AirportSummaryEntity> findSummaryByContinent( String continentCode );
 
