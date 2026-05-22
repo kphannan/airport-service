@@ -149,6 +149,13 @@ public interface AirportRepository extends PagingAndSortingRepository<AirportEnt
     /**
      * Find the list of the number airports in a specific Region.
      *
+     * @return list of all known regions with the count of the number of airports in that region.
+     */
+    List<AirportCountInRegionEntity> countAirportsGroupedByRegion();
+
+    /**
+     * Find the list of the number airports in a specific Region.
+     *
      * @param regionCode the target region.
      * @return
      */

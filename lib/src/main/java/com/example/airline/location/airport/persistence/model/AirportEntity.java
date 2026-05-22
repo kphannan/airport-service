@@ -206,6 +206,20 @@ WHERE r.code = 'US-GA'
                 GROUP BY a.isoRegion
                 """
 )
+
+@NamedQuery( name = "AirportEntity.countAirportsGroupedByRegion",
+             query = """
+                SELECT new com.example.airline.location.airport.persistence.model.AirportCountInRegionEntity(
+                           r.code AS regionCode,
+                           r.name AS name,
+                           COUNT(a.id) AS airportCount
+                       )
+                  FROM AirportEntity a
+                INNER JOIN RegionEntity r ON r.code = a.isoRegion
+                GROUP BY a.isoRegion
+                """
+)
+
 @NamedQuery( name = "AirportEntity.countAirportsByRegion",
              query = """
                 SELECT new com.example.airline.location.airport.persistence.model.AirportCountInRegionEntity(
@@ -219,6 +233,7 @@ WHERE r.code = 'US-GA'
                 GROUP BY a.isoRegion
                 """
 )
+
 @NamedQuery( name = "AirportEntity.findSummaryByContinent",
              query = """
                      SELECT new com.example.airline.location.airport.persistence.model.AirportSummaryEntity(

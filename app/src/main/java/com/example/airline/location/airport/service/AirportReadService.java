@@ -131,10 +131,6 @@ public class AirportReadService
 
     public List<AirportCountInRegion> countCountryAirportsByContinent( final String continentCode, final String countryCode )
     {
-        // var entity = repository.countRegionAirportsByContinentAndIsoCountry( continentCode, countryCode );
-        // var domain = mapper.entityToDomainAirportsInRegion( entity );
-        //
-        // return domain;
         return mapper.entityToDomainAirportsInRegion( repository.countRegionAirportsByContinentAndIsoCountry( continentCode, countryCode ) );
     }
 
@@ -142,10 +138,6 @@ public class AirportReadService
                                                                  final String countryCode,
                                                                  final String regionCode )
     {
-        // var entity = repository.countRegionAirportsByContinentAndIsoCountryAndIsoRegion( continentCode, countryCode, regionCode );
-        // var domain = mapper.entityToDomain( entity );
-        //
-        // return domain;
         return mapper.entityToDomain( repository.countRegionAirportsByContinentAndIsoCountryAndIsoRegion( continentCode, countryCode, regionCode ) );
     }
 
@@ -183,12 +175,23 @@ public class AirportReadService
      */
     public List<AirportCountInRegion> countRegionAirportsByCountry( final String countryCode )
     {
-        // var entity = repository.countRegionAirportsByCountry( countryCode );
-        // return mapper.entityToDomainAirportsInRegion( entity );
         return mapper.entityToDomainAirportsInRegion( repository.countRegionAirportsByCountry( countryCode ) );
     }
 
     // --- by Region ---
+
+    /**
+     * Get the number of airports in a specific region.
+     *
+     * @return list of airport counts.
+     */
+    public List<AirportCountInRegion> countAirportsByRegion()
+    {
+        final List<AirportCountInRegionEntity> entities = repository.countAirportsGroupedByRegion();
+
+        return mapper.entityToDomainAirportsInRegion( entities );
+    }
+
 
     /**
      * Get the number of airports in a specific region.
@@ -294,12 +297,6 @@ public class AirportReadService
     private List<Airport> mapEntityToDomain( final List<AirportEntity> entity )
     {
         return mapper.entityToDomain( entity );
-    }
-
-    private static <T> void printList( final String msg, final Collection<T> collection )
-    {
-        log.error( "Display collection {}", msg );
-        collection.forEach( log::error );
     }
 
 }

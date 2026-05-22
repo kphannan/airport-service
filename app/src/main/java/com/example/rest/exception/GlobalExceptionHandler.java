@@ -478,7 +478,6 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
                                         final IllegalArgumentException exception )
     {
         // TODO the MDC should include the traceId (UUID) and log pattern should
-
         final ProblemDetail details = detailForException( HttpStatus.BAD_REQUEST, exception );
 
         return ResponseEntity
@@ -503,7 +502,6 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
                                      final IllegalStateException exception )
     {
         // TODO the MDC should include the traceId (UUID) and log pattern should
-
         final ProblemDetail details = detailForException( HttpStatus.BAD_REQUEST, exception );
 
         return ResponseEntity
@@ -522,14 +520,14 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
      * @return a formatted {@code ProblemDetail}.
      */
     @ExceptionHandler( UnsupportedOperationException.class )
-    @ResponseStatus( HttpStatus.INTERNAL_SERVER_ERROR )
+    @ResponseStatus( HttpStatus.NOT_IMPLEMENTED )
     public ResponseEntity<ProblemDetail>
         handleUnsupportedOperationException( final ServletWebRequest request,
                                              final UnsupportedOperationException exception )
     {
         // TODO the MDC should include the traceId (UUID) and log pattern should
 
-        final ProblemDetail details = detailForException( HttpStatus.INTERNAL_SERVER_ERROR, exception );
+        final ProblemDetail details = detailForException( HttpStatus.NOT_IMPLEMENTED, exception );
 
         details.setProperty( "x-logref", UUID.randomUUID() );
         details.setProperty( "x-exception", exception.getClass().getTypeName() );
@@ -544,7 +542,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
         }
 
         return ResponseEntity
-                .status( HttpStatus.INTERNAL_SERVER_ERROR )
+                .status( HttpStatus.NOT_IMPLEMENTED )
                 .headers( HeaderUtility.copyNeededHeaders( request ) )
                 .body( details );
     }
@@ -566,6 +564,7 @@ public class GlobalExceptionHandler //extends ResponseEntityExceptionHandler
         handleGenericException( final ServletWebRequest request,
                                 final Exception exception )
     {
+        // log.error( exception.getMessage(), exception );
         // TODO the MDC should include the traceId (UUID) and log pattern should
 
         final ProblemDetail details = detailForException( HttpStatus.INTERNAL_SERVER_ERROR, exception );

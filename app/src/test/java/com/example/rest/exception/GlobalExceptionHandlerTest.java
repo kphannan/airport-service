@@ -370,8 +370,8 @@ public class GlobalExceptionHandlerTest
                                    .doesNotContainKey( "x-TRACESTATE" )
                                    .doesNotContainKey( "x-Cause" ),
                            //
-                           () -> assertEquals( "Internal Server Error", detail.getTitle() ),
-                           () -> assertEquals( 500, detail.getStatus() ),
+                           () -> assertEquals( "Not Implemented", detail.getTitle() ),
+                           () -> assertEquals( 501, detail.getStatus() ),
                            () -> assertEquals( "Test UnsupportedOperation", detail.getDetail() )
                 );
 
@@ -415,8 +415,8 @@ public class GlobalExceptionHandlerTest
                                    .doesNotContainKey( "Cause" )
                                    .doesNotContainKey( "x-Cause" ),
                            //
-                           () -> assertEquals( "Internal Server Error", detail.getTitle() ),
-                           () -> assertEquals( 500, detail.getStatus() ),
+                           () -> assertEquals( "Not Implemented", detail.getTitle() ),
+                           () -> assertEquals( 501, detail.getStatus() ),
                            () -> assertEquals( "Test UnsupportedOperation", detail.getDetail() )
                 );
 
@@ -464,8 +464,8 @@ public class GlobalExceptionHandlerTest
                                                                 .matches( "java.lang.Throwable: throwable cause" ) )
                                    .containsEntry( "Cause", "java.lang.Throwable: throwable cause" ),
                            //
-                           () -> assertEquals( "Internal Server Error", detail.getTitle() ),
-                           () -> assertEquals( 500, detail.getStatus() ),
+                           () -> assertEquals( "Not Implemented", detail.getTitle() ),
+                           () -> assertEquals( 501, detail.getStatus() ),
                            () -> assertEquals( "Test UnsupportedOperation", detail.getDetail() )
                 );
 
