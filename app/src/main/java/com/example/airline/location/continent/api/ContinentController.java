@@ -180,14 +180,14 @@ public class ContinentController
         if ( null != continent )
         {
             // Build the resource id (path) of the newly created item
-            final URI location = ServletUriComponentsBuilder
+            final URI newResourceLocation = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .path( "/{continentId}" )
                     .buildAndExpand( continent.id() )
                     .toUri();
 
             return ResponseEntity
-                    .created( location )
+                    .created( newResourceLocation )
                     .headers( HeaderUtility.copyNeededHeaders( requestHeaders ) )
                     .body( mapper.domainToApi( continent ) );
         }
@@ -197,6 +197,7 @@ public class ContinentController
         return ResponseEntity
                 .status( HttpStatus.CONFLICT )
                 .headers( HeaderUtility.copyNeededHeaders( requestHeaders ) )
+                // TODO Include Problem Details as response body
                 //.body( "Continent does not exist" )
                 .build();
     }

@@ -74,8 +74,13 @@ class NewContinentDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "code", "A 2-character code is required" ),
-                                             tuple( "name", "Name is required" ) );
+                                             tuple( "code",
+                                                     """
+                                                     Code must be one of these character sequences:
+                                                     AF, AN, AS, EU, NA, OC, SA
+                                                     """
+                                                  ),
+                                             tuple( "name", "Continent name must be between 2 to 52 characters" ) );
         }
 
     }
@@ -100,7 +105,13 @@ class NewContinentDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "code", "Code must be 2 uppercase characters" ) );
+                                             tuple( "code",
+                                                    """
+                                                    Code must be one of these character sequences:
+                                                    AF, AN, AS, EU, NA, OC, SA
+                                                    """
+                                                  )
+                                           );
         }
 
         @Test
@@ -115,7 +126,13 @@ class NewContinentDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "code", "Code must be 2 uppercase characters" ) );
+                                             tuple( "code",
+                                                    """
+                                                    Code must be one of these character sequences:
+                                                    AF, AN, AS, EU, NA, OC, SA
+                                                    """
+                                                  )
+                                           );
         }
 
         @Test
@@ -130,7 +147,13 @@ class NewContinentDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "code", "Code must be 2 uppercase characters" ) );
+                                             tuple( "code",
+                                                    """
+                                                    Code must be one of these character sequences:
+                                                    AF, AN, AS, EU, NA, OC, SA
+                                                    """
+                                                  )
+                                           );
         }
 
         @Test
@@ -146,7 +169,12 @@ class NewContinentDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "name", "Name must be between 2 and 52 characters" ) );
+                                             tuple( "code",
+                                                     """
+                                                      Code must be one of these character sequences:
+                                                      AF, AN, AS, EU, NA, OC, SA
+                                                      """                                                    ),
+                                             tuple( "name", "Continent name must be between 2 and 52 characters" ) );
         }
     }
 

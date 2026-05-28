@@ -14,6 +14,7 @@ import com.example.airline.location.continent.api.ContinentController;
 import com.example.airline.location.continent.model.Continent;
 import com.example.airline.location.continent.model.NewContinent;
 import com.example.airline.location.continent.persistence.model.ContinentEntity;
+import com.example.airline.location.continent.persistence.model.NewContinentEntity;
 import com.example.airline.location.continent.persistence.repository.ContinentRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,7 +50,7 @@ class ContinentCreateServiceTest
 
         when( repository.existsByCode( anyString() ) )
                 .thenReturn( false );
-        when( repository.save( any( ContinentEntity.class ) ) )
+        when( repository.save( any( NewContinentEntity.class ) ) )
                 .thenReturn( continentEntity );
 
         // -- when
@@ -62,7 +63,7 @@ class ContinentCreateServiceTest
                    () -> assertNull( continent.wikiLink() ),
                    () -> assertNull( continent.keywords() ),
                    () -> verify( repository ).existsByCode( anyString() ),
-                   () -> verify( repository ).save( any( ContinentEntity.class ) )
+                   () -> verify( repository ).save( any( NewContinentEntity.class ) )
         );
     }
 

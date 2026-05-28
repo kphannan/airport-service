@@ -8,6 +8,7 @@ import java.util.List;
 import com.example.airline.location.continent.model.Continent;
 import com.example.airline.location.continent.model.NewContinent;
 import com.example.airline.location.continent.persistence.model.ContinentEntity;
+import com.example.airline.location.continent.persistence.model.NewContinentEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -62,7 +63,7 @@ public interface ContinentEntityMapper
      * @return a persistent layer representation of the NewContinent object.
      */
     @Mapping( target = "id", ignore = true )
-    ContinentEntity domainToEntity( NewContinent domain );
+    NewContinentEntity domainToEntity( NewContinent domain );
     // --- Collection
 
 }

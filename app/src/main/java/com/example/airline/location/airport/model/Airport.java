@@ -68,7 +68,7 @@ public class Airport
     @NonNull private String continent;
 
     /**
-     * The two-character ISO 3166:1-alpha2 code for the country where the airport is
+     * The two-character ISO 3166-1:alpha2 code for the country where the airport is
      * (primarily) located. A handful of unofficial, non-ISO codes are also in use,
      * such as "XK" for Kosovo. Points to the code column in countries.csv.
      */

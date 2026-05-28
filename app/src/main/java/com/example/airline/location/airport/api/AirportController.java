@@ -10,6 +10,7 @@ import com.example.airline.airport.AirportCountInContinentDTO;
 import com.example.airline.airport.AirportCountInCountryDTO;
 import com.example.airline.airport.AirportCountInRegionDTO;
 import com.example.airline.airport.AirportDTO;
+import com.example.airline.location.LocationCodePatterns;
 import com.example.airline.location.airport.mapper.AirportDtoMapper;
 import com.example.airline.location.airport.model.Airport;
 import com.example.airline.location.airport.model.AirportCountInContinent;
@@ -21,10 +22,12 @@ import com.example.airline.location.airport.service.AirportReadService;
 import com.example.airline.location.airport.service.AirportUpdateService;
 import com.example.airline.location.config.GlobalApiResponses;
 import com.example.airline.location.config.GlobalApiSecurityResponses;
+import com.example.aviation.reference.AviationCodePatterns;
 import com.example.utility.HeaderUtility;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -242,7 +245,46 @@ public class AirportController
      * @param code the airport code (ICAO or IATA)
      * @return the airport.
      */
-    // TODO add OpenAPI spec
+    @Operation( method = "GET",
+                summary = "Find a single airport from its identifier code.",
+                description = "",
+                requestBody = @RequestBody( required = false ),
+                responses = {
+                    @ApiResponse( description = "Success",
+                                  responseCode = "200",
+                                  content = {
+                                      @Content( mediaType = "application/json",
+                                                schema = @Schema( implementation = AirportDTO.class )
+                                      ),
+                                      @Content( mediaType = "application/yaml",
+                                                schema = @Schema( implementation = AirportDTO.class )
+                                      ),
+                                      @Content( mediaType = "application/xml",
+                                                schema = @Schema( implementation = AirportDTO.class )
+                                      )
+                                  }
+                    )
+                },
+                parameters = {
+                    @Parameter( name = "code", required = true,
+                                in = ParameterIn.PATH,
+                                description = "Airport ICAO code",
+                                schema = @Schema( pattern = AviationCodePatterns.AIRPORT_IDENTIFIER )
+                    ),
+                    @Parameter( name = "Bearer", required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Authentication / Authorization token" ),
+                    @Parameter( name = HeaderUtility.TRACEID, required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Distributed tracing identifier" ),
+                    @Parameter( name = HeaderUtility.TRACESTATE, required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Vendor specific trace identification" )
+                }
+    )
     @GetMapping( "/code/{code}" )
     public ResponseEntity<AirportDTO>
         restGetFindAirportByCode( @PathVariable final String code,
@@ -266,6 +308,8 @@ public class AirportController
     }
 
 
+    // ----- Summary of airports -----
+
     // ----- Count of airports -----
 
     // --- grouped by Continent ---
@@ -280,7 +324,44 @@ public class AirportController
      *
      * @return List of all continents and the number of airports in the continent.
      */
-    // TODO add OpenAPI spec
+    @Operation( method = "GET",
+                summary = "Number of airports by continent",
+                description = "Find the number of airports on every continent",
+                requestBody = @RequestBody( required = false ),
+                responses = {
+                    @ApiResponse( description = "Success",
+                                  responseCode = "200",
+                                  content = {
+                                      @Content( mediaType = "application/json",
+                                                array = @ArraySchema(
+                                                    schema = @Schema( implementation = AirportCountInContinentDTO.class ) )
+                                                ),
+                                      @Content( mediaType = "application/yaml",
+                                                array = @ArraySchema(
+                                                    schema = @Schema( implementation = AirportCountInContinentDTO.class ) )
+                                      ),
+                                      @Content( mediaType = "application/xml",
+                                                array = @ArraySchema(
+                                                    schema = @Schema( implementation = AirportCountInContinentDTO.class ) )
+                                      )
+                                  }
+                    )
+                },
+                parameters = {
+                    @Parameter( name = "Bearer", required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Authentication / Authorization token" ),
+                    @Parameter( name = HeaderUtility.TRACEID, required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Distributed tracing identifier" ),
+                    @Parameter( name = HeaderUtility.TRACESTATE, required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Vendor specific trace identification" )
+                }
+    )
     @GetMapping( "/count/continent" )
     public ResponseEntity<List<AirportCountInContinentDTO>>
         restGetCountAirportsInAllContinents( @RequestHeader final HttpHeaders requestHeaders )
@@ -305,8 +386,50 @@ public class AirportController
      *
      * @return List of countries including the number of airports in that country.
      */
-    // TODO add OpenAPI spec
-    @GetMapping( "/count/continent/{continentCode}" )
+    @Operation( method = "GET",
+                summary = "Number of airports per country on specified continent",
+                description = "",
+                requestBody = @RequestBody( required = false ),
+                responses = {
+                    @ApiResponse( description = "Success",
+                                  responseCode = "200",
+                                  content = {
+                                      @Content( mediaType = "application/json",
+                                                array = @ArraySchema(
+                                                    schema = @Schema( implementation = AirportCountInCountryDTO.class ) )
+                                      ),
+                                      @Content( mediaType = "application/yaml",
+                                                array = @ArraySchema(
+                                                    schema = @Schema( implementation = AirportCountInCountryDTO.class ) )
+                                      ),
+                                      @Content( mediaType = "application/xml",
+                                                array = @ArraySchema(
+                                                    schema = @Schema( implementation = AirportCountInCountryDTO.class ) )
+                                      )
+                                  }
+                    )
+                },
+                parameters = {
+                    @Parameter( name = "continentCode", required = true,
+                                in = ParameterIn.PATH,
+                                description = "de facto continent code",
+                                schema = @Schema( pattern = LocationCodePatterns.CONTINENT_CODE )
+                    ),
+                    @Parameter( name = "Bearer", required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Authentication / Authorization token" ),
+                    @Parameter( name = HeaderUtility.TRACEID, required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Distributed tracing identifier" ),
+                    @Parameter( name = HeaderUtility.TRACESTATE, required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Vendor specific trace identification" )
+                }
+    )
+    @GetMapping( "/count/continent/{continentCode:AF|AN|AS|EU|NA|OC|SA}" )
     public ResponseEntity<List<AirportCountInCountryDTO>>
         restGetCountCountryAirportsByContinent( @PathVariable final String continentCode,
                                                 @RequestHeader final HttpHeaders requestHeaders )
@@ -325,13 +448,60 @@ public class AirportController
      * get a list of regions in the continent plus country, with counts of airports in each region.
      *
      * @param continentCode  the 2 character continent code.
-     * @param countryCode    the ISO 3166 continent code.
+     * @param countryCode    the ISO 3166-1:alpha2 continent code.
      * @param requestHeaders HttpHeaders primarily for call tracing, optional.
      *
      * @return List of countries including the number of airports in that country.
      */
-    // TODO add OpenAPI spec
-    @GetMapping( "/count/continent/{continentCode}/{countryCode}")
+    @Operation( method = "GET",
+                summary = "Number of airports per region (country subdivision (state, province, etc))",
+                description = "",
+                requestBody = @RequestBody( required = false ),
+                responses = {
+                    @ApiResponse( description = "Success",
+                                  responseCode = "200",
+                                  content = {
+                                      @Content( mediaType = "application/json",
+                                                array = @ArraySchema(
+                                                    schema = @Schema( implementation = AirportCountInRegionDTO.class ) )
+                                      ),
+                                      @Content( mediaType = "application/yaml",
+                                                array = @ArraySchema(
+                                                    schema = @Schema( implementation = AirportCountInRegionDTO.class ) )
+                                      ),
+                                      @Content( mediaType = "application/xml",
+                                                array = @ArraySchema(
+                                                    schema = @Schema( implementation = AirportCountInRegionDTO.class ) )
+                                      )
+                                  }
+                    )
+                },
+                parameters = {
+                    @Parameter( name = "continentCode", required = true,
+                                in = ParameterIn.PATH,
+                                description = "de facto continent code",
+                                schema = @Schema( pattern = LocationCodePatterns.CONTINENT_CODE )
+                    ),
+                    @Parameter( name = "countryCode", required = true,
+                                in = ParameterIn.PATH,
+                                description = "ISO 3166:2 country subdivision code",
+                                schema = @Schema( pattern = LocationCodePatterns.ISO_COUNTRY_CODE)
+                    ),
+                    @Parameter( name = "Bearer", required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Authentication / Authorization token" ),
+                    @Parameter( name = HeaderUtility.TRACEID, required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Distributed tracing identifier" ),
+                    @Parameter( name = HeaderUtility.TRACESTATE, required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Vendor specific trace identification" )
+                }
+    )
+    @GetMapping( "/count/continent/{continentCode:AF|AN|AS|EU|NA|OC|SA}/{countryCode:[A-Z]{2}}")
     public ResponseEntity<List<AirportCountInRegionDTO>>
         restGetCountCountryAirportsByContinent( @PathVariable final String continentCode,
                                                 @PathVariable final String countryCode,
@@ -349,21 +519,72 @@ public class AirportController
     }
 
     /**
-     * get a list of regions in the continent plus country, with counts of airports in each region.
+     * get a single region in the continent plus country, with counts of airports in that region.
      *
      * @param continentCode  the 2 character continent code.
-     * @param countryCode    the ISO 3166 continent code.
+     * @param countryCode    the ISO 3166-1:alpha2 continent code.
+     * @param regionCode     ISO 3166-2 country specific abbreviation for an administrative
+     *                       subdivision (province, state, etc.).
      * @param requestHeaders HttpHeaders primarily for call tracing, optional.
      *
      * @return List of countries including the number of airports in that country.
      */
-    // TODO add OpenAPI spec
-    @GetMapping( "/count/continent/{continentCode}/{countryCode}/{regionCode}")
+    @Operation( method = "GET",
+                summary = "Number of airports in a single country subdivision (state, province, etc)",
+                description = "",
+                requestBody = @RequestBody( required = false ),
+                responses = {
+                    @ApiResponse( description = "Success",
+                                  responseCode = "200",
+                                  content = {
+                                      @Content( mediaType = "application/json",
+                                                schema = @Schema( implementation = AirportCountInRegionDTO.class )
+                                      ),
+                                      @Content( mediaType = "application/yaml",
+                                                schema = @Schema( implementation = AirportCountInRegionDTO.class )
+                                      ),
+                                      @Content( mediaType = "application/xml",
+                                                schema = @Schema( implementation = AirportCountInRegionDTO.class )
+                                      )
+                                  }
+                    )
+                },
+                parameters = {
+                    @Parameter( name = "continentCode", required = true,
+                                in = ParameterIn.PATH,
+                                description = "de facto continent code",
+                                schema = @Schema( pattern = LocationCodePatterns.CONTINENT_CODE )
+                    ),
+                    @Parameter( name = "countryCode", required = true,
+                                in = ParameterIn.PATH,
+                                description = "ISO 3166-1 country code",
+                                schema = @Schema( pattern = LocationCodePatterns.ISO_COUNTRY_CODE)
+                    ),
+                    @Parameter( name = "regionCode", required = true,
+                                in = ParameterIn.PATH,
+                                description = "ISO 3166:2 country subdivision code without the country code prefix",
+                                schema = @Schema( pattern = LocationCodePatterns.ISO_REGION_SUB_CODE)
+                    ),
+                    @Parameter( name = "Bearer", required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Authentication / Authorization token" ),
+                    @Parameter( name = HeaderUtility.TRACEID, required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Distributed tracing identifier" ),
+                    @Parameter( name = HeaderUtility.TRACESTATE, required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Vendor specific trace identification" )
+                }
+    )
+    @GetMapping( "/count/continent/{continentCode:AF|AN|AS|EU|NA|OC|SA}/{countryCode:[A-Z]{2}}/{regionCode}")
     public ResponseEntity<AirportCountInRegionDTO>
         restGetCountCountryAirportsByContinent( @PathVariable  final String continentCode,
-                                                                      @PathVariable  final String countryCode,
-                                                                      @PathVariable  final String regionCode,
-                                                                      @RequestHeader final HttpHeaders requestHeaders )
+                                                @PathVariable  final String countryCode,
+                                                @PathVariable  final String regionCode,
+                                                @RequestHeader final HttpHeaders requestHeaders )
     {
         final AirportCountInRegion counts =
             readService.countAirportsByContinent( continentCode, countryCode, regionCode );
@@ -386,6 +607,44 @@ public class AirportController
      *
      * @return collection of Country names and the number of airports within that country.
      */
+    @Operation( method = "GET",
+                summary = "Number of airports per country for all countries",
+                description = "",
+                requestBody = @RequestBody( required = false ),
+                responses = {
+                    @ApiResponse( description = "Success",
+                                  responseCode = "200",
+                                  content = {
+                                      @Content( mediaType = "application/json",
+                                                array = @ArraySchema(
+                                                    schema = @Schema( implementation = AirportCountInCountryDTO.class ) )
+                                      ),
+                                      @Content( mediaType = "application/yaml",
+                                                array = @ArraySchema(
+                                                    schema = @Schema( implementation = AirportCountInCountryDTO.class ) )
+                                      ),
+                                      @Content( mediaType = "application/xml",
+                                                array = @ArraySchema(
+                                                    schema = @Schema( implementation = AirportCountInCountryDTO.class ) )
+                                      )
+                                  }
+                    )
+                },
+                parameters = {
+                    @Parameter( name = "Bearer", required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Authentication / Authorization token" ),
+                    @Parameter( name = HeaderUtility.TRACEID, required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Distributed tracing identifier" ),
+                    @Parameter( name = HeaderUtility.TRACESTATE, required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Vendor specific trace identification" )
+                }
+    )
     @GetMapping( "/count/country" )
     public ResponseEntity<List<AirportCountInCountryDTO>>
         restGetCountAirportsByCountry(
@@ -409,6 +668,49 @@ public class AirportController
      *
      * @return collection of Country names and the number of airports within that country.
      */
+    @Operation( method = "GET",
+                summary = "Number of airports for each region (country subdivision (state, province, etc)) in a country",
+                description = "",
+                requestBody = @RequestBody( required = false ),
+                responses = {
+                    @ApiResponse( description = "Success",
+                                  responseCode = "200",
+                                  content = {
+                                      @Content( mediaType = "application/json",
+                                                array = @ArraySchema(
+                                                    schema = @Schema( implementation = AirportCountInRegionDTO.class ) )
+                                      ),
+                                      @Content( mediaType = "application/yaml",
+                                                array = @ArraySchema(
+                                                    schema = @Schema( implementation = AirportCountInRegionDTO.class ) )
+                                      ),
+                                      @Content( mediaType = "application/xml",
+                                                array = @ArraySchema(
+                                                    schema = @Schema( implementation = AirportCountInRegionDTO.class ) )
+                                      )
+                                  }
+                    )
+                },
+                parameters = {
+                    @Parameter( name = "countryCode", required = true,
+                                in = ParameterIn.PATH,
+                                description = "ISO 3166:2 country subdivision code",
+                                schema = @Schema( pattern = LocationCodePatterns.ISO_COUNTRY_CODE)
+                    ),
+                    @Parameter( name = "Bearer", required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Authentication / Authorization token" ),
+                    @Parameter( name = HeaderUtility.TRACEID, required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Distributed tracing identifier" ),
+                    @Parameter( name = HeaderUtility.TRACESTATE, required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Vendor specific trace identification" )
+                }
+    )
     @GetMapping( "/count/country/{countryCode}" )
     public ResponseEntity<List<AirportCountInRegionDTO>>
         restGetCountAirportsByCountry( @PathVariable final String countryCode,
@@ -435,13 +737,58 @@ public class AirportController
      *
      * @return collection of Country names and the number of airports within that country.
      */
+    @Operation( method = "GET",
+                summary = "Number of airports in a single (region) country subdivision (state, province, etc)",
+                description = "",
+                requestBody = @RequestBody( required = false ),
+                responses = {
+                    @ApiResponse( description = "Success",
+                                  responseCode = "200",
+                                  content = {
+                                      @Content( mediaType = "application/json",
+                                                schema = @Schema( implementation = AirportCountInRegionDTO.class )
+                                      ),
+                                      @Content( mediaType = "application/yaml",
+                                                schema = @Schema( implementation = AirportCountInRegionDTO.class )
+                                      ),
+                                      @Content( mediaType = "application/xml",
+                                                schema = @Schema( implementation = AirportCountInRegionDTO.class )
+                                      )
+                                  }
+                    )
+                },
+                parameters = {
+                    @Parameter( name = "countryCode", required = true,
+                                in = ParameterIn.PATH,
+                                description = "ISO 3166-1 country code",
+                                schema = @Schema( pattern = LocationCodePatterns.ISO_COUNTRY_CODE)
+                    ),
+                    @Parameter( name = "regionCode", required = true,
+                                in = ParameterIn.PATH,
+                                description = "ISO 3166:2 country subdivision code without the country code prefix",
+                                schema = @Schema( pattern = LocationCodePatterns.ISO_REGION_SUB_CODE)
+                    ),
+                    @Parameter( name = "Bearer", required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Authentication / Authorization token" ),
+                    @Parameter( name = HeaderUtility.TRACEID, required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Distributed tracing identifier" ),
+                    @Parameter( name = HeaderUtility.TRACESTATE, required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Vendor specific trace identification" )
+                }
+    )
     @GetMapping( "/count/country/{countryCode}/{regionCode}" )
     public ResponseEntity<AirportCountInRegionDTO>
         restGetCountAirportsByCountry( @PathVariable final String countryCode,
                                        @PathVariable final String regionCode,
                                        @RequestHeader final HttpHeaders requestHeaders )
     {
-        final String region = String.format( "%s-%s", countryCode, regionCode );
+        // final String region = String.format( "%s-%s", countryCode, regionCode );
         final AirportCountInRegion counts = readService.countAirportsByCountry( countryCode, regionCode );
 
         final AirportCountInRegionDTO dto = mapper.domainToApi( counts );
@@ -485,6 +832,44 @@ public class AirportController
     // --- by Region within a country
     //     Grouped/counted by region within a specific country
 
+    @Operation( method = "GET",
+                summary = "Number of airports for every region (country subdivision (state, province, etc))",
+                description = "",
+                requestBody = @RequestBody( required = false ),
+                responses = {
+                    @ApiResponse( description = "Success",
+                                  responseCode = "200",
+                                  content = {
+                                      @Content( mediaType = "application/json",
+                                                array = @ArraySchema(
+                                                    schema = @Schema( implementation = AirportCountInRegionDTO.class ) )
+                                      ),
+                                      @Content( mediaType = "application/yaml",
+                                                array = @ArraySchema(
+                                                    schema = @Schema( implementation = AirportCountInRegionDTO.class ) )
+                                      ),
+                                      @Content( mediaType = "application/xml",
+                                                array = @ArraySchema(
+                                                    schema = @Schema( implementation = AirportCountInRegionDTO.class ) )
+                                      )
+                                  }
+                    )
+                },
+                parameters = {
+                    @Parameter( name = "Bearer", required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Authentication / Authorization token" ),
+                    @Parameter( name = HeaderUtility.TRACEID, required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Distributed tracing identifier" ),
+                    @Parameter( name = HeaderUtility.TRACESTATE, required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Vendor specific trace identification" )
+                }
+    )
     @GetMapping( "/count/region" )
     public ResponseEntity<List<AirportCountInRegionDTO>>
         restGetCountAirportsByRegion( @RequestHeader final HttpHeaders requestHeaders )
@@ -507,7 +892,46 @@ public class AirportController
      *
      * @return list of regions and the number of airports in that region.
      */
-    // TODO add OpenAPI spec
+    @Operation( method = "GET",
+                summary = "Number of airports in a single (region) country subdivision (state, province, etc)",
+                description = "",
+                requestBody = @RequestBody( required = false ),
+                responses = {
+                    @ApiResponse( description = "Success",
+                                  responseCode = "200",
+                                  content = {
+                                      @Content( mediaType = "application/json",
+                                                schema = @Schema( implementation = AirportCountInRegionDTO.class )
+                                      ),
+                                      @Content( mediaType = "application/yaml",
+                                                schema = @Schema( implementation = AirportCountInRegionDTO.class )
+                                      ),
+                                      @Content( mediaType = "application/xml",
+                                                schema = @Schema( implementation = AirportCountInRegionDTO.class )
+                                      )
+                                  }
+                    )
+                },
+                parameters = {
+                    @Parameter( name = "regionCode", required = true,
+                                in = ParameterIn.PATH,
+                                description = "ISO 3166:2 country subdivision code without the country code prefix",
+                                schema = @Schema( pattern = LocationCodePatterns.ISO_REGION_SUB_CODE)
+                    ),
+                    @Parameter( name = "Bearer", required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Authentication / Authorization token" ),
+                    @Parameter( name = HeaderUtility.TRACEID, required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Distributed tracing identifier" ),
+                    @Parameter( name = HeaderUtility.TRACESTATE, required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Vendor specific trace identification" )
+                }
+    )
     @GetMapping( "/count/region/{regionCode}" )
     public ResponseEntity<AirportCountInRegionDTO>
         restGetCountAirportsByRegion( @PathVariable final String regionCode,

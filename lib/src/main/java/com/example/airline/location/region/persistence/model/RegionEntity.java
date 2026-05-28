@@ -5,6 +5,7 @@ package com.example.airline.location.region.persistence.model;
 
 import java.net.URI;
 
+import com.example.airline.location.LocationCodePatterns;
 import com.example.airline.location.persistence.model.UriConverter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -46,7 +47,7 @@ public class RegionEntity
      * identifier.
      */
     @Pattern( regexp = "[A-Z]{2}-[A-Z\\-]{1,4}",
-              message = "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" )
+              message = "code must be a valid ISO 3166-1:alpha2 followed by '-' and a local code" )
     @Column( name = "code", length = 7, nullable = false )
     @NonNull private String code;
 
@@ -59,7 +60,7 @@ public class RegionEntity
      */
     @Column( name = "local_code", length = 4, nullable = false )
     @Pattern( regexp = "([A-Z]{2}-[A-Z\\-]{1,4}|U-A)",
-              message = "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" )
+              message = "Code must be a valid ISO 3166-1:alpha2 followed by '-' and a local code" )
     @NonNull private String localCode;
 
     /**
@@ -67,16 +68,16 @@ public class RegionEntity
      * cases, the name in local languages will appear in the keyword field assist
      * search.
      */
-    @Pattern( regexp = "[a-zA-Z][a-zA-Z ]{1,51}", message = "Continent name must be 2 to 52 characters" )
+    @Pattern( regexp = "[a-zA-Z][a-zA-Z ]{1,51}", message = "Continent name must be between 2 and 52 characters" )
     @Column( name = "name", length = 52, nullable = false )
     @NonNull private String name;
 
     /**
-     * The two-character ISO 3166:1-alpha2 code for the country containing the
+     * The two-character ISO 3166-1:alpha2 code for the country containing the
      * administrative subdivision. A handful of unofficial, non-ISO codes are also
      * in use, such as "XK" for Kosovo.
      */
-    @Pattern( regexp = "[A-Z]{2}", message = "Country code must a valid ISO 3166:1-alpha2" )
+    @Pattern( regexp = "[A-Z]{2}", message = "Country code must be a valid ISO 3166-1:alpha2" )
     @Column( name = "iso_country", length = 2, nullable = false, columnDefinition = "char(2)" )
     @NonNull private String country; // ! Create a domain object for the country code
 
@@ -84,7 +85,8 @@ public class RegionEntity
      * A code for the continent to which the region belongs. See the continent field
      * in airports.csv for a list of codes.
      */
-    @Pattern( regexp = "[A-Z]{2}", message = "Continent code must be 2 uppercase characters" )
+    @Pattern( regexp = LocationCodePatterns.CONTINENT_CODE,
+              message = "Continent code must be 2 uppercase characters" )
     @Column( name = "continent", length = 2, nullable = false, columnDefinition = "char(2)" )
     @NonNull private String continent; // ! Create a domain object for continent code
 

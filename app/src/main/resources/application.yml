@@ -61,6 +61,7 @@ spring:
     url: ${datasource.url}
     username: ${datasource.username}
     password: ${datasource.password}
+
     hikari:
       autoCommit: false
       poolName: hikari-airport

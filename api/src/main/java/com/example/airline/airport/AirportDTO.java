@@ -6,6 +6,8 @@ package com.example.airline.airport;
 import java.math.BigDecimal;
 import java.net.URI;
 
+import com.example.airline.location.LocationCodePatterns;
+import com.example.aviation.reference.AviationCodePatterns;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -23,6 +25,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * API representation of an Airport.
  */
+@Schema( description = "Represents a single airport." )
 @Data
 @AllArgsConstructor
 @Builder
@@ -50,16 +53,21 @@ public class AirportDTO
     @NonNull
     @JsonProperty( "ident" )
     @Schema( name = "ident",
-             description = "Unique abbreviation, of the airport.",
+             description =
+                 """
+                 Unique abbreviation, of the airport; typically the ICAO code or
+                 local_code or ISO 3166-1:alpha2 country code followed by dash
+                 and a 4 digit number
+                 """,
              requiredMode = Schema.RequiredMode.REQUIRED,
-             minLength = 4,
-             maxLength = 7,
-             pattern = "(([A-Z]{3,4})|([A-Z]{2}[0-9]{2})|([A-Z]{2}-[0-9]{4}))",
+             // minLength = 4,
+             // maxLength = 7,
+             pattern = AviationCodePatterns.AIRPORT_IDENTIFIER, //"(([A-Z]{3,4})|([A-Z]{2}[0-9]{2})|([A-Z]{2}-[0-9]{4}))",
              example = "KORD" )
     @NotBlank( message = "A 4 to 7 character airport ident code is required" )
     @lombok.NonNull
-    // @Pattern( regexp = "(([A-Z]{3,4})|([A-Z]{2}\\d{2})|([A-Z]{2}-\\d{4}))",
-    @Pattern( regexp = "^(([0-9]{1,2}[A-Z]{1,2}[0-9]?)|([A-Z]{3,4}[0-9]?)|([A-Z]{1,2}-([0-9]{2,5}|[A-Z]{3,4}))|([A-Z]{1,2}[0-9]{1,2}[A-Z]{1,2}?[0-9]?)|([A-Z]{1,2}[0-9]{1,2})|([A-Z]{1,2}-(([0-9]{1,2}[A-Z]{1,2}[0-9]?)|([A-Z]{2,3}[0-9]{1,2}))))$",
+    @Pattern( regexp = AviationCodePatterns.AIRPORT_IDENTIFIER,
+    // @Pattern( regexp = "^(([0-9]{1,2}[A-Z]{1,2}[0-9]?)|([A-Z]{3,4}[0-9]?)|([A-Z]{1,2}-([0-9]{2,5}|[A-Z]{3,4}))|([A-Z]{1,2}[0-9]{1,2}[A-Z]{1,2}?[0-9]?)|([A-Z]{1,2}[0-9]{1,2})|([A-Z]{1,2}-(([0-9]{1,2}[A-Z]{1,2}[0-9]?)|([A-Z]{2,3}[0-9]{1,2}))))$",
               message = "Airport ident must a unique 4 to 7 character code following a specific pattern" )
     private String ident;  // char-8
 
@@ -68,27 +76,57 @@ public class AirportDTO
      * "large_airport", "medium_airport", "seaplane_base", and "small_airport". See
      * the map legend for a definition of each type.
      */
+    @Schema( description = "Type of airport",
+             requiredMode = Schema.RequiredMode.REQUIRED,
+             maxLength = 14,
+             pattern =
+                 """
+                 BALLOONPORT|CLOSED_AIRPORT|HELIPORT|LARGE_AIRPORT|MEDIUM_AIRPORT|SEAPLANE_BASE|SMALL_AIRPORT
+                 """,
+             example = "LARGE_AIRPORT0"
+    )
     @NonNull private String type;  // char-14 - should become an enum
 
     /**
      * The official airport name, including "Airport", "Airstrip", etc.
      */
+    @Schema( description = "The official airport name",
+             requiredMode = Schema.RequiredMode.REQUIRED,
+             maxLength = 128
+    )
     @NonNull private String name;  // char-128
 
     /**
      * The airport latitude in decimal degrees (positive for north).
      */
+    @Schema( description = "he airport longitude in decimal degrees (positive for north)",
+             requiredMode = Schema.RequiredMode.REQUIRED,
+             pattern = LocationCodePatterns.LAT_LONG_DD, //"^[+-]?(?:0|[1-9]{1,6})\\.(?:[0-9]{1,14})?$",
+             example = "33.6367"
+             )
     @NonNull private BigDecimal latitude;
 
     /**
      * The airport longitude in decimal degrees (positive for east).
      */
-    @NonNull private BigDecimal longitude;
+    @Schema( description = "The airport longitude in decimal degrees (positive for east)",
+             requiredMode = Schema.RequiredMode.REQUIRED,
+             pattern = LocationCodePatterns.LAT_LONG_DD, //"^[+-]?(?:0|[1-9]{1,6})\\.(?:[0-9]{1,14})?$",
+             example = "-84.428101"
+    )
+    @NonNull
+    private BigDecimal longitude;
 
     /**
      * The airport elevation MSL in feet (not metres).
      */
-    @Nullable private Integer elevation;
+    @Schema( description = "The airport mean sea level elevation in feet.",
+             type = "number",
+             format = "integer",
+             example = "1026"
+    )
+    @Nullable
+    private Integer elevation;
 
     /**
      * The code for the continent where the airport is (primarily) located. Allowed
@@ -100,31 +138,38 @@ public class AirportDTO
     @Schema( name = "continent",
              description = "Unique abbreviation, of the continent where this country is located.",
              requiredMode = Schema.RequiredMode.REQUIRED,
-             minLength = 2,
-             maxLength = 2,
-             pattern = "[A-Z]{2}",
+             // minLength = 2,
+             // maxLength = 2,
+             pattern = LocationCodePatterns.CONTINENT_CODE,
              example = "AS" )
-    @NotBlank( message = "A 2-character continent code is required" )
+    // @NotBlank( message = "A 2-character continent code is required" )
     @lombok.NonNull
-    @Pattern( regexp = "[A-Z]{2}", message = "Continent code must be 2 uppercase characters" )
+    @Pattern( regexp = LocationCodePatterns.CONTINENT_CODE,
+              message =
+                  """
+                  Code must be one of these character sequences:
+                  AF, AN, AS, EU, NA, OC, SA
+                  """ )
+    //
+    // message = "Continent code must be 2 uppercase characters" )
     private String continent;  // char-2
 
     /**
-     * The two-character ISO 3166:1-alpha2 code for the {@see CountryDTO} where the airport is
+     * The two-character ISO 3166-1:alpha2 code for the {@see CountryDTO} where the airport is
      * (primarily) located. A handful of unofficial, non-ISO codes are also in use,
      * such as "XK" for Kosovo. Points to the code column in countries.csv.
      */
     @JsonProperty( "isoCountry" )
     @Schema( name = "isoCountry",
-             description = "The two-character ISO 3166:1-alpha2 code for the country.",
+             description = "The two-character ISO 3166-1:alpha2 code for the country.",
              requiredMode = Schema.RequiredMode.REQUIRED,
-             minLength = 2,
-             maxLength = 2,
-             pattern = "[A-Z]{2}",
+             // minLength = 2,
+             // maxLength = 2,
+             pattern = LocationCodePatterns.ISO_COUNTRY_CODE, //"[A-Z]{2}",
              example = "US" )
-    @NotBlank( message = "An ISO 3166:1-alpha2 country code is required" )
+    @NotBlank( message = "An ISO 3166-1:alpha2 country code is required" )
     @lombok.NonNull
-    @Pattern( regexp = "[A-Z]{2}", message = "Country code must a valid ISO 3166:1-alpha2" )
+    @Pattern( regexp = "[A-Z]{2}", message = "Country code must be a valid ISO 3166-1:alpha2" )
     private String isoCountry;
 
     /**
@@ -145,14 +190,14 @@ public class AirportDTO
                         for the administrative subdivision (e.g., province, state)
                      """,
              requiredMode = Schema.RequiredMode.REQUIRED,
-             minLength = 3,
-             maxLength = 7,
-             pattern = "([A-Z]{2}-[A-Z\\-]{1,4})|(U-A)",
+             // minLength = 3,
+             // maxLength = 7,
+             pattern = LocationCodePatterns.ISO_REGION_CODE, //"([A-Z]{2}-[A-Z\\-]{1,4})|(U-A)",
              example = "IE-D" )
     @NotBlank( message = "A unique region code is required" )
     @lombok.NonNull
     @Pattern( regexp = "([A-Z]{2}-[A-Z\\-]{1,4})|(U-A)",
-              message = "Region code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" )
+              message = "Region code must be a valid ISO 3166-1:alpha2 followed by '-' and a local code" )
     private String isoRegion;  // char-7
 
     /**
@@ -161,12 +206,25 @@ public class AirportDTO
      * located.
      */
     //@NonNull
+    @Schema( description =
+                 """
+                 The primary municipality that the airport serves (when available).
+                 Note that this is not necessarily the municipality where the airport is physically located.
+                 """,
+             type = "string",
+             minLength = 0,
+             maxLength = 80
+    )
     @Nullable
     private String municipality;  // char-80
 
     /**
      * "yes" if the airport currently has scheduled airline service, "no" otherwise.
      */
+    @Schema( description = "Indicator if the airport has scheduled service yes or no",
+             requiredMode = Schema.RequiredMode.REQUIRED,
+             pattern = "yes|YES|no|NO"
+    )
     @NonNull
     private String scheduledService;   // char-3 // TODO boolean...
 
@@ -187,7 +245,8 @@ public class AirportDTO
              example = "KATL",
              requiredMode = Schema.RequiredMode.NOT_REQUIRED,
              maxLength = 4 )
-    @Pattern( regexp = "[A-HK-Z][A-Z]{3}", message = "Country name must be between 2 and 52 characters" )
+    @Pattern( regexp = "[A-HK-Z][A-Z]{3}",
+              message = "Country name must be between 2 and 52 characters" )
     @Nullable
     private String gpsCode;  // char-4
 
@@ -207,10 +266,13 @@ public class AirportDTO
                      are most familiar with. Flight ticketing, baggage handling,
                      and cargo shipping primarily use these codes.
                      """,
-             example = "KATL",
              requiredMode = Schema.RequiredMode.NOT_REQUIRED,
-             maxLength = 4 )
-    @Pattern( regexp = "[A-HK-Z][A-Z]{3}", message = "IACO code has four alpha-numeric characters" )
+             pattern = AviationCodePatterns.AIRPORT_ICAO,
+             maxLength = 4,
+             example = "KATL"
+    )
+    @Pattern( regexp = AviationCodePatterns.AIRPORT_ICAO,
+              message = "IACO code has four alpha-numeric characters" )
     @Nullable
     private String icaoCode;  // char-4
 
@@ -225,10 +287,12 @@ public class AirportDTO
                            (also commonly known as IATA code) used in aviation
                            and also in logistics to identify an airport.
                            """,
-             example = "ATL",
              requiredMode = Schema.RequiredMode.NOT_REQUIRED,
+             pattern = AviationCodePatterns.AIRPORT_IATA,
+             example = "ATL",
              maxLength = 3 )
-    @Pattern( regexp = "[A-Z]{3}", message = "IATA code has three alphabetic characters" )
+    @Pattern( regexp = AviationCodePatterns.AIRPORT_IATA,
+              message = "IATA code has three alphabetic characters" )
     @Nullable
     private String iataCode;  // char-3
 
@@ -280,7 +344,12 @@ public class AirportDTO
      */
     @JsonProperty( "keywords" )
     @Schema( name = "keywords",
-             description = "Optional additional search terms",
+             description =
+               """
+               Extra keywords/phrases to assist with search, comma-separated.
+               May include former names for the airport, alternate codes, names
+               in other languages, nearby tourist destinations, etc.
+               """,
              requiredMode = Schema.RequiredMode.NOT_REQUIRED,
              maxLength = 255 )
     @Nullable

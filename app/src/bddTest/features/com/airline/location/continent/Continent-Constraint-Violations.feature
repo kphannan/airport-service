@@ -78,7 +78,7 @@ Feature: Continent constraint validation
     When method PUT
        * print response
     Then status 400
-     And match $.name contains( "Continent name must be 2 to 52 characters, provided: []" )
+     And match $.name contains( "Continent name must be between 2 and 52 characters, provided: []" )
 #     And match $.name contains( "Name must be between 2 and 52 characters, provided: []" )
 #     And match $.name contains( "Name is required, provided: []" )
 
@@ -92,7 +92,7 @@ Feature: Continent constraint validation
        * print response
     Then status 400
 #     And match $.name contains( "Name must be between 2 and 52 characters; provided: [A]" )
-     And match $.name contains( "Continent name must be 2 to 52 characters, provided: [A]" )
+     And match $.name contains( "Continent name must be between 2 and 52 characters, provided: [A]" )
 
   @Validation
   Scenario: Name is too long
@@ -107,7 +107,7 @@ Feature: Continent constraint validation
     When method PUT
        * print response
     Then status 400
-     And match $.name contains( "Continent name must be 2 to 52 characters, provided: [abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ]" )
+     And match $.name contains( "Continent name must be between 2 and 52 characters, provided: [abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ]" )
 
   @Validation
   Scenario: Malformed Wiki URL

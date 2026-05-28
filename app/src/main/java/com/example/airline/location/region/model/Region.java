@@ -5,6 +5,7 @@ package com.example.airline.location.region.model;
 
 import java.net.URI;
 
+import com.example.airline.location.LocationCodePatterns;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import org.jspecify.annotations.NonNull;
@@ -31,7 +32,7 @@ import org.jspecify.annotations.Nullable;
  *                      to a region (or perhaps can't be, as in the case of a deep-sea oil platform).
  * @param name          The common English-language name for the administrative subdivision. In some cases, the name in
  *                      local languages will appear in the keyword field assist search.
- * @param country       The two-character ISO 3166:1-alpha2 code for the country containing the administrative
+ * @param country       The two-character ISO 3166-1:alpha2 code for the country containing the administrative
  *                      subdivision. A handful of unofficial, non-ISO codes are also in use, such as "XK" for Kosovo.
  * @param continent     A code for the continent to which the region belongs. See the continent field in airports.csv
  *                      for a list of codes.
@@ -46,26 +47,27 @@ public record Region(
     Integer id,
 
     @Pattern( regexp = "[A-Z]{2}-[A-Z\\-]{1,4}",
-              message = "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code"
+              message = "code must be a valid ISO 3166-1:alpha2 followed by '-' and a local code"
     )
     @NonNull
     String code,
 
     @Pattern( regexp = "([A-Z]{2}-[A-Z\\-]{1,4}|U-A)",
-              message = "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code"
+              message = "code must be a valid ISO 3166-1:alpha2 followed by '-' and a local code"
     )
     @NonNull
     String localCode,
 
-    @Pattern( regexp = "[a-zA-Z][a-zA-Z ]{1,51}", message = "Continent name must be 2 to 52 characters" )
+    @Pattern( regexp = "[a-zA-Z][a-zA-Z ]{1,51}", message = "Continent name must be between 2 and 52 characters" )
     @NonNull
     String name,
 
-    @Pattern( regexp = "[A-Z]{2}", message = "Country code must a valid ISO 3166:1-alpha2" )
+    @Pattern( regexp = "[A-Z]{2}", message = "Country code must be a valid ISO 3166-1:alpha2" )
     @NonNull
     String country, // ! Create a domain object for the country code
 
-    @Pattern( regexp = "[A-Z]{2}", message = "Continent code must be 2 uppercase characters" )
+    @Pattern( regexp = LocationCodePatterns.CONTINENT_CODE,
+              message = "Continent code must be 2 uppercase characters" )
     @NonNull
     String continent, // ! Create a domain object for continent code
 

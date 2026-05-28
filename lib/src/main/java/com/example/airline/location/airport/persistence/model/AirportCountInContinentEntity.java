@@ -1,6 +1,7 @@
 package com.example.airline.location.airport.persistence.model;
 
 
+import com.example.airline.location.LocationCodePatterns;
 import com.example.utility.IgnoreGeneratedCoverage;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -17,7 +18,8 @@ import jakarta.validation.constraints.Size;
  */
 @IgnoreGeneratedCoverage
 public record AirportCountInContinentEntity(
-    @Pattern( regexp = "[A-Z]{2}", message = "Continent code must be 2 uppercase characters" )
+    @Pattern( regexp = LocationCodePatterns.CONTINENT_CODE,
+              message = "Continent code must be 2 uppercase characters" )
     String continentCode,
 
     @NotBlank

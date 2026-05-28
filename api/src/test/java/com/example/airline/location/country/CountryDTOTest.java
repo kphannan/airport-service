@@ -135,8 +135,8 @@ class CountryDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "code", "An ISO 3166:1-alpha2 country code is required" ),
-                                             tuple( "code", "Code must a valid ISO 3166:1-alpha2" ) );
+                                             tuple( "code", "An ISO 3166-1:alpha2 country code is required" ),
+                                             tuple( "code", "code must be a valid ISO 3166-1:alpha2" ) );
         }
 
         @Test
@@ -153,7 +153,7 @@ class CountryDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "code", "Code must a valid ISO 3166:1-alpha2" ) );
+                                             tuple( "code", "code must be a valid ISO 3166-1:alpha2" ) );
         }
 
         @Test
@@ -170,7 +170,7 @@ class CountryDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "code", "Code must a valid ISO 3166:1-alpha2" ) );
+                                             tuple( "code", "code must be a valid ISO 3166-1:alpha2" ) );
         }
 
         @Test
@@ -211,8 +211,8 @@ class CountryDTOTest
                                              tuple( "continent", "Continent code must be 2 uppercase characters" ),
                                              tuple( "name", "Name is required" ),
                                              tuple( "name", "Country name must be between 2 and 52 characters" ),
-                                             tuple( "code", "An ISO 3166:1-alpha2 country code is required" ),
-                                             tuple( "code", "Code must a valid ISO 3166:1-alpha2" ) );
+                                             tuple( "code", "An ISO 3166-1:alpha2 country code is required" ),
+                                             tuple( "code", "code must be a valid ISO 3166-1:alpha2" ) );
         }
     }
 

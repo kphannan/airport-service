@@ -19,8 +19,8 @@ spring:
     hikari:
       autoCommit: false
       poolName: hikari-airport
-      leakDetectionThreshold: 2000
-      keepAliveTime: 30000
+      leakDetectionThreshold: 4000
+      keepAliveTime: 600000
       maximum-pool-size: 20
       minimumIdle: 10
 #      maxLifetime: 120000

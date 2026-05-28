@@ -563,9 +563,13 @@ class AirportDTOTest
                 final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility
-                        .assertConstraintErrors( constraintViolations,
-                                                 tuple( "continent", "A 2-character continent code is required" ),
-                                                 tuple( "continent", "Continent code must be 2 uppercase characters" ) );
+                    .assertConstraintErrors( constraintViolations,
+                                             tuple( "continent",
+                                                    """
+                                                    Code must be one of these character sequences:
+                                                    AF, AN, AS, EU, NA, OC, SA
+                                                    """ )
+                                           );
             }
 
 
@@ -595,8 +599,13 @@ class AirportDTOTest
                 final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility
-                        .assertConstraintErrors( constraintViolations,
-                                                 tuple( "continent", "Continent code must be 2 uppercase characters" ) );
+                    .assertConstraintErrors( constraintViolations,
+                                             tuple( "continent",
+                                                    """
+                                                    Code must be one of these character sequences:
+                                                    AF, AN, AS, EU, NA, OC, SA
+                                                    """ )
+                                           );
             }
 
             @Test
@@ -625,8 +634,13 @@ class AirportDTOTest
                 final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility
-                        .assertConstraintErrors( constraintViolations,
-                                                 tuple( "continent", "Continent code must be 2 uppercase characters" ) );
+                    .assertConstraintErrors( constraintViolations,
+                                             tuple( "continent",
+                                                    """
+                                                    Code must be one of these character sequences:
+                                                    AF, AN, AS, EU, NA, OC, SA
+                                                    """ )
+                                           );
             }
 
             @Test
@@ -654,8 +668,14 @@ class AirportDTOTest
                                                                  "Key1, key2" );
                 final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
-                assertThat( constraintViolations.size() )
-                        .isEqualTo( 0 );
+                ConstraintValidationUtility
+                    .assertConstraintErrors( constraintViolations,
+                                             tuple( "continent",
+                                                    """
+                                                    Code must be one of these character sequences:
+                                                    AF, AN, AS, EU, NA, OC, SA
+                                                    """ )
+                                           );
             }
 
             @Test
@@ -684,8 +704,13 @@ class AirportDTOTest
                 final Set<ConstraintViolation<AirportDTO>> constraintViolations = validator.validate( itemUnderTest );
 
                 ConstraintValidationUtility
-                        .assertConstraintErrors( constraintViolations,
-                                                 tuple( "continent", "Continent code must be 2 uppercase characters" ) );
+                    .assertConstraintErrors( constraintViolations,
+                                             tuple( "continent",
+                                                    """
+                                                    Code must be one of these character sequences:
+                                                    AF, AN, AS, EU, NA, OC, SA
+                                                    """ )
+                                           );
             }
 
         }
@@ -725,8 +750,8 @@ class AirportDTOTest
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
-                                                 tuple( "isoCountry", "An ISO 3166:1-alpha2 country code is required" ),
-                                                 tuple( "isoCountry", "Country code must a valid ISO 3166:1-alpha2" ) );
+                                                 tuple( "isoCountry", "An ISO 3166-1:alpha2 country code is required" ),
+                                                 tuple( "isoCountry", "Country code must be a valid ISO 3166-1:alpha2" ) );
             }
 
             @Test
@@ -756,7 +781,7 @@ class AirportDTOTest
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
-                                                 tuple( "isoCountry", "Country code must a valid ISO 3166:1-alpha2" ) );
+                                                 tuple( "isoCountry", "Country code must be a valid ISO 3166-1:alpha2" ) );
             }
 
             @Test
@@ -786,7 +811,7 @@ class AirportDTOTest
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
-                                                 tuple( "isoCountry", "Country code must a valid ISO 3166:1-alpha2" ) );
+                                                 tuple( "isoCountry", "Country code must be a valid ISO 3166-1:alpha2" ) );
             }
 
 
@@ -846,7 +871,7 @@ class AirportDTOTest
 
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
-                                                 tuple( "isoCountry", "Country code must a valid ISO 3166:1-alpha2" ) );
+                                                 tuple( "isoCountry", "Country code must be a valid ISO 3166-1:alpha2" ) );
             }
         }
 
@@ -887,7 +912,7 @@ class AirportDTOTest
                         .assertConstraintErrors( constraintViolations,
                                                  tuple( "isoRegion", "A unique region code is required" ),
                                                  tuple( "isoRegion",
-                                                        "Region code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" ) );
+                                                        "Region code must be a valid ISO 3166-1:alpha2 followed by '-' and a local code" ) );
             }
 
             @Test
@@ -918,7 +943,7 @@ class AirportDTOTest
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
                                                  tuple( "isoRegion",
-                                                        "Region code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" ) );
+                                                        "Region code must be a valid ISO 3166-1:alpha2 followed by '-' and a local code" ) );
             }
 
             @Test
@@ -949,7 +974,7 @@ class AirportDTOTest
                 ConstraintValidationUtility
                         .assertConstraintErrors( constraintViolations,
                                                  tuple( "isoRegion",
-                                                        "Region code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" ) );
+                                                        "Region code must be a valid ISO 3166-1:alpha2 followed by '-' and a local code" ) );
             }
 
             @Test

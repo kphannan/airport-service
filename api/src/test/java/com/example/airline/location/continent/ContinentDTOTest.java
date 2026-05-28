@@ -111,6 +111,11 @@ class ContinentDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
+                                             tuple( "code",
+                                                    """
+                                                    Code must be one of these character sequences:
+                                                    AF, AN, AS, EU, NA, OC, SA
+                                                    """ ),
                                              tuple( "id", "A continent id is required" ) );
         }
 
@@ -127,7 +132,12 @@ class ContinentDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "code", "Code must be 2 uppercase characters" ) );
+                                             tuple( "code",
+                                                    """
+                                                    Code must be one of these character sequences:
+                                                    AF, AN, AS, EU, NA, OC, SA
+                                                    """ )
+                                             );
         }
 
         @Test
@@ -143,7 +153,11 @@ class ContinentDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "code", "Code must be 2 uppercase characters" ) );
+                                             tuple( "code",
+                                                    """
+                                                    Code must be one of these character sequences:
+                                                    AF, AN, AS, EU, NA, OC, SA
+                                                    """ ) );
         }
 
         @Test
@@ -159,7 +173,12 @@ class ContinentDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "code", "Code must be 2 uppercase characters" ) );
+                                             tuple( "code",
+                                                    """
+                                                    Code must be one of these character sequences:
+                                                    AF, AN, AS, EU, NA, OC, SA
+                                                    """ )
+                                             );
         }
 
         @Test
@@ -176,7 +195,13 @@ class ContinentDTOTest
 
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
-                                             tuple( "name", "Continent name must be 2 to 52 characters" ) );
+                                             tuple( "name", "Continent name must be between 2 and 52 characters" ),
+                                             tuple( "code",
+                                                    """
+                                                    Code must be one of these character sequences:
+                                                    AF, AN, AS, EU, NA, OC, SA
+                                                    """ )
+                                             );
         }
 
         @Test
@@ -193,8 +218,13 @@ class ContinentDTOTest
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
                                              tuple( "id", "A continent id is required" ),
-                                             tuple( "code", "Code must be 2 uppercase characters" ),
-                                             tuple( "name", "Continent name must be 2 to 52 characters" ) );
+                                             tuple( "code",
+                                                    """
+                                                    Code must be one of these character sequences:
+                                                    AF, AN, AS, EU, NA, OC, SA
+                                                    """ ),
+
+                                             tuple( "name", "Continent name must be between 2 and 52 characters" ) );
         }
 
     }

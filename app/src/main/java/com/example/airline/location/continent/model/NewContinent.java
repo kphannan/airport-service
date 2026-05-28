@@ -18,7 +18,7 @@ public record NewContinent(
     @Pattern( regexp = "[A-Z]{2}", message = "Code must be 2 uppercase characters" )
     @NonNull  String code,
 
-    @Pattern( regexp = "[a-zA-Z][a-zA-Z ]{1,51}", message = "Continent name must be 2 to 52 characters" )
+    @Pattern( regexp = "[a-zA-Z][a-zA-Z ]{1,51}", message = "Continent name must be between 2 and 52 characters" )
     @NonNull  String name,
 
     @Nullable URI    wikiLink,

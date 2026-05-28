@@ -4,6 +4,7 @@ package com.example.airline.location.continent;
 
 import java.net.URI;
 
+import com.example.airline.location.LocationCodePatterns;
 import com.example.utility.IgnoreGeneratedCoverage;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,6 +26,7 @@ import org.springframework.validation.annotation.Validated;
  * @param keywords Optional comma-separated list of keywords for helping with search. May include former names for the
  *                 continent, and/or the continent name in other languages.
  */
+@Schema( description = "Represents a geographical continent" )
 @IgnoreGeneratedCoverage
 @Validated
 public record ContinentDTO(
@@ -42,10 +44,15 @@ public record ContinentDTO(
              requiredMode = Schema.RequiredMode.REQUIRED,
              minLength = 2,
              maxLength = 2,
-             pattern = "[A-Z]{2}",
+             pattern = LocationCodePatterns.CONTINENT_CODE,
              example = "NA" )
     @NotNull( message = "A continent code is required" )
-    @Pattern( regexp = "[A-Z]{2}", message = "Code must be 2 uppercase characters" )
+    @Pattern( regexp = LocationCodePatterns.CONTINENT_CODE,
+              message =
+                """
+                Code must be one of these character sequences:
+                AF, AN, AS, EU, NA, OC, SA
+                """ )
     @NonNull
     String code,        // TODO create an enum for continent codes.
 
@@ -56,7 +63,7 @@ public record ContinentDTO(
              requiredMode = Schema.RequiredMode.REQUIRED,
              minLength = 2,
              maxLength = 52 )
-    @Pattern( regexp = "[a-zA-Z][a-zA-Z ]{1,51}", message = "Continent name must be 2 to 52 characters" )
+    @Pattern( regexp = "[a-zA-Z][a-zA-Z ]{1,51}", message = "Continent name must be between 2 and 52 characters" )
     @NonNull
     String name,
 

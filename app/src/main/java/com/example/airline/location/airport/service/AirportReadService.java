@@ -160,7 +160,7 @@ public class AirportReadService
     /**
      * Get the number of airports in a country.
      *
-     * @param countryCode unique ISO 3166 code of the country.
+     * @param countryCode unique ISO 3166-1:alpha2 code of the country.
      *
      * @return a collection of Airport count in a country
      */
@@ -231,7 +231,7 @@ public class AirportReadService
     /**
      * Find all the airports in a Country.
      *
-     * @param isoCountry ISO 3166 code for the Country.
+     * @param isoCountry ISO 3166-1:alpha2 code for the Country.
      *
      * @return collection of airports in the country.
      */

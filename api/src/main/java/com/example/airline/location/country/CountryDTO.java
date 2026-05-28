@@ -5,6 +5,7 @@ package com.example.airline.location.country;
 
 import java.net.URI;
 
+import com.example.airline.location.LocationCodePatterns;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -26,6 +27,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * API representation of a Country.
  */
+@Schema( description = "Represents a country or country-like entity (e.g. Hong Kong)" )
 @Data
 @AllArgsConstructor
 @NoArgsConstructor  // required for Jackson mapping
@@ -45,15 +47,15 @@ public class CountryDTO
 
     @JsonProperty( "code" )
     @Schema( name = "code",
-             description = "The two-character ISO 3166:1-alpha2 code for the country.",
+             description = "The two-character ISO 3166-1:alpha2 code for the country.",
              requiredMode = Schema.RequiredMode.REQUIRED,
              minLength = 2,
              maxLength = 2,
              pattern = "[A-Z]{2}",
              example = "PH" )
-    @NotBlank( message = "An ISO 3166:1-alpha2 country code is required" )
+    @NotBlank( message = "An ISO 3166-1:alpha2 country code is required" )
     @NonNull
-    @Pattern( regexp = "[A-Z]{2}", message = "Code must a valid ISO 3166:1-alpha2" )
+    @Pattern( regexp = "[A-Z]{2}", message = "code must be a valid ISO 3166-1:alpha2" )
     private String code;
 
     @JsonProperty( "name" )
@@ -79,11 +81,12 @@ public class CountryDTO
              requiredMode = Schema.RequiredMode.REQUIRED,
              minLength = 2,
              maxLength = 2,
-             pattern = "[A-Z]{2}",
+             pattern = LocationCodePatterns.CONTINENT_CODE,
              example = "AS" )
     @NotBlank( message = "A 2-character continent code is required" )
     @NonNull
-    @Pattern( regexp = "[A-Z]{2}", message = "Continent code must be 2 uppercase characters" )
+    @Pattern( regexp = LocationCodePatterns.CONTINENT_CODE,
+              message = "Continent code must be 2 uppercase characters" )
     private String continent;
 
     @JsonProperty( "wikiLink" )

@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.example.aviation.reference.AviationCodePatterns;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -28,11 +29,12 @@ import org.jspecify.annotations.NonNull;
 @ToString
 public class AirportCodeIataEntity
 {
-    private static final Pattern REGEX = Pattern.compile( "[A-Z]{3}" );
+    private static final Pattern REGEX = Pattern.compile( AviationCodePatterns.AIRPORT_IATA );
 
     @Id
     @Column( name = "iata_code", length = 3, nullable = false, columnDefinition = "char(3)" )
-    @jakarta.validation.constraints.Pattern( regexp = "[A-Z]{3}", message = "IATA code has three alphabetic characters" )
+    @jakarta.validation.constraints.Pattern( regexp = AviationCodePatterns.AIRPORT_IATA,
+                                             message = "IATA code has three alphabetic characters" )
     @NonNull private String iataCode;
 
 

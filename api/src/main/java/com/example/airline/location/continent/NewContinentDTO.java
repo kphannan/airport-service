@@ -4,6 +4,7 @@ package com.example.airline.location.continent;
 
 import java.net.URI;
 
+import com.example.airline.location.LocationCodePatterns;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -12,7 +13,8 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
+// import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.validation.annotation.Validated;
 
@@ -25,6 +27,7 @@ import org.springframework.validation.annotation.Validated;
 /**
  * API representation of a Continent.
  */
+@Schema( description = "Create a new continent record with with the specified values." )
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,29 +35,40 @@ import org.springframework.validation.annotation.Validated;
 public class NewContinentDTO
 {
     // TODO convert to a Java record
-    @JsonProperty( "code" )
+    @JsonProperty( value = "code", required = true )
     @Schema( name = "code",
-             description = "Unique abbreviation, which is a 2-character uppercase alphabetic code\"",
+             description = "Unique abbreviation, which is a 2-character uppercase alphabetic code",
              requiredMode = Schema.RequiredMode.REQUIRED,
              minLength = 2,
              maxLength = 2,
-             pattern = "[A-Z]{2}",
+             pattern = LocationCodePatterns.CONTINENT_CODE,
              example = "NA" )
-    @NotNull( message = "A 2-character code is required" )
     @NonNull
-    @Pattern( regexp = "[A-Z]{2}", message = "Code must be 2 uppercase characters" )
+    @NotNull( message =
+                  """
+                  Code must be one of these character sequences:
+                  AF, AN, AS, EU, NA, OC, SA
+                  """
+    )
+    @Pattern( regexp = LocationCodePatterns.CONTINENT_CODE,
+              message =
+                  """
+                  Code must be one of these character sequences:
+                  AF, AN, AS, EU, NA, OC, SA
+                  """
+    )
     private String code;
 
-    @JsonProperty( "name" )
+    @JsonProperty( value = "name", required = true )
     @Schema( name = "name",
              description = "Common use name",
              example = "North America",
              requiredMode = Schema.RequiredMode.REQUIRED,
              minLength = 2,
              maxLength = 52 )
-    @Pattern( regexp = "[a-zA-Z][a-zA-Z ]{1,51}", message = "Name must be between 2 and 52 characters" )
-    @NotNull( message = "Name is required" )
+    @Pattern( regexp = "[a-zA-Z][a-zA-Z ]{1,51}", message = "Continent name must be between 2 and 52 characters" )
     @NonNull
+    @NotNull( message = "Continent name must be between 2 to 52 characters" )
     private String name;
 
     @JsonProperty( "wikiLink" )

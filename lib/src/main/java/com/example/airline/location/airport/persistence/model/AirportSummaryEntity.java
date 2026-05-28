@@ -17,6 +17,7 @@ facility.scheduledService
 */
 
 
+import com.example.airline.location.LocationCodePatterns;
 import com.example.utility.IgnoreGeneratedCoverage;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -30,7 +31,7 @@ import jakarta.validation.constraints.Size;
  * @param name             common name of the airport.
  * @param continentCode    de facto continent code where the airport exists.
  * @param continentName    common name of the continent.
- * @param countryCode      ISO 3166 code for the country where the airport exists.
+ * @param countryCode      ISO 3166-1:alpha2 code for the country where the airport exists.
  * @param countryName      name of the country where the airport exists.
  * @param regionCode       ISO 3166 code of the high-level administrative subdivision of the country where the airport
  *                         is primarily located.
@@ -55,15 +56,16 @@ public record AirportSummaryEntity(
     String name,
 
     @NotBlank
-    @Pattern( regexp = "[A-Z]{2}", message = "Continent code must be 2 uppercase characters" )
+    @Pattern( regexp = LocationCodePatterns.CONTINENT_CODE,
+              message = "Continent code must be 2 uppercase characters" )
     String continentCode,
 
     @NotBlank
     @Size( max = 52 )
     String continentName,
 
-    @NotBlank( message = "An ISO 3166:1-alpha2 country code is required" )
-    @Pattern( regexp = "[A-Z]{2}", message = "Country code must a valid ISO 3166:1-alpha2" )
+    @NotBlank( message = "An ISO 3166-1:alpha2 country code is required" )
+    @Pattern( regexp = LocationCodePatterns.CONTINENT_CODE, message = "Country code must be a valid ISO 3166-1:alpha2" )
     String countryCode,
 
     @NotBlank
@@ -72,7 +74,7 @@ public record AirportSummaryEntity(
 
     @NotBlank( message = "A unique region code is required" )
     @Pattern( regexp = "[A-Z]{2}-[A-Z\\-]{1,4}",
-              message = "Region code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" )
+              message = "Region code must be a valid ISO 3166-1:alpha2 followed by '-' and a local code" )
     String regionCode,
 
     @NotBlank

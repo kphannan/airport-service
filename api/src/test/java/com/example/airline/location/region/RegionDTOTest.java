@@ -116,7 +116,7 @@ class RegionDTOTest
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
                                              tuple( "code",
-                                                    "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" ),
+                                                    "code must be a valid ISO 3166-1:alpha2 followed by '-' and a local code" ),
                                              tuple( "id", "A Region id is required" ) );
         }
 
@@ -138,7 +138,7 @@ class RegionDTOTest
                     .assertConstraintErrors( constraintViolations,
                                              tuple( "code", "A unique region code is required" ),
                                              tuple( "code",
-                                                    "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" ) );
+                                                    "code must be a valid ISO 3166-1:alpha2 followed by '-' and a local code" ) );
         }
 
         @Test
@@ -158,7 +158,7 @@ class RegionDTOTest
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
                                              tuple( "code",
-                                                    "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" ) );
+                                                    "code must be a valid ISO 3166-1:alpha2 followed by '-' and a local code" ) );
         }
 
         @Test
@@ -178,7 +178,7 @@ class RegionDTOTest
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
                                              tuple( "code",
-                                                    "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" ) );
+                                                    "code must be a valid ISO 3166-1:alpha2 followed by '-' and a local code" ) );
         }
 
         @Test
@@ -199,7 +199,7 @@ class RegionDTOTest
             ConstraintValidationUtility
                     .assertConstraintErrors( constraintViolations,
                                              tuple( "code",
-                                                    "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" ),
+                                                    "code must be a valid ISO 3166-1:alpha2 followed by '-' and a local code" ),
                                              tuple( "name", "Region name is required" ),
                                              tuple( "name", "Region name must be between 7 and 80 characters" ) );
         }
@@ -222,7 +222,7 @@ class RegionDTOTest
                     .assertConstraintErrors( constraintViolations,
                                              tuple( "id", "A Region id is required" ),
                                              tuple( "code",
-                                                    "Code must a valid ISO 3166:1-alpha2 followed by '-' and a local code" ),
+                                                    "code must be a valid ISO 3166-1:alpha2 followed by '-' and a local code" ),
                                              tuple( "code", "A unique region code is required" ),
                                              tuple( "localCode", "A unique local code is required" ),
                                              tuple( "localCode", "local code" ),
