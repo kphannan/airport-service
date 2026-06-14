@@ -766,8 +766,6 @@ class ContinentControllerRestTest
             when( repository.findByCode( eq( "ZZ" ) ) )
                     .thenReturn( Optional.of( continentEntity ) );
 
-
-
             // --- when
             final ResultActions resultActions =
                 mvc

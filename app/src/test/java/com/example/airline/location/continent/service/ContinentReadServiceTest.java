@@ -15,9 +15,9 @@ import java.util.Optional;
 import com.example.airline.location.continent.api.ContinentController;
 import com.example.airline.location.continent.mapper.ContinentEntityMapper;
 import com.example.airline.location.continent.model.Continent;
+import com.example.airline.location.continent.model.ContinentTester;
 import com.example.airline.location.continent.persistence.model.ContinentEntity;
 import com.example.airline.location.continent.persistence.repository.ContinentRepository;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,12 +75,13 @@ class ContinentReadServiceTest
         // --- when
         Optional<Continent> continent = service.findById( Integer.valueOf( 123 ) );
 
-        // --- then
-        // assertThat( Optional.ofNullable( continent.get() ) ).isPresent().contains(  );
-        assertAll( () -> assertThat( continent.get().name() ).contains( "name" ),
-                   () -> assertThat( continent.get().code() ).contains( "code" ),
-                   () -> assertThat( continent.get().wikiLink() ).isNull(),
-                   () -> assertThat( continent.get().keywords() ).contains( "Key string" ),
+        // ---
+        ContinentTester continentTester = ContinentTester.of( continent.get() );
+        assertAll( () -> assertThat( continentTester )
+                             .hasName( "name")
+                             .hasCode( "code" )
+                             .blankWikiLink()
+                             .hasKeywords( "Key string" ),
                    () -> verify( repository, atMost( 1 ) ).findById( anyInt() )
                  );
     }
@@ -97,11 +98,12 @@ class ContinentReadServiceTest
         Optional<Continent> continent = service.findByCode( "abc" );
 
         // --- then
-        // assertThat( Optional.ofNullable( continent.get() ) ).isPresent().contains(  );
-        assertAll( () -> assertThat( continent.get().name() ).contains( "name" ),
-                   () -> assertThat( continent.get().code() ).contains( "code" ),
-                   () -> assertThat( continent.get().wikiLink() ).isNull(),
-                   () -> assertThat( continent.get().keywords() ).contains( "Key string" ),
+        ContinentTester continentTester = ContinentTester.of( continent.get() );
+        assertAll( () -> assertThat( continentTester )
+                             .hasName( "name")
+                             .hasCode( "code" )
+                             .blankWikiLink()
+                             .hasKeywords( "Key string" ),
                    () -> verify( repository, atMost( 1 ) ).findByCode( anyString() )
                    // () -> verify( mapper ).entityToDomain( any( ContinentEntity.class ) )
                  );
