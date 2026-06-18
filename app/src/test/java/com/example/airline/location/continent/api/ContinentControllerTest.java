@@ -1,6 +1,7 @@
 package com.example.airline.location.continent.api;
 
 
+import static org.apache.commons.lang3.ArrayUtils.contains;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,6 +20,8 @@ import java.util.Optional;
 import com.example.airline.location.continent.ContinentDTO;
 import com.example.airline.location.continent.mapper.ContinentDtoMapper;
 import com.example.airline.location.continent.model.Continent;
+import com.example.airline.location.continent.model.ContinentDTOTester;
+import com.example.airline.location.continent.model.ContinentTester;
 import com.example.airline.location.continent.service.ContinentCreateService;
 import com.example.airline.location.continent.service.ContinentDeleteService;
 import com.example.airline.location.continent.service.ContinentReadService;
@@ -148,8 +151,11 @@ class ContinentControllerTest
             final ResponseEntity<ContinentDTO> response = controller.restFindContinentById( 100, requestHeader );
             final HttpHeaders headers = response.getHeaders();
 
-            // TODO check response body.
-            assertAll( () -> assertNotNull( response.getBody() ),
+            assertAll( () -> assertThat( ContinentDTOTester.of( response.getBody() ) )
+                                 .hasName( "North")
+                                 .hasCode( "NA" )
+                                 .blankWikiLink()
+                                 .blankKeywords(),
                        () -> assertEquals( "application/json;charset=UTF-8", headers.getFirst( "Content-Type" )  ),
                        () -> verifyNoInteractions( createService ),
                        () -> verify( readService, times( 1 ) )
@@ -272,11 +278,13 @@ class ContinentControllerTest
                                .containsHeader( HttpHeaders.ACCEPT )
                                .containsHeader( HttpHeaders.ALLOW )
                                .containsHeader( HttpHeaders.CONTENT_TYPE )
-                               .containsHeader( "TRACEPARENT" )
-                               .containsHeader( "TRACESTATE" )
+                               // .containsHeader( "TRACEPARENT" )
+                               // .containsHeader( "TRACESTATE" )
                                .doesNotContainHeader( "NoWay" )
                                .hasValue( "TRACEPARENT", "testParent" )
                                .hasValue( "TRACESTATE", "testState" )
+                               // .hasHeaderSatisfying( HttpHeaders.ALLOW, contains( expectedMethods ) )
+                               // .hasExactlyValuesInAnyOrder( HttpHeaders.ALLOW, expectedMethods )
                                .hasValue( HttpHeaders.CONTENT_TYPE, "application/json;charset=UTF-8" ),
                        () -> assertThat( headers.get( HttpHeaders.ALLOW ) )
                                .anySatisfy( element ->

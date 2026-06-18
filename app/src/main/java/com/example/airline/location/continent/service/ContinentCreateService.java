@@ -52,6 +52,7 @@ public class ContinentCreateService
     {
         if ( repository.existsByCode( newContinent.code() ) )
         {
+            // TODO should result in ProblemDetail returned to API caller
             return null;
         }
 

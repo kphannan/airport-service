@@ -1,9 +1,8 @@
 package com.example.airline.location.continent.service;
 
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
@@ -12,6 +11,7 @@ import static org.mockito.Mockito.when;
 
 import com.example.airline.location.continent.api.ContinentController;
 import com.example.airline.location.continent.model.Continent;
+import com.example.airline.location.continent.model.ContinentTester;
 import com.example.airline.location.continent.model.NewContinent;
 import com.example.airline.location.continent.persistence.model.ContinentEntity;
 import com.example.airline.location.continent.persistence.model.NewContinentEntity;
@@ -58,10 +58,12 @@ class ContinentCreateServiceTest
         final Continent continent  = service.create( newContinent );
 
         // -- then
-        assertAll( () -> assertEquals( "North", continent.name() ),
-                   () -> assertEquals( "NA", continent.code() ),
-                   () -> assertNull( continent.wikiLink() ),
-                   () -> assertNull( continent.keywords() ),
+        ContinentTester continentTester = ContinentTester.of( continent );
+        assertAll( () -> assertThat( continentTester )
+                             .hasName( "North")
+                             .hasCode( "NA" )
+                             .blankWikiLink()
+                             .blankKeywords(),
                    () -> verify( repository ).existsByCode( anyString() ),
                    () -> verify( repository ).save( any( NewContinentEntity.class ) )
         );
@@ -80,7 +82,7 @@ class ContinentCreateServiceTest
         final Continent continent  = service.create( newContinent );
 
         // -- then
-        assertAll( () -> assertNull( continent ),
+        assertAll( () -> assertThat( continent ).isNull(),
                    () -> verify( repository ).existsByCode( anyString() ),
                    () -> verify( repository, never() ).save( any( ContinentEntity.class ) )
         );

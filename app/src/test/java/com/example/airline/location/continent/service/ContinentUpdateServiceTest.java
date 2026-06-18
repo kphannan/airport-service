@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 
 import com.example.airline.location.continent.api.ContinentController;
 import com.example.airline.location.continent.model.Continent;
+import com.example.airline.location.continent.model.ContinentTester;
 import com.example.airline.location.continent.persistence.model.ContinentEntity;
 import com.example.airline.location.continent.persistence.repository.ContinentRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -42,11 +43,10 @@ class ContinentUpdateServiceTest
     void update_existing_returnChanged()
     {
         // --- given
-        final Continent       continent       = new Continent( 1, "code", "name", null, null );
-        final ContinentEntity continentEntity = new ContinentEntity( 1, "code", "name", null, null );
+        final Continent       continent       = new Continent( 1, "code", "xnew name", null, "xUpdated" );
+        final ContinentEntity continentEntity = new ContinentEntity( 1, "code", "new name", null, "Updated" );
 
         when( repository.existsById( anyInt() ) ).thenReturn( true );
-        when( repository.existsByCode( anyString() ) ).thenReturn( true );
         when( repository.save( any( ContinentEntity.class ) ) )
                 .thenReturn( continentEntity );
 
@@ -54,9 +54,14 @@ class ContinentUpdateServiceTest
         final Continent updated = service.update( continent );
 
         // --- then
-        assertAll( () -> assertThat( updated ).isNotNull(),
+        ContinentTester continentTester = ContinentTester.of( updated );
+        assertAll( () -> assertThat( continentTester )
+                             .hasName( "new name")
+                             .hasCode( "code" )
+                             .blankWikiLink()
+                             .hasKeywords( "Updated" ),
                    () -> verify( repository, atMost( 1 ) ).existsById( anyInt() ),
-                   () -> verify( repository, atMost( 1 ) ).existsByCode( anyString() ),
+                   () -> verify( repository, never() ).existsByCode( anyString() ),
                    () -> verify( repository ).save( any( ContinentEntity.class ) )
         );
     }

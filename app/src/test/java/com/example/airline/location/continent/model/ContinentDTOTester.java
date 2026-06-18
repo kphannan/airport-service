@@ -1,14 +1,13 @@
 package com.example.airline.location.continent.model;
 
 
-import io.swagger.v3.core.util.ObjectMapperFactory;
+import com.example.airline.location.continent.ContinentDTO;
 import org.assertj.core.api.AbstractIntegerAssert;
 import org.assertj.core.api.AbstractObjectAssert;
 import org.assertj.core.api.AbstractStringAssert;
 import org.assertj.core.api.AbstractUriAssert;
 import org.assertj.core.api.AssertProvider;
 import org.assertj.core.api.Assertions;
-import tools.jackson.databind.ObjectMapper;
 
 /**
  *
@@ -17,34 +16,26 @@ import tools.jackson.databind.ObjectMapper;
  *     <p>
  *     Copyright (c) 2020-2026
  */
-public class ContinentTester extends AbstractObjectAssert<ContinentTester, Continent> implements AssertProvider<ContinentTester>
+public class ContinentDTOTester extends AbstractObjectAssert<ContinentDTOTester, ContinentDTO> implements AssertProvider<ContinentDTOTester>
 {
-    private final Continent continent;
+    private final ContinentDTO continent;
 
-    private ContinentTester( Continent continent, Class<?> selfType )
+    private ContinentDTOTester( ContinentDTO continent, Class<?> selfType )
     {
         super( continent, selfType );
         this.continent = continent;
     }
 
-    public static ContinentTester of( Continent  continent )
+    public static ContinentDTOTester of( ContinentDTO  continent )
     {
-        return new ContinentTester( continent, ContinentTester.class );
-    }
-
-    public static ContinentTester of( String json )
-    {
-        final ObjectMapper mapper = new ObjectMapper();
-        final Continent ccc = mapper.readValue(  json, Continent.class );
-
-        return of( ccc );
+        return new ContinentDTOTester( continent, ContinentDTOTester.class );
     }
 
 
     @Override
-    public ContinentTester assertThat()
+    public ContinentDTOTester assertThat()
     {
-        return new ContinentTester( continent, ContinentTester.class );
+        return new ContinentDTOTester( continent, ContinentDTOTester.class );
     }
 
 
@@ -53,7 +44,7 @@ public class ContinentTester extends AbstractObjectAssert<ContinentTester, Conti
     public AbstractIntegerAssert<?> id()
     {
         return Assertions.assertThat( continent.id() )
-                         .describedAs( "persistence key" );
+                         .describedAs( "id" );
     }
 
     public AbstractStringAssert<?> code()
@@ -82,51 +73,51 @@ public class ContinentTester extends AbstractObjectAssert<ContinentTester, Conti
 
 
     // Exact matches
-    public ContinentTester hasId( Integer value )
+    public ContinentDTOTester hasId( Integer id )
     {
         assertThat()
             .isNotNull()
             .id()
-            .describedAs( "persistence  key" )
-            .isEqualTo( value );
+            .describedAs( "id" )
+            .isEqualTo( id );
 
         return myself;
     }
 
-    public ContinentTester hasCode( String value )
+    public ContinentDTOTester hasCode( String  code )
     {
         assertThat()
             .isNotNull()
             .code()
             .describedAs( "code" )
-            .isEqualTo( value );
+            .isEqualTo( code );
 
         return myself;
     }
 
-    public ContinentTester hasName( String value )
+    public ContinentDTOTester hasName( String  name )
     {
         assertThat()
             .isNotNull()
             .name()
             .describedAs( "name" )
-            .isEqualTo( value );
+            .isEqualTo( name );
 
         return myself;
     }
 
-    public ContinentTester hasWikiLink( String value )
+    public ContinentDTOTester hasWikiLink( String  name )
     {
         assertThat()
             .isNotNull()
             .wikiLink()
             .describedAs( "wikiLink" )
-            .isEqualTo( value );
+            .isEqualTo( name );
 
         return myself;
     }
 
-    public ContinentTester blankWikiLink()
+    public ContinentDTOTester blankWikiLink()
     {
         assertThat()
             .isNotNull()
@@ -137,7 +128,7 @@ public class ContinentTester extends AbstractObjectAssert<ContinentTester, Conti
         return myself;
     }
 
-    public ContinentTester blankKeywords()
+    public ContinentDTOTester blankKeywords()
     {
         assertThat()
             .isNotNull()
@@ -149,13 +140,13 @@ public class ContinentTester extends AbstractObjectAssert<ContinentTester, Conti
         return myself;
     }
 
-    public ContinentTester hasKeywords( String value )
+    public ContinentDTOTester hasKeywords( String  keywords )
     {
         assertThat()
             .isNotNull()
             .keywords()
             .describedAs( "keywords" )
-            .isEqualTo( value );
+            .isEqualTo( keywords );
 
         return myself;
     }

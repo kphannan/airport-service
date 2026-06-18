@@ -8,14 +8,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -39,6 +37,7 @@ import java.util.Optional;
 import com.example.airline.location.continent.mapper.ContinentDtoMapper;
 import com.example.airline.location.continent.mapper.ContinentEntityMapper;
 import com.example.airline.location.continent.model.Continent;
+import com.example.airline.location.continent.model.ContinentTester;
 import com.example.airline.location.continent.model.NewContinent;
 import com.example.airline.location.continent.persistence.model.ContinentEntity;
 import com.example.airline.location.continent.persistence.model.NewContinentEntity;
@@ -47,18 +46,16 @@ import com.example.airline.location.continent.service.ContinentCreateService;
 import com.example.airline.location.continent.service.ContinentDeleteService;
 import com.example.airline.location.continent.service.ContinentReadService;
 import com.example.airline.location.continent.service.ContinentUpdateService;
+import com.example.rest.utility.ProblemDetailTester;
 import com.example.utility.HeaderUtility;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -66,11 +63,11 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
-import org.springframework.test.http.HttpHeadersAssert;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import tools.jackson.databind.ObjectMapper;
 //import org.springframework.transaction.support.TransactionTemplate;
@@ -157,11 +154,8 @@ class ContinentControllerRestTest
             when( repository.existsByCode( anyString() ) )
                     .thenReturn( true );
 
-
             // --- when
-            final ResultActions resultActions =
-                mvc
-                    .perform( request );
+            final ResultActions resultActions = mvc.perform( request );
 
             // --- then
             resultActions.andDo(  print() );
@@ -178,20 +172,20 @@ class ContinentControllerRestTest
                        () -> resultActions
                                  .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) ),
 
-                       // ----
+                       // --- header
                        () -> assertThat( headerNames )
                                  .contains( "TRACEPARENT" )
                                  .contains( "TRACESTATE" )
                                  .contains( "Content-Type" )
                                  .doesNotContain( "NoWay" ),
-                       // TODO should response include problem details indicating existing entity with same ID
-                       // verify the resulting JSON....
-                       //        () -> resultActions
-                       //                  .andExpect( jsonPath( "$.content[0].id" ).value( 1 ) )
-                       //                  .andExpect( jsonPath( "$.content[0].ident" ).value( "KATLident" ) )
-                       //                  .andExpect( jsonPath( "$.content[0].name" ).value( "::NAME::" ) )
-                       //                  .andExpect( jsonPath( "$.content[0].wikipediaLink" ).doesNotExist() )
-                       //                  .andExpect( jsonPath( "$.content[0].keywords" ).doesNotExist() ),
+                       // --- body
+                       () -> assertThat( ProblemDetailTester.of( response.getContentAsString() ) )
+                                 .blankType()
+                                 .hasStatus( HttpStatus.CONFLICT )
+                                 .hasTitle( "Conflict")
+                                 .blankDetail()
+                                 .hasInstance( "/location/continent" )
+                                 .blankProperties(),
                        //
                        () -> verify( createService ).create( any( NewContinent.class ) ),
                        () -> verifyNoInteractions( readService ),
@@ -233,25 +227,20 @@ class ContinentControllerRestTest
 
 
             // --- when
-            final ResultActions resultActions =
-                mvc
-                    .perform( request );
+            final ResultActions resultActions = mvc.perform( request );
 
             // --- then
             resultActions.andDo(  print() );
 
-            final MvcResult result = resultActions.andReturn();
+            final MvcResult result                 = resultActions.andReturn();
             final MockHttpServletResponse response = result.getResponse();
             final Collection<String> headerNames   = response.getHeaderNames();
-            // final ArgumentCaptor<Pageable> pageableCaptor =
-            //     ArgumentCaptor.forClass( Pageable.class );
 
             // TODO Include Problem Details as response body
             assertAll( () -> assertThat( response.getStatus() )
                                  .isEqualTo( HttpStatus.CREATED.value() ),
                        () -> resultActions
                                  .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) ),
-
                        // ----
                        () -> assertThat( headerNames )
                                  .contains( "TRACEPARENT" )
@@ -265,12 +254,18 @@ class ContinentControllerRestTest
                                  .anyMatch( location -> location.matches( "^.*/location/continent/22$" ) ),
                        // TODO should response include problem details indicating existing entity with same ID
                        // verify the resulting JSON....
-                       () -> resultActions
-                                 .andExpect( jsonPath( "$.id" ).value( 22 ) )
-                                 .andExpect( jsonPath( "$.code" ).value( "CC" ) )
-                                 .andExpect( jsonPath( "$.name" ).value( "::ZNAMEZ::" ) ),
-                                 // .andExpect( jsonPath( "$.content[0].wikipediaLink" ).doesNotExist() )
-                                 // .andExpect( jsonPath( "$.content[0].keywords" ).doesNotExist() ),
+                       () -> ContinentTester.of( response.getContentAsString() )
+                                 .hasId( 22 )
+                                 .hasCode( "CC" )
+                                 .hasName( "::ZNAMEZ::" )
+                                 .blankWikiLink()
+                                 .blankKeywords(),
+                       // () -> resultActions
+                       //           .andExpect( jsonPath( "$.id" ).value( 22 ) )
+                       //           .andExpect( jsonPath( "$.code" ).value( "CC" ) )
+                       //           .andExpect( jsonPath( "$.name" ).value( "::ZNAMEZ::" ) )
+                       //           .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
+                       //           .andExpect( jsonPath( "$.keywords" ).doesNotExist() ),
                        //
                        () -> verify( createService ).create( any( NewContinent.class ) ),
                        () -> verifyNoInteractions( readService ),
@@ -285,11 +280,20 @@ class ContinentControllerRestTest
 
 
 
-        @Disabled
+        // @Disabled
         @Nested
         @DisplayName( "validations" )
         class Validation
         {
+            MockHttpServletRequestBuilder request;
+
+            @BeforeEach
+            void setup()
+            {
+                request = withHeaders( post( "/location/continent" ) )
+                                                   .characterEncoding( "UTF-8" )
+                                                   .headers( requestHeaders );
+            }
 
             // @Disabled
             @Test
@@ -303,16 +307,10 @@ class ContinentControllerRestTest
                            "keywords": "will report missing code, name fields"
                         }
                         """;
-                final RequestBuilder request = withHeaders( post( "/location/continent" ) )
-                        .characterEncoding( "UTF-8" )
-                        .content( jsonString )
-                        .headers( requestHeaders );
-
+                request.content( jsonString );
 
                 // --- when
-                final ResultActions resultActions =
-                    mvc
-                        .perform( request );
+                final ResultActions resultActions = mvc.perform( request );
 
                 // --- then
                 resultActions.andDo(  print() );
@@ -322,15 +320,11 @@ class ContinentControllerRestTest
                 final Collection<String> headerNames   = response.getHeaderNames();
                 // final HttpHeadersAssert  headersAssert = new HttpHeadersAssert( result.getResponse(). .getHeaders() );
                 final String             body          = result.getResponse().getContentAsString();
-                // final ArgumentCaptor<Pageable> pageableCaptor =
-                //     ArgumentCaptor.forClass( Pageable.class );
 
-                // TODO Include Problem Details as response body
                 assertAll( () -> assertThat( response.getStatus() )
-                                     .isEqualTo( HttpStatus.CREATED.value() ),
+                                     .isEqualTo( HttpStatus.BAD_REQUEST.value() ),
                            () -> resultActions
                                      .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) ),
-
                            // ----
                            () -> assertThat( headerNames )
                                      .contains( "TRACEPARENT" )
@@ -338,67 +332,55 @@ class ContinentControllerRestTest
                                      .contains( "Content-Type" )
                                      .doesNotContain( "NoWay" ),
                            // -----
-                           () -> assertThat( response.getRedirectedUrl() )
-                                     .matches( "^.*/location/continent/22" ),
-                           () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
-                                     .anyMatch( location -> location.matches( "^.*/location/continent/22$" ) ),
+                           // () -> assertThat( response.getRedirectedUrl() )
+                           //           .matches( "^.*/location/continent/22" ),
+                           // () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
+                           //           .anyMatch( location -> location.matches( "^.*/location/continent/22$" ) ),
                            // TODO should response include problem details indicating existing entity with same ID
                            // verify the resulting JSON....
+                           () -> assertThat( ProblemDetailTester.of( response.getContentAsString() ) )
+                                     .blankType()
+                                     .hasStatus( HttpStatus.BAD_REQUEST )
+                                     .hasTitle( "Validation failed on 'newContinentDTO'")
+                                     .hasDetail( "Invalid request content." )
+                                     .hasInstance( "/location/continent" )
+                                     // .hasProperties( entry( "name", "xName is required, provided: [null]" ),
+                                     //                 entry( "code", "xA 2-character code is required, provided: [null]"  )
+                                     //               )
+                                     .blankProperties(),
                            () -> assertThatJson( body )
                                      .isObject()
-                                     .containsOnly( entry( "title", "Validation failed on 'newContinentDTO'" ),
-                                                    entry( "status", 400 ),
-                                                    entry( "detail",  "Invalid request content." ),
-                                                    entry( "instance", "/location/continent" ),
-                                                    entry( "name", "Name is required, provided: [null]"  ),
-                                                    entry( "code", "A 2-character code is required, provided: [null]"  )
+                                     .contains( //entry( "title", "Validation failed on 'newContinentDTO'" ),
+                                                    // entry( "status", 400 ),
+                                                    // entry( "detail",  "Invalid request content." ),
+                                                    // entry( "instance", "/location/continent" ),
+                                                    entry( "name", "Continent name must be between 2 to 52 characters, provided: [null]"  ),
+                                                    entry( "code",
+                                                    """
+                                                    Code must be one of these character sequences:
+                                                    AF, AN, AS, EU, NA, OC, SA
+                                                    , provided: [null]"""  )
                                                   ),
-                           () -> resultActions
-                                     .andExpect( jsonPath( "$.id" ).value( 22 ) )
-                                     .andExpect( jsonPath( "$.code" ).value( "CC" ) )
-                                     .andExpect( jsonPath( "$.name" ).value( "::ZNAMEZ::" ) ),
-                           // .andExpect( jsonPath( "$.content[0].wikipediaLink" ).doesNotExist() )
-                           // .andExpect( jsonPath( "$.content[0].keywords" ).doesNotExist() ),
+                           // () -> resultActions
+                           //           .andExpect( jsonPath( "$.id" ).value( 22 ) )
+                           //           .andExpect( jsonPath( "$.code" ).value( "CC" ) )
+                           //           .andExpect( jsonPath( "$.name" ).value( "::ZNAMEZ::" ) ),
+                           // .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
+                           // .andExpect( jsonPath( "$.keywords" ).doesNotExist() ),
                            //
-                           () -> verify( createService ).create( any( NewContinent.class ) ),
+                           () -> verifyNoInteractions( createService ),
                            () -> verifyNoInteractions( readService ),
                            () -> verifyNoInteractions( updateService ),
                            () -> verifyNoInteractions( deleteService ),
-                    // persistence
-                           () -> verify( repository ).existsByCode( eq( "NA" ) ),
-                           () -> verify( repository ).save( any( NewContinentEntity.class ) ),
-                           () -> verify( mapper ).domainToApi( any( Continent.class ) )
+                           // persistence
+                           () -> verifyNoInteractions( repository ),
+                           () -> verifyNoInteractions( mapper )
                          );
             }
 
 
-            // () -> assertThat( result.getResponse().getRedirectedUrl() )
-            //                        .matches( "^.* /location/continent/123$" ),
-            // () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
-            //     .anyMatch( location -> location.matches( "^.* /location/continent/123$" ) )
-            //
-            // final MockHttpServletResponse response = result.getResponse();
-            // // TODO verify the JSON is the created entity
-            // final Collection<String> headerNames   = response.getHeaderNames();
-            // //            final HttpHeadersAssert  headersAssert = new HttpHeadersAssert( response.getHeaders() );
-            // final Collection<String> headerNames   = response.getHeaderNames();
-            // assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
-            //     () -> assertThat( headerNames )
-            //                        .contains( "TRACEPARENT" )
-            //                        .contains( "TRACESTATE" )
-            //                        .contains( "Content-Type" )
-            //                        .doesNotContain( "NoWay" ),
-            //!                       () -> assertEquals( "application/json;charset=UTF-8",
-            //!                                           response.getHeader( "Content-Type" ) ),
-            //!                       () -> assertThat( result.getResponse().getHeaderNames() )
-            //!                               .contains( "Content-Type",
-            //!                                          HeaderTestingSupport.TRACESTATE, HeaderTestingSupport.TRACEID ),
-            //                () -> verify( readService ).findAll(),
-            //                () -> verify( repository ).findAll()
-            //              );
 
-
-            @Disabled
+            // @Disabled
             @Test
             @DisplayName( "blank name and code - 400: Bad Request - problem details indicate blank values" )
             void restPost_withBlankRequiredParams_returnsValidationError() throws Exception
@@ -408,67 +390,66 @@ class ContinentControllerRestTest
                         """
                         {
                            "code": "  ",
-                           "code": "  ",
                            "name": "     "
                         }
                         """;
-                final RequestBuilder request = withHeaders( post( "/location/continent" ) )
-                        .characterEncoding( "UTF-8" )
-                        .headers( requestHeaders )
-                        .content( jsonString );
+                request.content( jsonString );
 
                 // --- when
-                final MvcResult result = mvc
-                        .perform( request )
-                        .andDo( print() )
-                        .andReturn();
+                final ResultActions resultActions = mvc.perform( request );
 
                 // --- then
-                // final MockHttpServletResponse response = result.getResponse();
+                resultActions.andDo(  print() );
+
+                final MvcResult result                 = resultActions.andReturn();
+                final MockHttpServletResponse response = result.getResponse();
+                final Collection<String> headerNames   = response.getHeaderNames();
+
+                // --- then
                 // TODO verify the JSON is the created entity
-                final String body = result.getResponse().getContentAsString();
+                // final String body = response.getContentAsString();
 
                 // It is desired to have all 'asserts' as soft asserts.
-                assertAll( () -> assertEquals( HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus() ),
-                           () -> assertThat( result.getResponse().getHeaderNames() )
+                assertAll( () -> assertEquals( HttpStatus.BAD_REQUEST.value(), response.getStatus() ),
+                           () -> assertThat( response.getHeaderNames() )
                                    .contains( "Content-Type", HeaderUtility.TRACESTATE, HeaderUtility.TRACEID ),
+                           // ----
+                           () -> assertThat( headerNames )
+                                     .contains( "TRACEPARENT" )
+                                     .contains( "TRACESTATE" )
+                                     .contains( "Content-Type" )
+                                     .doesNotContain( "NoWay" ),
+                           // -----
+                           // verify the resulting JSON....
+                           () -> assertThat( ProblemDetailTester.of( response.getContentAsString() ) )
+                                     .blankType()
+                                     .hasStatus( HttpStatus.BAD_REQUEST )
+                                     .hasTitle( "Validation failed on 'newContinentDTO'" )
+                                     .hasDetail( "Invalid request content." )
+                                     .hasInstance( "/location/continent" ),
+                           // .hasProperties( entry( "name", "xName is required, provided: [null]" ),
+                           //                 entry( "code", "xA 2-character code is required, provided: [null]"  )
+                           //               )
+                           //
                            // TODO Use a JSON assertion instead of a plain string
-                           () -> assertThatJson( body )
+                           () -> assertThatJson( response.getContentAsString() )
                                    .isObject()
-                                   .containsOnly( entry( "title", "Validation failed on 'newContinentDTO'" ),
-                                                  entry( "status", 400 ),
-                                                  entry( "detail",  "Invalid request content." ),
-                                                  entry( "instance", "/location/continent" ),
-                                                  entry( "name",
-                                                         "Name must be between 2 and 52 characters, provided: [     ]"  ),
-                                                  entry( "code", "Code must be 2 uppercase characters, provided: [  ]"  )
-                                                )
+                                   .contains( // entry( "title", "Validation failed on 'newContinentDTO'" ),
+                                              // entry( "status", 400 ),
+                                              // entry( "detail",  "Invalid request content." ),
+                                              // entry( "instance", "/location/continent" ),
+                                              entry( "name",
+                                                     "Continent name must be between 2 and 52 characters, provided: [     ]"  ),
+                                              entry( "code",
+                                                     """
+                                                     Code must be one of these character sequences:
+                                                     AF, AN, AS, EU, NA, OC, SA
+                                                     , provided: [  ]""" )
+                                                     //
+                                                     // "Code must be 2 uppercase characters, provided: [  ]"  )
+                                            )
                 );
             }
-
-
-            // () -> assertThat( result.getResponse().getRedirectedUrl() )
-            //                        .matches( "^.* /location/continent/123$" ),
-            // () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
-            //     .anyMatch( location -> location.matches( "^.* /location/continent/123$" ) )
-            //
-            // final MockHttpServletResponse response = result.getResponse();
-            // // TODO verify the JSON is the created entity
-            // final Collection<String> headerNames   = response.getHeaderNames();
-            // //            final HttpHeadersAssert  headersAssert = new HttpHeadersAssert( response.getHeaders() );
-            // final Collection<String> headerNames   = response.getHeaderNames();
-            // assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
-            //     () -> assertThat( headerNames )
-            //                        .contains( "TRACEPARENT" )
-            //                        .contains( "TRACESTATE" )
-            //                        .contains( "Content-Type" )
-            //                        .doesNotContain( "NoWay" ),
-            //!                       () -> assertEquals( "application/json;charset=UTF-8", response.getHeader( "Content-Type" ) ),
-            //!                       () -> assertThat( result.getResponse().getHeaderNames() )
-            //!                               .contains( "Content-Type", HeaderTestingSupport.TRACESTATE, HeaderTestingSupport.TRACEID ),
-            //                () -> verify( readService ).findAll(),
-            //                () -> verify( repository ).findAll()
-            //              );
 
 
 
@@ -477,35 +458,31 @@ class ContinentControllerRestTest
             void restPost_withInvalidWikiLink_returnsValidationError() throws Exception
             {
                 // --- given
+                // "detail" : "JSON parse error: Unexpected character ('/' (code 47)): maybe a (non-standard) comment? (not recognized as one since Feature 'ALLOW_COMMENTS' not enabled for parser)",
+                //                "instance" : "/location/continent",
+                //                                 "Exception" : "org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Unexpected character ('/' (code 47)): maybe a (non-standard) comment? (not recognized as one since Feature 'ALLOW_COMMENTS' not enabled for parser)",
+                //                                                   "Cause" : "tools.jackson.core.exc.StreamReadException: Unexpected character ('/' (code 47)): maybe a (non-standard) comment? (not recognized as one since Feature 'ALLOW_COMMENTS' not enabled for parser)\n at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); byte offset: #5]",
                 final String jsonString =
                         """
                         {
-                           "id": 1,
                            "code": "NA",
                            "name": "A valid length name",
                            "wikiLink": "https://wikipedia.com/bad url/not encoded",
                            "keywords": "will report missing code, name fields"
                         }
                         """;
-                final RequestBuilder request = withHeaders( put( "/location/continent" ) )
-                        .characterEncoding( "UTF-8" )
-                        .headers( requestHeaders )
-                        .content( jsonString );
+                request.content( jsonString );
 
 
                 // --- when
-                final ResultActions resultActions =
-                    mvc
-                        .perform( request );
+                final ResultActions resultActions = mvc.perform( request );
 
                 // --- then
                 resultActions.andDo(  print() );
 
-                final MvcResult result = resultActions.andReturn();
+                final MvcResult result                 = resultActions.andReturn();
                 final MockHttpServletResponse response = result.getResponse();
                 final Collection<String> headerNames   = response.getHeaderNames();
-                // final ArgumentCaptor<Pageable> pageableCaptor =
-                //     ArgumentCaptor.forClass( Pageable.class );
 
                 // TODO Include Problem Details as response body
                 assertAll( () -> assertThat( response.getStatus() )
@@ -518,56 +495,29 @@ class ContinentControllerRestTest
                                      .contains( "TRACEPARENT" )
                                      .contains( "TRACESTATE" )
                                      .contains( "Content-Type" )
-                                     .doesNotContain( "NoWay" )
-                    // -----
-                    //        () -> assertThat( response.getRedirectedUrl() )
-                    //                  .matches( "^.*/location/continent/22" ),
-                    //        () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
-                    //                  .anyMatch( location -> location.matches( "^.*/location/continent/22$" ) ),
-                    // // TODO should response include problem details indicating existing entity with same ID
-                    // verify the resulting JSON....
-                    //        () -> resultActions
-                    //                  .andExpect( jsonPath( "$.id" ).value( 22 ) )
-                    //                  .andExpect( jsonPath( "$.code" ).value( "CC" ) )
-                    //                  .andExpect( jsonPath( "$.name" ).value( "::ZNAMEZ::" ) ),
-                    // // .andExpect( jsonPath( "$.content[0].wikipediaLink" ).doesNotExist() )
-                    // .andExpect( jsonPath( "$.content[0].keywords" ).doesNotExist() ),
-                    //
-                    //        () -> verify( createService ).create( any( NewContinent.class ) ),
-                    //        () -> verifyNoInteractions( readService ),
-                    //        () -> verifyNoInteractions( updateService ),
-                    //        () -> verifyNoInteractions( deleteService ),
-                    // // persistence
-                    //        () -> verify( repository ).existsByCode( eq( "NA" ) ),
-                    //        () -> verify( repository ).save( any( NewContinentEntity.class ) ),
-                    //        () -> verify( mapper ).domainToApi( any( Continent.class ) )
+                                     .doesNotContain( "NoWay" ),
+                           // -----
+                           // verify the resulting JSON....
+                           () -> assertThat( ProblemDetailTester.of( response.getContentAsString() ) )
+                                     .blankType()
+                                     .hasStatus( HttpStatus.BAD_REQUEST )
+                                     .hasTitle( "Malformed Request")
+                                     .hasDetail( "JSON parse error: Cannot deserialize value of type `java.net.URI` from String \"https://wikipedia.com/bad url/not encoded\": not a valid textual representation, problem: Illegal character in path at index 25: https://wikipedia.com/bad url/not encoded" )
+                                     .hasInstance( "/location/continent" ),
+                                     // .hasProperties( entry( "name", "xName is required, provided: [null]" ),
+                                     //                 entry( "code", "xA 2-character code is required, provided: [null]"  )
+                                     //               )
+                           //
+                           () -> verifyNoInteractions( createService ),
+                           () -> verifyNoInteractions( readService ),
+                           () -> verifyNoInteractions( updateService ),
+                           () -> verifyNoInteractions( deleteService ),
+                           // persistence
+                           () -> verifyNoInteractions( repository ),
+                           () -> verifyNoInteractions( mapper )
                          );
             }
 
-            // () -> assertThat( result.getResponse().getRedirectedUrl() )
-            //                        .matches( "^.* /location/continent/123$" ),
-            // () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
-            //     .anyMatch( location -> location.matches( "^.* /location/continent/123$" ) )
-            //
-            // final MockHttpServletResponse response = result.getResponse();
-            // // TODO verify the JSON is the created entity
-            // final Collection<String> headerNames   = response.getHeaderNames();
-            // //            final HttpHeadersAssert  headersAssert = new HttpHeadersAssert( response.getHeaders() );
-            // final Collection<String> headerNames   = response.getHeaderNames();
-            // assertAll( () -> assertEquals( HttpStatus.OK.value(), response.getStatus() ),
-            //     () -> assertThat( headerNames )
-            //                        .contains( "TRACEPARENT" )
-            //                        .contains( "TRACESTATE" )
-            //                        .contains( "Content-Type" )
-            //                        .doesNotContain( "NoWay" ),
-            //!                       () -> assertEquals( "application/json;charset=UTF-8",
-            //!                                           response.getHeader( "Content-Type" ) ),
-            //!                       () -> assertThat( result.getResponse().getHeaderNames() )
-            //!                               .contains( "Content-Type",
-            //!                                          HeaderTestingSupport.TRACESTATE, HeaderTestingSupport.TRACEID ),
-            //                () -> verify( readService ).findAll(),
-            //                () -> verify( repository ).findAll()
-            //              );
         }
     }
 
@@ -706,9 +656,7 @@ class ContinentControllerRestTest
                     .thenReturn( Optional.empty() );
 
             // --- when
-            final ResultActions resultActions =
-                mvc
-                    .perform( request );
+            final ResultActions resultActions =  mvc.perform( request );
 
             // --- then
             resultActions.andDo(  print() );
@@ -731,13 +679,21 @@ class ContinentControllerRestTest
                                  .contains( "Content-Type" )
                                  .doesNotContain( "NoWay" ),
                        // -----
-                       //        () -> assertFalse( body.isBlank() ),
                        // verify the resulting JSON....
+                       // --- body
+                       () -> assertThat( ProblemDetailTester.of( response.getContentAsString() ) )
+                                 .blankType()
+                                 .hasStatus( HttpStatus.BAD_REQUEST )
+                                 .hasTitle( "Parameter Type Mismatch")
+                                 .hasDetail( "Method parameter 'continentId': Failed to convert value of type 'java.lang.String' to required type 'java.lang.Integer'; For input string: \"code\"" )
+                                 .hasInstance( "/location/continent/code" )
+                                 // TODO validate properties (Exception, Cause)
+                                 .blankProperties(),
                        () -> resultActions
-                                 .andExpect( jsonPath( "$.title" ).value( "Parameter Type Mismatch" ) )
-                                 .andExpect( jsonPath( "$.status" ).value( "400" ) )
-                                 .andExpect( jsonPath( "$.detail" ).value( "Method parameter 'continentId': Failed to convert value of type 'java.lang.String' to required type 'java.lang.Integer'; For input string: \"code\"" ) )
-                                 .andExpect( jsonPath( "$.instance" ).value( "/location/continent/code" ) )
+                                 // .andExpect( jsonPath( "$.title" ).value( "Parameter Type Mismatch" ) )
+                                 // .andExpect( jsonPath( "$.status" ).value( "400" ) )
+                                 // .andExpect( jsonPath( "$.detail" ).value( "Method parameter 'continentId': Failed to convert value of type 'java.lang.String' to required type 'java.lang.Integer'; For input string: \"code\"" ) )
+                                 // .andExpect( jsonPath( "$.instance" ).value( "/location/continent/code" ) )
                                  // .andExpect( jsonPath( "$.Exception" ).value( "North" ) )
                                  .andExpect( jsonPath( "$.Exception", containsString("org.springframework.web.method.annotation.MethodArgumentTypeMismatchException:" ) ) )
                                  .andExpect( jsonPath( "$.Exception", containsString("Method parameter 'continentId': Failed to convert value of type 'java.lang.String' to required type 'java.lang.Integer'; For input string: \"code\"" ) ) )
@@ -779,6 +735,14 @@ class ContinentControllerRestTest
             final Collection<String> headerNames   = response.getHeaderNames();
             // final String body = response.getContentAsString();
 
+            // ContinentTester continentTester = ContinentTester.of( response.getContentAsString() );
+            // assertAll( () -> assertThat( continentTester )
+            //                      .hasName( "North")
+            //                      .hasCode( "NA" )
+            //                      .blankWikiLink()
+            //                      .blankKeywords(),
+
+
             // TODO Include Problem Details as response body
             assertAll( () -> assertThat( response.getStatus() )
                                  .isEqualTo( HttpStatus.OK.value() ),
@@ -794,12 +758,12 @@ class ContinentControllerRestTest
                        // -----
                        //        () -> assertFalse( body.isBlank() ),
                        // verify the resulting JSON....
-                       () -> resultActions
-                                 .andExpect( jsonPath( "$.id" ).value( 1 ) )
-                                 .andExpect( jsonPath( "$.code" ).value( "ZZ" ) )
-                                 .andExpect( jsonPath( "$.name" ).value( "::NAME::" ) )
-                                 .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
-                                 .andExpect( jsonPath( "$.keywords" ).doesNotExist() ),
+                       () -> assertThat( ContinentTester.of( response.getContentAsString() ) )
+                                 .hasId( 1 )
+                                 .hasName( "::NAME::")
+                                 .hasCode( "ZZ" )
+                                 .blankWikiLink()
+                                 .blankKeywords(),
                        //
                        () -> verifyNoInteractions( createService ),
                        () -> verify( readService ).findByCode( anyString() ),
@@ -1055,29 +1019,51 @@ class ContinentControllerRestTest
 
             // --- when
 
-            final MvcResult result = mvc
-                    .perform( request )
-                    .andDo( print() )
-                    // .andExpect( status().isOk() )
-                    .andExpect( status().isNotImplemented() )
-                    .andExpect( content().encoding( "UTF-8" ) )
-                    // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
-                    //      don't complain about lack of assertions in tests
-                    .andExpect( jsonPath( "$.id" ).value( 1 ) )
-                    .andExpect( jsonPath( "$.code" ).value( "NA" ) )
-                    .andExpect( jsonPath( "$.name" ).value( "North" ) )
-                    // .andExpect( jsonPath( "$.keywords" ).value( "North" ) )
-                    .andReturn();
+            // final MvcResult result = mvc
+            //         .perform( request )
+            //         .andDo( print() )
+            //         // .andExpect( status().isOk() )
+            //         .andExpect( status().isNotImplemented() )
+            //         .andExpect( content().encoding( "UTF-8" ) )
+            //         // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
+            //         //      don't complain about lack of assertions in tests
+            //         // .andExpect( jsonPath( "$.id" ).value( 1 ) )
+            //         // .andExpect( jsonPath( "$.code" ).value( "NA" ) )
+            //         // .andExpect( jsonPath( "$.name" ).value( "North" ) )
+            //         // .andExpect( jsonPath( "$.keywords" ).value( "North" ) )
+            //         .andReturn();
+
+            // --- when
+            final ResultActions resultActions =
+                mvc
+                    .perform( request );
+
+            // --- then
+            resultActions.andDo(  print() );
+
+            final MvcResult result = resultActions.andReturn();
+            final MockHttpServletResponse response = result.getResponse();
 
             // --- then
             final Collection<String> headerNames   = result.getResponse().getHeaderNames();
             assertAll( () -> assertEquals( HttpStatus.NOT_IMPLEMENTED.value(), result.getResponse().getStatus() ),
+                       () -> resultActions
+                                 .andExpect( content().encoding( "UTF-8" ) )
+                                 .andExpect( content().contentTypeCompatibleWith( "application/json-patch+json;charset=UTF-8" ) ),
                        () -> assertThat( headerNames )
                                .contains( "TRACEPARENT" )
                                .contains( "TRACESTATE" )
                                .contains( "Content-Type" )
                                .doesNotContain( "NoWay" ),
-                       // () -> assertThat( result.getResponse().getHeaderNames() )
+                       //
+                       () -> assertThat( ContinentTester.of( result.getResponse().getContentAsString() ) )
+                                 .hasId( 1 )
+                                 .hasName( "North")
+                                 .hasCode( "NA" )
+                                 .blankWikiLink()
+                                 .blankKeywords(),
+                        //
+                // () -> assertThat( result.getResponse().getHeaderNames() )
                        //           .contains( "Content-Type", HeaderTestingSupport.TRACESTATE, HeaderTestingSupport.TRACEID )
                        () -> verify( readService ).findById(  anyInt() ),
                        () -> verify( repository ).findById( anyInt() ),

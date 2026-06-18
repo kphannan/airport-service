@@ -3,7 +3,6 @@ package com.example.airline.location.continent.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.atMost;
@@ -91,7 +90,7 @@ class ContinentReadServiceTest
     void read_findByCode()
     {
         // given
-        ContinentEntity entity = new ContinentEntity( 1, "code", "name", null, "Key string" );
+        ContinentEntity entity = new ContinentEntity( 1234, "code", "name", null, "Key string" );
         when( repository.findByCode( anyString() ) ).thenReturn( Optional.of( entity ) );
 
         // --- when
@@ -100,6 +99,7 @@ class ContinentReadServiceTest
         // --- then
         ContinentTester continentTester = ContinentTester.of( continent.get() );
         assertAll( () -> assertThat( continentTester )
+                             .hasId( 1234 )
                              .hasName( "name")
                              .hasCode( "code" )
                              .blankWikiLink()

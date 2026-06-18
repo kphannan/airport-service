@@ -34,6 +34,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -172,7 +173,8 @@ public class ContinentController
                 }
     )
     @PostMapping( "" )
-    public ResponseEntity<ContinentDTO>
+    // public ResponseEntity<ContinentDTO>
+    public ResponseEntity<?>
         restPostAddContinent( @Valid @org.springframework.web.bind.annotation.RequestBody final NewContinentDTO newContinentDTO,
                               @RequestHeader final HttpHeaders requestHeaders )
     {
@@ -194,12 +196,14 @@ public class ContinentController
 
         // The item is already in the DB.  If the client intention is to update,
         // then a PUT should have been used.
+        final ProblemDetail problemDetail = ProblemDetail.forStatus( HttpStatus.CONFLICT );
         return ResponseEntity
-                .status( HttpStatus.CONFLICT )
+                   // .status( HttpStatus.CONFLICT )
+                .status( problemDetail.getStatus() )
                 .headers( HeaderUtility.copyNeededHeaders( requestHeaders ) )
                 // TODO Include Problem Details as response body
-                //.body( "Continent does not exist" )
-                .build();
+                .body( problemDetail );
+                // .build();
     }
 
 

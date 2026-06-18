@@ -5,37 +5,30 @@ package com.example.airline.location.country.model;
 
 import java.net.URI;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
+import org.jspecify.annotations.NonNull;
 
 
 /**
  * Domain model object representing a single Country.
  */
-@Data
-@AllArgsConstructor
-public class Country
-{
-    // @Id
-    // @GeneratedValue( strategy = GenerationType.AUTO )
-    // private final Long id;
-
-    // @NotNull
+public record Country(
+    @NonNull
     @SuppressWarnings( "PMD.ShortVariable" )
-    private Integer id;
+    Integer id,
 
-    // @NotNull
-    private String code; // TODO change code to a 2 character code...
+    @NonNull
+    String code, // TODO change code to a 2 character code...
 
-    // @NotNull
-    private String name;
+    @NonNull
+    String name,
 
-    // @NotNull
-    private String continent;
+    @NonNull
+    String continent,
 
     // @Convert( converter = UriConverter.class )
-    private URI wikipediaLink;
+    URI wikipediaLink,
 
-    private String keywords;
-}
+    String keywords
+)
+{}
+
