@@ -410,7 +410,7 @@ public class ContinentController
      * @param continentId key of the entity to update.
      * @param patch A modified continent instance.
      * @param requestHeaders Request's HttpHeaders
-     * @return the updated Conntinent
+     * @return the updated Continent
      */
     @Operation( method = "PATCH",
                 summary = "Update a Continent",
@@ -499,7 +499,7 @@ public class ContinentController
      *
      * @param continentDTO the modified Continent entity.
      * @param requestHeaders request headers including traceID.
-     * @return OK when updated, along with the updated entitty;
+     * @return OK when updated, along with the updated entity;
      *         CONFLICT when the underlying persistent object has been modified after
      *         it had been fetched.
      */
@@ -637,7 +637,7 @@ public class ContinentController
      *
      * @param continentDTO the continent entity to delete
      * @param requestHeaders headers of the request, mostly for tracing.
-     * @return ResponseEntity with no body.  Status NO_CONTENT indicates the entity
+     * @return ResponseEntity with no content body.  Status NO_CONTENT indicates the entity
      *         was deleted; NOT_FOUND indicates the entity did not exist.
      */
     @DeleteMapping( "" )
