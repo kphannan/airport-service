@@ -1177,7 +1177,7 @@ class AirportDTOTest
 
             @Test
             @DisplayName( "<aaa> is accepted" )
-            void airportIata_aaa_isAccpeted()
+            void airportIata_aaa_isAccepted()
             {
                 final AirportDTO itemUnderTest = new AirportDTO( 1L,
                                                                  "ABCD",

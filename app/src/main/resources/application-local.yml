@@ -39,7 +39,7 @@ spring:
       indent-output: true
 #      writeDatesAsTimestamps: false
 #      WRITE-DATES-AS-TIMESTAMPS: false
-      # false means write as ISO-8601
+      #  means write as ISO-8601
   #      write-dates-as-timestamps: false
 
   jpa:
@@ -235,7 +235,7 @@ logging:
 # Metrics related configurations
 management:
 
-  # Auto-configuation of liveness/readiness probes
+  # Autoconfiguration of liveness/readiness probes
   health:
     probes:
       enabled: true
@@ -293,7 +293,7 @@ management:
         enabled: true
 
 
-  # --- Informaion about the application ---
+  # --- Information about the application ---
   # {"git":{"commit":{"time":"2019-11-23T23:41:52Z","id":"5b27927"},"branch":"development"}}
   info:
     app:

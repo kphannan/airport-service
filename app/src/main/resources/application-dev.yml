@@ -48,7 +48,7 @@ logging:
 
 management:
 
-  # Auto-configuation of liveness/readiness probes
+  # Autoconfiguration of liveness/readiness probes
   health:
     probes:
       enabled: true
@@ -101,7 +101,7 @@ management:
         enabled: true
 
 
-  # --- Informaion about the application ---
+  # --- Information about the application ---
   # {"git":{"commit":{"time":"2019-11-23T23:41:52Z","id":"5b27927"},"branch":"development"}}
   info:
     app:
