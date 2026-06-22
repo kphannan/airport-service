@@ -2,10 +2,9 @@ package com.example.rest.utility;
 
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Map;
 
-import org.assertj.core.api.AbstractCollectionAssert;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import org.assertj.core.api.AbstractIntegerAssert;
 import org.assertj.core.api.AbstractMapAssert;
 import org.assertj.core.api.AbstractObjectAssert;
@@ -15,7 +14,6 @@ import org.assertj.core.api.AssertProvider;
 import org.assertj.core.api.Assertions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
-import org.springframework.http.converter.json.ProblemDetailJacksonMixin;
 import org.springframework.util.StringUtils;
 import tools.jackson.databind.ObjectMapper;
 
@@ -43,7 +41,7 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
 
     public static ProblemDetailTester of( String json )
     {
-        if ( StringUtils.isEmpty( json ) )
+        if ( !StringUtils.hasText( json ) )
         {
             return of( (ProblemDetail)null );
         }
@@ -51,11 +49,12 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
         final ObjectMapper mapper = new ObjectMapper();
         // mapper.findAndRegisterModules();
         // mapper.addMixIn(ProblemDetail.class, ProblemDetailJacksonMixin.class );
-        final ProblemDetail ccc = mapper.readValue(  json, ProblemDetail.class );
+        final ProblemDetail ccc = mapper.readValue(  json, ProblemDetailProperties.class );
         // https://www.baeldung.com/members/courses/learn-json-with-jackson/lessons/lesson-3-handling-unknown-properties
         // TODO need custom mapper to take unknown attributes and put them in 'properties' map
         return of( ccc );
     }
+
 
 
     @Override
@@ -214,14 +213,16 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
     }
 
     // TODO value should be Map<String, String>
-    public ProblemDetailTester hasProperties( Map.Entry<? extends String, ? extends Object>...  entries )
+    @SafeVarargs
+    public final ProblemDetailTester hasProperties( Map.Entry<? extends String, ? extends Object>...  entries )
     {
+        final Map<? extends String, ? extends Object> expected = Map.ofEntries( entries );
         assertThat()
             .isNotNull()
             .properties()
-            .describedAs( "properties" );
-        // TODO implement containsOnly after mapping JSON into properties collection
-            // .containsOnly( entries );
+            .describedAs( "properties" )
+            // TODO implement containsOnly after mapping JSON into properties collection
+            .containsAllEntriesOf( expected );
 
         return myself;
     }
@@ -238,10 +239,34 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
     }
 
     // TODO  implement 'satisfying'
-    public ProblemDetailTester hasPropertiesSatisfying( Map.Entry<? extends String, ? extends Object>...  entries )
+    @SafeVarargs
+    public final ProblemDetailTester hasPropertiesSatisfying( Map.Entry<? extends String, ? extends Object>...  entries )
     {
         return myself;
     }
+
+    public ProblemDetailTester containsKey( String key )
+    {
+        assertThat()
+            .isNotNull()
+            .properties()
+            .describedAs( "contains key" )
+            .containsKey( key );
+
+        return myself;
+    }
+
+    public ProblemDetailTester doesNotContainKey( String key )
+    {
+        assertThat()
+            .isNotNull()
+            .properties()
+            .describedAs( "does not contain key" )
+            .doesNotContainKey( key );
+
+        return myself;
+    }
+
 
         // public final ProblemDetailTester containsOnly( Map.Entry<String, String>...  entries )
     // {
@@ -253,9 +278,14 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
     // }
 
 
+}
 
 
-
-
-
+class ProblemDetailProperties extends ProblemDetail
+{
+    @JsonAnySetter
+    void addUnknownAsProperty( final String key, final Object value )
+    {
+        setProperty( key, value );
+    }
 }

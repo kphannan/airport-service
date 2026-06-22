@@ -43,7 +43,7 @@ class ContinentUpdateServiceTest
     void update_existing_returnChanged()
     {
         // --- given
-        final Continent       continent       = new Continent( 1, "code", "xnew name", null, "xUpdated" );
+        final Continent       continent       = new Continent( 1, "code", "x new name", null, "xUpdated" );
         final ContinentEntity continentEntity = new ContinentEntity( 1, "code", "new name", null, "Updated" );
 
         when( repository.existsById( anyInt() ) ).thenReturn( true );

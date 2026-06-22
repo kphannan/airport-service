@@ -3,9 +3,7 @@ package com.example.airline.location.continent.api;
 
 import static com.example.rest.utility.HeaderTestingSupport.withHeaders;
 import static java.util.Map.entry;
-import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -97,9 +95,6 @@ class ContinentControllerRestTest
     @MockitoSpyBean
     private ContinentDeleteService  deleteService;
 
-    // @Autowired
-    // @SuppressWarnings( "unused" )
-    // private ContinentDtoMapper mapperReal;
     @MockitoSpyBean
     private ContinentDtoMapper    mapper;
     @MockitoSpyBean
@@ -344,29 +339,13 @@ class ContinentControllerRestTest
                                      .hasTitle( "Validation failed on 'newContinentDTO'")
                                      .hasDetail( "Invalid request content." )
                                      .hasInstance( "/location/continent" )
-                                     // .hasProperties( entry( "name", "xName is required, provided: [null]" ),
-                                     //                 entry( "code", "xA 2-character code is required, provided: [null]"  )
-                                     //               )
-                                     .blankProperties(),
-                           () -> assertThatJson( body )
-                                     .isObject()
-                                     .contains( //entry( "title", "Validation failed on 'newContinentDTO'" ),
-                                                    // entry( "status", 400 ),
-                                                    // entry( "detail",  "Invalid request content." ),
-                                                    // entry( "instance", "/location/continent" ),
-                                                    entry( "name", "Continent name must be between 2 to 52 characters, provided: [null]"  ),
-                                                    entry( "code",
-                                                    """
-                                                    Code must be one of these character sequences:
-                                                    AF, AN, AS, EU, NA, OC, SA
-                                                    , provided: [null]"""  )
-                                                  ),
-                           // () -> resultActions
-                           //           .andExpect( jsonPath( "$.id" ).value( 22 ) )
-                           //           .andExpect( jsonPath( "$.code" ).value( "CC" ) )
-                           //           .andExpect( jsonPath( "$.name" ).value( "::ZNAMEZ::" ) ),
-                           // .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
-                           // .andExpect( jsonPath( "$.keywords" ).doesNotExist() ),
+                                     .hasProperties( entry( "name", "Continent name must be between 2 to 52 characters, provided: [null]" ),
+                                                     entry( "code",
+                                                            """
+                                                            Code must be one of these character sequences:
+                                                            AF, AN, AS, EU, NA, OC, SA
+                                                            , provided: [null]"""  )
+                                                   ),
                            //
                            () -> verifyNoInteractions( createService ),
                            () -> verifyNoInteractions( readService ),
@@ -426,28 +405,14 @@ class ContinentControllerRestTest
                                      .hasStatus( HttpStatus.BAD_REQUEST )
                                      .hasTitle( "Validation failed on 'newContinentDTO'" )
                                      .hasDetail( "Invalid request content." )
-                                     .hasInstance( "/location/continent" ),
-                           // .hasProperties( entry( "name", "xName is required, provided: [null]" ),
-                           //                 entry( "code", "xA 2-character code is required, provided: [null]"  )
-                           //               )
-                           //
-                           // TODO Use a JSON assertion instead of a plain string
-                           () -> assertThatJson( response.getContentAsString() )
-                                   .isObject()
-                                   .contains( // entry( "title", "Validation failed on 'newContinentDTO'" ),
-                                              // entry( "status", 400 ),
-                                              // entry( "detail",  "Invalid request content." ),
-                                              // entry( "instance", "/location/continent" ),
-                                              entry( "name",
-                                                     "Continent name must be between 2 and 52 characters, provided: [     ]"  ),
-                                              entry( "code",
-                                                     """
-                                                     Code must be one of these character sequences:
-                                                     AF, AN, AS, EU, NA, OC, SA
-                                                     , provided: [  ]""" )
-                                                     //
-                                                     // "Code must be 2 uppercase characters, provided: [  ]"  )
-                                            )
+                                     .hasInstance( "/location/continent" )
+                                     .hasProperties( entry("name", "Continent name must be between 2 and 52 characters, provided: [     ]" ),
+                                                     entry("code",
+                                                           """
+                                                           Code must be one of these character sequences:
+                                                           AF, AN, AS, EU, NA, OC, SA
+                                                           , provided: [  ]""" )
+                                                   )
                 );
             }
 
@@ -503,10 +468,18 @@ class ContinentControllerRestTest
                                      .hasStatus( HttpStatus.BAD_REQUEST )
                                      .hasTitle( "Malformed Request")
                                      .hasDetail( "JSON parse error: Cannot deserialize value of type `java.net.URI` from String \"https://wikipedia.com/bad url/not encoded\": not a valid textual representation, problem: Illegal character in path at index 25: https://wikipedia.com/bad url/not encoded" )
-                                     .hasInstance( "/location/continent" ),
-                                     // .hasProperties( entry( "name", "xName is required, provided: [null]" ),
-                                     //                 entry( "code", "xA 2-character code is required, provided: [null]"  )
-                                     //               )
+                                     .hasInstance( "/location/continent" )
+                                     .hasProperties( entry("Exception",
+                                                           "org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.net.URI` from String \"https://wikipedia.com/bad url/not encoded\": not a valid textual representation, problem: Illegal character in path at index 25: https://wikipedia.com/bad url/not encoded"
+                                                          ),
+                                                     entry("Cause",
+                                                           "tools.jackson.databind.exc.InvalidFormatException: Cannot deserialize value of type `java.net.URI` from String \"https://wikipedia.com/bad url/not encoded\": not a valid textual representation, problem: Illegal character in path at index 25: https://wikipedia.com/bad url/not encoded\n at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); byte offset: #68] (through reference chain: com.example.airline.location.continent.NewContinentDTO[\"wikiLink\"])"
+                                                          ),
+                                                     entry("Possibility 1", "Malformed request body" ),
+                                                     entry("Possibility 2", "Invalid request parameters" ),
+                                                     entry("Possibility 3", "Incompatible data format" ),
+                                                     entry("Possibility 4", "Serialization errors" )
+                                                   ),
                            //
                            () -> verifyNoInteractions( createService ),
                            () -> verifyNoInteractions( readService ),
@@ -688,17 +661,12 @@ class ContinentControllerRestTest
                                  .hasDetail( "Method parameter 'continentId': Failed to convert value of type 'java.lang.String' to required type 'java.lang.Integer'; For input string: \"code\"" )
                                  .hasInstance( "/location/continent/code" )
                                  // TODO validate properties (Exception, Cause)
-                                 .blankProperties(),
-                       () -> resultActions
-                                 // .andExpect( jsonPath( "$.title" ).value( "Parameter Type Mismatch" ) )
-                                 // .andExpect( jsonPath( "$.status" ).value( "400" ) )
-                                 // .andExpect( jsonPath( "$.detail" ).value( "Method parameter 'continentId': Failed to convert value of type 'java.lang.String' to required type 'java.lang.Integer'; For input string: \"code\"" ) )
-                                 // .andExpect( jsonPath( "$.instance" ).value( "/location/continent/code" ) )
-                                 // .andExpect( jsonPath( "$.Exception" ).value( "North" ) )
-                                 .andExpect( jsonPath( "$.Exception", containsString("org.springframework.web.method.annotation.MethodArgumentTypeMismatchException:" ) ) )
-                                 .andExpect( jsonPath( "$.Exception", containsString("Method parameter 'continentId': Failed to convert value of type 'java.lang.String' to required type 'java.lang.Integer'; For input string: \"code\"" ) ) )
-
-                                 .andExpect( jsonPath( "$.Cause" ).value( "java.lang.NumberFormatException: For input string: \"code\"" ) ),
+                                 .hasProperties( entry( "Exception", "org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Method parameter 'continentId': Failed to convert value of type 'java.lang.String' to required type 'java.lang.Integer'; For input string: \"code\""),
+                                     // entry( "Exception", "org.springframework.web.method.annotation.MethodArgumentTypeMismatchException:" ),
+                                     //             entry( "Exception", "Method parameter 'continentId': Failed to convert value of type 'java.lang.String' to required type 'java.lang.Integer'; For input string: \"code\"" ),
+                                                 entry( "Cause", "java.lang.NumberFormatException: For input string: \"code\"" )
+                                               ),
+                                 // .blankProperties(),
                        //
                        () -> verifyNoInteractions( createService ),
                        () -> verify( readService, never() ).findById( anyInt() ),
@@ -874,37 +842,6 @@ class ContinentControllerRestTest
                        () -> verifyNoInteractions( mapper )
                        // () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
                      );
-
-
-
-            // // --- when
-            // final MvcResult result = mvc
-            //         .perform( request )
-            //         .andDo( print() )
-            //         .andExpect( status().isNotFound() )
-            //         .andReturn();
-            //
-
-            // // --- then
-            // final MockHttpServletResponse response = result.getResponse();
-            // final String body = response.getContentAsString();
-            // // TODO examine the ProblemDetail
-            // // TODO convert body to ProblemDetail....  use ObjectMapper.....
-            // final Collection<String> headerNames   = result.getResponse().getHeaderNames();
-            // assertAll( () -> assertEquals( HttpStatus.NOT_FOUND.value(), response.getStatus() ),
-            //            () -> assertThat( headerNames )
-            //                    .contains( "TRACEPARENT" )
-            //                    .contains( "TRACESTATE" )
-            //                    .contains( "Content-Type" )
-            //                    .doesNotContain( "NoWay" ),
-            //            () -> assertThat( body ).isNotBlank(),
-            //            //
-            //            () -> verifyNoInteractions( createService ),
-            //            () -> verifyNoInteractions( readService ),
-            //            () -> verifyNoInteractions( updateService ),
-            //            () -> verifyNoInteractions( deleteService )
-            //            // TODO mapper check
-            // );
         }
 
 
@@ -1016,22 +953,6 @@ class ContinentControllerRestTest
                     // .contentType( "application/json-patch+json" )
                     .headers( requestHeaders )
                     .content( json );
-
-            // --- when
-
-            // final MvcResult result = mvc
-            //         .perform( request )
-            //         .andDo( print() )
-            //         // .andExpect( status().isOk() )
-            //         .andExpect( status().isNotImplemented() )
-            //         .andExpect( content().encoding( "UTF-8" ) )
-            //         // TODO Prefer to inspect the JSON in assertions so SonarQube and PMD
-            //         //      don't complain about lack of assertions in tests
-            //         // .andExpect( jsonPath( "$.id" ).value( 1 ) )
-            //         // .andExpect( jsonPath( "$.code" ).value( "NA" ) )
-            //         // .andExpect( jsonPath( "$.name" ).value( "North" ) )
-            //         // .andExpect( jsonPath( "$.keywords" ).value( "North" ) )
-            //         .andReturn();
 
             // --- when
             final ResultActions resultActions =
@@ -1265,26 +1186,6 @@ class ContinentControllerRestTest
             );
         }
 
-        // @Test
-        // @DisplayName( "by ID - 204: No Content - empty body" )
-        // void restDeleteById_withId_returnsGone() throws Exception
-        // {
-        //    // --- given
-        //    final RequestBuilder request = withHeaders( delete( "/location/continent/{id}", 99 ) );
-        //
-        //    // --- when
-        //    final MvcResult result = mvc
-        //            .perform( request )
-        //            .andDo( print() )
-        //            .andReturn();
-        //
-        //    // --- then
-        //    // final MockHttpServletResponse response = result.getResponse();
-        //
-        //    assertAll( () -> assertEquals( HttpStatus.GONE.value(), result.getResponse().getStatus() ),
-        //               () -> verify( repository ).deleteById( anyInt() )
-        //             );
-        // }
 
         @Test
         @DisplayName( "by entity - 204: No Content - empty body" )
@@ -1513,7 +1414,7 @@ class ContinentControllerRestTest
     class InfoMethod           // NOPMD
     {
         // @Test
-        // void restTrace_returnsNoContent() throws Exception
+        // void restInfo_returnsNoContent() throws Exception
         // {
         //     // --- given
         //     final RequestBuilder request = withHeaders( MockMvcRequestBuilders.request( HttpMethod.INFO,
@@ -1657,17 +1558,6 @@ class ContinentControllerRestTest
                        () -> assertThat( response.getHeaders( HttpHeaders.LOCATION ) )
                                .anyMatch( location -> location.matches( "^.*/location/continent/123$" ) )
             );
-
-            // assertAll(
-            //            () -> verify( readService ).findAll(),
-            //            () -> verify( repository ).findAll(),
-            //            () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
-            //          );
-
-
-
-
-
         }
 
     }
@@ -1694,7 +1584,7 @@ class ContinentControllerRestTest
     private static ObjectMapper buildMapper()
     {
         ObjectMapper mapper = new ObjectMapper();
-        //mapper
+        // mapper
         //    .deserializationConfig()
         //    .configure( DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false );
 
