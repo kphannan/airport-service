@@ -198,12 +198,10 @@ public class ContinentController
         // then a PUT should have been used.
         final ProblemDetail problemDetail = ProblemDetail.forStatus( HttpStatus.CONFLICT );
         return ResponseEntity
-                   // .status( HttpStatus.CONFLICT )
+                // .status( HttpStatus.CONFLICT )
                 .status( problemDetail.getStatus() )
                 .headers( HeaderUtility.copyNeededHeaders( requestHeaders ) )
-                // TODO Include Problem Details as response body
                 .body( problemDetail );
-                // .build();
     }
 
 

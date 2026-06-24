@@ -12,14 +12,13 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.http.ProblemDetail;
 
 
 /**
  * Centralized definition of REST response objects.
  */
-@Retention( RetentionPolicy.RUNTIME)
-@Target( ElementType.TYPE)
+@Retention( RetentionPolicy.RUNTIME )
+@Target( ElementType.TYPE )
 @ApiResponses(
     value = {
         @ApiResponse( responseCode = "204",
@@ -32,7 +31,7 @@ import org.springframework.http.ProblemDetail;
                       no response body.
                       As a **2xx** success code, it confirms the operation
                       (such as a `DELETE`, `PUT`, or `PATCH`) completed as
-                      expected without requiring the client to navigate away or 
+                      expected without requiring the client to navigate away or
                       update the UI with new data.
                       
                       Key characteristics include:
@@ -45,21 +44,21 @@ import org.springframework.http.ProblemDetail;
                       - **Common Use Cases**: It is ideal for **silent background operations**
                         like clearing caches, updating settings, dismissing notifications,
                          or deleting resources where the client already knows the final state.
-                      - **Distinction from 200 OK**: Unlike **200 OK**, which 
+                      - **Distinction from 200 OK**: Unlike **200 OK**, which
                         returns a payload, **204** is used when returning data would
                          be **redundant** or unnecessary.
                       - **Distinction from 202 Accepted**: **204** signifies
                         immediate completion, whereas **202** indicates the request
                         is accepted for **asynchronous processing** that is not yet finished.
                       """,
-                      content = @Content( schema = @Schema( implementation = Void.class))
+                      content = @Content( schema = @Schema( implementation = Void.class ) )
         ),
         @ApiResponse( responseCode = "400",
                       description =
                           """
                           **Bad Request**
                           
-                          The **HTTP 400 Bad Request** status code indicates a 
+                          The **HTTP 400 Bad Request** status code indicates a
                           **client error** where the server cannot process the request
                           due to **malformed syntax**, invalid message framing,
                           or deceptive routing.  It is a **4xx** response,
@@ -82,13 +81,13 @@ import org.springframework.http.ProblemDetail;
                           """,
                       content = {
                           @Content( mediaType = "application/json",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           ),
                           @Content( mediaType = "application/yaml",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           ),
                           @Content( mediaType = "application/xml",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           )
                       }
         ),
@@ -118,13 +117,13 @@ import org.springframework.http.ProblemDetail;
                           """,
                       content = {
                           @Content( mediaType = "application/json",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           ),
                           @Content( mediaType = "application/yaml",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           ),
                           @Content( mediaType = "application/xml",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           )
                       }
         ),
@@ -152,7 +151,8 @@ import org.springframework.http.ProblemDetail;
                           - **Common Causes**:
                             - Using the wrong HTTP verb for an endpoint (e.g., sending a `POST` request to a read-only
                             `GET` endpoint).
-                            - Incorrect URL structure or routing misconfiguration in the backend framework (e.g., Flask, Express, Spring Boot).
+                            - Incorrect URL structure or routing misconfiguration in the backend framework
+                              (e.g., Flask, Express, Spring Boot).
                             - Server-level restrictions in web servers like Nginx or Apache
                               (e.g., `limit_except` directives).
                             - *CORS* preflight failures where the server does not properly respond to `OPTIONS` requests.
@@ -168,13 +168,13 @@ import org.springframework.http.ProblemDetail;
                           """,
                       content = {
                           @Content( mediaType = "application/json",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           ),
                           @Content( mediaType = "application/yaml",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           ),
                           @Content( mediaType = "application/xml",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           )
                       }
         ),
@@ -225,13 +225,13 @@ import org.springframework.http.ProblemDetail;
                           """,
                       content = {
                           @Content( mediaType = "application/json",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           ),
                           @Content( mediaType = "application/yaml",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           ),
                           @Content( mediaType = "application/xml",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           )
                       }
         ),
@@ -267,13 +267,13 @@ import org.springframework.http.ProblemDetail;
                         """,
                       content = {
                           @Content( mediaType = "application/json",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           ),
                           @Content( mediaType = "application/yaml",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           ),
                           @Content( mediaType = "application/xml",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           )
                       }
         ),
@@ -311,13 +311,13 @@ import org.springframework.http.ProblemDetail;
                           """,
                       content = {
                           @Content( mediaType = "application/json",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           ),
                           @Content( mediaType = "application/yaml",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           ),
                           @Content( mediaType = "application/xml",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           )
                       }
         ),
@@ -351,13 +351,13 @@ import org.springframework.http.ProblemDetail;
                           """,
                       content = {
                           @Content( mediaType = "application/json",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           ),
                           @Content( mediaType = "application/yaml",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           ),
                           @Content( mediaType = "application/xml",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           )
                       }
         ),
@@ -390,13 +390,13 @@ import org.springframework.http.ProblemDetail;
                           """,
                       content = {
                           @Content( mediaType = "application/json",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           ),
                           @Content( mediaType = "application/yaml",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           ),
                           @Content( mediaType = "application/xml",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           )
                       }
         )

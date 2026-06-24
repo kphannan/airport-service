@@ -75,33 +75,6 @@ import org.springframework.web.bind.annotation.RestController;
  *       Update
  *       Delete
  *
- *
- * /location/airport
- *     GET      - /location/airport                                            (restGetFindAll)                                 paged list of all airports
- *     GET      - /location/airport/{id}                                       (restGetFindAirportById)                         single airport by ID
- *     GET      - /location/airport/code/{code}                                (restGetFindAirportByCode)                       single airport by ICAO code
- *     GET      - /location/airport/summary/continent/code                     (restGetCountAirportsInAllContinents)            count of airports on continent
- *     GET      - /location/airport/summary/continent/code/{continentCode}     (restGetCountCountryAirportsByContinent)         count of airports by country
- *  *  GET      - /location/airport/summary/country/code/{countryCode}         (restGetCountAirportsByCountry)
- *  -  GET      - /location/airport/summary/country/code/{regionCode}          (restGetCountAirportsByRegion)
- *  +  GET      - /location/airport/summary/region/code/{regionCode}           (restGetCountAirportsByRegion)
- *  -  GET      - /location/airport/summary/region/code/{regionCode}           (restGetAirportsByRegion)                        List of airports in a Region
- *  +  GET      - /location/airport/region/code/{regionCode}                   (restGetAirportsByRegion)                        List of airports in a Region
- *  +  GET      - /location/airport/country/code/{countryCode}                 (restGetAirportsByCountry)                        List of airports in a Region
- *     GET      - /location/airport/search                                     (advancedQuery)                                  General query
-
- *
- * * /location/airport                                            - GET       paged list of all airports
- * /location/airport/{id}                                       - GET       single airport
- * /location/airport/code/{code}                                - GET       single airport
- * /location/airport/count/continent                            - GET       count of airports by continent
- * /location/airport/count/continent/{continentCode}            - GET       count of airports by country
- * /location/airport/summary/country/code/{countryCode}
- * /location/airport/summary/country/code/{countryCode}
- * /location/airport/summary/country/code/{regionCode}
- * /location/airport/summary/region/code/{regionCode}           - GET
- * /location/airport/search                                     - GET
- *
  */
 
 /**
@@ -485,7 +458,7 @@ public class AirportController
                     @Parameter( name = "countryCode", required = true,
                                 in = ParameterIn.PATH,
                                 description = "ISO 3166:2 country subdivision code",
-                                schema = @Schema( pattern = LocationCodePatterns.ISO_COUNTRY_CODE)
+                                schema = @Schema( pattern = LocationCodePatterns.ISO_COUNTRY_CODE )
                     ),
                     @Parameter( name = "Bearer", required = false,
                                 schema = @Schema( implementation = String.class ),
@@ -501,7 +474,7 @@ public class AirportController
                                 description = "Vendor specific trace identification" )
                 }
     )
-    @GetMapping( "/count/continent/{continentCode:AF|AN|AS|EU|NA|OC|SA}/{countryCode:[A-Z]{2}}")
+    @GetMapping( "/count/continent/{continentCode:AF|AN|AS|EU|NA|OC|SA}/{countryCode:[A-Z]{2}}" )
     public ResponseEntity<List<AirportCountInRegionDTO>>
         restGetCountCountryAirportsByContinent( @PathVariable final String continentCode,
                                                 @PathVariable final String countryCode,
@@ -558,12 +531,12 @@ public class AirportController
                     @Parameter( name = "countryCode", required = true,
                                 in = ParameterIn.PATH,
                                 description = "ISO 3166-1 country code",
-                                schema = @Schema( pattern = LocationCodePatterns.ISO_COUNTRY_CODE)
+                                schema = @Schema( pattern = LocationCodePatterns.ISO_COUNTRY_CODE )
                     ),
                     @Parameter( name = "regionCode", required = true,
                                 in = ParameterIn.PATH,
                                 description = "ISO 3166:2 country subdivision code without the country code prefix",
-                                schema = @Schema( pattern = LocationCodePatterns.ISO_REGION_SUB_CODE)
+                                schema = @Schema( pattern = LocationCodePatterns.ISO_REGION_SUB_CODE )
                     ),
                     @Parameter( name = "Bearer", required = false,
                                 schema = @Schema( implementation = String.class ),
@@ -579,7 +552,7 @@ public class AirportController
                                 description = "Vendor specific trace identification" )
                 }
     )
-    @GetMapping( "/count/continent/{continentCode:AF|AN|AS|EU|NA|OC|SA}/{countryCode:[A-Z]{2}}/{regionCode}")
+    @GetMapping( "/count/continent/{continentCode:AF|AN|AS|EU|NA|OC|SA}/{countryCode:[A-Z]{2}}/{regionCode}" )
     public ResponseEntity<AirportCountInRegionDTO>
         restGetCountCountryAirportsByContinent( @PathVariable  final String continentCode,
                                                 @PathVariable  final String countryCode,
@@ -695,7 +668,7 @@ public class AirportController
                     @Parameter( name = "countryCode", required = true,
                                 in = ParameterIn.PATH,
                                 description = "ISO 3166:2 country subdivision code",
-                                schema = @Schema( pattern = LocationCodePatterns.ISO_COUNTRY_CODE)
+                                schema = @Schema( pattern = LocationCodePatterns.ISO_COUNTRY_CODE )
                     ),
                     @Parameter( name = "Bearer", required = false,
                                 schema = @Schema( implementation = String.class ),
@@ -761,12 +734,12 @@ public class AirportController
                     @Parameter( name = "countryCode", required = true,
                                 in = ParameterIn.PATH,
                                 description = "ISO 3166-1 country code",
-                                schema = @Schema( pattern = LocationCodePatterns.ISO_COUNTRY_CODE)
+                                schema = @Schema( pattern = LocationCodePatterns.ISO_COUNTRY_CODE )
                     ),
                     @Parameter( name = "regionCode", required = true,
                                 in = ParameterIn.PATH,
                                 description = "ISO 3166:2 country subdivision code without the country code prefix",
-                                schema = @Schema( pattern = LocationCodePatterns.ISO_REGION_SUB_CODE)
+                                schema = @Schema( pattern = LocationCodePatterns.ISO_REGION_SUB_CODE )
                     ),
                     @Parameter( name = "Bearer", required = false,
                                 schema = @Schema( implementation = String.class ),
@@ -832,6 +805,14 @@ public class AirportController
     // --- by Region within a country
     //     Grouped/counted by region within a specific country
 
+    /**
+     * Count the number of the number of airports in every Region in the system
+     * regardless of continent or country.
+     *
+     * @param requestHeaders HttpHeaders primarily for call tracing, optional.
+     *
+     * @return list of regions and the number of airports in that region.
+     */
     @Operation( method = "GET",
                 summary = "Number of airports for every region (country subdivision (state, province, etc))",
                 description = "",
@@ -916,7 +897,7 @@ public class AirportController
                     @Parameter( name = "regionCode", required = true,
                                 in = ParameterIn.PATH,
                                 description = "ISO 3166:2 country subdivision code without the country code prefix",
-                                schema = @Schema( pattern = LocationCodePatterns.ISO_REGION_SUB_CODE)
+                                schema = @Schema( pattern = LocationCodePatterns.ISO_REGION_SUB_CODE )
                     ),
                     @Parameter( name = "Bearer", required = false,
                                 schema = @Schema( implementation = String.class ),

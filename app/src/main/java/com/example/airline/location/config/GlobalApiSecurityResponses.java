@@ -52,10 +52,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
                                     schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           ),
                           @Content( mediaType = "application/yaml",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           ),
                           @Content( mediaType = "application/xml",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           )
                       }
         ),
@@ -75,7 +75,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
                        - Insufficient Permissions: The user account does not have the required role or scope 
                        (e.g., trying to access an admin page as a standard user).
                        - IP Blocking: The server or a Web Application Firewall (WAF) has blocked the client's IP address.
-                       - Misconfiguration: Incorrect file permissions, restrictive .htaccess rules, or disabled directory listings on the server.
+                       - Misconfiguration: Incorrect file permissions, restrictive .htaccess rules, or disabled directory
+                         listings on the server.
                        - Security Policies: Aggressive security plugins, hotlink protection, or missing SSL client certificates.
                        
                        For website owners, **403** errors can negatively impact SEO by preventing search engine bots 
@@ -88,10 +89,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
                                     schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           ),
                           @Content( mediaType = "application/yaml",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           ),
                           @Content( mediaType = "application/xml",
-                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class)
+                                    schema = @Schema( implementation = org.springframework.http.ProblemDetail.class )
                           )
                       }
         )

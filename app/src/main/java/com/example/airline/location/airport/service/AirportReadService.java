@@ -123,16 +123,37 @@ public class AirportReadService
         return mapper.entityToDomainAirportsInContinent( entities );
     }
 
+    /**
+     * Get the number of airports in each country within a continent.
+     *
+     * @param continentCode the target continent
+     * @return list of countries on a continent including the number of airports in each country.
+     */
     public List<AirportCountInCountry> countAirportsByContinent( final String continentCode )
     {
         return mapper.entityToDomainAirportsInCountry( repository.countCountryAirportsByContinent( continentCode ) );
     }
 
+    /**
+     * Get the number of airports in all regions within a specified country.
+     *
+     * @param continentCode the target continent
+     * @param countryCode code of the target country
+     * @return list of regions and the number of airports in each region.
+     */
     public List<AirportCountInRegion> countAirportsByContinent( final String continentCode, final String countryCode )
     {
         return mapper.entityToDomainAirportsInRegion( repository.countRegionAirportsByContinentAndIsoCountry( continentCode, countryCode ) );
     }
 
+    /**
+     * Get the number of airports in a specific region.
+     *
+     * @param continentCode the target continent
+     * @param countryCode code of the target country
+     * @param regionCode the region specific code.
+     * @return the region and the number of airports in that region.
+     */
     public AirportCountInRegion countAirportsByContinent( final String continentCode,
                                                           final String countryCode,
                                                           final String regionCode )
