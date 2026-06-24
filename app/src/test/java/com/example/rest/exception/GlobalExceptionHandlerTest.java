@@ -144,7 +144,6 @@ public class GlobalExceptionHandlerTest
                                      .hasStatus( HttpStatus.UNSUPPORTED_MEDIA_TYPE )
                                      .hasTitle( "Unsupported Media Type" )
                                      .hasDetail( "Test Message" )
-                                     //  TODO need to map properties from JSON
                                      .hasProperties(  entry( "Exception",
                                                              "org.springframework.web.HttpMediaTypeNotSupportedException: Test Message" ),
                                                       entry( "Unsupported content:", "application/rss+xml" ),
@@ -188,7 +187,6 @@ public class GlobalExceptionHandlerTest
                                      .hasStatus( HttpStatus.NOT_ACCEPTABLE )
                                      .hasTitle( "Unacceptable Media Type" )
                                      .hasDetail( "No acceptable representation" )
-                                     //  TODO need to map properties from JSON
                                      .hasProperties( entry( "Exception", "org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation" ),
                                                      entry( "Supported content:", "application/json, application/yaml" )
                                                    )
@@ -236,7 +234,6 @@ public class GlobalExceptionHandlerTest
                                      .hasStatus( HttpStatus.ALREADY_REPORTED )
                                      .hasTitle( "Bad Media Type" )
                                      .hasDetail( "Kilroy was here" )
-                                     //  TODO need to map properties from JSON
                                      .hasProperties(  entry( "Exception",
                                                              "com.example.rest.exception.GlobalExceptionHandlerTest$Rest$Media$1: Kilroy was here" ),
                                                       // entry( "Unsupported content:", "application/rss+xml" ),
@@ -286,11 +283,8 @@ public class GlobalExceptionHandlerTest
                                      .hasStatus( HttpStatus.NOT_FOUND )
                                      .hasTitle( "Not Found" )
                                      .hasDetail( "No static resource /some/resource/path for request 'request-uri'." )
-                                     //  TODO need to map properties from JSON
                                      .hasProperties(  entry( "Exception",
                                                              "org.springframework.web.servlet.resource.NoResourceFoundException: No static resource /some/resource/path for request 'request-uri'." )
-                                                      // entry( "Unsupported content:", "application/rss+xml" ),
-                                                      // entry( "Supported content:", "application/json, application/yaml" )
                                                    )
                                      .doesNotContainKey( "Cause" )
                                      .hasInstance( "/some/resource/path" )
@@ -380,6 +374,10 @@ public class GlobalExceptionHandlerTest
                                      .hasTitle( "Not Implemented" )
                                      .hasDetail( "Test UnsupportedOperation" )
                                      //  TODO need to map properties from JSON
+                                     .doesNotContainKey( "Cause" )
+                                     .doesNotContainKey( "x-TRACEPARENT" )
+                                     .doesNotContainKey( "x-TRACESTATE" )
+                                     .doesNotContainKey( "x-Cause" )
                                      .hasProperties(  entry( "Exception",
                                                              "java.lang.UnsupportedOperationException: Test UnsupportedOperation" ),
                                                       entry( "x-exception", "java.lang.UnsupportedOperationException" )
@@ -388,19 +386,11 @@ public class GlobalExceptionHandlerTest
                                          //              entry( "x-TRACEPARENT", "traceParent" ),
                                          //              entry( "x-TRACESTATE", "traceState" )
                                                    )
-                                     .hasPropertiesSatisfying( entry( "x-logref", uuidPattern )
-                                         // entry( "x-Cause", "java.lang.Throwable: throwable cause" )
-                                                             )
-                                     .blankInstance(),
-                           // TODO make checks fluent
-                           () -> assertThat( detail.getProperties() )
-                                   .hasEntrySatisfying( "x-logref",
-                                                        value -> assertThat( value.toString() )
-                                                                .matches( uuidPattern ) )
-                                   .doesNotContainKey( "Cause" )
-                                   .doesNotContainKey( "x-TRACEPARENT" )
-                                   .doesNotContainKey( "x-TRACESTATE" )
-                                   .doesNotContainKey( "x-Cause" )
+                                     // TODO implement this method
+                                     .hasPropertiesSatisfying( "x-logref",
+                                                               value -> assertThat( value.toString() )
+                                                                            .matches( uuidPattern ) )
+                                     .blankInstance()
                 );
             }
 
@@ -437,30 +427,22 @@ public class GlobalExceptionHandlerTest
                                      // .hasInstance( "/" )
                                      .hasTitle( "Not Implemented" )
                                      .hasDetail( "Test UnsupportedOperation" )
-                                     //  TODO need to map properties from JSON
                                      .hasProperties(  entry( "Exception",
                                                              "java.lang.UnsupportedOperationException: Test UnsupportedOperation" ),
-                                                      // entry( "Cause", "java.lang.Throwable: throwable cause" ),
                                                       entry( "x-exception", "java.lang.UnsupportedOperationException" ),
                                                       entry( "x-TRACEPARENT", "traceParent" ),
                                                       entry( "x-TRACESTATE", "traceState" )
                                                    )
-                                     .hasPropertiesSatisfying( entry( "x-logref", uuidPattern )
-                                                               // entry( "x-Cause", "java.lang.Throwable: throwable cause" )
+                                     // TODO implement this method
+                                     .hasPropertiesSatisfying( "x-logref",
+                                                               value -> assertThat( value.toString() )
+                                                                            .matches( uuidPattern )
                                                              )
-                                     .blankInstance(),
-
-                           () -> assertThat( detail.getProperties() )
-                                   .containsEntry( "Exception",
-                                                   "java.lang.UnsupportedOperationException: Test UnsupportedOperation" )
-                                   .containsEntry( "x-exception", "java.lang.UnsupportedOperationException" )
-                                   .containsEntry( "x-TRACEPARENT", "traceParent" )
-                                   .containsEntry( "x-TRACESTATE", "traceState" )
-                                   .hasEntrySatisfying( "x-logref",
-                                                        value -> assertThat( value.toString() )
-                                                                .matches( uuidPattern ) )
-                                   .doesNotContainKey( "Cause" )
-                                   .doesNotContainKey( "x-Cause" )
+                                                               // entry( "x-Cause", "java.lang.Throwable: throwable cause" )
+                                                             // )
+                                     .doesNotContainKey( "Cause" )
+                                     .doesNotContainKey( "x-Cause" )
+                                     .blankInstance()
                 );
 
             }
@@ -500,7 +482,6 @@ public class GlobalExceptionHandlerTest
                                      // .hasInstance( "/" )
                                      .hasTitle( "Not Implemented" )
                                      .hasDetail( "Test UnsupportedOperation" )
-                                     //  TODO need to map properties from JSON
                                      .hasProperties(  entry( "Exception",
                                                              "java.lang.UnsupportedOperationException: Test UnsupportedOperation" ),
                                                       entry( "Cause", "java.lang.Throwable: throwable cause" ),
@@ -508,17 +489,14 @@ public class GlobalExceptionHandlerTest
                                                       entry( "x-TRACEPARENT", "traceParent" ),
                                                       entry( "x-TRACESTATE", "traceState" )
                                                    )
-                                     .hasPropertiesSatisfying( entry( "x-logref", uuidPattern ),
-                                                               entry( "x-Cause", "java.lang.Throwable: throwable cause" )
-                                                             )
-                                     .blankInstance(),
-                           () -> assertThat( detail.getProperties() )
-                                   .hasEntrySatisfying( "x-logref",
-                                                        value -> assertThat( value.toString() )
-                                                                .matches( uuidPattern ) )
-                                   .hasEntrySatisfying( "x-Cause",
-                                                        value -> assertThat( value.toString() )
-                                                                .matches( "java.lang.Throwable: throwable cause" ) )
+                                     // TODO implement this method
+                                     .hasPropertiesSatisfying( "x-logref",
+                                                          value -> assertThat( value.toString() )
+                                                                       .matches( uuidPattern ) )
+                                     .hasPropertiesSatisfying( "x-Cause",
+                                                          value -> assertThat( value.toString() )
+                                                                       .matches( "java.lang.Throwable: throwable cause" ) )
+                                     .blankInstance()
                 );
             }
 
@@ -612,7 +590,7 @@ public class GlobalExceptionHandlerTest
                                      .hasStatus( HttpStatus.NOT_IMPLEMENTED )
                                      .hasTitle( "Unable to produce requested response format" )
                                      .hasDetail( "Test writable exception" )
-                                     .hasProperties( entry("Exception",
+                                     .hasProperties( entry( "Exception",
                                                             "org.springframework.http.converter.HttpMessageNotWritableException: Test writable exception" )
                                                    )
                                      .blankInstance()
@@ -694,8 +672,7 @@ public class GlobalExceptionHandlerTest
                                      .hasStatus( HttpStatus.BAD_REQUEST )
                                      .hasTitle( "Parameter Type Mismatch" )
                                      .hasDetail( "Method parameter 'name': Failed to convert value of type 'java.lang.String' to required type 'java.util.ArrayList'" )
-                                     //  TODO need to map properties from JSON
-                                     .hasProperties( entry("Exception",
+                                     .hasProperties( entry( "Exception",
                                                             "org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Method parameter 'name': Failed to convert value of type 'java.lang.String' to required type 'java.util.ArrayList'" )
                                                    )
                                      .doesNotContainKey( "Cause" )
@@ -730,7 +707,6 @@ public class GlobalExceptionHandlerTest
                                      .hasStatus( HttpStatus.BAD_REQUEST )
                                      .hasTitle( "Bad Request" )
                                      .hasDetail( "value" )
-                                     //  TODO need to map properties from JSON
                                      .hasProperties(  entry( "Exception", "java.lang.IllegalArgumentException: value" ),
                                                       entry( "Cause", "java.lang.Exception: Just Cause" )
                                                    )
@@ -765,7 +741,6 @@ public class GlobalExceptionHandlerTest
                                      .hasStatus( HttpStatus.BAD_REQUEST )
                                      .hasTitle( "Bad Request" )
                                      .hasDetail( "value" )
-                                     //  TODO need to map properties from JSON
                                      .hasProperties(  entry( "Exception", "java.lang.IllegalArgumentException: value" ) )
                                      .doesNotContainKey( "Cause" )
                                      .blankInstance()
@@ -804,7 +779,6 @@ public class GlobalExceptionHandlerTest
                                      .hasStatus( HttpStatus.BAD_REQUEST )
                                      .hasTitle( "Bad Request" )
                                      .hasDetail( "test illegal state" )
-                                     //  TODO need to map properties from JSON
                                      .hasProperties(  entry( "Exception", "java.lang.IllegalStateException: test illegal state" ) )
                                      .doesNotContainKey( "Cause" )
                                      .blankInstance()
@@ -851,8 +825,7 @@ public class GlobalExceptionHandlerTest
                                      .hasStatus( HttpStatus.BAD_REQUEST )
                                      .hasTitle( "Constraint violation message" )
                                      .hasDetail( "Constraint violation message" )
-                                     //  TODO need to map properties from JSON
-                                     .hasProperties(  entry( "property path","constraint message" ) )
+                                     .hasProperties(  entry( "property path", "constraint message" ) )
                                      .doesNotContainKey( "Cause" )
                                      .blankInstance()
                 );
@@ -1081,8 +1054,8 @@ public class GlobalExceptionHandlerTest
                                      .hasStatus( HttpStatus.BAD_REQUEST )
                                      .hasTitle( "Validation failed on 'TestStandIn'" )
                                      .hasDetail( "Invalid request content." )
-                                     .hasProperties( entry("foo", "default foo error message, provided: [Value]" ),
-                                                     entry("bar", "default bar error message, provided: [null]" )
+                                     .hasProperties( entry( "foo", "default foo error message, provided: [Value]" ),
+                                                     entry( "bar", "default bar error message, provided: [null]" )
                                                    )
                                      .blankInstance()
                 );
@@ -1125,10 +1098,9 @@ public class GlobalExceptionHandlerTest
                                      .blankType()
                                      .hasStatus( HttpStatus.INTERNAL_SERVER_ERROR )
                                      .hasTitle( "Internal Server Error" )
-                                     // .hasDetail( "Test Message" )
-                                     //  TODO need to map properties from JSON
-                                     .hasProperties( entry("Exception", "java.lang.Exception: Catch all test" ),
-                                                     entry("Cause", "java.lang.Exception: Test Cause" )
+                                     .hasDetail( "Catch all test" )
+                                     .hasProperties( entry( "Exception", "java.lang.Exception: Catch all test" ),
+                                                     entry( "Cause", "java.lang.Exception: Test Cause" )
                                                    )
                                      .containsKey( "logref" )
                                      .blankInstance()
@@ -1175,7 +1147,6 @@ public class GlobalExceptionHandlerTest
                                  .hasStatus( HttpStatus.GONE )
                                  .hasTitle( "Not Found" )
                                  .hasDetail( "Dummy message" )
-                                 //  TODO need to map properties from JSON
                                  .hasProperties( entry( "Exception", "jakarta.persistence.EntityNotFoundException: Dummy message" ),
                                                  entry( "Cause", "java.lang.Exception: Test cause" )
                                                )
@@ -1213,20 +1184,17 @@ public class GlobalExceptionHandlerTest
                                  .hasStatus( HttpStatus.INTERNAL_SERVER_ERROR )
                                  .hasTitle( "Internal Server Error" )
                                  .hasDetail( "Test JPA cause" )
-                                 //  TODO need to map properties from JSON
                                  .hasProperties(  entry( "Exception", "org.springframework.orm.jpa.JpaSystemException: Test JPA cause" ),
                                                   entry( "Cause", "java.lang.ClassCastException: Test JPA cause" )
                                                )
-                                 .blankInstance(),
-                       // TODO look for an assertThat()...matches( "key", <regex> ) or ....contains( "key", <regex> )
-                       () -> assertThat( detail.getProperties() )
-                               .hasEntrySatisfying( "Exception",  //Exception -> org.springframework.orm.jpa.JpaSystemException
-                                                    value -> assertThat( value.toString() )
-                                                            .matches( ".*JpaSystemException.*Test JPA cause$" ) ),
-                       () -> assertThat( detail.getProperties() )
-                               .hasEntrySatisfying( "logref",
-                                                    value -> assertThat( value.toString() )
-                                                            .matches( uuidPattern ) )
+                                 // TODO implememnt varargs for Satisfying
+                                 .hasPropertiesSatisfying( "logref",
+                                                      value -> assertThat( value.toString() )
+                                                                   .matches( uuidPattern ) )
+                                 .hasPropertiesSatisfying( "Exception",  //Exception -> org.springframework.orm.jpa.JpaSystemException
+                                                 value -> assertThat( value.toString() )
+                                                              .matches( ".*JpaSystemException.*Test JPA cause$" ) )
+                                 .blankInstance()
             );
         }
     }

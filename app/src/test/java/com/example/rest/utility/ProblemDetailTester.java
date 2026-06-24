@@ -2,7 +2,9 @@ package com.example.rest.utility;
 
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import org.assertj.core.api.AbstractIntegerAssert;
@@ -238,10 +240,33 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
         return myself;
     }
 
+
+
     // TODO  implement 'satisfying'
     @SafeVarargs
     public final ProblemDetailTester hasPropertiesSatisfying( Map.Entry<? extends String, ? extends Object>...  entries )
     {
+        // TODO implement this method
+        assertThat()
+            .isNotNull()
+            .properties()
+            .describedAs( "satisfies" )
+            .
+            .hasEntrySatisfying( entries );
+
+        return myself;
+    }
+
+    // TODO  implement 'satisfying'
+    public final ProblemDetailTester hasPropertiesSatisfying( String key, Consumer<? super Object> valueRequirements )
+    {
+        // TODO implement this method
+        assertThat()
+            .isNotNull()
+            .properties()
+            .describedAs( "satisfies" )
+            .hasEntrySatisfying( key, valueRequirements );
+
         return myself;
     }
 
