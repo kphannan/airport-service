@@ -243,19 +243,19 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
 
 
     // TODO  implement 'satisfying'
-    @SafeVarargs
-    public final ProblemDetailTester hasPropertiesSatisfying( Map.Entry<? extends String, ? extends Object>...  entries )
-    {
-        // TODO implement this method
-        assertThat()
-            .isNotNull()
-            .properties()
-            .describedAs( "satisfies" )
-            .
-            .hasEntrySatisfying( entries );
-
-        return myself;
-    }
+    // @SafeVarargs
+    // public final ProblemDetailTester hasPropertiesSatisfying( Map.Entry<? extends String, ? extends Object>...  entries )
+    // {
+    //     // TODO implement this method
+    //     assertThat()
+    //         .isNotNull()
+    //         .properties()
+    //         .describedAs( "satisfies" )
+    //         // .
+    //         .hasEntrySatisfying( entries );
+    //
+    //     return myself;
+    // }
 
     // TODO  implement 'satisfying'
     public final ProblemDetailTester hasPropertiesSatisfying( String key, Consumer<? super Object> valueRequirements )
