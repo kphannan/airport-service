@@ -1,11 +1,9 @@
 package com.example.airline.location.continent.api;
 
 
-import static org.apache.commons.lang3.ArrayUtils.contains;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -21,7 +19,6 @@ import com.example.airline.location.continent.ContinentDTO;
 import com.example.airline.location.continent.mapper.ContinentDtoMapper;
 import com.example.airline.location.continent.model.Continent;
 import com.example.airline.location.continent.model.ContinentDTOTester;
-import com.example.airline.location.continent.model.ContinentTester;
 import com.example.airline.location.continent.service.ContinentCreateService;
 import com.example.airline.location.continent.service.ContinentDeleteService;
 import com.example.airline.location.continent.service.ContinentReadService;

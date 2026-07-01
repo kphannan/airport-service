@@ -40,6 +40,9 @@ plugins {
     // --- Performance Testing
     id 'io.gatling.gradle'
 
+//    id 'openRewrite'
+    id 'org.openrewrite.rewrite'
+
     // ===== Configuration Management =====
     // --- Artifact Versioning
     // id 'net.nemerosa.versioning'
@@ -60,7 +63,7 @@ dependencies {
 
     implementation libs.jspecify
 
-    testImplementation libs.bundles.unit.test;
+    testImplementation libs.bundles.unit.test
 }
 
 
@@ -415,6 +418,13 @@ pmd {
     }
 }
 
+// ---  OpenRewrite
+rewrite {
+//    activeRecipe(
+//            'org.openrewrite.java.OrderImports',
+//            'org.openrewrite.FindParseFailures'
+//    )
+}
 
 // --- spotbugs
 // https://github.com/spotbugs/spotbugs/blob/master/gradle/java.gradle

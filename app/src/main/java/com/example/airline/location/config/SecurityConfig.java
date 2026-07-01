@@ -54,7 +54,7 @@ public class SecurityConfig         // TODO create security tests
     /**
      * Configure security for all service endpoints.
      *
-     * @param http https://docs.spring.io/spring-security/reference/servlet/architecture.html
+     * @param http <a href="https://docs.spring.io/spring-security/reference/servlet/architecture.html">Security Reference</a>
      * @return the updated {@see org.springframework.security.web.SecurityFilterChain}
      * @throws Exception
      */

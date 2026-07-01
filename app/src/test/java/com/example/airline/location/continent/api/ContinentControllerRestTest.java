@@ -177,7 +177,7 @@ class ContinentControllerRestTest
                        () -> assertThat( ProblemDetailTester.of( response.getContentAsString() ) )
                                  .blankType()
                                  .hasStatus( HttpStatus.CONFLICT )
-                                 .hasTitle( "Conflict")
+                                 .hasTitle( "Conflict" )
                                  .blankDetail()
                                  .hasInstance( "/location/continent" )
                                  .blankProperties(),
@@ -190,7 +190,7 @@ class ContinentControllerRestTest
                        () -> verify( repository ).existsByCode( anyString() ),
                        () -> verify( repository, never() ).save( any( NewContinentEntity.class ) ),
                        () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
-                     );
+            );
         }
 
 
@@ -270,7 +270,7 @@ class ContinentControllerRestTest
                        () -> verify( repository ).existsByCode( eq( "NA" ) ),
                        () -> verify( repository ).save( any( NewContinentEntity.class ) ),
                        () -> verify( mapper ).domainToApi( any( Continent.class ) )
-                     );
+            );
         }
 
 
@@ -336,7 +336,7 @@ class ContinentControllerRestTest
                            () -> assertThat( ProblemDetailTester.of( response.getContentAsString() ) )
                                      .blankType()
                                      .hasStatus( HttpStatus.BAD_REQUEST )
-                                     .hasTitle( "Validation failed on 'newContinentDTO'")
+                                     .hasTitle( "Validation failed on 'newContinentDTO'" )
                                      .hasDetail( "Invalid request content." )
                                      .hasInstance( "/location/continent" )
                                      .hasProperties( entry( "name", "Continent name must be between 2 to 52 characters, provided: [null]" ),
@@ -406,12 +406,12 @@ class ContinentControllerRestTest
                                      .hasTitle( "Validation failed on 'newContinentDTO'" )
                                      .hasDetail( "Invalid request content." )
                                      .hasInstance( "/location/continent" )
-                                     .hasProperties( entry("name", "Continent name must be between 2 and 52 characters, provided: [     ]" ),
-                                                     entry("code",
-                                                           """
-                                                           Code must be one of these character sequences:
-                                                           AF, AN, AS, EU, NA, OC, SA
-                                                           , provided: [  ]""" )
+                                     .hasProperties( entry( "name", "Continent name must be between 2 and 52 characters, provided: [     ]" ),
+                                                     entry( "code",
+                                                            """
+                                                                Code must be one of these character sequences:
+                                                                AF, AN, AS, EU, NA, OC, SA
+                                                                , provided: [  ]""" )
                                                    )
                 );
             }
@@ -469,16 +469,16 @@ class ContinentControllerRestTest
                                      .hasTitle( "Malformed Request")
                                      .hasDetail( "JSON parse error: Cannot deserialize value of type `java.net.URI` from String \"https://wikipedia.com/bad url/not encoded\": not a valid textual representation, problem: Illegal character in path at index 25: https://wikipedia.com/bad url/not encoded" )
                                      .hasInstance( "/location/continent" )
-                                     .hasProperties( entry("Exception",
-                                                           "org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.net.URI` from String \"https://wikipedia.com/bad url/not encoded\": not a valid textual representation, problem: Illegal character in path at index 25: https://wikipedia.com/bad url/not encoded"
+                                     .hasProperties( entry( "Exception",
+                                                            "org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.net.URI` from String \"https://wikipedia.com/bad url/not encoded\": not a valid textual representation, problem: Illegal character in path at index 25: https://wikipedia.com/bad url/not encoded"
                                                           ),
-                                                     entry("Cause",
-                                                           "tools.jackson.databind.exc.InvalidFormatException: Cannot deserialize value of type `java.net.URI` from String \"https://wikipedia.com/bad url/not encoded\": not a valid textual representation, problem: Illegal character in path at index 25: https://wikipedia.com/bad url/not encoded\n at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); byte offset: #68] (through reference chain: com.example.airline.location.continent.NewContinentDTO[\"wikiLink\"])"
+                                                     entry( "Cause",
+                                                            "tools.jackson.databind.exc.InvalidFormatException: Cannot deserialize value of type `java.net.URI` from String \"https://wikipedia.com/bad url/not encoded\": not a valid textual representation, problem: Illegal character in path at index 25: https://wikipedia.com/bad url/not encoded\n at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); byte offset: #68] (through reference chain: com.example.airline.location.continent.NewContinentDTO[\"wikiLink\"])"
                                                           ),
-                                                     entry("Possibility 1", "Malformed request body" ),
-                                                     entry("Possibility 2", "Invalid request parameters" ),
-                                                     entry("Possibility 3", "Incompatible data format" ),
-                                                     entry("Possibility 4", "Serialization errors" )
+                                                     entry( "Possibility 1", "Malformed request body" ),
+                                                     entry( "Possibility 2", "Invalid request parameters" ),
+                                                     entry( "Possibility 3", "Incompatible data format" ),
+                                                     entry( "Possibility 4", "Serialization errors" )
                                                    ),
                            //
                            () -> verifyNoInteractions( createService ),
@@ -613,7 +613,7 @@ class ContinentControllerRestTest
                        () -> verifyNoInteractions( deleteService ),
                        () -> verify( repository ).findById( anyInt() ),
                        () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
-                     );
+            );
         }
 
 
@@ -657,13 +657,13 @@ class ContinentControllerRestTest
                        () -> assertThat( ProblemDetailTester.of( response.getContentAsString() ) )
                                  .blankType()
                                  .hasStatus( HttpStatus.BAD_REQUEST )
-                                 .hasTitle( "Parameter Type Mismatch")
+                                 .hasTitle( "Parameter Type Mismatch" )
                                  .hasDetail( "Method parameter 'continentId': Failed to convert value of type 'java.lang.String' to required type 'java.lang.Integer'; For input string: \"code\"" )
                                  .hasInstance( "/location/continent/code" )
                                  // TODO validate properties (Exception, Cause)
-                                 .hasProperties( entry( "Exception", "org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Method parameter 'continentId': Failed to convert value of type 'java.lang.String' to required type 'java.lang.Integer'; For input string: \"code\""),
-                                     // entry( "Exception", "org.springframework.web.method.annotation.MethodArgumentTypeMismatchException:" ),
-                                     //             entry( "Exception", "Method parameter 'continentId': Failed to convert value of type 'java.lang.String' to required type 'java.lang.Integer'; For input string: \"code\"" ),
+                                 .hasProperties( entry( "Exception", "org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Method parameter 'continentId': Failed to convert value of type 'java.lang.String' to required type 'java.lang.Integer'; For input string: \"code\"" ),
+                                 //                entry( "Exception", "org.springframework.web.method.annotation.MethodArgumentTypeMismatchException:" ),
+                                 //                entry( "Exception", "Method parameter 'continentId': Failed to convert value of type 'java.lang.String' to required type 'java.lang.Integer'; For input string: \"code\"" ),
                                                  entry( "Cause", "java.lang.NumberFormatException: For input string: \"code\"" )
                                                ),
                                  // .blankProperties(),
@@ -674,7 +674,7 @@ class ContinentControllerRestTest
                        () -> verifyNoInteractions( deleteService ),
                        // () -> verify( repository, never() ).findById( anyInt() ),
                        () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
-                     );
+            );
         }
 
 
@@ -728,7 +728,7 @@ class ContinentControllerRestTest
                        // verify the resulting JSON....
                        () -> assertThat( ContinentTester.of( response.getContentAsString() ) )
                                  .hasId( 1 )
-                                 .hasName( "::NAME::")
+                                 .hasName( "::NAME::" )
                                  .hasCode( "ZZ" )
                                  .blankWikiLink()
                                  .blankKeywords(),
@@ -739,7 +739,7 @@ class ContinentControllerRestTest
                        () -> verifyNoInteractions( deleteService ),
                        () -> verify( repository ).findByCode( anyString() ),
                        () -> verify( mapper ).domainToApi( any( Continent.class ) )
-                     );
+            );
         }
 
         @Test
@@ -784,7 +784,7 @@ class ContinentControllerRestTest
                        () -> verifyNoInteractions( deleteService ),
                        () -> verify( repository ).findByCode( anyString() ),
                        () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
-                     );
+            );
         }
 
         @Test
@@ -817,22 +817,22 @@ class ContinentControllerRestTest
                        () -> resultActions
                                  .andExpect( content().encoding( "UTF-8" ) )
                                  .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) ),
-                // ----
+                       // ----
                        () -> assertThat( headerNames )
                                  .contains( "TRACEPARENT" )
                                  .contains( "TRACESTATE" )
                                  .contains( "Content-Type" )
                                  .doesNotContain( "NoWay" ),
-                // -----
-                //        () -> assertFalse( body.isBlank() ),
-                // verify the resulting JSON....
-                //        () -> resultActions
-                //                  .andExpect( jsonPath( "$.id" ).value( 1 ) )
-                //                  .andExpect( jsonPath( "$.code" ).value( "ZZ" ) )
-                //                  .andExpect( jsonPath( "$.name" ).value( "::NAME::" ) )
-                //                  .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
-                //                  .andExpect( jsonPath( "$.keywords" ).doesNotExist() ),
-                //
+                       // -----
+                       //        () -> assertFalse( body.isBlank() ),
+                       // verify the resulting JSON....
+                       //        () -> resultActions
+                       //                  .andExpect( jsonPath( "$.id" ).value( 1 ) )
+                       //                  .andExpect( jsonPath( "$.code" ).value( "ZZ" ) )
+                       //                  .andExpect( jsonPath( "$.name" ).value( "::NAME::" ) )
+                       //                  .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
+                       //                  .andExpect( jsonPath( "$.keywords" ).doesNotExist() ),
+                       //
                        () -> verifyNoInteractions( createService ),
                        () -> verifyNoInteractions( readService ),
                        // () -> verify( readService ).findByCode( anyString() ),
@@ -841,7 +841,7 @@ class ContinentControllerRestTest
                        // () -> verify( repository ).findByCode( anyString() ),
                        () -> verifyNoInteractions( mapper )
                        // () -> verify( mapper, never() ).domainToApi( any( Continent.class ) )
-                     );
+            );
         }
 
 
@@ -979,12 +979,12 @@ class ContinentControllerRestTest
                        //
                        () -> assertThat( ContinentTester.of( result.getResponse().getContentAsString() ) )
                                  .hasId( 1 )
-                                 .hasName( "North")
+                                 .hasName( "North" )
                                  .hasCode( "NA" )
                                  .blankWikiLink()
                                  .blankKeywords(),
-                        //
-                // () -> assertThat( result.getResponse().getHeaderNames() )
+                       //
+                       // () -> assertThat( result.getResponse().getHeaderNames() )
                        //           .contains( "Content-Type", HeaderTestingSupport.TRACESTATE, HeaderTestingSupport.TRACEID )
                        () -> verify( readService ).findById(  anyInt() ),
                        () -> verify( repository ).findById( anyInt() ),

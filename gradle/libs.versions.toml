@@ -7,6 +7,10 @@ springBootVersion = '4.0.3'
 #springCloudVersion = '2024.0.1'
 #
 
+# --- Developer Tools ---
+#  -- OpenRewrite --
+openRewriteVersion = '7.23.0'   #'latest.release'
+
 # --- Persistence ---
 hibernateValidationVersion = '9.1.0.Final'
 postgresqlVersion = '42.7.11'
@@ -27,7 +31,7 @@ jakartaAnnotationVersion = '3.0.0'
 #jakartaValidationVersion = '3.0.2'
 
 # --- OpenAPI / Swagger ---
-swaggerVersion = '3.0.2'
+swaggerVersion = '3.0.3'
 
 # --- JSepcify - tool neutral null checks
 jspecifyVersion = '1.0.0'
@@ -62,6 +66,7 @@ karateVersion               = '1.5.2'
 ## ----- Libraries -----
 [libraries]
 logcaptor = { group = 'io.github.hakky54', name = 'logcaptor', version.ref = 'logcaptorVersion' }
+
 
 # --- Jakarta ---
 
@@ -211,10 +216,13 @@ spring-boot-base = [
     'json-patch'
 ]
 
-spring-boot-persistence = [
-#    'spring-boot-starter-jpa',
-#    'flexy-pool-spring-boot-starter',
-#    'datasource-proxy-spring-boot-starter'
+spring-boot-test = [
+    'spring-boot-starter-actuator-test',
+    'spring-boot-starter-validation-test',
+    'spring-boot-starter-jpa-test',
+    'spring-boot-starter-liquibase-test',
+    'spring-boot-starter-restlient-test',
+    'spring-boot-starter-security-test'
 ]
 
 bindings = [
@@ -284,3 +292,7 @@ jacoco = { id = 'jacoco' }
 pitest = { id = 'info.solidsoft.pitest', version.ref = 'pitPluginVersion' }
 # --- Performance ---
 gatling = { id = 'io.gatling.gradle', version.ref = 'gatlingVersion' }
+
+#openrewrite = { id = 'io.gatling.gradle', version.ref = 'openRewriteVersion' }
+# --- OpenRewrite ---
+openRewrite = { id = 'org.openrewrite.rewrite', version.ref = 'openRewriteVersion' }

@@ -39,7 +39,6 @@ dependencies {
     implementation project( ':api' )
     implementation project( ':lib' )
 
-
 	implementation libs.bundles.spring.boot.base
 
     // --- Annotation Processor
