@@ -2,10 +2,8 @@ package com.example.rest.utility;
 
 
 import java.net.URI;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Consumer;
-
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import org.assertj.core.api.AbstractIntegerAssert;
