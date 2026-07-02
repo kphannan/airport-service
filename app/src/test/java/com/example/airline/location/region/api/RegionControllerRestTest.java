@@ -303,7 +303,7 @@ class RegionControllerRestTest //extends RestControllerTestBase
                        () -> verify( repository )
                            .findAll( pageableCaptor.capture() ),
                        () -> PageableAssert
-                           .assertThat( (PageRequest)pageableCaptor.getValue() )
+                           .assertThat( pageableCaptor.getValue() )
                            .pageNumberMatches( 5 )
                            .pageSizeMatches( 10 )
                            .sortCriteriaMatches( "name", Sort.Direction.ASC )

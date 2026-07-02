@@ -5,6 +5,7 @@ package com.example.airline.location.continent.model;
 
 import java.net.URI;
 
+
 import com.example.airline.location.LocationCodePatterns;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;

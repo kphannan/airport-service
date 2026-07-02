@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 import com.example.aviation.reference.AviationCodePatterns;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -65,7 +66,7 @@ public class AirportCodeIataEntity
 
     /**
      * Verify the code conforms to the format of a IATA geocode of 3 uppercase letters.
-     * {@liknk https://en.wikipedia.org/wiki/International_Air_Transport_Association}
+     * {@link https://en.wikipedia.org/wiki/International_Air_Transport_Association}
      *
      * @param value the string to validate as an IATA code.
      * @return {@code true} if the input contains only 3 uppercase characters,

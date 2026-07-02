@@ -76,11 +76,16 @@ clean {
 }
 
 
-
-compileJava {
-    options.compilerArgs << "-parameters" << "-Xlint:unchecked" << "-Xlint:deprecation" << "-Amapstruct.verbose=false"
-//    options.forkOptions.jvmArgs << "--enable-native-access=ALL-UNNAMED"
+tasks.withType(JavaCompile) {
+//    options.deprecation = true;
+//    options.compilerArgs += [ '-Xlint:unchecked', '-Xlint:deprecation', '-Amapstruct.verbose=false']
+    options.compilerArgs += [ '-Xlint:unchecked', '-Xlint:deprecation' ]
 }
+
+//compileJava {
+//    options.compilerArgs << "-parameters" << "-Xlint:unchecked" << "-Xlint:deprecation" << "-Amapstruct.verbose=false"
+////    options.forkOptions.jvmArgs << "--enable-native-access=ALL-UNNAMED"
+//}
 
 test {
     testLogging {
@@ -420,10 +425,14 @@ pmd {
 
 // ---  OpenRewrite
 rewrite {
-//    activeRecipe(
-//            'org.openrewrite.java.OrderImports',
-//            'org.openrewrite.FindParseFailures'
-//    )
+    activeRecipe(
+            'org.openrewrite.FindParseFailures',
+            'org.openrewrite.java.OrderImports',
+            'org.openrewrite.java.format.AutoFormat'
+//            'com.yourorg.UseTabsOrSpacesExample'
+    )
+
+    setExportDatatables( true )
 }
 
 // --- spotbugs

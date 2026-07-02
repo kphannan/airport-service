@@ -5,6 +5,7 @@ package com.example.airline.location.region.mapper;
 
 import java.util.List;
 
+
 import com.example.airline.location.region.model.Region;
 import com.example.airline.location.region.persistence.model.RegionEntity;
 import org.mapstruct.Mapper;

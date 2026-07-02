@@ -9,7 +9,7 @@ springBootVersion = '4.0.3'
 
 # --- Developer Tools ---
 #  -- OpenRewrite --
-openRewriteVersion = '7.23.0'   #'latest.release'
+openRewriteVersion = '7.36.0'   #'latest.release'
 
 # --- Persistence ---
 hibernateValidationVersion = '9.1.0.Final'
