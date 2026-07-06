@@ -43,7 +43,7 @@ styleConfigs:
   # https://github.com/openrewrite/rewrite/blob/main/rewrite-java/src/main/java/org/openrewrite/java/style/SpacesStyle.java
   - org.openrewrite.java.style.SpacesStyle:
 #      beforeParenthesis:
-#        - ifParentthesis
+#        - ifParenthesis
 #      aroundOperators: true
 #      ternaryOperator:
 #        beforeQuestionMark: true
