@@ -26,7 +26,7 @@ public class ContinentDTOTester extends AbstractObjectAssert<ContinentDTOTester,
         this.continent = continent;
     }
 
-    public static ContinentDTOTester of( ContinentDTO  continent )
+    public static ContinentDTOTester of( ContinentDTO continent )
     {
         return new ContinentDTOTester( continent, ContinentDTOTester.class );
     }
@@ -37,7 +37,6 @@ public class ContinentDTOTester extends AbstractObjectAssert<ContinentDTOTester,
     {
         return new ContinentDTOTester( continent, ContinentDTOTester.class );
     }
-
 
 
     // Delegating matchers
@@ -84,7 +83,7 @@ public class ContinentDTOTester extends AbstractObjectAssert<ContinentDTOTester,
         return myself;
     }
 
-    public ContinentDTOTester hasCode( String  code )
+    public ContinentDTOTester hasCode( String code )
     {
         assertThat()
             .isNotNull()
@@ -95,7 +94,7 @@ public class ContinentDTOTester extends AbstractObjectAssert<ContinentDTOTester,
         return myself;
     }
 
-    public ContinentDTOTester hasName( String  name )
+    public ContinentDTOTester hasName( String name )
     {
         assertThat()
             .isNotNull()
@@ -106,7 +105,7 @@ public class ContinentDTOTester extends AbstractObjectAssert<ContinentDTOTester,
         return myself;
     }
 
-    public ContinentDTOTester hasWikiLink( String  name )
+    public ContinentDTOTester hasWikiLink( String name )
     {
         assertThat()
             .isNotNull()
@@ -140,7 +139,7 @@ public class ContinentDTOTester extends AbstractObjectAssert<ContinentDTOTester,
         return myself;
     }
 
-    public ContinentDTOTester hasKeywords( String  keywords )
+    public ContinentDTOTester hasKeywords( String keywords )
     {
         assertThat()
             .isNotNull()

@@ -2,7 +2,6 @@ package com.example.rest.utility;
 
 import java.util.Objects;
 
-
 import org.assertj.core.api.AbstractAssert;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

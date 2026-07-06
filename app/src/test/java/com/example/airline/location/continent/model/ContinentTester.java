@@ -1,7 +1,6 @@
 package com.example.airline.location.continent.model;
 
 
-import io.swagger.v3.core.util.ObjectMapperFactory;
 import org.assertj.core.api.AbstractIntegerAssert;
 import org.assertj.core.api.AbstractObjectAssert;
 import org.assertj.core.api.AbstractStringAssert;
@@ -27,7 +26,7 @@ public class ContinentTester extends AbstractObjectAssert<ContinentTester, Conti
         this.continent = continent;
     }
 
-    public static ContinentTester of( Continent  continent )
+    public static ContinentTester of( Continent continent )
     {
         return new ContinentTester( continent, ContinentTester.class );
     }
@@ -35,7 +34,7 @@ public class ContinentTester extends AbstractObjectAssert<ContinentTester, Conti
     public static ContinentTester of( String json )
     {
         final ObjectMapper mapper = new ObjectMapper();
-        final Continent ccc = mapper.readValue(  json, Continent.class );
+        final Continent ccc = mapper.readValue( json, Continent.class );
 
         return of( ccc );
     }
@@ -46,7 +45,6 @@ public class ContinentTester extends AbstractObjectAssert<ContinentTester, Conti
     {
         return new ContinentTester( continent, ContinentTester.class );
     }
-
 
 
     // Delegating matchers

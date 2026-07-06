@@ -36,7 +36,7 @@ public final class LocationCodePatterns
      *     1. Country code
      *     1. Abbreviation of the country's administrative subdivision.
      */
-    public static final String ISO_REGION_CODE     = "([A-Z]{2})-((?:U-A)|(?:[A-Z0-9]{1,3}))";
+    public static final String ISO_REGION_CODE = "([A-Z]{2})-((?:U-A)|(?:[A-Z0-9]{1,3}))";
     /**
      * {@linkurl https://en.wikipedia.org/wiki/ISO_3166-2 ISO 3166-2}
      * country subdivision code.

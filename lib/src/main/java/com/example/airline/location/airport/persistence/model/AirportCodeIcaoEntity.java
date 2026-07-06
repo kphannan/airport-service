@@ -25,6 +25,7 @@ public class AirportCodeIcaoEntity
 {
     @Id
     @Column( name = "icao_code", length = 4, nullable = false, columnDefinition = "char(4)" )
-    @NonNull private String icaoCode;
+    @NonNull
+    private String icaoCode;
 
 }

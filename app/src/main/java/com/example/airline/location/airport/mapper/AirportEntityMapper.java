@@ -5,7 +5,6 @@ package com.example.airline.location.airport.mapper;
 
 import java.util.List;
 
-
 import com.example.airline.location.airport.model.Airport;
 import com.example.airline.location.airport.model.AirportCountInContinent;
 import com.example.airline.location.airport.model.AirportCountInCountry;

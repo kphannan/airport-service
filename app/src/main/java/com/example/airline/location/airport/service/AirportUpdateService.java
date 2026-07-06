@@ -27,9 +27,8 @@ public class AirportUpdateService
     public AirportUpdateService( final AirportRepository repository, final AirportEntityMapper mapper )
     {
         this.repository = repository;
-        this.mapper     = mapper;
+        this.mapper = mapper;
     }
-
 
 
     // ========== CREATE ==========

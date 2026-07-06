@@ -8,7 +8,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
-
 /**
  * REST service application.
  */
@@ -32,7 +31,6 @@ public final class AirportServiceApplication
         log.info( "Starting the app" );
         SpringApplication.run( AirportServiceApplication.class, args );
     }
-
 
 
     private AirportServiceApplication()

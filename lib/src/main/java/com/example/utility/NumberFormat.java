@@ -44,7 +44,6 @@ public final class NumberFormat
     }
 
 
-
     /**
      * Converts an integer to a binary string.
      *
@@ -68,7 +67,6 @@ public final class NumberFormat
     }
 
 
-
     /**
      * Converts an integer to a binary string.
      *
@@ -90,7 +88,6 @@ public final class NumberFormat
 
         return toBinaryString( (long)number, groupSize, bits );
     }
-
 
 
     /**
@@ -119,10 +116,10 @@ public final class NumberFormat
         long value = number;
         for ( int i = bits - 1; i >= 0; i-- )
         {
-            result.append( ( value & 1L ) == 1 ? "1" : "0" );
+            result.append( (value & 1L) == 1 ? "1" : "0" );
             value >>= 1; // shift next bit to LSB
 
-            if ( ( i > 0 ) && ( i % groupSize == 0 ) )
+            if ( (i > 0) && (i % groupSize == 0) )
             {
                 result.append( ' ' );
             }

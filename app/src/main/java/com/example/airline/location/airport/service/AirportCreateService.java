@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AirportCreateService
 {
-    private final AirportRepository repository;
+    private final AirportRepository   repository;
 
     private final AirportEntityMapper mapper;
 
@@ -29,7 +29,6 @@ public class AirportCreateService
         this.repository = repository;
         this.mapper     = mapper;
     }
-
 
 
     // ========== CREATE ==========

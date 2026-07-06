@@ -6,7 +6,6 @@ package com.example.utility;
 import lombok.extern.log4j.Log4j2;
 
 
-
 /**
  * A simple way to capture elapsed time.
  */
@@ -33,7 +32,6 @@ public class Stopwatch implements AutoCloseable
     }
 
 
-
     /**
      * Create a new timer and optionally start it.
      *
@@ -58,7 +56,6 @@ public class Stopwatch implements AutoCloseable
     }
 
 
-
     /**
      * Start the timer. Do nothing if the timer is already running.
      */
@@ -69,7 +66,6 @@ public class Stopwatch implements AutoCloseable
             startTime = System.currentTimeMillis();
         }
     }
-
 
 
     /**
@@ -84,14 +80,12 @@ public class Stopwatch implements AutoCloseable
     }
 
 
-
     @Override
     public void close()
     {
         stop();
         debug();
     }
-
 
 
     /**
@@ -105,7 +99,6 @@ public class Stopwatch implements AutoCloseable
     }
 
 
-
     /**
      * Enter a log message with the elapsed time of the timer.
      *
@@ -117,12 +110,10 @@ public class Stopwatch implements AutoCloseable
     }
 
 
-
     private void debug()
     {
         logX( stopTime, null );
     }
-
 
 
     private void logX( final long endTime,

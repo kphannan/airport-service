@@ -32,7 +32,6 @@ public class AirportDeleteService
     }
 
 
-
     // ========== CREATE ==========
     // ===== POST =====
 
@@ -87,8 +86,6 @@ public class AirportDeleteService
     // ===== INFO =====
     // ===== OPTION =====
     // ===== TRACE =====
-
-
 
 
 }

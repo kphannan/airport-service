@@ -35,7 +35,7 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
         this.problemDetail = problemDetail;
     }
 
-    public static ProblemDetailTester of( ProblemDetail  continent )
+    public static ProblemDetailTester of( ProblemDetail continent )
     {
         return new ProblemDetailTester( continent, ProblemDetailTester.class );
     }
@@ -50,12 +50,11 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
         final ObjectMapper mapper = new ObjectMapper();
         // mapper.findAndRegisterModules();
         // mapper.addMixIn(ProblemDetail.class, ProblemDetailJacksonMixin.class );
-        final ProblemDetail ccc = mapper.readValue(  json, ProblemDetailProperties.class );
+        final ProblemDetail ccc = mapper.readValue( json, ProblemDetailProperties.class );
         // https://www.baeldung.com/members/courses/learn-json-with-jackson/lessons/lesson-3-handling-unknown-properties
         // TODO need custom mapper to take unknown attributes and put them in 'properties' map
         return of( ccc );
     }
-
 
 
     @Override
@@ -63,7 +62,6 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
     {
         return new ProblemDetailTester( problemDetail, ProblemDetailTester.class );
     }
-
 
 
     // Delegating matchers
@@ -215,7 +213,7 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
 
     // TODO value should be Map<String, String>
     @SafeVarargs
-    public final ProblemDetailTester hasProperties( Map.Entry<? extends String, ? extends Object>...  entries )
+    public final ProblemDetailTester hasProperties( Map.Entry<? extends String, ? extends Object>... entries )
     {
         final Map<? extends String, ? extends Object> expected = Map.ofEntries( entries );
         assertThat()
@@ -238,7 +236,6 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
 
         return myself;
     }
-
 
 
     // TODO  implement 'satisfying'
@@ -292,7 +289,7 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
     }
 
 
-        // public final ProblemDetailTester containsOnly( Map.Entry<String, String>...  entries )
+    // public final ProblemDetailTester containsOnly( Map.Entry<String, String>...  entries )
     // {
     //     return myself;
     // }

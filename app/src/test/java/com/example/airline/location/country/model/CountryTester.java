@@ -24,7 +24,7 @@ public class CountryTester extends AbstractObjectAssert<CountryTester, Country> 
         this.country = country;
     }
 
-    public static CountryTester of( Country  continent )
+    public static CountryTester of( Country continent )
     {
         return new CountryTester( continent, CountryTester.class );
     }
@@ -35,7 +35,6 @@ public class CountryTester extends AbstractObjectAssert<CountryTester, Country> 
     {
         return new CountryTester( country, CountryTester.class );
     }
-
 
 
     // Delegating matchers
@@ -76,7 +75,7 @@ public class CountryTester extends AbstractObjectAssert<CountryTester, Country> 
         return myself;
     }
 
-    public CountryTester hasName( String  name )
+    public CountryTester hasName( String name )
     {
         assertThat()
             .isNotNull()
@@ -87,7 +86,7 @@ public class CountryTester extends AbstractObjectAssert<CountryTester, Country> 
         return myself;
     }
 
-    public CountryTester hasWikiLink( String  name )
+    public CountryTester hasWikiLink( String name )
     {
         assertThat()
             .isNotNull()
@@ -121,7 +120,7 @@ public class CountryTester extends AbstractObjectAssert<CountryTester, Country> 
         return myself;
     }
 
-    public CountryTester hasKeywords( String  keywords )
+    public CountryTester hasKeywords( String keywords )
     {
         assertThat()
             .isNotNull()

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class RegionDeleteService
 {
-    private final RegionRepository repository;
+    private final RegionRepository   repository;
 
     private final RegionEntityMapper mapper;
 
@@ -29,7 +29,6 @@ public class RegionDeleteService
         this.repository = repository;
         this.mapper     = mapper;
     }
-
 
 
     // ========== CREATE ==========

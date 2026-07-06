@@ -5,7 +5,6 @@ package com.example.airline.location.persistence.model;
 
 import java.net.URI;
 
-
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import lombok.extern.log4j.Log4j2;
@@ -23,7 +22,6 @@ public class UriConverter implements AttributeConverter<URI, String>
     {
         return null == uri ? null : uri.toString();
     }
-
 
 
     @Override

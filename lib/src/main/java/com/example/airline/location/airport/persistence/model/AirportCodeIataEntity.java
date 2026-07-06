@@ -7,7 +7,6 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 import com.example.aviation.reference.AviationCodePatterns;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,7 +35,8 @@ public class AirportCodeIataEntity
     @Column( name = "iata_code", length = 3, nullable = false, columnDefinition = "char(3)" )
     @jakarta.validation.constraints.Pattern( regexp = AviationCodePatterns.AIRPORT_IATA,
                                              message = "IATA code has three alphabetic characters" )
-    @NonNull private String iataCode;
+    @NonNull
+    private String iataCode;
 
 
     /**
