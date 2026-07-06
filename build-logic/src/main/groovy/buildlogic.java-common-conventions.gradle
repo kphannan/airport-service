@@ -42,6 +42,7 @@ plugins {
 
 //    id 'openRewrite'
     id 'org.openrewrite.rewrite'
+//    alias( libs.plugins.openRewrite )
 
     // ===== Configuration Management =====
     // --- Artifact Versioning
@@ -427,12 +428,20 @@ pmd {
 rewrite {
     activeRecipe(
             'org.openrewrite.FindParseFailures',
+//            'com.yourorg.AddLicenseHeaderExample',
+            'org.openrewrite.java.RemoveUnusedImports',
             'org.openrewrite.java.OrderImports',
-            'org.openrewrite.java.format.AutoFormat'
+            'org.openrewrite.java.format.AutoFormat',
+            'org.openrewrite.java.format.RemoveTrailingWhitespace'
 //            'com.yourorg.UseTabsOrSpacesExample'
     )
 
-    setExportDatatables( true )
+    activeStyle( "org.openrewrite.java.style.IntelliJ" )
+
+    exportDatatables = true
+    enableExperimentalGradleBuildScriptParsing = false
+    logCompilationWarningsAndErrors = true
+//    throwOnParseFailures = true
 }
 
 // --- spotbugs

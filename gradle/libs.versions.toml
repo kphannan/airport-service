@@ -4,6 +4,8 @@
 [versions]
 
 springBootVersion = '4.0.3'
+springDependencyManagementVersion = '1.1.7'
+
 #springCloudVersion = '2024.0.1'
 #
 
@@ -271,6 +273,8 @@ unit-test = [
 ## ------------------------------------
 ## ----- Plugins -----
 [plugins]
+springBoot = { id = 'org.springframework.boot', version.ref = 'springBootVersion' }
+springDependencyManagement = { id = 'io.spring.dependency-management', version.ref = 'springDependencyManagementVersion' }
 versioning = { id = 'net.nemerosa.versioning', version.ref = 'versioningVersion' }
 lombok = { id = 'io.freefair.lombok', version.ref = 'lombokVersion' }
 

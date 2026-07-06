@@ -2,6 +2,8 @@
 
 buildscript {
     ext {
+        //   see gradle/lib.versions.toml for dependencies and versions
+
         basePackage                 = 'com.example'
 
         // --- Compiler extensions
@@ -16,7 +18,7 @@ buildscript {
         // --- model mapping
 
         // --- Spring  Boot
-        springBootVersion           = '4.0.3'
+//        springBootVersion           = '4.0.3'
 //        springBootVersion           = libs.versions.springBootVersion
 //    	springCloudVersion          = '2025.1.1'
 
@@ -72,10 +74,8 @@ plugins {
 
     // ===== Frameworks =====
     // --- Spring boot
-//    alias libs.spring.boot.starter
-    id 'org.springframework.boot' version "${springBootVersion}" apply false
-//    id 'org.springframework.boot' version libs.versions.springBootVersion.get() apply false
-    id 'io.spring.dependency-management' version '1.1.7' apply false
+    alias( libs.plugins.springBoot ).apply( false )
+    alias( libs.plugins.springDependencyManagement ).apply( false )
 
     alias( libs.plugins.lombok ).apply( false )
 
@@ -93,8 +93,6 @@ plugins {
     // --- Performance Testing
     alias( libs.plugins.gatling ).apply( false )
 
-    //    id 'openRewrite'
-//    id("org.openrewrite.rewrite") version("latest.release")
     alias( libs.plugins.openRewrite ).apply( false )
 
     // ===== Configuration Management =====
