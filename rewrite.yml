@@ -1,0 +1,54 @@
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: com.yourorg.AddLicenseHeaderExample
+displayName: Add license header example
+recipeList:
+  - org.openrewrite.java.AddLicenseHeader:
+      licenseText: Copyright ${CURRENT_YEAR} the original author or authors...
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: com.yourorg.UseTabsOrSpacesExample
+displayName: Force indentation to either tabs or spaces example
+recipeList:
+  - org.openrewrite.java.migrate.UseTabsOrSpaces:
+      useTabs: false
+---
+type: specs.openrewrite.org/v1beta/style
+name: com.yourorg.YesTabsNoStarImports
+displayName: Use spaces not tabs
+description: all leading spaces, no tabs so code formats consistently.
+styleConfigs:
+  - org.openrewrite.java.style.TabsAndIndentsStyle:
+      useTabCharacter: false
+---
+type: specs.openrewrite.org/v1beta/style
+name: com.yourorg.CustomImportLayout
+styleConfigs:
+  - org.openrewrite.java.style.ImportLayoutStyle:
+      classCountToUseStarImport: 999
+      nameCountToUseStarImport: 999
+      layout:
+        - 'import static all other imports'
+        - '<blank line>'
+        - '<blank line>'
+        - 'import java.*'
+        - 'import javax.*'
+        - '<blank line>'
+        - 'import all other imports'
+      packagesToFold:
+        - 'import java.awt.*'
+#        - 'import static org.junit.jupiter.api.Assertions.*'
+  # https://github.com/openrewrite/rewrite/blob/main/rewrite-java/src/main/java/org/openrewrite/java/style/SpacesStyle.java
+  - org.openrewrite.java.style.SpacesStyle:
+#      beforeParenthesis:
+#        - ifParentthesis
+#      aroundOperators: true
+#      ternaryOperator:
+#        beforeQuestionMark: true
+#        afterQuestionMark: true
+#        beforeColon : true
+#        afterColon : true
+
+
