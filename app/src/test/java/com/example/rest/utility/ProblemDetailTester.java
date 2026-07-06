@@ -213,9 +213,9 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
 
     // TODO value should be Map<String, String>
     @SafeVarargs
-    public final ProblemDetailTester hasProperties( Map.Entry<? extends String, ? extends Object>... entries )
+    public final ProblemDetailTester hasProperties( Map.Entry<? extends String, ?>... entries )
     {
-        final Map<? extends String, ? extends Object> expected = Map.ofEntries( entries );
+        final Map<? extends String, ?> expected = Map.ofEntries( entries );
         assertThat()
             .isNotNull()
             .properties()

@@ -102,7 +102,7 @@ public class AirportCodeIataEntity
 
         final AirportCodeIataEntity that = (AirportCodeIataEntity)object;
 
-        return getIataCode() != null && Objects.equals( getIataCode(), that.getIataCode() );
+        return Objects.equals( getIataCode(), that.getIataCode() );
     }
 
     @Override
