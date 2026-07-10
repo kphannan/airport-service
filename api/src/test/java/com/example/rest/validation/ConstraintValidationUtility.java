@@ -45,9 +45,10 @@ public final class ConstraintValidationUtility
 
         assertThat( constraints )
                 .hasSize( tuples.length )
-                .extracting(
-                        t -> t.getPropertyPath().toString(),
-                        ConstraintViolation::getMessage
+                .extracting( t ->t
+                                     .getPropertyPath()
+                                     .toString(),
+                             ConstraintViolation::getMessage
                            )
                 .containsExactlyInAnyOrder( tuples )
         ;
