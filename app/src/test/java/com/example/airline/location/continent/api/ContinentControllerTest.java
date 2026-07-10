@@ -4,6 +4,7 @@ package com.example.airline.location.continent.api;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -12,6 +13,7 @@ import static org.mockito.Mockito.when;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,8 +67,7 @@ class ContinentControllerTest
 
         dtoMapper     = Mockito.spy( Mappers.getMapper( ContinentDtoMapper.class ) );
 
-        controller = new ContinentController( readService, createService, updateService, deleteService, dtoMapper );
-
+        controller    = new ContinentController( readService, createService, updateService, deleteService, dtoMapper );
 
         requestHeader = buildDefaultHeaders();
     }
@@ -156,7 +157,7 @@ class ContinentControllerTest
                        () -> assertEquals( "application/json;charset=UTF-8", headers.getFirst( "Content-Type" )  ),
                        () -> verifyNoInteractions( createService ),
                        () -> verify( readService, times( 1 ) )
-                               .findById(  anyInt() ),
+                                 .findById( anyInt() ),
                        () -> verifyNoInteractions( updateService ),
                        () -> verifyNoInteractions( deleteService )
             );
@@ -198,7 +199,7 @@ class ContinentControllerTest
                                                                             dtoMapper );
 
             when( deleteService.deleteById( anyInt() ) )
-                    .thenReturn( true );
+                .thenReturn( true );
 
             final ResponseEntity<ContinentDTO> response = controller.restDeleteContinentById( 100, requestHeader );
             final HttpHeadersAssert headersAssert = new HttpHeadersAssert( response.getHeaders() );
@@ -272,28 +273,18 @@ class ContinentControllerTest
 
             final HttpHeadersAssert headersAssert = new HttpHeadersAssert( headers );
             assertAll( () -> headersAssert
-                               .containsHeader( HttpHeaders.ACCEPT )
-                               .containsHeader( HttpHeaders.ALLOW )
-                               .containsHeader( HttpHeaders.CONTENT_TYPE )
-                               // .containsHeader( "TRACEPARENT" )
-                               // .containsHeader( "TRACESTATE" )
-                               .doesNotContainHeader( "NoWay" )
-                               .hasValue( "TRACEPARENT", "testParent" )
-                               .hasValue( "TRACESTATE", "testState" )
-                               // .hasHeaderSatisfying( HttpHeaders.ALLOW, contains( expectedMethods ) )
-                               // .hasExactlyValuesInAnyOrder( HttpHeaders.ALLOW, expectedMethods )
-                               .hasValue( HttpHeaders.CONTENT_TYPE, "application/json;charset=UTF-8" ),
-                       () -> assertThat( headers.get( HttpHeaders.ALLOW ) )
-                               .anySatisfy( element ->
-                                   {
-                                       for ( final String expected : expectedMethods )
-                                       {
-                                           assertThat( element ).contains( expected );
-                                       }
-                                   }
-                               ),
+                                 .containsHeader( HttpHeaders.ACCEPT )
+                                 .containsHeader( HttpHeaders.ALLOW )
+                                 .containsHeader( HttpHeaders.CONTENT_TYPE )
+                                 .doesNotContainHeader( "NoWay" )
+                                 .hasValue( "TRACEPARENT", "testParent" )
+                                 .hasValue( "TRACESTATE", "testState" )
+                                 // .hasHeaderSatisfying( HttpHeaders.ALLOW, contains( expectedMethods ) )
+                                 // .hasExactlyValuesInAnyOrder( HttpHeaders.ALLOW, expectedMethods )
+                                 .hasValue( HttpHeaders.CONTENT_TYPE, "application/json;charset=UTF-8" ),
+                       () -> satisfyAll( headers.get( HttpHeaders.ALLOW ), expectedMethods ),
                        () -> assertThat( headers.get( HttpHeaders.ACCEPT ) )
-                               .contains( "application/json,application/yaml,application/xml" ),
+                                 .contains( "application/json,application/yaml,application/xml" ),
                        () -> verifyNoInteractions( createService ),
                        () -> verifyNoInteractions( readService ),
                        () -> verifyNoInteractions( updateService ),
@@ -321,20 +312,12 @@ class ContinentControllerTest
 
             final HttpHeadersAssert headersAssert = new HttpHeadersAssert( headers );
             assertAll( () -> headersAssert
-                               .containsHeader( HttpHeaders.ACCEPT )
-                               .containsHeader( HttpHeaders.ALLOW )
-                               .doesNotContainHeader( "NoWay" ),
-                       () -> assertThat( headers.get( HttpHeaders.ALLOW ) )
-                               .anySatisfy( element ->
-                                            {
-                                                for ( final String expected : expectedMethods )
-                                                {
-                                                    assertThat( element ).contains( expected );
-                                                }
-                                            }
-                               ),
+                                 .containsHeader( HttpHeaders.ACCEPT )
+                                 .containsHeader( HttpHeaders.ALLOW )
+                                 .doesNotContainHeader( "NoWay" ),
+                       () -> satisfyAll( headers.get( HttpHeaders.ALLOW ), expectedMethods ),
                        () -> assertThat( headers.get( HttpHeaders.ACCEPT ) )
-                               .contains( "application/json,application/yaml,application/xml" )
+                                 .contains( "application/json,application/yaml,application/xml" )
             );
         }
 
@@ -346,5 +329,21 @@ class ContinentControllerTest
     class Trace           // NOPMD
     {
     }   // end of Put class group
+
+
+
+    // ===== Supporting Methods =====
+    private void satisfyAll( final Collection<String> actual, final Collection<String> expected )
+    {
+        actual.forEach( item -> satisfyAll( item, expected ) );
+    }
+
+    private void satisfyAll( final String actual, final Collection<String> expected )
+    {
+        for ( final String item : expected )
+        {
+            assertThat( actual ).contains( item );
+        }
+    }
 
 }
