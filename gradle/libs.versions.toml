@@ -3,28 +3,13 @@
 ## ----- Versions -----
 [versions]
 
+# ----- Frameworks -----
+# --- Spring ---
 springBootVersion = '4.0.3'
 springDependencyManagementVersion = '1.1.7'
 
 #springCloudVersion = '2024.0.1'
 #
-
-# --- Developer Tools ---
-#  -- OpenRewrite --
-openRewriteVersion = '7.36.0'   #'latest.release'
-
-# --- Persistence ---
-hibernateValidationVersion = '9.1.0.Final'
-postgresqlVersion = '42.7.11'
-
-lombokVersion = '9.2.0'
-versioningVersion = '3.1.0'
-logcaptorVersion = '2.10.2'
-
-# --- Unit Testing ---
-jsonassertVersion = '2.0-rc1'
-jsonUnitAssertVersion = '5.1.1'
-assertjVersion = '4.0.0-M1'
 
 # --- Data binding ---
 jacksonDatabindVersion = '3.1.0'
@@ -32,8 +17,17 @@ mapstructVersion = '1.6.3'
 jakartaAnnotationVersion = '3.0.0'
 #jakartaValidationVersion = '3.0.2'
 
-# --- OpenAPI / Swagger ---
-swaggerVersion = '3.0.3'
+# ----- Persistence -----
+hibernateValidationVersion = '9.1.0.Final'
+# --- Providers ---
+postgresqlVersion = '42.7.11'
+
+# --- FlexyPool - JDBC stats ---
+flexyPoolVersion = '1.12.1'
+
+
+# --- Annotation Processors ---
+lombokVersion = '9.2.0'
 
 # --- JSepcify - tool neutral null checks
 jspecifyVersion = '1.0.0'
@@ -44,8 +38,25 @@ guavaVersion = '33.4.8-jre'
 # --- Apache Commons ---
 apacheCommonsCollectionsVersion = '4.5.0'
 
-# --- FlexyPool - JDBC stats ---
-flexyPoolVersion = '1.12.1'
+# --- Configuration Management ---
+versioningVersion = '3.1.0'
+
+
+# --- Developer Tools ---
+#  -- OpenRewrite --
+openRewriteVersion = '7.36.0'   #'latest.release'
+
+
+# --- Unit Testing ---
+jsonassertVersion = '2.0-rc1'
+jsonUnitAssertVersion = '5.1.1'
+assertjVersion = '4.0.0-M1'
+logcaptorVersion = '2.10.2'
+
+
+# --- OpenAPI / Swagger ---
+swaggerVersion = '3.0.3'
+
 
 # ----- Static Analysis -----
 # --- Mutation Testing (pitest) ---

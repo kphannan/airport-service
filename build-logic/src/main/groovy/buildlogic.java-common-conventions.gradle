@@ -61,6 +61,8 @@ dependencies {
     }
 
 //    implementation( plugins( libs.plugins.lombok ))
+    rewrite( "org.openrewrite.recipe:rewrite-migrate-java:3.39.0" )
+    rewrite( "org.openrewrite.recipe:rewrite-spring:6.34.0" )
 
     implementation libs.jspecify
 
@@ -426,22 +428,33 @@ pmd {
 
 // ---  OpenRewrite
 rewrite {
+    checkstyleConfigFile = project.file("../config/checkstyle/checkstyle.xml")
+    configFile = project.file("../config/rewrite.yml")
+//    activeStyle( "org.openrewrite.java.style.IntelliJ" )
+
+    activeStyle( 'com.example.java.MyCustomStyle' )
+
     activeRecipe(
             'org.openrewrite.FindParseFailures',
 //            'com.yourorg.AddLicenseHeaderExample',
-            'org.openrewrite.java.RemoveUnusedImports',
-            'org.openrewrite.java.OrderImports',
-            'org.openrewrite.java.format.AutoFormat',
-            'org.openrewrite.java.format.RemoveTrailingWhitespace'
+//            'org.openrewrite.java.format.AutoFormat',
+            'com.example.java.format.Style',
+            'com.example.UpgradeDependencies',
+            'com.example.java.jspecify.JSpecifyBestPractices',
+
+//            'org.apache.druid.RewriteRules',
+//            'org.apache.druid.JUnit4to5Migration'
+//            'com.yourorg.CustomImportLayout'
 //            'com.yourorg.UseTabsOrSpacesExample'
+//            'org.openrewrite.java.cleanup.Cleanup',
+//            'org.openrewrite.java.format.Spaces'
     )
 
-    activeStyle( "org.openrewrite.java.style.IntelliJ" )
 
     exportDatatables = true
     enableExperimentalGradleBuildScriptParsing = false
     logCompilationWarningsAndErrors = true
-//    throwOnParseFailures = true
+    throwOnParseFailures = true
 }
 
 // --- spotbugs
