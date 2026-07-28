@@ -56,7 +56,7 @@ class ContinentUpdateServiceTest
         // --- then
         ContinentTester continentTester = ContinentTester.of( updated );
         assertAll( () -> assertThat( continentTester )
-                             .hasName( "new name")
+                             .hasName( "new name" )
                              .hasCode( "code" )
                              .blankWikiLink()
                              .hasKeywords( "Updated" ),

@@ -398,9 +398,6 @@ class AirportControllerTest //extends RestControllerTestBase
                 final AirportCountInRegion airport =
                     new AirportCountInRegion( "AS", "Asia", 5 );
 
-                // final List<AirportCountInRegion> listOfAirports = new ArrayList<>();
-                // listOfAirports.add( airport );
-
                 when( readService.countAirportsByContinent( anyString(), anyString(), anyString() ) )
                     .thenReturn( airport );
 

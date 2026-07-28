@@ -23,7 +23,6 @@ public final class LocationCodePatterns
     /**
      * {@linkurl https://en.wikipedia.org/wiki/ISO_3166-1 ISO 3166-1 alpha2}
      * code designating a country.
-     *
      */
     public static final String ISO_COUNTRY_CODE = "[A-Z]{2}";
 
@@ -32,7 +31,7 @@ public final class LocationCodePatterns
      * {@linkurl https://en.wikipedia.org/wiki/ISO_3166-2 ISO 3166-2}
      * country subdivision code.
      *
-     * Capture Groups:
+     * <p>Capture Groups:
      *     1. Country code
      *     1. Abbreviation of the country's administrative subdivision.
      */
@@ -41,7 +40,7 @@ public final class LocationCodePatterns
      * {@linkurl https://en.wikipedia.org/wiki/ISO_3166-2 ISO 3166-2}
      * country subdivision code.
      *
-     * Capture Groups:
+     * <p>Capture Groups:
      *     1. Abbreviation of the country's administrative subdivision.
      */
     public static final String ISO_REGION_SUB_CODE = "((?:U-A)|(?:[A-Z0-9]{1,3}))";

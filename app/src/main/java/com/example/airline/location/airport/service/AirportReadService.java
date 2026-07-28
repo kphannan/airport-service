@@ -143,7 +143,10 @@ public class AirportReadService
      */
     public List<AirportCountInRegion> countAirportsByContinent( final String continentCode, final String countryCode )
     {
-        return mapper.entityToDomainAirportsInRegion( repository.countRegionAirportsByContinentAndIsoCountry( continentCode, countryCode ) );
+        return mapper
+                   .entityToDomainAirportsInRegion( repository
+                                                        .countRegionAirportsByContinentAndIsoCountry( continentCode,
+                                                                                                      countryCode ) );
     }
 
     /**
@@ -158,7 +161,11 @@ public class AirportReadService
                                                           final String countryCode,
                                                           final String regionCode )
     {
-        return mapper.entityToDomain( repository.countRegionAirportsByContinentAndIsoCountryAndIsoRegion( continentCode, countryCode, regionCode ) );
+        return mapper
+                   .entityToDomain( repository
+                                        .countRegionAirportsByContinentAndIsoCountryAndIsoRegion( continentCode,
+                                                                                                  countryCode,
+                                                                                                  regionCode ) );
     }
 
 

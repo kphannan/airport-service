@@ -66,7 +66,8 @@ public class AirportCodeIataEntity
 
     /**
      * Verify the code conforms to the format of a IATA geocode of 3 uppercase letters.
-     * @see <a href=https://en.wikipedia.org/wiki/International_Air_Transport_Association>IATA</a></a>
+     *
+     * @see <a href=https://en.wikipedia.org/wiki/International_Air_Transport_Association>IATA</a>
      *
      * @param value the string to validate as an IATA code.
      * @return {@code true} if the input contains only 3 uppercase characters,

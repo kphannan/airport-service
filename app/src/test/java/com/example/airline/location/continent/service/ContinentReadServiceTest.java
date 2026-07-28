@@ -64,7 +64,7 @@ class ContinentReadServiceTest
 
 
     @Test
-    @DisplayName( "findById")
+    @DisplayName( "findById" )
     void read_findById()
     {
         // given
@@ -77,7 +77,7 @@ class ContinentReadServiceTest
         // ---
         ContinentTester continentTester = ContinentTester.of( continent.get() );
         assertAll( () -> assertThat( continentTester )
-                             .hasName( "name")
+                             .hasName( "name" )
                              .hasCode( "code" )
                              .blankWikiLink()
                              .hasKeywords( "Key string" ),
@@ -100,13 +100,13 @@ class ContinentReadServiceTest
         ContinentTester continentTester = ContinentTester.of( continent.get() );
         assertAll( () -> assertThat( continentTester )
                              .hasId( 1234 )
-                             .hasName( "name")
+                             .hasName( "name" )
                              .hasCode( "code" )
                              .blankWikiLink()
                              .hasKeywords( "Key string" ),
                    () -> verify( repository, atMost( 1 ) ).findByCode( anyString() )
                    // () -> verify( mapper ).entityToDomain( any( ContinentEntity.class ) )
-                 );
+        );
     }
 
 

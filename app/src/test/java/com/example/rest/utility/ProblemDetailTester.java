@@ -25,22 +25,22 @@ import tools.jackson.databind.ObjectMapper;
  *     <p>
  *     Copyright (c) 2020-2026
  */
-public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTester, ProblemDetail> implements AssertProvider<ProblemDetailTester>
+public final class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTester, ProblemDetail> implements AssertProvider<ProblemDetailTester>
 {
     private final ProblemDetail problemDetail;
 
-    private ProblemDetailTester( ProblemDetail problemDetail, Class<?> selfType )
+    private ProblemDetailTester( final ProblemDetail problemDetail, final Class<?> selfType )
     {
         super( problemDetail, selfType );
         this.problemDetail = problemDetail;
     }
 
-    public static ProblemDetailTester of( ProblemDetail continent )
+    public static ProblemDetailTester of( final ProblemDetail continent )
     {
         return new ProblemDetailTester( continent, ProblemDetailTester.class );
     }
 
-    public static ProblemDetailTester of( String json )
+    public static ProblemDetailTester of( final String json )
     {
         if ( !StringUtils.hasText( json ) )
         {
@@ -104,7 +104,7 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
 
 
     // Exact matches
-    public ProblemDetailTester hasType( String value )
+    public ProblemDetailTester hasType( final String value )
     {
         assertThat()
             .isNotNull()
@@ -115,6 +115,11 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
         return myself;
     }
 
+    /**
+     * Assert the type attribute is null.
+     *
+     * @return self to allow chaining.
+     */
     public ProblemDetailTester blankType()
     {
         assertThat()
@@ -127,7 +132,14 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
     }
 
 
-    public ProblemDetailTester hasTitle( String value )
+    /**
+     * Assert the title attribute contains a specific value.
+     *
+     * @param value the desired title value.
+     *
+     * @return self to allow chaining.
+     */
+    public ProblemDetailTester hasTitle( final String value )
     {
         assertThat()
             .isNotNull()
@@ -138,6 +150,11 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
         return myself;
     }
 
+    /**
+     * Assert the title attribute is blank.
+     *
+     * @return self to allow chaining.
+     */
     public ProblemDetailTester blankTitle()
     {
         assertThat()
@@ -149,12 +166,26 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
         return myself;
     }
 
-    public ProblemDetailTester hasStatus( HttpStatus value )
+    /**
+     * Assert the status attribute contains a specific value.
+     *
+     * @param value the desired value.
+     *
+     * @return self to allow chaining.
+     */
+    public ProblemDetailTester hasStatus( final HttpStatus value )
     {
         return hasStatus( value.value() );
     }
 
-    public ProblemDetailTester hasStatus( Integer value )
+    /**
+     * Assert the status attribute contains a specific value.
+     *
+     * @param value the desired value.
+     *
+     * @return self to allow chaining.
+     */
+    public ProblemDetailTester hasStatus( final Integer value )
     {
         assertThat()
             .isNotNull()
@@ -166,7 +197,7 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
     }
 
 
-    public ProblemDetailTester hasDetail( String value )
+    public ProblemDetailTester hasDetail( final String value )
     {
         assertThat()
             .isNotNull()
@@ -177,6 +208,11 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
         return myself;
     }
 
+    /**
+     * Assert the detail attribute is null.
+     *
+     * @return self to allow chaining
+     */
     public ProblemDetailTester blankDetail()
     {
         assertThat()
@@ -188,7 +224,14 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
         return myself;
     }
 
-    public ProblemDetailTester hasInstance( String value )
+    /**
+     * Asser the instance attribute exists and has a specific value.
+     *
+     * @param value the desired value of the instance.
+     *
+     * @return self for chaining.
+     */
+    public ProblemDetailTester hasInstance( final String value )
     {
         // final URI location = URI.create( value  )
         assertThat()
@@ -213,7 +256,7 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
 
     // TODO value should be Map<String, String>
     @SafeVarargs
-    public final ProblemDetailTester hasProperties( Map.Entry<? extends String, ?>... entries )
+    public final ProblemDetailTester hasProperties( final Map.Entry<? extends String, ?>... entries )
     {
         final Map<? extends String, ?> expected = Map.ofEntries( entries );
         assertThat()
@@ -226,6 +269,11 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
         return myself;
     }
 
+    /**
+     * Assert there are no additional properties.
+     *
+     * @return self to allow chaining.
+     */
     public ProblemDetailTester blankProperties()
     {
         assertThat()
@@ -253,8 +301,8 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
     //     return myself;
     // }
 
-    // TODO  implement 'satisfying'
-    public final ProblemDetailTester hasPropertiesSatisfying( String key, Consumer<? super Object> valueRequirements )
+    public ProblemDetailTester hasPropertiesSatisfying( final String key,
+                                                              final Consumer<? super Object> valueRequirements )
     {
         // TODO implement this method
         assertThat()
@@ -266,7 +314,13 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
         return myself;
     }
 
-    public ProblemDetailTester containsKey( String key )
+    /**
+     * Fluent method to assert a named item is a property.
+     *
+     * @param key the named item to verify.
+     * @return self to allow chaining.
+     */
+    public ProblemDetailTester containsKey( final String key )
     {
         assertThat()
             .isNotNull()
@@ -277,7 +331,13 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
         return myself;
     }
 
-    public ProblemDetailTester doesNotContainKey( String key )
+    /**
+     * Fluent method to assert a named item is not a property.
+     *
+     * @param key the named item to verify.
+     * @return self to allow chaining.
+     */
+    public ProblemDetailTester doesNotContainKey( final String key )
     {
         assertThat()
             .isNotNull()
@@ -302,6 +362,11 @@ public class ProblemDetailTester extends AbstractObjectAssert<ProblemDetailTeste
 }
 
 
+/**
+ * Derived class of ProblemDetail needed when parsing JSON to catch unknown properties
+ * and add them to the list of properties contained in the ProblemDetail, otherwise the
+ * extra values are ignored.
+ */
 class ProblemDetailProperties extends ProblemDetail
 {
     @JsonAnySetter

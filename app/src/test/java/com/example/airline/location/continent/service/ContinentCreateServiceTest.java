@@ -60,7 +60,7 @@ class ContinentCreateServiceTest
         // -- then
         ContinentTester continentTester = ContinentTester.of( continent );
         assertAll( () -> assertThat( continentTester )
-                             .hasName( "North")
+                             .hasName( "North" )
                              .hasCode( "NA" )
                              .blankWikiLink()
                              .blankKeywords(),

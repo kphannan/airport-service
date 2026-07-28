@@ -66,8 +66,17 @@ public class AirportDTO
              example = "KORD" )
     @NotBlank( message = "A 4 to 7 character airport ident code is required" )
     @lombok.NonNull
+    // @Pattern( regexp =
+    //             """^(([0-9]{1,2}[A-Z]{1,2}[0-9]?)
+    //                |([A-Z]{3,4}[0-9]?)
+    //                |([A-Z]{1,2}-([0-9]{2,5}
+    //                |[A-Z]{3,4}))
+    //                |([A-Z]{1,2}[0-9]{1,2}[A-Z]{1,2}?[0-9]?)
+    //                |([A-Z]{1,2}[0-9]{1,2})
+    //                |([A-Z]{1,2}-(([0-9]{1,2}[A-Z]{1,2}[0-9]?)
+    //                |([A-Z]{2,3}[0-9]{1,2}))))$
+    //             """,
     @Pattern( regexp = AviationCodePatterns.AIRPORT_IDENTIFIER,
-    // @Pattern( regexp = "^(([0-9]{1,2}[A-Z]{1,2}[0-9]?)|([A-Z]{3,4}[0-9]?)|([A-Z]{1,2}-([0-9]{2,5}|[A-Z]{3,4}))|([A-Z]{1,2}[0-9]{1,2}[A-Z]{1,2}?[0-9]?)|([A-Z]{1,2}[0-9]{1,2})|([A-Z]{1,2}-(([0-9]{1,2}[A-Z]{1,2}[0-9]?)|([A-Z]{2,3}[0-9]{1,2}))))$",
               message = "Airport ident must a unique 4 to 7 character code following a specific pattern" )
     private String ident;  // char-8
 

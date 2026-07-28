@@ -188,7 +188,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
                                      .andExpect( jsonPath( "$.continent" ).value( "NA" ) )
                                      .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
                                      .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
-                         );
+                );
             }
 
             @Test
@@ -214,7 +214,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
 
                 assertAll( () -> assertThat( response.getStatus() )
                                      .isEqualTo( HttpStatus.NO_CONTENT.value() )
-                         );
+                );
             }
         }
 
@@ -262,7 +262,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
                                      .andExpect( jsonPath( "$.isoRegion" ).value( "GA" ) )
                                      .andExpect( jsonPath( "$.wikipediaLink" ).doesNotExist() )
                                      .andExpect( jsonPath( "$.keywords" ).doesNotExist() )
-                         );
+                );
             }
 
             @Test
@@ -290,7 +290,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
 
                 assertAll( () -> assertThat( response.getStatus() )
                                      .isEqualTo( HttpStatus.NO_CONTENT.value() )
-                         );
+                );
             }
         }
 
@@ -360,7 +360,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
                            // Verify how the data was retrieved
                            () -> verify( mapper, times( 3 ) )
                                      .domainToApi( any( Airport.class ) )
-                         );
+                );
             }
         }
 
@@ -438,7 +438,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
                            // Verify how the data was retrieved
                            () -> verify( mapper, times( 3 ) )
                                      .domainToApi( any( Airport.class ) )
-                         );
+                );
             }
 
 
@@ -482,7 +482,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
                            // Verify how the data was retrieved
                            () -> verify( mapper, times( 3 ) )
                                      .domainToApi( any( Airport.class ) )
-                         );
+                );
             }
 
 
@@ -527,7 +527,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
                            // Verify how the data was retrieved
                            () -> verify( mapper, times( 3 ) )
                                      .domainToApi( any( Airport.class ) )
-                         );
+                );
             }
 
         }
@@ -591,7 +591,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
                            // Verify how the data was retrieved
                            () -> verify( mapper, times( 2 ) )
                                      .domainToApi( any( AirportCountInContinent.class ) )
-                         );
+                );
             }
 
             @Test
@@ -722,8 +722,8 @@ class AirportControllerRestTest //extends RestControllerTestBase
                 assertAll( () -> assertThat( response.getStatus() )
                                      .isEqualTo( HttpStatus.OK.value() ),
                            // () -> assertThat( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) ),
-                    // // () -> assertThat( response.getContentType() )
-                    //           .isEqualTo( MediaType.APPLICATION_JSON_VALUE ),
+                           // // () -> assertThat( response.getContentType() )
+                           //           .isEqualTo( MediaType.APPLICATION_JSON_VALUE ),
                            () -> resultActions
                                      .andExpect( content().contentTypeCompatibleWith( MediaType.APPLICATION_JSON.toString() ) ),
                            // verify the resulting JSON....
@@ -782,14 +782,18 @@ class AirportControllerRestTest //extends RestControllerTestBase
                                      .andExpect( jsonPath( "$.title" ).value( "Not Found" ) )
                                      .andExpect( jsonPath( "$.status" ).value( "404" ) )
                                      // .andExpect( jsonPath( "$.detail" ).value( 42 ) )
-                                     .andExpect( jsonPath("$.detail", containsString("No static resource location/airport/count/continent/CC for request '/location/airport/count/continent/CC'." ) ) )
-                                     .andExpect( jsonPath( "$.instance" ).value( "location/airport/count/continent/CC" ) )
+                                     .andExpect( jsonPath("$.detail",
+                                                          containsString("No static resource location/airport/count/continent/CC for request '/location/airport/count/continent/CC'." ) ) )
+                                     .andExpect( jsonPath( "$.instance" )
+                                                     .value( "location/airport/count/continent/CC" ) )
                                      // .andExpect( jsonPath( "$exception" ).value( "org.springframework.web.servlet.resource.NoResourceFoundException: No static resource location/airport/count/continent/CC for request '/location/airport/count/continent/CC'." ) )
                                      // .andExpect( jsonPath( "$.exception" ), containsString( "foo" )
                                      // .andExpect(jsonPath("$.performers[1].name", containsString("di Me" ) ) )
-                                     .andExpect( jsonPath("$.Exception", containsString("org.springframework.web.servlet.resource.NoResourceFoundException:" ) ) )
-                                     .andExpect( jsonPath("$.Exception", containsString("No static resource location/airport/count/continent/CC for request '/location/airport/count/continent/CC'." ) ) )
-                         );
+                                     .andExpect( jsonPath( "$.Exception",
+                                                           containsString( "org.springframework.web.servlet.resource.NoResourceFoundException:" ) ) )
+                                     .andExpect( jsonPath( "$.Exception",
+                                                           containsString( "No static resource location/airport/count/continent/CC for request '/location/airport/count/continent/CC'." ) ) )
+                );
             }
 
             // --- Region ---
@@ -832,7 +836,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
                                      .countAirportsByRegion( eq( "RE" ) ),
                            () -> verify( mapper, times( 1 ) )
                                      .domainToApi( any( AirportCountInRegion.class ) )
-                         );
+                );
             }
         }
 

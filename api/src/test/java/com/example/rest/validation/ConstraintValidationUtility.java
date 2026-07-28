@@ -1,5 +1,6 @@
 package com.example.rest.validation;
 
+
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 import java.util.Set;
@@ -45,11 +46,17 @@ public final class ConstraintValidationUtility
 
         assertThat( constraints )
                 .hasSize( tuples.length )
-                .extracting( t ->t
+                .extracting( cv -> cv
                                      .getPropertyPath()
                                      .toString(),
                              ConstraintViolation::getMessage
                            )
+                //  .extracting( ConstraintViolation::getPropertyPath,
+                //              ConstraintViolation::getMessage
+                //            )
+                //  .extracting( cv -> ConstraintViolation::getPropertyPath,
+                //              ConstraintViolation::getMessage
+                //            )
                 .containsExactlyInAnyOrder( tuples )
         ;
     }

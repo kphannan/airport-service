@@ -466,7 +466,7 @@ class ContinentControllerRestTest
                            () -> assertThat( ProblemDetailTester.of( response.getContentAsString() ) )
                                      .blankType()
                                      .hasStatus( HttpStatus.BAD_REQUEST )
-                                     .hasTitle( "Malformed Request")
+                                     .hasTitle( "Malformed Request" )
                                      .hasDetail( "JSON parse error: Cannot deserialize value of type `java.net.URI` from String \"https://wikipedia.com/bad url/not encoded\": not a valid textual representation, problem: Illegal character in path at index 25: https://wikipedia.com/bad url/not encoded" )
                                      .hasInstance( "/location/continent" )
                                      .hasProperties( entry( "Exception",
@@ -488,7 +488,7 @@ class ContinentControllerRestTest
                            // persistence
                            () -> verifyNoInteractions( repository ),
                            () -> verifyNoInteractions( mapper )
-                         );
+                );
             }
 
         }
@@ -560,7 +560,7 @@ class ContinentControllerRestTest
                        () -> verifyNoInteractions( updateService ),
                        () -> verifyNoInteractions( deleteService ),
                        () -> verify( mapper ).domainToApi( any( Continent.class ) )
-                     );
+            );
         }
 
 

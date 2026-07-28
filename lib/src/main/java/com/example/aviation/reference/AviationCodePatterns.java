@@ -21,22 +21,22 @@ public final class AviationCodePatterns
      * ICAO airport codes consist of a four-letter alphanumeric sequence
      * (e.g., EGLL for London Heathrow) assigned by the International Civil Aviation
      * Organization to uniquely identify airports, heliports, and other aviation facilities.
-     * <p>
-     * The structure is hierarchical and regionally standardized:
-     * <p>
-     * First Letter: Indicates the general geographic region (e.g., K for the
+     *
+     * <p>The structure is hierarchical and regionally standardized:
+     *
+     * <p>First Letter: Indicates the general geographic region (e.g., K for the
      * contiguous United States, C for Canada, E for Northern Europe, L for Southern Europe).
-     * <p>
-     * ICAO codes do not start with the letters I, J, Q or X.
-     * <p>
-     * ZZZZ is also a pseudocode, used in flight plans for aerodromes with no ICAO code assigned.
-     * <p>
-     * Second Letter: Identifies the specific country or territory within that region
+     *
+     * <p>ICAO codes do not start with the letters I, J, Q or X.
+     *
+     * <p>ZZZZ is also a pseudocode, used in flight plans for airodromes with no ICAO code assigned.
+     *
+     * <p>Second Letter: Identifies the specific country or territory within that region
      * (e.g., G for the United Kingdom, F for France, D for Germany).
      * Last Two Letters: Designate the specific airport or facility, assigned by
      * national authorities to avoid duplication.
-     * <p>
-     * {@linktourl https://en.wikipedia.org/wiki/ICAO_airport_code Wikipedia}
+     *
+     * {@linkurl https://en.wikipedia.org/wiki/ICAO_airport_code Wikipedia}
      */
     public static final String AIRPORT_ICAO       = "[A-HK-PR-WY-Z][A-Z]{3}"; // "[A-Z]{4}";
 
@@ -65,7 +65,7 @@ public final class AviationCodePatterns
 
     /**
      * The standard regex for an IATA airline code (a 2-character commercial service mark).
-     * <p>
+     *
      * This pattern enforces that the first two characters contain **at least one alphabetic
      * letter**, rejecting pure numeric combinations like "11" while accepting formats like
      * **BA**, **X3**, or **9F**.

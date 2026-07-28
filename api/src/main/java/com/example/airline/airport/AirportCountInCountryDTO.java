@@ -38,7 +38,7 @@ public record AirportCountInCountryDTO(
         @Size( max = 52 )
         String name,
 
-        @Schema( description = "Number of airports in the country")
+        @Schema( description = "Number of airports in the country" )
         @PositiveOrZero
         Long airportCount
 )
