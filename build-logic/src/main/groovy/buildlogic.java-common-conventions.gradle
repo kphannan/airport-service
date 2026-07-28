@@ -430,6 +430,7 @@ pmd {
 rewrite {
     checkstyleConfigFile = project.file("../config/checkstyle/checkstyle.xml")
     configFile = project.file("../config/rewrite.yml")
+
 //    activeStyle( "org.openrewrite.java.style.IntelliJ" )
 
     activeStyle( 'com.example.java.MyCustomStyle' )
@@ -438,8 +439,9 @@ rewrite {
             'org.openrewrite.FindParseFailures',
 //            'com.yourorg.AddLicenseHeaderExample',
 //            'org.openrewrite.java.format.AutoFormat',
-            'com.example.java.format.Style',
-            'com.example.UpgradeDependencies',
+
+//            'com.example.java.format.Style',
+//            'com.example.UpgradeDependencies',
             'com.example.java.jspecify.JSpecifyBestPractices',
 
 //            'org.apache.druid.RewriteRules',
@@ -450,6 +452,11 @@ rewrite {
 //            'org.openrewrite.java.format.Spaces'
     )
 
+    exclusion(
+            "**/SecurityConfig.java",
+            "**/ConstraintValidationUtility.java",
+//            "api/src/test/java/com/example/rest/validation/ConstraintValidationUtility.*",
+    )
 
     exportDatatables = true
     enableExperimentalGradleBuildScriptParsing = false

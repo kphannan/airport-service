@@ -96,30 +96,30 @@ class ContinentControllerTest
     @DisplayName( "Create" )
     class Post           // NOPMD
     {
-//        @Test
-//        @DisplayName( "Continent" )
-//        void methodPost_Continent_isCreated()
-//        {
-//            final ContinentController controller = new ContinentController( readService, createService, updateService, deleteService, dtoMapper );
-//
-//            final Continent continent = new Continent( 1, "NA", "North", null, null );
-//            final NewContinentDTO dto = new NewContinentDTO( "NA", "North", null, null );
-//
-//            when( readService.findByCode( anyString() ) )
-//                    .thenReturn( Optional.of( continent ) );
-//            when( createService.create( any( NewContinent.class ) ) )
-//                    .thenReturn( continent );
-//
-//            ResponseEntity<ContinentDTO> response = controller.restPostAddContinent( dto, requestHeader );
-//            final HttpHeaders headers = response.getHeaders();
-//
-//            assertAll( () -> assertEquals( "application/json;charset=UTF-8", headers.getFirst( "Content-Type" )  ),
-//                       () -> verify( createService ).create(  any( NewContinent.class ) ) ,
-//                       () -> verify( readService ).findByCode( anyString() ),
-//                       () -> verifyNoInteractions( updateService ),
-//                       () -> verifyNoInteractions( deleteService )
-//                     );
-//        }
+        // @Test
+        // @DisplayName( "Continent" )
+        // void methodPost_Continent_isCreated()
+        // {
+        //    final ContinentController controller = new ContinentController( readService, createService, updateService, deleteService, dtoMapper );
+        //
+        //    final Continent continent = new Continent( 1, "NA", "North", null, null );
+        //    final NewContinentDTO dto = new NewContinentDTO( "NA", "North", null, null );
+        //
+        //    when( readService.findByCode( anyString() ) )
+        //            .thenReturn( Optional.of( continent ) );
+        //    when( createService.create( any( NewContinent.class ) ) )
+        //            .thenReturn( continent );
+        //
+        //    ResponseEntity<ContinentDTO> response = controller.restPostAddContinent( dto, requestHeader );
+        //    final HttpHeaders headers = response.getHeaders();
+        //
+        //    assertAll( () -> assertEquals( "application/json;charset=UTF-8", headers.getFirst( "Content-Type" )  ),
+        //               () -> verify( createService ).create(  any( NewContinent.class ) ) ,
+        //               () -> verify( readService ).findByCode( anyString() ),
+        //               () -> verifyNoInteractions( updateService ),
+        //               () -> verifyNoInteractions( deleteService )
+        //             );
+        // }
     }   // end of Post class group
 
 
@@ -150,7 +150,7 @@ class ContinentControllerTest
             final HttpHeaders headers = response.getHeaders();
 
             assertAll( () -> assertThat( ContinentDTOTester.of( response.getBody() ) )
-                                 .hasName( "North")
+                                 .hasName( "North" )
                                  .hasCode( "NA" )
                                  .blankWikiLink()
                                  .blankKeywords(),

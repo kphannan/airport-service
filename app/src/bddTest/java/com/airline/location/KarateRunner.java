@@ -5,16 +5,13 @@ package com.airline.location;
 
 import com.intuit.karate.junit5.Karate;
 
-//import org.junit.jupiter.api.Test;
 
-
+/**
+ * Main entrypoint for running KarateBDD test suite.
+ */
 public class KarateRunner
 {
-//    @Test
-//    public void foo()
-//    {
-//
-//    }
+
     @Karate.Test
     public Karate fullRegression()
     {
