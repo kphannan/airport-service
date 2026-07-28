@@ -22,901 +22,1539 @@
                 </li>
             </ul>
 
+
             <!-- Application -->
-            <section class="source" id="app-results">  <!-- Application -->
+            <section class="" id="app-results"> <!-- Application -->
                 <h2 class="numbered-title"><span>01</span>Application</h2>
 
                 <div class="flex">
                     <!-- Application -->
-                    <div class="card" style="flex-grow: 1;">
-                        <h3 class="text-accent letter-spacing-3">Main</h3>
-                        <ul>
-                            <li>Static Analysis
-                                <ul>
-                                    <li><a class="letter-spacing-4" href="app/build/reports/checkstyle/main.html">Code Style (Checkstyle)</a></li>
-                                    <li><a class="letter-spacing-4" href="app/build/reports/pmd/main.html">Common Flaws (PMD)</a></li>
-                                    <li><a class="letter-spacing-4" href="app/build/reports/spotbugs/main.html">Common Flaws (SpotBugs)</a></li>
-                                </ul>
-                            </li>
-                            <li>Dynamic Analysis
-                                <ul>
-                                    <li>Unit Tests
-                                        <ul>
-                                            <li><a class="letter-spacing-4" href="app/build/reports/tests/test/index.html">Unit Tests</a></li>
-                                            <li><a class="letter-spacing-4" href="app/build/reports/jacoco/test/html/index.html">Line Coverage</a></li>
-                                        </ul>
-                                    </li>
-                                    <li>Mutation Tests
-                                        <ul>
-                                            <li><a class="letter-spacing-4" href="app/build/reports/pitest/index.html">Mutation Tests (PiTest)</a></li>
-                                        </ul>
-                                    </li>
-                                    <li style="display: none;">Functional Tests
-                                        <ul>
-                                            <li><a class="letter-spacing-4" href="app/target/cucumber-html-reports/overview-features.html">Functional/BDD Tests (CucumberReports)</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
+                    <div class="card" style="flex-grow: 1;"> <!-- Main -->
+                        <div class="main">
+                            <h3 class="text-accent letter-spacing-3">Main</h3>
 
-                            <li class="api-spec">API Specification
-                                <ul>
-                                    <li><a class="letter-spacing-4" href="http://localhost:8100/api/v1/v3/api-docs">Swagger (Json)</a></li>
-                                    <li><a class="letter-spacing-4" href="http://localhost:8100/api/v1/swagger-ui.html">Swagger (UI)</a></li>
-                                </ul>
-                            </li>
+                            <ul class="flex table secondary-navigation">
+                                <li class="static-analysis">Static Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="static-style">Style
+                                            <ul class="flex secondary-navigation">
+                                                <li class="checkstyle">
+                                                    <a class="letter-spacing-4" href="app/build/reports/checkstyle/main.html">Checkstyle</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="common-flaws">Common Flaws
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pmd">
+                                                    <a class="letter-spacing-4" href="app/build/reports/pmd/main.html">PMD</a>
+                                                </li>
+                                                <li class="spotbugs">
+                                                    <a class="letter-spacing-4" href="app/build/reports/spotbugs/main.html">SpotBugs</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
 
-                        </ul>
+                                <li  class="dynamic-analysis">Dynamic Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="unit-test">Unit Tests
+
+                                            <ul class="flex secondary-navigation">
+                                                <li class="junit">
+                                                    <a class="letter-spacing-4" href="app/build/reports/tests/test/index.html">JUnit</a>
+                                                </li>
+                                                <li class="coverage">
+                                                    <a class="letter-spacing-4" href="app/build/reports/jacoco/test/html/index.html">Coverage</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="test-mutation">Mutation Tests
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pitest">
+                                                    <a class="letter-spacing-4" href="app/build/reports/pitest/index.html">PiTest</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li class='hidden'>Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <!--                            <li>API Specification-->
+                                <!--                                <ul>-->
+                                <!--                                </ul>-->
+                                <!--                            </li>-->
+
+                                <li class="documentation">Documentation
+                                    <ul class="flex secondary-navigation">
+                                        <li class="diagrams">Diagrams
+                                            <ul class="flex secondary-navigation">
+                                                <li class="architecture">Architecture</li>
+                                                <li class="uml">UML</li>
+                                            </ul>
+                                        </li>
+                                        <li class="javadoc">Javadoc
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class="database">Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="database">Database
+                                    <ul class="flex secondary-navigation">
+                                        <li class="diagrams">Diagrams
+                                            <ul class="flex secondary-navigation">
+                                                <li class="architecture">Architecture</li>
+                                                <li class="erd">
+                                                    <a href="#">ERD</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li class="console">Console
+                                            <ul class="flex secondary-navigation">
+                                                <li class="h2-console">
+                                                    <!--                                            <a href="http://localhost:9005/h2-console">H2 Console</a>-->
+                                                    <a href="http://localhost:8100/api/v1/h2-console">H2</a>
+                                                </li>
+                                                <li class="postgresql">
+                                                    <a href="http://localhost:8100/api/v1/h2-console">PostgreSQL</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                            </ul>
+                        </div>
+
+                        <div class="qa">
+                            <h3 class="text-accent letter-spacing-3">QA</h3>
+
+                            <ul class="flex table secondary-navigation">
+                                <li class="static-analysis">Static Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="static-style">Style
+                                            <ul class="flex secondary-navigation">
+                                                <li class="checkstyle">
+                                                    <a class="letter-spacing-4" href="app/build/reports/checkstyle/test.html">Checkstyle</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="common-flaws">Common Flaws
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pmd">
+                                                    <a class="letter-spacing-4" href="app/build/reports/pmd/test.html">PMD</a>
+                                                </li>
+                                                <li class="spotbugs">
+                                                    <a class="letter-spacing-4" href="app/build/reports/spotbugs/test.html">SpotBugs</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li  class="dynamic-analysis">Dynamic Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="unit-test">Unit Tests
+
+                                            <ul class="flex secondary-navigation">
+                                                <li class="junit">
+                                                    <a class="letter-spacing-4" href="app/build/reports/tests/test/index.html">JUnit</a>
+                                                </li>
+                                                <li class="coverage">
+                                                    <a class="letter-spacing-4" href="app/build/reports/jacoco/test/html/index.html">Coverage</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="test-mutation">Mutation Tests
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pitest">
+                                                    <a class="letter-spacing-4" href="app/build/reports/pitest/index.html">PiTest</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li class='hidden'>Functional Tests
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class='hidden'>Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class='hidden'>Runtime
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <!--                            <li>API Specification-->
+                                <!--                                <ul>-->
+                                <!--                                </ul>-->
+                                <!--                            </li>-->
+
+                                <li class="documentation">Documentation
+                                    <ul class="flex secondary-navigation">
+                                        <li class="diagrams">Diagrams
+                                            <ul class="flex secondary-navigation">
+                                                <li class="architecture">Architecture</li>
+                                                <li class="uml">UML</li>
+                                            </ul>
+                                        </li>
+                                        <li class="javadoc">Javadoc
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class="database">Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="test-functional">
+                            <h3 class="text-accent letter-spacing-3">Functional</h3>
+
+                            <ul class="flex table secondary-navigation">
+                                <li class="static-analysis">Static Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="static-style">Style
+                                            <ul class="flex secondary-navigation">
+                                                <li class="checkstyle">
+                                                    <a class="letter-spacing-4" href="app/build/reports/checkstyle/test.html">Checkstyle</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="common-flaws">Common Flaws
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pmd">
+                                                    <a class="letter-spacing-4" href="app/build/reports/pmd/test.html">PMD</a>
+                                                </li>
+                                                <li class="spotbugs">
+                                                    <a class="letter-spacing-4" href="app/build/reports/spotbugs/test.html">SpotBugs</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li  class=>Dynamic Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="unit-test">Unit Tests
+
+                                            <ul class="flex secondary-navigation">
+                                                <li class="junit">
+                                                    <a class="letter-spacing-4" href="app/build/reports/tests/test/index.html">JUnit</a>
+                                                </li>
+                                                <li class="coverage">
+                                                    <a class="letter-spacing-4" href="app/build/reports/jacoco/test/html/index.html">Coverage</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="test-mutation">Mutation Tests
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pitest">
+                                                    <a class="letter-spacing-4" href="app/build/reports/pitest/index.html">PiTest</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li class='hidden'>Functional Tests
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class='hidden'>Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class='hidden'>Runtime
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <!--                            <li>API Specification-->
+                                <!--                                <ul>-->
+                                <!--                                </ul>-->
+                                <!--                            </li>-->
+
+                                <li class="documentation">Documentation
+                                    <ul class="flex secondary-navigation">
+                                        <li class="diagrams">Diagrams
+                                            <ul class="flex secondary-navigation">
+                                                <li class="architecture">Architecture</li>
+                                                <li class="uml">UML</li>
+                                            </ul>
+                                        </li>
+                                        <li class="javadoc">Javadoc
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class="database">Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="test-bdd">
+                            <h3 class="text-accent letter-spacing-3">BDD</h3>
+
+                            <ul class="flex table secondary-navigation">
+                                <li class="static-analysis">Static Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="static-style">Style
+                                            <ul class="flex secondary-navigation">
+                                                <li class="checkstyle">
+                                                    <a class="letter-spacing-4" href="app/build/reports/checkstyle/bddtest.html">Checkstyle</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="common-flaws">Common Flaws
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pmd">
+                                                    <a class="letter-spacing-4" href="app/build/reports/pmd/bddTest.html">PMD</a>
+                                                </li>
+                                                <li class="spotbugs">
+                                                    <a class="letter-spacing-4" href="app/build/reports/spotbugs/bddTest.html">SpotBugs</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li  class="dynamic-analysis">Dynamic Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="unit-test">Unit Tests
+
+                                            <ul class="flex secondary-navigation">
+                                                <li class="junit">
+                                                    <a class="letter-spacing-4" href="app/build/reports/tests/bddtest/index.html">JUnit</a>
+                                                </li>
+                                                <li class="coverage">
+                                                    <a class="letter-spacing-4" href="app/build/reports/jacoco/bddtest/html/index.html">Coverage</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="test-mutation">Mutation Tests
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pitest">
+                                                    <a class="letter-spacing-4" href="app/build/reports/pitest/index.html">PiTest</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="karate-test">Karate
+
+                                            <ul class="flex secondary-navigation">
+                                                <li class="junit">
+                                                    <a class="letter-spacing-4" href="app/build/reports/tests/bddtest/index.html">JUnit</a>
+                                                </li>
+                                                <li class="detail">
+                                                    <a class="letter-spacing-4" href="app/build/karate-reports/karate-summary.html">Detail</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <!--                            <li>API Specification-->
+                                <!--                                <ul>-->
+                                <!--                                </ul>-->
+                                <!--                            </li>-->
+
+                                <li class="documentation">Documentation
+                                    <ul class="flex secondary-navigation">
+                                        <li class="diagrams">Diagrams
+                                            <ul class="flex secondary-navigation">
+                                                <li class="architecture">Architecture</li>
+                                                <li class="uml">UML</li>
+                                            </ul>
+                                        </li>
+                                        <li class="javadoc">Javadoc
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class="database">Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="test-performance">
+                            <h3 class="text-accent letter-spacing-3">Performance</h3>
+
+                            <ul class="flex table secondary-navigation">
+                                <li class="static-analysis">Static Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="static-style">Style
+                                            <ul class="flex secondary-navigation">
+                                                <li class="checkstyle">
+                                                    <a class="letter-spacing-4" href="app/build/reports/checkstyle/gatling.html">Checkstyle</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="common-flaws">Common Flaws
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pmd">
+                                                    <a class="letter-spacing-4" href="app/build/reports/pmd/gatling.html">PMD</a>
+                                                </li>
+                                                <li class="spotbugs">
+                                                    <a class="letter-spacing-4" href="app/build/reports/spotbugs/gatling.html">SpotBugs</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li  class="dynamic-analysis">Dynamic Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="unit-test">Unit Tests
+
+                                            <ul class="flex secondary-navigation">
+                                                <li class="junit">
+                                                    <a class="letter-spacing-4" href="app/build/reports/tests/test/index.html">JUnit</a>
+                                                </li>
+                                                <li class="coverage">
+                                                    <a class="letter-spacing-4" href="app/build/reports/jacoco/test/html/index.html">Coverage</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="test-mutation">Mutation Tests
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pitest">
+                                                    <a class="letter-spacing-4" href="app/build/reports/pitest/index.html">PiTest</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                    </ul>
+                                </li>
+
+                                <!--                            <li>API Specification-->
+                                <!--                                <ul>-->
+                                <!--                                </ul>-->
+                                <!--                            </li>-->
+
+                                <li class="documentation">Documentation
+                                    <ul class="flex secondary-navigation">
+                                        <li class="diagrams">Diagrams
+                                            <ul class="flex secondary-navigation">
+                                                <li class="architecture">Architecture</li>
+                                                <li class="uml">UML</li>
+                                            </ul>
+                                        </li>
+                                        <li class="javadoc">Javadoc
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class="database">Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
 
-                </div>
-
-            </section>
-
-            <section class="quality" id="app-qa-results"> <!-- Quality Assurance -->
-                <h2 class="numbered-title"><span>02</span>Application Quality Assurance (Tests)</h2>
-
-                <div class="flex">
-                    <!-- Application -->
-                    <div class="card test-unit" style="flex-grow: 1;"> <!-- Unit -->
-                        <h3 class="text-accent letter-spacing-3">Unit</h3>
-                        <ul>
-                            <li class="static">Static Analysis
-                                <ul>
-                                    <li><a class="letter-spacing-4" href="app/build/reports/checkstyle/test.html">Code Style (Checkstyle)</a></li>
-                                    <li><a class="letter-spacing-4" href="app/build/reports/pmd/test.html">Common Flaws (PMD)</a></li>
-                                    <li><a class="letter-spacing-4" href="app/build/reports/spotbugs/test.html">Common Flaws (SpotBugs)</a></li>
-                                </ul>
-                            </li>
-                            <li class="dynamic">Dynamic Analysis
-                                <ul>
-                                    <li>Unit Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Functional Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Database
-                                        <ul>
-                                            <li><a class="letter-spacing-4" href="http://localhost:8100/api/v1/h2-console">H2 console</a></li>
-                                        </ul>
-                                    </li>
-                                    <li>Runtime
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li class="api-spec">API Specification
-                                <ul>
-                                    <li><a class="letter-spacing-4" href="http://localhost:9005/v3/api-docs">Swagger (Json)</a></li>
-                                    <li><a class="letter-spacing-4" href="http://localhost:9005/swagger-ui.html">Swagger (UI)</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-
-
-                    <div class="card test-functional" style="flex-grow: 1;"> <!-- Functional -->
-                        <h3 class="text-accent letter-spacing-3">Functional</h3>
-                        <ul>
-                            <li>Static Analysis
-                                <ul>
-                                    <li><a class="letter-spacing-4" href="app/build/reports/checkstyle/functional.html">Code Style (Checkstyle)</a></li>
-                                    <li><a class="letter-spacing-4" href="app/build/reports/pmd/functional.html">Common Flaws (PMD)</a></li>
-                                    <li><a class="letter-spacing-4" href="app/build/reports/spotbugs/functional.html">Common Flaws (SpotBugs)</a></li>
-                                </ul>
-                            </li>
-                            <li>Dynamic Analysis
-                                <ul>
-                                    <li style="display: none;">Unit Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li style="display: none;">Functional Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Database
-                                        <ul>
-                                            <li><a class="letter-spacing-4" href="http://localhost:9005/h2-console">H2 console (jdbc:h2:mem:testdb)</a></li>
-                                        </ul>
-                                    </li>
-                                    <li>Runtime
-                                        <ul>
-                                            <li><a class="letter-spacing-4" href="app/build/reports/tests/functional/index.html">Suite execution</a></li>
-                                            <li><a class="letter-spacing-4" href="app/target/cucumber-html-reports/overview-features.html">Cucumber Report</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li style="display: none;">API Specification
-                                <ul>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-
-
-
-                    <div class="card test-bdd" style="flex-grow: 1;"> <!-- BDD -->
-                        <h3 class="text-accent letter-spacing-3">BDD</h3>
-                        <ul>
-                            <li style="display: none;">Static Analysis
-                                <ul>
-                                    <li><a class="letter-spacing-4" href="app/build/reports/checkstyle/bddTest.html">Code Style (Checkstyle)</a></li>
-                                    <li><a class="letter-spacing-4" href="app/build/reports/pmd/bddTest.html">Common Flaws (PMD)</a></li>
-                                    <li><a class="letter-spacing-4" href="app/build/reports/spotbugs/bddTest.html">Common Flaws (SpotBugs)</a></li>
-                                </ul>
-                            </li>
-                            <li>Dynamic Analysis
-                                <ul>
-                                    <li style="display: none;">Unit Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li style="test-functional">Functional Tests
-                                        <ul>
-                                            <li><a class="letter-spacing-4" href="app/build/reports/tests/bddTest/index.html">JUnit summary</a></li>
-                                            <li><a class="letter-spacing-4" href="app/build/karate-reports/karate-summary.html">Detail</a></li>
-                                        </ul>
-                                    </li>
-                                    <li style="display: none;">Database
-                                        <ul>
-                                            <li><a class="letter-spacing-4" href="http://localhost:9005/h2-console">H2 console</a></li>
-                                        </ul>
-                                    </li>
-                                    <li style="display: none;">Runtime
-                                        <ul>
-                                            <li><a class="letter-spacing-4" href="app/build/reports/tests/bdd/index.html">Suite execution</a></li>
-                                            <li><a class="letter-spacing-4" href="throttle/build/reports/tests/bdd2/index.html">Suite execution (BDD 2)</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li style="display: none;">API Specification
-                                <ul>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-
-
-                    <div class="card test-performance" style="flex-grow: 1;"> <!-- Performance -->
-                        <h3 class="text-accent letter-spacing-3">Performance</h3>
-                        <ul>
-                            <li>Static Analysis
-                                <ul>
-                                    <li><a class="letter-spacing-4" href="app/build/reports/checkstyle/gatling.html">Code Style (Checkstyle)</a></li>
-                                    <li><a class="letter-spacing-4" href="app/build/reports/pmd/gatling.html">Common Flaws (PMD)</a></li>
-                                    <li><a class="letter-spacing-4" href="app/build/reports/spotbugs/gatling.html">Common Flaws (SpotBugs)</a></li>
-                                </ul>
-                            </li>
-                            <li>Dynamic Analysis
-                                <ul>
-                                    <li style="display: none;">Unit Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li style="display: none;">Functional Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Database
-                                        <ul>
-                                            <li><a class="letter-spacing-4" href="http://localhost:9005/h2-console">H2 console</a></li>
-                                        </ul>
-                                    </li>
-                                    <li>Runtime
-                                        <ul>
-                                            <li><a class="letter-spacing-4" href="app/build/reports/gatling/">Suite execution</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li style="display: none;">API Specification
-                                <ul>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
             </section>
 
 
             <!-- Library -->
-            <section class="" id="library-results"> <!-- Library -->
-                <h2 class="numbered-title"><span>03</span>Library</h2>
+            <section class="" id="lib-results"> <!-- Library -->
+                <h2 class="numbered-title"><span>02</span>Library</h2>
 
                 <div class="flex">
                     <!-- Application -->
-                    <div class="card test-unit" style="flex-grow: 1;"> <!-- Main -->
-                        <h3 class="text-accent letter-spacing-3">Main</h3>
-                        <ul>
-                            <li>Documentation
-                                <ul>
-                                    <li><a class="text-accent letter-spacing-4" href="lib/build/docs/javadoc/index.html">Javadoc</a></li>
-                                </ul>
-                            </li>
-                            <li>Static Analysis
-                                <ul>
-                                    <li><a class="text-accent letter-spacing-4" href="lib/build/reports/checkstyle/main.html">Code Style (Checkstyle)</a></li>
-                                    <li><a class="text-accent letter-spacing-4" href="lib/build/reports/pmd/main.html">Common Flaws (PMD)</a></li>
-                                    <li><a class="letter-spacing-4" href="lib/build/reports/spotbugs/main.html">Common Flaws (SpotBugs)</a></li>
-                                </ul>
-                            </li>
-                            <li class="dynamic">Dynamic Analysis
-                                <ul>
-                                    <li class="unit">Unit Tests
-                                        <ul>
-                                            <li><a class="text-accent letter-spacing-4" href="lib/build/reports/tests/test/index.html">Unit Tests</a></li>
-                                            <li><a class="text-accent letter-spacing-4" href="lib/build/reports/jacoco/test/html/index.html">Line Coverage</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="mutation">Mutation Tests
-                                        <ul>
-                                            <li><a class="text-accent letter-spacing-4" href="lib/build/reports/pitest/index.html">Mutation Tests (PiTest)</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="functional">Functional Tests
-                                        <ul>
-                                            <li><a class="text-accent letter-spacing-4" href="lib/target/cucumber-html-reports/overview-features.html">Functional/BDD Tests (CucumberReports)</a></li>
-                                        </ul>
-                                    </li>
-                                    <li  class="database">Database
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li  class="runtime">Runtime
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
+                    <div class="card" style="flex-grow: 1;"> <!-- Main -->
+                        <div class="main">
+                            <h3 class="text-accent letter-spacing-3">Main</h3>
 
-                            <li style="display: none;">API Specification
-                                <ul>
-                                </ul>
-                            </li>
-                        </ul>
+                            <ul class="flex table secondary-navigation">
+                                <li class="static-analysis">Static Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="static-style">Style
+                                            <ul class="flex secondary-navigation">
+                                                <li class="checkstyle">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/checkstyle/main.html">Checkstyle</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="common-flaws">Common Flaws
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pmd">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/pmd/main.html">PMD</a>
+                                                </li>
+                                                <li class="spotbugs">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/spotbugs/main.html">SpotBugs</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li  class="dynamic-analysis">Dynamic Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="unit-test">Unit Tests
+
+                                            <ul class="flex secondary-navigation">
+                                                <li class="junit">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/tests/test/index.html">JUnit</a>
+                                                </li>
+                                                <li class="coverage">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/jacoco/test/html/index.html">Coverage</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="test-mutation">Mutation Tests
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pitest">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/pitest/index.html">PiTest</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li class='hidden'>Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <!--                            <li>API Specification-->
+                                <!--                                <ul>-->
+                                <!--                                </ul>-->
+                                <!--                            </li>-->
+
+                                <li class="documentation">Documentation
+                                    <ul class="flex secondary-navigation">
+                                        <li class="diagrams">Diagrams
+                                            <ul class="flex secondary-navigation">
+                                                <li class="architecture">Architecture</li>
+                                                <li class="uml">UML</li>
+                                            </ul>
+                                        </li>
+                                        <li class="javadoc">Javadoc
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class="database">Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="qa">
+                            <h3 class="text-accent letter-spacing-3">QA</h3>
+
+                            <ul class="flex table secondary-navigation">
+                                <li class="static-analysis">Static Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="static-style">Style
+                                            <ul class="flex secondary-navigation">
+                                                <li class="checkstyle">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/checkstyle/test.html">Checkstyle</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="common-flaws">Common Flaws
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pmd">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/pmd/test.html">PMD</a>
+                                                </li>
+                                                <li class="spotbugs">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/spotbugs/test.html">SpotBugs</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li  class="dynamic-analysis">Dynamic Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="unit-test">Unit Tests
+
+                                            <ul class="flex secondary-navigation">
+                                                <li class="junit">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/tests/test/index.html">JUnit</a>
+                                                </li>
+                                                <li class="coverage">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/jacoco/test/html/index.html">Coverage</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="test-mutation">Mutation Tests
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pitest">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/pitest/index.html">PiTest</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li class='hidden'>Functional Tests
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class='hidden'>Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class='hidden'>Runtime
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <!--                            <li>API Specification-->
+                                <!--                                <ul>-->
+                                <!--                                </ul>-->
+                                <!--                            </li>-->
+
+                                <li class="documentation">Documentation
+                                    <ul class="flex secondary-navigation">
+                                        <li class="diagrams">Diagrams
+                                            <ul class="flex secondary-navigation">
+                                                <li class="architecture">Architecture</li>
+                                                <li class="uml">UML</li>
+                                            </ul>
+                                        </li>
+                                        <li class="javadoc">Javadoc
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class="database">Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="test-functional">
+                            <h3 class="text-accent letter-spacing-3">Functional</h3>
+
+                            <ul class="flex table secondary-navigation">
+                                <li class="static-analysis">Static Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="static-style">Style
+                                            <ul class="flex secondary-navigation">
+                                                <li class="checkstyle">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/checkstyle/test.html">Checkstyle</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="common-flaws">Common Flaws
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pmd">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/pmd/test.html">PMD</a>
+                                                </li>
+                                                <li class="spotbugs">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/spotbugs/test.html">SpotBugs</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li  class=>Dynamic Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="unit-test">Unit Tests
+
+                                            <ul class="flex secondary-navigation">
+                                                <li class="junit">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/tests/test/index.html">JUnit</a>
+                                                </li>
+                                                <li class="coverage">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/jacoco/test/html/index.html">Coverage</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="test-mutation">Mutation Tests
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pitest">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/pitest/index.html">PiTest</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li class='hidden'>Functional Tests
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class='hidden'>Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class='hidden'>Runtime
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <!--                            <li>API Specification-->
+                                <!--                                <ul>-->
+                                <!--                                </ul>-->
+                                <!--                            </li>-->
+
+                                <li class="documentation">Documentation
+                                    <ul class="flex secondary-navigation">
+                                        <li class="diagrams">Diagrams
+                                            <ul class="flex secondary-navigation">
+                                                <li class="architecture">Architecture</li>
+                                                <li class="uml">UML</li>
+                                            </ul>
+                                        </li>
+                                        <li class="javadoc">Javadoc
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class="database">Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="test-bdd">
+                            <h3 class="text-accent letter-spacing-3">BDD</h3>
+
+                            <ul class="flex table secondary-navigation">
+                                <li class="static-analysis">Static Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="static-style">Style
+                                            <ul class="flex secondary-navigation">
+                                                <li class="checkstyle">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/checkstyle/bddtest.html">Checkstyle</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="common-flaws">Common Flaws
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pmd">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/pmd/bddTest.html">PMD</a>
+                                                </li>
+                                                <li class="spotbugs">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/spotbugs/bddTest.html">SpotBugs</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li  class="dynamic-analysis">Dynamic Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="unit-test">Unit Tests
+
+                                            <ul class="flex secondary-navigation">
+                                                <li class="junit">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/tests/bddtest/index.html">JUnit</a>
+                                                </li>
+                                                <li class="coverage">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/jacoco/bddtest/html/index.html">Coverage</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="test-mutation">Mutation Tests
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pitest">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/pitest/index.html">PiTest</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <!--                            <li>API Specification-->
+                                <!--                                <ul>-->
+                                <!--                                </ul>-->
+                                <!--                            </li>-->
+
+                                <li class="documentation">Documentation
+                                    <ul class="flex secondary-navigation">
+                                        <li class="diagrams">Diagrams
+                                            <ul class="flex secondary-navigation">
+                                                <li class="architecture">Architecture</li>
+                                                <li class="uml">UML</li>
+                                            </ul>
+                                        </li>
+                                        <li class="javadoc">Javadoc
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class="database">Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="test-performance">
+                            <h3 class="text-accent letter-spacing-3">Performance</h3>
+
+                            <ul class="flex table secondary-navigation">
+                                <li class="static-analysis">Static Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="static-style">Style
+                                            <ul class="flex secondary-navigation">
+                                                <li class="checkstyle">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/checkstyle/gatling.html">Checkstyle</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="common-flaws">Common Flaws
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pmd">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/pmd/gatling.html">PMD</a>
+                                                </li>
+                                                <li class="spotbugs">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/spotbugs/gatling.html">SpotBugs</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li  class="dynamic-analysis">Dynamic Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="unit-test">Unit Tests
+
+                                            <ul class="flex secondary-navigation">
+                                                <li class="junit">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/tests/test/index.html">JUnit</a>
+                                                </li>
+                                                <li class="coverage">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/jacoco/test/html/index.html">Coverage</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="test-mutation">Mutation Tests
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pitest">
+                                                    <a class="letter-spacing-4" href="lib/build/reports/pitest/index.html">PiTest</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                    </ul>
+                                </li>
+
+                                <!--                            <li>API Specification-->
+                                <!--                                <ul>-->
+                                <!--                                </ul>-->
+                                <!--                            </li>-->
+
+                                <li class="documentation">Documentation
+                                    <ul class="flex secondary-navigation">
+                                        <li class="diagrams">Diagrams
+                                            <ul class="flex secondary-navigation">
+                                                <li class="architecture">Architecture</li>
+                                                <li class="uml">UML</li>
+                                            </ul>
+                                        </li>
+                                        <li class="javadoc">Javadoc
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class="database">Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
 
-                    <div class="card test-functional" style="flex-grow: 1;"> <!-- Functional -->
-                        <h3 class="text-accent letter-spacing-3">Functional</h3>
-                        <ul>
-                            <li>Static Analysis
-                                <ul>
-                                </ul>
-                            </li>
-                            <li>Dynamic Analysis
-                                <ul>
-                                    <li style="display: none;">Unit Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li style="display: none;">Functional Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Database
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Runtime
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li style="display: none;">API Specification
-                                <ul>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="card test-bdd" style="flex-grow: 1;"> <!-- BDD -->
-                        <h3 class="text-accent letter-spacing-3">BDD</h3>
-                        <ul>
-                            <li>Static Analysis
-                                <ul>
-                                </ul>
-                            </li>
-                            <li>Dynamic Analysis
-                                <ul>
-                                    <li style="display: none;">Unit Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li style="display: none;">Functional Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Database
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Runtime
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li style="display: none;">API Specification
-                                <ul>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="card test-performance" style="flex-grow: 1;"> <!-- Performance -->
-                        <h3 class="text-accent letter-spacing-3">Performance</h3>
-                        <ul>
-                            <li>Static Analysis
-                                <ul>
-                                </ul>
-                            </li>
-                            <li>Dynamic Analysis
-                                <ul>
-                                    <li style="display: none;">Unit Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li style="display: none;">Functional Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Database
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Runtime
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li style="display: none;">API Specification
-                                <ul>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <section class="" id="library-qa-results"> <!-- Library QA -->
-                <h2 class="numbered-title"><span>04</span>Library Quality Assurance (Tests)</h2>
-
-                <div class="flex">
-                    <!-- Application -->
-                    <div class="card test-unit" style="flex-grow: 1;"> <!-- Main -->
-                        <h3 class="text-accent letter-spacing-3">Unit</h3>
-                        <ul>
-                            <li>Documentation
-                                <ul>
-                                    <li><a class="text-accent letter-spacing-4" href="lib/build/docs/testjavadoc/index.html">Javadoc</a></li>
-                                </ul>
-                            </li>
-                            <li>Static Analysis
-                                <ul>
-                                    <li><a class="text-accent letter-spacing-4" href="lib/build/reports/checkstyle/test.html">Code Style (Checkstyle)</a></li>
-                                    <li><a class="text-accent letter-spacing-4" href="lib/build/reports/pmd/test.html">Common Flaws (PMD)</a></li>
-                                    <li><a class="letter-spacing-4" href="lib/build/reports/spotbugs/test.html">Common Flaws (SpotBugs)</a></li>
-                                </ul>
-                            </li>
-                            <li class="dynamic">Dynamic Analysis
-                                <ul>
-                                    <li>Unit Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Mutation Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Functional Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li style="display: none;">Database
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li style="display: none;">Runtime
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li style="display: none;">API Specification
-                                <ul>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-
-
-                    <div class="card test-functional" style="flex-grow: 1;"> <!-- Functional -->
-                        <h3 class="text-accent letter-spacing-3">Functional</h3>
-                        <ul>
-                            <li>Static Analysis
-                                <ul>
-                                </ul>
-                            </li>
-                            <li>Dynamic Analysis
-                                <ul>
-                                    <li style="display: none;">Unit Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li style="display: none;">Functional Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Database
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Runtime
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li style="display: none;">API Specification
-                                <ul>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-
-
-
-                    <div class="card test-bdd" style="flex-grow: 1;"> <!-- BDD -->
-                        <h3 class="text-accent letter-spacing-3">BDD</h3>
-                        <ul>
-                            <li>Static Analysis
-                                <ul>
-                                    <li><a class="text-accent letter-spacing-4" href="lib/build/reports/checkstyle/bddTest.html">Code Style (Checkstyle)</a></li>
-                                    <li><a class="text-accent letter-spacing-4" href="lib/build/reports/pmd/bddTest.html">Common Flaws (PMD)</a></li>
-                                    <li><a class="letter-spacing-4" href="lib/build/reports/spotbugs/bddTest.html">Common Flaws (SpotBugs)</a></li>
-                                </ul>
-                            </li>
-                            <li>Dynamic Analysis
-                                <ul>
-                                    <li style="display: none;">Unit Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li style="display: none;">Functional Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Database
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Runtime
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li style="display: none;">API Specification
-                                <ul>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-
-
-                    <div class="card test-performance" style="flex-grow: 1;"> <!-- Performance -->
-                        <h3 class="text-accent letter-spacing-3">Performance</h3>
-                        <ul>
-                            <li>Static Analysis
-                                <ul>
-                                </ul>
-                            </li>
-                            <li>Dynamic Analysis
-                                <ul>
-                                    <li style="display: none;">Unit Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li style="display: none;">Functional Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Database
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Runtime
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li style="display: none;">API Specification
-                                <ul>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
             </section>
 
 
             <!-- API -->
-            <section class="" id="api-results"> <!-- API Library -->
-                <h2 class="numbered-title"><span>05</span>API Library</h2>
+            <section class="" id="api-results"> <!-- API -->
+                <h2 class="numbered-title"><span>03</span>API</h2>
 
                 <div class="flex">
                     <!-- Application -->
-                    <div class="card test-unit" style="flex-grow: 1;"> <!-- Main -->
-                        <h3 class="text-accent letter-spacing-3">Main</h3>
-                        <ul>
-                            <li>Static Analysis
-                                <ul>
-                                    <li class="checkstyle"><a class="letter-spacing-4" href="api/build/reports/checkstyle/main.html">Code Style (Checkstyle)</a></li>
-                                    <li class="pmd"><a class="letter-spacing-4" href="api/build/reports/pmd/main.html">Common Flaws (PMD)</a></li>
-                                    <li class="spotbugs"><a class="letter-spacing-4" href="api/build/reports/spotbugs/main.html">Common Flaws (SpotBugs)</a></li>
-                                </ul>
-                            </li>
-                            <li>Dynamic Analysis
-                                <ul>
-                                    <li class="test-coverage">Unit Tests
-                                        <ul>
-                                            <li><a class="letter-spacing-4" href="api/build/reports/tests/test/index.html">Unit Tests</a></li>
-                                            <li><a class="letter-spacing-4" href="api/build/reports/jacoco/test/html/index.html">Line Coverage</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="test-mutation">Mutation Tests
-                                        <ul>
-                                            <li><a class="letter-spacing-4" href="api/build/reports/pitest/index.html">Mutation Tests (PiTest)</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="test-bdd">Functional Tests
-                                        <ul>
-                                            <li><a class="letter-spacing-4" href="target/cucumber-html-reports/overview-features.html">Functional/BDD Tests (CucumberReports)</a></li>
-                                        </ul>
-                                    </li>
-                                    <li style="display: none;">Database
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li style="display: none;">Runtime
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
+                    <div class="card" style="flex-grow: 1;"> <!-- Main -->
+                        <div class="main">
+                            <h3 class="text-accent letter-spacing-3">Main</h3>
 
-                            <li style="display: none;">API Specification
-                                <ul>
-                                </ul>
-                            </li>
-                        </ul>
+                            <ul class="flex table secondary-navigation">
+                                <li class="static-analysis">Static Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="static-style">Style
+                                            <ul class="flex secondary-navigation">
+                                                <li class="checkstyle">
+                                                    <a class="letter-spacing-4" href="api/build/reports/checkstyle/main.html">Checkstyle</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="common-flaws">Common Flaws
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pmd">
+                                                    <a class="letter-spacing-4" href="api/build/reports/pmd/main.html">PMD</a>
+                                                </li>
+                                                <li class="spotbugs">
+                                                    <a class="letter-spacing-4" href="api/build/reports/spotbugs/main.html">SpotBugs</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li  class="dynamic-analysis">Dynamic Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="unit-test">Unit Tests
+
+                                            <ul class="flex secondary-navigation">
+                                                <li class="junit">
+                                                    <a class="letter-spacing-4" href="api/build/reports/tests/test/index.html">JUnit</a>
+                                                </li>
+                                                <li class="coverage">
+                                                    <a class="letter-spacing-4" href="api/build/reports/jacoco/test/html/index.html">Coverage</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="test-mutation">Mutation Tests
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pitest">
+                                                    <a class="letter-spacing-4" href="api/build/reports/pitest/index.html">PiTest</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li class='hidden'>Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <!--                            <li>API Specification-->
+                                <!--                                <ul>-->
+                                <!--                                </ul>-->
+                                <!--                            </li>-->
+
+                                <li class="documentation">Documentation
+                                    <ul class="flex secondary-navigation">
+                                        <li class="diagrams">Diagrams
+                                            <ul class="flex secondary-navigation">
+                                                <li class="architecture">Architecture</li>
+                                                <li class="uml">UML</li>
+                                            </ul>
+                                        </li>
+                                        <li class="swagger">Swagger
+                                            <ul class="flex secondary-navigation">
+                                                <li class="swagger-json">
+                                                    <a href="http://localhost:8100/api/v1/v3/api-docs">JSON</a>
+                                                </li>
+                                                <li class="swagger-ui">
+                                                    <a href="http://localhost:9005/swagger-ui.html">UI</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="javadoc">Javadoc
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class="database">Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="qa">
+                            <h3 class="text-accent letter-spacing-3">QA</h3>
+
+                            <ul class="flex table secondary-navigation">
+                                <li class="static-analysis">Static Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="static-style">Style
+                                            <ul class="flex secondary-navigation">
+                                                <li class="checkstyle">
+                                                    <a class="letter-spacing-4" href="api/build/reports/checkstyle/test.html">Checkstyle</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="common-flaws">Common Flaws
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pmd">
+                                                    <a class="letter-spacing-4" href="api/build/reports/pmd/test.html">PMD</a>
+                                                </li>
+                                                <li class="spotbugs">
+                                                    <a class="letter-spacing-4" href="api/build/reports/spotbugs/test.html">SpotBugs</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li  class="dynamic-analysis">Dynamic Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="unit-test">Unit Tests
+
+                                            <ul class="flex secondary-navigation">
+                                                <li class="junit">
+                                                    <a class="letter-spacing-4" href="api/build/reports/tests/test/index.html">JUnit</a>
+                                                </li>
+                                                <li class="coverage">
+                                                    <a class="letter-spacing-4" href="api/build/reports/jacoco/test/html/index.html">Coverage</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="test-mutation">Mutation Tests
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pitest">
+                                                    <a class="letter-spacing-4" href="api/build/reports/pitest/index.html">PiTest</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li class='hidden'>Functional Tests
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class='hidden'>Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class='hidden'>Runtime
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <!--                            <li>API Specification-->
+                                <!--                                <ul>-->
+                                <!--                                </ul>-->
+                                <!--                            </li>-->
+
+                                <li class="documentation">Documentation
+                                    <ul class="flex secondary-navigation">
+                                        <li class="diagrams">Diagrams
+                                            <ul class="flex secondary-navigation">
+                                                <li class="architecture">Architecture</li>
+                                                <li class="uml">UML</li>
+                                            </ul>
+                                        </li>
+                                        <li class="javadoc">Javadoc
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class="database">Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="test-functional">
+                            <h3 class="text-accent letter-spacing-3">Functional</h3>
+
+                            <ul class="flex table secondary-navigation">
+                                <li class="static-analysis">Static Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="static-style">Style
+                                            <ul class="flex secondary-navigation">
+                                                <li class="checkstyle">
+                                                    <a class="letter-spacing-4" href="api/build/reports/checkstyle/test.html">Checkstyle</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="common-flaws">Common Flaws
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pmd">
+                                                    <a class="letter-spacing-4" href="api/build/reports/pmd/test.html">PMD</a>
+                                                </li>
+                                                <li class="spotbugs">
+                                                    <a class="letter-spacing-4" href="api/build/reports/spotbugs/test.html">SpotBugs</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li  class=>Dynamic Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="unit-test">Unit Tests
+
+                                            <ul class="flex secondary-navigation">
+                                                <li class="junit">
+                                                    <a class="letter-spacing-4" href="api/build/reports/tests/test/index.html">JUnit</a>
+                                                </li>
+                                                <li class="coverage">
+                                                    <a class="letter-spacing-4" href="api/build/reports/jacoco/test/html/index.html">Coverage</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="test-mutation">Mutation Tests
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pitest">
+                                                    <a class="letter-spacing-4" href="api/build/reports/pitest/index.html">PiTest</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li class='hidden'>Functional Tests
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class='hidden'>Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class='hidden'>Runtime
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <!--                            <li>API Specification-->
+                                <!--                                <ul>-->
+                                <!--                                </ul>-->
+                                <!--                            </li>-->
+
+                                <li class="documentation">Documentation
+                                    <ul class="flex secondary-navigation">
+                                        <li class="diagrams">Diagrams
+                                            <ul class="flex secondary-navigation">
+                                                <li class="architecture">Architecture</li>
+                                                <li class="uml">UML</li>
+                                            </ul>
+                                        </li>
+                                        <li class="javadoc">Javadoc
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class="database">Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="test-bdd">
+                            <h3 class="text-accent letter-spacing-3">BDD</h3>
+
+                            <ul class="flex table secondary-navigation">
+                                <li class="static-analysis">Static Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="static-style">Style
+                                            <ul class="flex secondary-navigation">
+                                                <li class="checkstyle">
+                                                    <a class="letter-spacing-4" href="api/build/reports/checkstyle/bddtest.html">Checkstyle</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="common-flaws">Common Flaws
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pmd">
+                                                    <a class="letter-spacing-4" href="api/build/reports/pmd/bddTest.html">PMD</a>
+                                                </li>
+                                                <li class="spotbugs">
+                                                    <a class="letter-spacing-4" href="api/build/reports/spotbugs/bddTest.html">SpotBugs</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li  class="dynamic-analysis">Dynamic Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="unit-test">Unit Tests
+
+                                            <ul class="flex secondary-navigation">
+                                                <li class="junit">
+                                                    <a class="letter-spacing-4" href="api/build/reports/tests/bddtest/index.html">JUnit</a>
+                                                </li>
+                                                <li class="coverage">
+                                                    <a class="letter-spacing-4" href="api/build/reports/jacoco/bddtest/html/index.html">Coverage</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="test-mutation">Mutation Tests
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pitest">
+                                                    <a class="letter-spacing-4" href="api/build/reports/pitest/index.html">PiTest</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <!--                            <li>API Specification-->
+                                <!--                                <ul>-->
+                                <!--                                </ul>-->
+                                <!--                            </li>-->
+
+                                <li class="documentation">Documentation
+                                    <ul class="flex secondary-navigation">
+                                        <li class="diagrams">Diagrams
+                                            <ul class="flex secondary-navigation">
+                                                <li class="architecture">Architecture</li>
+                                                <li class="uml">UML</li>
+                                            </ul>
+                                        </li>
+                                        <li class="javadoc">Javadoc
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class="database">Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="test-performance">
+                            <h3 class="text-accent letter-spacing-3">Performance</h3>
+
+                            <ul class="flex table secondary-navigation">
+                                <li class="static-analysis">Static Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="static-style">Style
+                                            <ul class="flex secondary-navigation">
+                                                <li class="checkstyle">
+                                                    <a class="letter-spacing-4" href="api/build/reports/checkstyle/gatling.html">Checkstyle</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="common-flaws">Common Flaws
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pmd">
+                                                    <a class="letter-spacing-4" href="api/build/reports/pmd/gatling.html">PMD</a>
+                                                </li>
+                                                <li class="spotbugs">
+                                                    <a class="letter-spacing-4" href="api/build/reports/spotbugs/gatling.html">SpotBugs</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li  class="dynamic-analysis">Dynamic Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="unit-test">Unit Tests
+
+                                            <ul class="flex secondary-navigation">
+                                                <li class="junit">
+                                                    <a class="letter-spacing-4" href="api/build/reports/tests/test/index.html">JUnit</a>
+                                                </li>
+                                                <li class="coverage">
+                                                    <a class="letter-spacing-4" href="api/build/reports/jacoco/test/html/index.html">Coverage</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="test-mutation">Mutation Tests
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pitest">
+                                                    <a class="letter-spacing-4" href="api/build/reports/pitest/index.html">PiTest</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                    </ul>
+                                </li>
+
+                                <!--                            <li>API Specification-->
+                                <!--                                <ul>-->
+                                <!--                                </ul>-->
+                                <!--                            </li>-->
+
+                                <li class="documentation">Documentation
+                                    <ul class="flex secondary-navigation">
+                                        <li class="diagrams">Diagrams
+                                            <ul class="flex secondary-navigation">
+                                                <li class="architecture">Architecture</li>
+                                                <li class="uml">UML</li>
+                                            </ul>
+                                        </li>
+                                        <li class="javadoc">Javadoc
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class="database">Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
 
-
-                    <div class="card test-functional" style="flex-grow: 1;"> <!-- Functional -->
-                        <h3 class="text-accent letter-spacing-3">Functional</h3>
-                        <ul>
-                            <li>Static Analysis
-                                <ul>
-                                </ul>
-                            </li>
-                            <li>Dynamic Analysis
-                                <ul>
-                                    <li style="display: none;">Unit Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li style="display: none;">Functional Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Database
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Runtime
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li style="display: none;">API Specification
-                                <ul>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-
-
-
-                    <div class="card test-bdd" style="flex-grow: 1;"> <!-- BDD -->
-                        <h3 class="text-accent letter-spacing-3">BDD</h3>
-                        <ul>
-                            <li>Static Analysis
-                                <ul>
-                                </ul>
-                            </li>
-                            <li>Dynamic Analysis
-                                <ul>
-                                    <li style="display: none;">Unit Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li style="display: none;">Functional Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Database
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Runtime
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li style="display: none;">API Specification
-                                <ul>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-
-
-                    <div class="card test-performance" style="flex-grow: 1;"> <!-- Performance -->
-                        <h3 class="text-accent letter-spacing-3">Performance</h3>
-                        <ul>
-                            <li>Static Analysis
-                                <ul>
-                                </ul>
-                            </li>
-                            <li>Dynamic Analysis
-                                <ul>
-                                    <li style="display: none;">Unit Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li style="display: none;">Functional Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Database
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Runtime
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li style="display: none;">API Specification
-                                <ul>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
             </section>
 
-            <section class="" id="api-qa-results"> <!-- API Library QA -->
-                <h2 class="numbered-title"><span>06</span>API Library Quality Assurance (Tests)</h2>
 
-                <div class="flex">
-                    <!-- Application -->
-                    <div class="card test-unit" style="flex-grow: 1;"> <!-- Main -->
-                        <h3 class="text-accent letter-spacing-3">Unit</h3>
-                        <ul>
-                            <li>Static Analysis
-                                <ul>
-                                    <li class="checkstyle"><a class="letter-spacing-4" href="api/build/reports/checkstyle/test.html">Code Style (Checkstyle)</a></li>
-                                    <li class="pmd"><a class="letter-spacing-4" href="api/build/reports/pmd/test.html">Common Flaws (PMD)</a></li>
-                                    <li class="spotbugs"><a class="letter-spacing-4" href="api/build/reports/spotbugs/test.html">Common Flaws (SpotBugs)</a></li>
-                                </ul>
-                            </li>
-                            <li>Dynamic Analysis
-                                <ul>
-                                    <li class="test-coverage">Unit Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li class="test-mutation">Mutation Tests
-                                        <ul>
-                                            <li><a class="letter-spacing-4" href="api/build/reports/pitest/index.html">Mutation Tests (PiTest)</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="test-functional">Functional Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li style="display: none;">Database
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li style="display: none;">Runtime
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
+            <!-- Application -->
+<!--            <section class="source" id="app-results">  &lt;!&ndash; Application &ndash;&gt;-->
+<!--                <h2 class="numbered-title"><span>01</span>Application</h2>-->
 
-                            <li style="display: none;">API Specification
-                                <ul>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
+<!--                <div class="flex">-->
+<!--                    &lt;!&ndash; Application &ndash;&gt;-->
+<!--                    <div class="card" style="flex-grow: 1;">-->
+<!--                        <h3 class="text-accent letter-spacing-3">Main</h3>-->
+<!--                        <ul>-->
+<!--                            <li>Static Analysis-->
+<!--                                <ul>-->
+<!--                                    <li><a class="letter-spacing-4" href="app/build/reports/checkstyle/main.html">Code Style (Checkstyle)</a></li>-->
+<!--                                    <li><a class="letter-spacing-4" href="app/build/reports/pmd/main.html">Common Flaws (PMD)</a></li>-->
+<!--                                    <li><a class="letter-spacing-4" href="app/build/reports/spotbugs/main.html">Common Flaws (SpotBugs)</a></li>-->
+<!--                                </ul>-->
+<!--                            </li>-->
+<!--                            <li>Dynamic Analysis-->
+<!--                                <ul>-->
+<!--                                    <li>Unit Tests-->
+<!--                                        <ul>-->
+<!--                                            <li><a class="letter-spacing-4" href="app/build/reports/tests/test/index.html">Unit Tests</a></li>-->
+<!--                                            <li><a class="letter-spacing-4" href="app/build/reports/jacoco/test/html/index.html">Line Coverage</a></li>-->
+<!--                                        </ul>-->
+<!--                                    </li>-->
+<!--                                    <li>Mutation Tests-->
+<!--                                        <ul>-->
+<!--                                            <li><a class="letter-spacing-4" href="app/build/reports/pitest/index.html">Mutation Tests (PiTest)</a></li>-->
+<!--                                        </ul>-->
+<!--                                    </li>-->
+<!--                                    <li style="display: none;">Functional Tests-->
+<!--                                        <ul>-->
+<!--                                            <li><a class="letter-spacing-4" href="app/target/cucumber-html-reports/overview-features.html">Functional/BDD Tests (CucumberReports)</a></li>-->
+<!--                                        </ul>-->
+<!--                                    </li>-->
+<!--                                </ul>-->
+<!--                            </li>-->
 
+<!--                            <li class="api-spec">API Specification-->
+<!--                                <ul>-->
+<!--                                    <li><a class="letter-spacing-4" href="http://localhost:8100/api/v1/v3/api-docs">Swagger (Json)</a></li>-->
+<!--                                    <li><a class="letter-spacing-4" href="http://localhost:8100/api/v1/swagger-ui.html">Swagger (UI)</a></li>-->
+<!--                                </ul>-->
+<!--                            </li>-->
 
-                    <div class="card test-functional" style="flex-grow: 1;"> <!-- Functional -->
-                        <h3 class="text-accent letter-spacing-3">Functional</h3>
-                        <ul>
-                            <li>Static Analysis
-                                <ul>
-                                    <li><a class="letter-spacing-4" href="api/build/reports/checkstyle/functional.html">Code Style (Checkstyle)</a></li>
-                                    <li><a class="letter-spacing-4" href="api/build/reports/pmd/functional.html">Common Flaws (PMD)</a></li>
-                                    <li><a class="letter-spacing-4" href="api/build/reports/spotbugs/functional.html">Common Flaws (SpotBugs)</a></li>
-                                </ul>
-                            </li>
-                            <li>Dynamic Analysis
-                                <ul>
-                                    <li style="display: none;">Unit Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li style="display: none;">Functional Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Database
-                                        <ul>
-                                            <li><a class="letter-spacing-4" href="http://localhost:9005/h2-console">H2 console (jdbc:h2:mem:testdb)</a></li>
-                                        </ul>
-                                    </li>
-                                    <li>Runtime
-                                        <ul>
-                                            <li><a class="letter-spacing-4" href="lib/build/reports/tests/functional/index.html">Suite execution</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
+<!--                        </ul>-->
+<!--                    </div>-->
 
-                            <li style="display: none;">API Specification
-                                <ul>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
+<!--                </div>-->
 
+<!--            </section>-->
 
+<!--            <section class="quality" id="app-qa-results"> &lt;!&ndash; Quality Assurance &ndash;&gt;-->
+<!--                <h2 class="numbered-title"><span>02</span>Application Quality Assurance (Tests)</h2>-->
 
-                    <div class="card test-bdd" style="flex-grow: 1;"> <!-- BDD -->
-                        <h3 class="text-accent letter-spacing-3">BDD</h3>
-                        <ul>
-                            <li>Static Analysis
-                                <ul>
-                                    <li><a class="letter-spacing-4" href="api/build/reports/checkstyle/bddTest.html">Code Style (Checkstyle)</a></li>
-                                    <li><a class="letter-spacing-4" href="api/build/reports/pmd/bddTest.html">Common Flaws (PMD)</a></li>
-                                    <li><a class="letter-spacing-4" href="api/build/reports/spotbugs/bddTest.html">Common Flaws (SpotBugs)</a></li>
-                                </ul>
-                            </li>
-                            <li>Dynamic Analysis
-                                <ul>
-                                    <li style="display: none;">Unit Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li style="display: none;">Functional Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Database
-                                        <ul>
-                                            <li><a class="letter-spacing-4" href="http://localhost:9005/h2-console">H2 console (jdbc:h2:mem:testdb)</a></li>
-                                        </ul>
-                                    </li>
-                                    <li>Runtime
-                                        <ul>
-                                            <li><a class="letter-spacing-4" href="lib/build/reports/tests/bddTest/index.html">Suite execution</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
+<!--                <div class="flex">-->
+<!--                    &lt;!&ndash; Application &ndash;&gt;-->
+<!--                    <div class="card test-unit" style="flex-grow: 1;"> &lt;!&ndash; Unit &ndash;&gt;-->
+<!--                        <h3 class="text-accent letter-spacing-3">Unit</h3>-->
+<!--                        <ul>-->
+<!--                            <li class="static">Static Analysis-->
+<!--                                <ul>-->
+<!--                                    <li><a class="letter-spacing-4" href="app/build/reports/checkstyle/test.html">Code Style (Checkstyle)</a></li>-->
+<!--                                    <li><a class="letter-spacing-4" href="app/build/reports/pmd/test.html">Common Flaws (PMD)</a></li>-->
+<!--                                    <li><a class="letter-spacing-4" href="app/build/reports/spotbugs/test.html">Common Flaws (SpotBugs)</a></li>-->
+<!--                                </ul>-->
+<!--                            </li>-->
+<!--                            <li class="dynamic">Dynamic Analysis-->
+<!--                                <ul>-->
+<!--                                    <li>Unit Tests-->
+<!--                                        <ul>-->
+<!--                                        </ul>-->
+<!--                                    </li>-->
+<!--                                    <li>Functional Tests-->
+<!--                                        <ul>-->
+<!--                                        </ul>-->
+<!--                                    </li>-->
+<!--                                    <li>Database-->
+<!--                                        <ul>-->
+<!--                                            <li><a class="letter-spacing-4" href="http://localhost:8100/api/v1/h2-console">H2 console</a></li>-->
+<!--                                        </ul>-->
+<!--                                    </li>-->
+<!--                                    <li>Runtime-->
+<!--                                        <ul>-->
+<!--                                        </ul>-->
+<!--                                    </li>-->
+<!--                                </ul>-->
+<!--                            </li>-->
 
-                            <li style="display: none;">API Specification
-                                <ul>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
+<!--                            <li class="api-spec">API Specification-->
+<!--                                <ul>-->
+<!--                                    <li><a class="letter-spacing-4" href="http://localhost:9005/v3/api-docs">Swagger (Json)</a></li>-->
+<!--                                    <li><a class="letter-spacing-4" href="http://localhost:9005/swagger-ui.html">Swagger (UI)</a></li>-->
+<!--                                </ul>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
 
 
-                    <div class="card test-performance" style="flex-grow: 1;"> <!-- Performance -->
-                        <h3 class="text-accent letter-spacing-3">Performance</h3>
-                        <ul>
-                            <li>Static Analysis
-                                <ul>
-                                    <li><a class="letter-spacing-4" href="api/build/reports/checkstyle/gatling.html">Code Style (Checkstyle)</a></li>
-                                    <li><a class="letter-spacing-4" href="api/build/reports/pmd/gatling.html">Common Flaws (PMD)</a></li>
-                                    <li><a class="letter-spacing-4" href="api/build/reports/spotbugs/gatling.html">Common Flaws (SpotBugs)</a></li>
-                                </ul>
-                            </li>
-                            <li>Dynamic Analysis
-                                <ul>
-                                    <li style="display: none;">Unit Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li style="display: none;">Functional Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Database
-                                        <ul>
-                                            <li><a class="letter-spacing-4" href="http://localhost:9005/h2-console">H2 console (jdbc:h2:mem:testdb)</a></li>
-                                        </ul>
-                                    </li>
-                                    <li>Runtime
-                                        <ul>
-                                            <li><a class="letter-spacing-4" href="lib/build/reports/tests/gatling/index.html">Suite execution</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
+<!--                    <div class="card test-functional" style="flex-grow: 1;"> &lt;!&ndash; Functional &ndash;&gt;-->
+<!--                        <h3 class="text-accent letter-spacing-3">Functional</h3>-->
+<!--                        <ul>-->
+<!--                            <li>Static Analysis-->
+<!--                                <ul>-->
+<!--                                    <li><a class="letter-spacing-4" href="app/build/reports/checkstyle/functional.html">Code Style (Checkstyle)</a></li>-->
+<!--                                    <li><a class="letter-spacing-4" href="app/build/reports/pmd/functional.html">Common Flaws (PMD)</a></li>-->
+<!--                                    <li><a class="letter-spacing-4" href="app/build/reports/spotbugs/functional.html">Common Flaws (SpotBugs)</a></li>-->
+<!--                                </ul>-->
+<!--                            </li>-->
+<!--                            <li>Dynamic Analysis-->
+<!--                                <ul>-->
+<!--                                    <li style="display: none;">Unit Tests-->
+<!--                                        <ul>-->
+<!--                                        </ul>-->
+<!--                                    </li>-->
+<!--                                    <li style="display: none;">Functional Tests-->
+<!--                                        <ul>-->
+<!--                                        </ul>-->
+<!--                                    </li>-->
+<!--                                    <li>Database-->
+<!--                                        <ul>-->
+<!--                                            <li><a class="letter-spacing-4" href="http://localhost:9005/h2-console">H2 console (jdbc:h2:mem:testdb)</a></li>-->
+<!--                                        </ul>-->
+<!--                                    </li>-->
+<!--                                    <li>Runtime-->
+<!--                                        <ul>-->
+<!--                                            <li><a class="letter-spacing-4" href="app/build/reports/tests/functional/index.html">Suite execution</a></li>-->
+<!--                                            <li><a class="letter-spacing-4" href="app/target/cucumber-html-reports/overview-features.html">Cucumber Report</a></li>-->
+<!--                                        </ul>-->
+<!--                                    </li>-->
+<!--                                </ul>-->
+<!--                            </li>-->
 
-                            <li style="display: none;">API Specification
-                                <ul>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
+<!--                            <li style="display: none;">API Specification-->
+<!--                                <ul>-->
+<!--                                </ul>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+
+
+
+<!--                    <div class="card test-bdd" style="flex-grow: 1;"> &lt;!&ndash; BDD &ndash;&gt;-->
+<!--                        <h3 class="text-accent letter-spacing-3">BDD</h3>-->
+<!--                        <ul>-->
+<!--                            <li style="display: none;">Static Analysis-->
+<!--                                <ul>-->
+<!--                                    <li><a class="letter-spacing-4" href="app/build/reports/checkstyle/bddTest.html">Code Style (Checkstyle)</a></li>-->
+<!--                                    <li><a class="letter-spacing-4" href="app/build/reports/pmd/bddTest.html">Common Flaws (PMD)</a></li>-->
+<!--                                    <li><a class="letter-spacing-4" href="app/build/reports/spotbugs/bddTest.html">Common Flaws (SpotBugs)</a></li>-->
+<!--                                </ul>-->
+<!--                            </li>-->
+<!--                            <li>Dynamic Analysis-->
+<!--                                <ul>-->
+<!--                                    <li style="display: none;">Unit Tests-->
+<!--                                        <ul>-->
+<!--                                        </ul>-->
+<!--                                    </li>-->
+<!--                                    <li style="test-functional">Functional Tests-->
+<!--                                        <ul>-->
+<!--                                            <li><a class="letter-spacing-4" href="app/build/reports/tests/bddTest/index.html">JUnit summary</a></li>-->
+<!--                                            <li><a class="letter-spacing-4" href="app/build/karate-reports/karate-summary.html">Detail</a></li>-->
+<!--                                        </ul>-->
+<!--                                    </li>-->
+<!--                                    <li style="display: none;">Database-->
+<!--                                        <ul>-->
+<!--                                            <li><a class="letter-spacing-4" href="http://localhost:9005/h2-console">H2 console</a></li>-->
+<!--                                        </ul>-->
+<!--                                    </li>-->
+<!--                                    <li style="display: none;">Runtime-->
+<!--                                        <ul>-->
+<!--                                            <li><a class="letter-spacing-4" href="app/build/reports/tests/bdd/index.html">Suite execution</a></li>-->
+<!--                                            <li><a class="letter-spacing-4" href="throttle/build/reports/tests/bdd2/index.html">Suite execution (BDD 2)</a></li>-->
+<!--                                        </ul>-->
+<!--                                    </li>-->
+<!--                                </ul>-->
+<!--                            </li>-->
+
+<!--                            <li style="display: none;">API Specification-->
+<!--                                <ul>-->
+<!--                                </ul>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+
+
+<!--                    <div class="card test-performance" style="flex-grow: 1;"> &lt;!&ndash; Performance &ndash;&gt;-->
+<!--                        <h3 class="text-accent letter-spacing-3">Performance</h3>-->
+<!--                        <ul>-->
+<!--                            <li>Static Analysis-->
+<!--                                <ul>-->
+<!--                                    <li><a class="letter-spacing-4" href="app/build/reports/checkstyle/gatling.html">Code Style (Checkstyle)</a></li>-->
+<!--                                    <li><a class="letter-spacing-4" href="app/build/reports/pmd/gatling.html">Common Flaws (PMD)</a></li>-->
+<!--                                    <li><a class="letter-spacing-4" href="app/build/reports/spotbugs/gatling.html">Common Flaws (SpotBugs)</a></li>-->
+<!--                                </ul>-->
+<!--                            </li>-->
+<!--                            <li>Dynamic Analysis-->
+<!--                                <ul>-->
+<!--                                    <li style="display: none;">Unit Tests-->
+<!--                                        <ul>-->
+<!--                                        </ul>-->
+<!--                                    </li>-->
+<!--                                    <li style="display: none;">Functional Tests-->
+<!--                                        <ul>-->
+<!--                                        </ul>-->
+<!--                                    </li>-->
+<!--                                    <li>Database-->
+<!--                                        <ul>-->
+<!--                                            <li><a class="letter-spacing-4" href="http://localhost:9005/h2-console">H2 console</a></li>-->
+<!--                                        </ul>-->
+<!--                                    </li>-->
+<!--                                    <li>Runtime-->
+<!--                                        <ul>-->
+<!--                                            <li><a class="letter-spacing-4" href="app/build/reports/gatling/">Suite execution</a></li>-->
+<!--                                        </ul>-->
+<!--                                    </li>-->
+<!--                                </ul>-->
+<!--                            </li>-->
+
+<!--                            <li style="display: none;">API Specification-->
+<!--                                <ul>-->
+<!--                                </ul>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </section>-->
+
+
 
 
 
@@ -931,152 +1569,414 @@
                 <div class="flex">
                     <!-- Application -->
                     <div class="card" style="flex-grow: 1;"> <!-- Main -->
-                        <h3 class="text-accent letter-spacing-3">Main</h3>
-                        <ul>
-                            <li>Static Analysis
-                                <ul>
-                                </ul>
-                            </li>
-                            <li>Dynamic Analysis
-                                <ul>
-                                    <li>Unit Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Mutation Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Functional Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Database
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Runtime
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
+                        <div class="main">
+                            <h3 class="text-accent letter-spacing-3">Main</h3>
 
-                            <li>API Specification
-                                <ul>
-                                </ul>
-                            </li>
-                        </ul>
+                            <ul class="flex table secondary-navigation">
+                                <li class="static-analysis">Static Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="static-style">Style
+                                            <ul class="flex secondary-navigation">
+                                                <li class="checkstyle">
+                                                    <a class="letter-spacing-4" href="app/build/reports/checkstyle/main.html">Checkstyle</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="common-flaws">Common Flaws
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pmd">
+                                                    <a class="letter-spacing-4" href="app/build/reports/pmd/main.html">PMD</a>
+                                                </li>
+                                                <li class="spotbugs">
+                                                    <a class="letter-spacing-4" href="app/build/reports/spotbugs/main.html">SpotBugs</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li  class="dynamic-analysis">Dynamic Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="unit-test">Unit Tests
+
+                                            <ul class="flex secondary-navigation">
+                                                <li class="junit">
+                                                    <a class="letter-spacing-4" href="app/build/reports/tests/test/index.html">JUnit</a>
+                                                </li>
+                                                <li class="coverage">
+                                                    <a class="letter-spacing-4" href="app/build/reports/jacoco/test/html/index.html">Coverage</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="test-mutation">Mutation Tests
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pitest">
+                                                    <a class="letter-spacing-4" href="app/build/reports/pitest/index.html">PiTest</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li class='hidden'>Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+    <!--                            <li>API Specification-->
+    <!--                                <ul>-->
+    <!--                                </ul>-->
+    <!--                            </li>-->
+
+                                <li class="documentation">Documentation
+                                    <ul class="flex secondary-navigation">
+                                        <li class="diagrams">Diagrams
+                                            <ul class="flex secondary-navigation">
+                                                <li class="architecture">Architecture</li>
+                                                <li class="uml">UML</li>
+                                            </ul>
+                                        </li>
+                                        <li class="javadoc">Javadoc
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class="database">Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="qa">
+                            <h3 class="text-accent letter-spacing-3">QA</h3>
+
+                            <ul class="flex table secondary-navigation">
+                                <li class="static-analysis">Static Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="static-style">Style
+                                            <ul class="flex secondary-navigation">
+                                                <li class="checkstyle">
+                                                    <a class="letter-spacing-4" href="app/build/reports/checkstyle/test.html">Checkstyle</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="common-flaws">Common Flaws
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pmd">
+                                                    <a class="letter-spacing-4" href="app/build/reports/pmd/test.html">PMD</a>
+                                                </li>
+                                                <li class="spotbugs">
+                                                    <a class="letter-spacing-4" href="app/build/reports/spotbugs/test.html">SpotBugs</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li  class="dynamic-analysis">Dynamic Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="unit-test">Unit Tests
+
+                                            <ul class="flex secondary-navigation">
+                                                <li class="junit">
+                                                    <a class="letter-spacing-4" href="app/build/reports/tests/test/index.html">JUnit</a>
+                                                </li>
+                                                <li class="coverage">
+                                                    <a class="letter-spacing-4" href="app/build/reports/jacoco/test/html/index.html">Coverage</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="test-mutation">Mutation Tests
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pitest">
+                                                    <a class="letter-spacing-4" href="app/build/reports/pitest/index.html">PiTest</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li class='hidden'>Functional Tests
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class='hidden'>Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class='hidden'>Runtime
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <!--                            <li>API Specification-->
+                                <!--                                <ul>-->
+                                <!--                                </ul>-->
+                                <!--                            </li>-->
+
+                                <li class="documentation">Documentation
+                                    <ul class="flex secondary-navigation">
+                                        <li class="diagrams">Diagrams
+                                            <ul class="flex secondary-navigation">
+                                                <li class="architecture">Architecture</li>
+                                                <li class="uml">UML</li>
+                                            </ul>
+                                        </li>
+                                        <li class="javadoc">Javadoc
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class="database">Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="test-functional">
+                            <h3 class="text-accent letter-spacing-3">Functional</h3>
+
+                            <ul class="flex table secondary-navigation">
+                                <li class="static-analysis">Static Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="static-style">Style
+                                            <ul class="flex secondary-navigation">
+                                                <li class="checkstyle">
+                                                    <a class="letter-spacing-4" href="app/build/reports/checkstyle/test.html">Checkstyle</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="common-flaws">Common Flaws
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pmd">
+                                                    <a class="letter-spacing-4" href="app/build/reports/pmd/test.html">PMD</a>
+                                                </li>
+                                                <li class="spotbugs">
+                                                    <a class="letter-spacing-4" href="app/build/reports/spotbugs/test.html">SpotBugs</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li  class=>Dynamic Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="unit-test">Unit Tests
+
+                                            <ul class="flex secondary-navigation">
+                                                <li class="junit">
+                                                    <a class="letter-spacing-4" href="app/build/reports/tests/test/index.html">JUnit</a>
+                                                </li>
+                                                <li class="coverage">
+                                                    <a class="letter-spacing-4" href="app/build/reports/jacoco/test/html/index.html">Coverage</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="test-mutation">Mutation Tests
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pitest">
+                                                    <a class="letter-spacing-4" href="app/build/reports/pitest/index.html">PiTest</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li class='hidden'>Functional Tests
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class='hidden'>Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class='hidden'>Runtime
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <!--                            <li>API Specification-->
+                                <!--                                <ul>-->
+                                <!--                                </ul>-->
+                                <!--                            </li>-->
+
+                                <li class="documentation">Documentation
+                                    <ul class="flex secondary-navigation">
+                                        <li class="diagrams">Diagrams
+                                            <ul class="flex secondary-navigation">
+                                                <li class="architecture">Architecture</li>
+                                                <li class="uml">UML</li>
+                                            </ul>
+                                        </li>
+                                        <li class="javadoc">Javadoc
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class="database">Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="test-bdd">
+                            <h3 class="text-accent letter-spacing-3">BDD</h3>
+
+                            <ul class="flex table secondary-navigation">
+                                <li class="static-analysis">Static Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="static-style">Style
+                                            <ul class="flex secondary-navigation">
+                                                <li class="checkstyle">
+                                                    <a class="letter-spacing-4" href="app/build/reports/checkstyle/bddtest.html">Checkstyle</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="common-flaws">Common Flaws
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pmd">
+                                                    <a class="letter-spacing-4" href="app/build/reports/pmd/bddTest.html">PMD</a>
+                                                </li>
+                                                <li class="spotbugs">
+                                                    <a class="letter-spacing-4" href="app/build/reports/spotbugs/bddTest.html">SpotBugs</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li  class="dynamic-analysis">Dynamic Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="unit-test">Unit Tests
+
+                                            <ul class="flex secondary-navigation">
+                                                <li class="junit">
+                                                    <a class="letter-spacing-4" href="app/build/reports/tests/bddtest/index.html">JUnit</a>
+                                                </li>
+                                                <li class="coverage">
+                                                    <a class="letter-spacing-4" href="app/build/reports/jacoco/bddtest/html/index.html">Coverage</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="test-mutation">Mutation Tests
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pitest">
+                                                    <a class="letter-spacing-4" href="app/build/reports/pitest/index.html">PiTest</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <!--                            <li>API Specification-->
+                                <!--                                <ul>-->
+                                <!--                                </ul>-->
+                                <!--                            </li>-->
+
+                                <li class="documentation">Documentation
+                                    <ul class="flex secondary-navigation">
+                                        <li class="diagrams">Diagrams
+                                            <ul class="flex secondary-navigation">
+                                                <li class="architecture">Architecture</li>
+                                                <li class="uml">UML</li>
+                                            </ul>
+                                        </li>
+                                        <li class="javadoc">Javadoc
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class="database">Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="test-performance">
+                            <h3 class="text-accent letter-spacing-3">Performance</h3>
+
+                            <ul class="flex table secondary-navigation">
+                                <li class="static-analysis">Static Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="static-style">Style
+                                            <ul class="flex secondary-navigation">
+                                                <li class="checkstyle">
+                                                    <a class="letter-spacing-4" href="app/build/reports/checkstyle/gatling.html">Checkstyle</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="common-flaws">Common Flaws
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pmd">
+                                                    <a class="letter-spacing-4" href="app/build/reports/pmd/gatling.html">PMD</a>
+                                                </li>
+                                                <li class="spotbugs">
+                                                    <a class="letter-spacing-4" href="app/build/reports/spotbugs/gatling.html">SpotBugs</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li  class="dynamic-analysis">Dynamic Analysis
+                                    <ul class="flex secondary-navigation">
+                                        <li class="unit-test">Unit Tests
+
+                                            <ul class="flex secondary-navigation">
+                                                <li class="junit">
+                                                    <a class="letter-spacing-4" href="app/build/reports/tests/test/index.html">JUnit</a>
+                                                </li>
+                                                <li class="coverage">
+                                                    <a class="letter-spacing-4" href="app/build/reports/jacoco/test/html/index.html">Coverage</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="test-mutation">Mutation Tests
+                                            <ul class="flex secondary-navigation">
+                                                <li class="pitest">
+                                                    <a class="letter-spacing-4" href="app/build/reports/pitest/index.html">PiTest</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                    </ul>
+                                </li>
+
+                                <!--                            <li>API Specification-->
+                                <!--                                <ul>-->
+                                <!--                                </ul>-->
+                                <!--                            </li>-->
+
+                                <li class="documentation">Documentation
+                                    <ul class="flex secondary-navigation">
+                                        <li class="diagrams">Diagrams
+                                            <ul class="flex secondary-navigation">
+                                                <li class="architecture">Architecture</li>
+                                                <li class="uml">UML</li>
+                                            </ul>
+                                        </li>
+                                        <li class="javadoc">Javadoc
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                        <li class="database">Database
+                                            <ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
 
-
-                    <div class="card" style="flex-grow: 1;"> <!-- Functional -->
-                        <h3 class="text-accent letter-spacing-3">Functional</h3>
-                        <ul>
-                            <li>Static Analysis
-                                <ul>
-                                </ul>
-                            </li>
-                            <li>Dynamic Analysis
-                                <ul>
-                                    <li style="display: none;">Unit Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li style="display: none;">Functional Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Database
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Runtime
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li style="display: none;">API Specification
-                                <ul>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-
-
-
-                    <div class="card" style="flex-grow: 1;"> <!-- BDD -->
-                        <h3 class="text-accent letter-spacing-3">BDD</h3>
-                        <ul>
-                            <li>Static Analysis
-                                <ul>
-                                </ul>
-                            </li>
-                            <li>Dynamic Analysis
-                                <ul>
-                                    <li style="display: none;">Unit Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li style="display: none;">Functional Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Database
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Runtime
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li style="display: none;">API Specification
-                                <ul>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-
-
-                    <div class="card" style="flex-grow: 1;"> <!-- Performance -->
-                        <h3 class="text-accent letter-spacing-3">Performance</h3>
-                        <ul>
-                            <li>Static Analysis
-                                <ul>
-                                </ul>
-                            </li>
-                            <li>Dynamic Analysis
-                                <ul>
-                                    <li style="display: none;">Unit Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li style="display: none;">Functional Tests
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Database
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                    <li>Runtime
-                                        <ul>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li style="display: none;">API Specification
-                                <ul>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
             </section>
 

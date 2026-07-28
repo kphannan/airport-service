@@ -3,41 +3,15 @@
 
 /* === Control visibility of major report sections === */
 
+/*.spotbugs,*/
 /* #app-results, */
 /* 01 - Application  */
-/* 02 - Application QA  */
-/* #app-results, */
-/* #app-results .api-spec, */
-/* #app-qa-results, */
-/* #app-qa-results .test-unit .static, */
-/* .api-spec, */
-.test-performance,
-/* .test-functional, */
-/* .test-mutation, */
-/* .test-bdd, */
-/* #app-qa-results, */
-/* #app-qa-results .test-unit .dynamic, */
 /* #app-qa-results .test-unit .api-spec, */
 #app-qa-results .test-functional,
 /* #app-qa-results .test-bdd, */
 /* #app-qa-results .test-performance, */
 /* 03 - Library  */
 /* 04 - Library QA  */
-/* #library-results, */
-/* #library-results .test-unit, */
-#library-results .test-unit .database,
-#library-results .test-unit .functional,
-#library-results .test-unit .runtime,
-#library-results .test-functional,
-#library-results .test-bdd,
-#library-results .test-performance,
-#library-qa-results,
-/* #library-qa-results .test-unit, */
-#library-qa-results .test-unit .dynamic,
-/* #library-qa-results .test-functional, */
-#library-qa-results .test-bdd,
-#library-qa-results .test-performance,
-/* 05 - API  */
 /* 06 - API QA  */
 /* #api-results, */
 /* #api-results .test-unit, */
@@ -60,7 +34,435 @@
 #api-qa-results .test-functional,
 #api-qa-results .test-bdd,
 /* #api-qa-results .test-performance, */
-#template-results {
+
+
+
+/*----- App ----- */
+/*#app-results,*/
+/*#app-results .main,*/
+/*#app-results .qa,*/
+#app-results .test-functional,
+/*#app-results .test-bdd,*/
+/*#app-results .test-performance,*/
+/*#app-results .main .static-analysis,*/
+/*#app-results .main .static-style,*/
+/*#app-results .main .static-style .checkstyle,*/
+/*#app-results .main .common-flaws,*/
+/*#app-results .main .pmd,*/
+/*#app-results .main .spotbugs,*/
+/*#app-results .main .dynamic-analysis,*/
+/*#app-results .main .unit-test,*/
+/*#app-results .main .unit-test .junit,*/
+/*#app-results .main .unit-test .coverage,*/
+/*#app-results .main .test-mutation,*/
+/*#app-results .main .test-mutation .pitest,*/
+#app-results .main .documentation,
+/*#app-results .main .documentation .diagrams,*/
+/*#app-results .main .documentation .diagrams .architecture,*/
+/*#app-results .main .documentation .diagrams .uml,*/
+/*#app-results .main .documentation .javadoc,*/
+/*#app-results .main .documentation .database,*/
+/*#app-results .main .database,*/
+/*#app-results .main .database .diagrams,*/
+#app-results .main .database .diagrams .architecture,
+/*#app-results .main .database .diagrams .erd,*/
+/*#app-results .main .database .console,*/
+/*#app-results .main .database .console .h2-console,*/
+#app-results .main .database .console .postgresql,
+
+/*#app-results .qa .static-analysis,*/
+/*#app-results .qa .static-style,*/
+/*#app-results .qa .static-style .checkstyle,*/
+/*#app-results .qa .common-flaws,*/
+/*#app-results .qa .pmd,*/
+/*#app-results .qa .spotbugs,*/
+#app-results .qa .dynamic-analysis,
+/*#app-results .qa .unit-test,*/
+/*#app-results .qa .unit-test .junit,*/
+/*#app-results .qa .unit-test .coverage,*/
+/*#app-results .qa .unit-test .coverage,*/
+/*#app-results .qa .test-mutation,*/
+/*#app-results .qa .test-mutation .pitest,*/
+#app-results .qa .documentation,
+/*#app-results .qa .documentation .diagrams,*/
+/*#app-results .qa .documentation .diagrams .architecture,*/
+/*#app-results .qa .documentation .diagrams .uml,*/
+/*#app-results .qa .documentation .javadoc,*/
+/*#app-results .qa .documentation .database,*/
+
+/*#app-results .test-functional .static-analysis,*/
+/*#app-results .test-functional .static-style,*/
+/*#app-results .test-functional .static-style .checkstyle,*/
+/*#app-results .test-functional .common-flaws,*/
+/*#app-results .test-functional .pmd,*/
+/*#app-results .test-functional .spotbugs,*/
+/*#app-results .test-functional .dynamic-analysis,*/
+/*#app-results .test-functional .unit-test,*/
+/*#app-results .test-functional .unit-test .junit,*/
+/*#app-results .test-functional .unit-test .coverage,*/
+/*#app-results .test-functional .test-mutation,*/
+/*#app-results .test-functional .test-mutation .pitest,*/
+/*#app-results .test-functional .documentation,*/
+/*#app-results .test-functional .documentation .diagrams,*/
+/*#app-results .test-functional .documentation .diagrams .architecture,*/
+/*#app-results .test-functional .documentation .diagrams .uml,*/
+/*#app-results .test-functional .documentation .javadoc,*/
+/*#app-results .test-functional .documentation .database,*/
+
+/*#app-results .test-bdd .static-analysis,*/
+/*#app-results .test-bdd .static-style,*/
+/*#app-results .test-bdd .static-style .checkstyle,*/
+/*#app-results .test-bdd .common-flaws,*/
+/*#app-results .test-bdd .pmd,*/
+/*#app-results .test-bdd .spotbugs,*/
+/*#app-results .test-bdd .dynamic-analysis,*/
+#app-results .test-bdd .unit-test,
+/*#app-results .test-bdd .unit-test .junit,*/
+/*#app-results .test-bdd .unit-test .coverage,*/
+#app-results .test-bdd .test-mutation,
+/*#app-results .test-bdd .test-mutation .pitest,*/
+/*#app-results .test-bdd .karate-test .junit,*/
+/*#app-results .test-bdd .karate-test .detail,*/
+#app-results .test-bdd .documentation,
+/*#app-results .test-bdd .documentation .diagrams,*/
+/*#app-results .test-bdd .documentation .diagrams .architecture,*/
+/*#app-results .test-bdd .documentation .diagrams .uml,*/
+/*#app-results .test-bdd .documentation .javadoc,*/
+/*#app-results .test-bdd .documentation .database,*/
+
+
+
+
+/*#app-results .test-performance .static-analysis,*/
+/*#app-results .test-performance .static-style,*/
+/*#app-results .test-performance .static-style .checkstyle,*/
+/*#app-results .test-performance .common-flaws,*/
+/*#app-results .test-performance .pmd,*/
+/*#app-results .test-performance .spotbugs,*/
+#app-results .test-performance .dynamic-analysis,
+/*#app-results .test-performance .unit-test,*/
+/*#app-results .test-performance .unit-test .junit,*/
+/*#app-results .test-performance .unit-test .coverage,*/
+/*#app-results .test-performance .test-mutation,*/
+/*#app-results .test-performance .test-mutation .pitest,*/
+#app-results .test-performance .documentation,
+/*#app-results .test-performance .documentation .diagrams,*/
+/*#app-results .test-performance .documentation .diagrams .architecture,*/
+/*#app-results .test-performance .documentation .diagrams .uml,*/
+/*#app-results .test-performance .documentation .javadoc,*/
+/*#app-results .test-performance .documentation .database,*/
+
+/*----- lib*/
+/*#lib-results,*/
+/*#lib-results .main,*/
+/*#lib-results .qa,*/
+#lib-results .test-functional,
+#lib-results .test-bdd,
+#lib-results .test-performance,
+/*#lib-results .main .static-analysis,*/
+/*#lib-results .main .static-style,*/
+/*#lib-results .main .static-style .checkstyle,*/
+/*#lib-results .main .common-flaws,*/
+/*#lib-results .main .pmd,*/
+/*#lib-results .main .spotbugs,*/
+/*#lib-results .main .dynamic-analysis,*/
+/*#lib-results .main .unit-test,*/
+/*#lib-results .main .unit-test .junit,*/
+/*#lib-results .main .unit-test .coverage,*/
+/*#lib-results .main .test-mutation,*/
+/*#lib-results .main .test-mutation .pitest,*/
+#lib-results .main .documentation,
+/*#lib-results .main .documentation .diagrams,*/
+/*#lib-results .main .documentation .diagrams .architecture,*/
+/*#lib-results .main .documentation .diagrams .uml,*/
+/*#lib-results .main .documentation .javadoc,*/
+/*#lib-results .main .documentation .database,*/
+
+/*#lib-results .qa .static-analysis,*/
+/*#lib-results .qa .static-style,*/
+/*#lib-results .qa .static-style .checkstyle,*/
+/*#lib-results .qa .common-flaws,*/
+/*#lib-results .qa .pmd,*/
+/*#lib-results .qa .spotbugs,*/
+#lib-results .qa .dynamic-analysis,
+/*#lib-results .qa .unit-test,*/
+/*#lib-results .qa .unit-test .junit,*/
+/*#lib-results .qa .unit-test .coverage,*/
+/*#lib-results .qa .test-mutation,*/
+/*#lib-results .qa .test-mutation .pitest,*/
+#lib-results .qa .documentation,
+/*#lib-results .qa .documentation .diagrams,*/
+/*#lib-results .qa .documentation .diagrams .architecture,*/
+/*#lib-results .qa .documentation .diagrams .uml,*/
+/*#lib-results .qa .documentation .javadoc,*/
+/*#lib-results .qa .documentation .database,*/
+
+/*#lib-results .test-functional .static-analysis,*/
+/*#lib-results .test-functional .static-style,*/
+/*#lib-results .test-functional .static-style .checkstyle,*/
+/*#lib-results .test-functional .common-flaws,*/
+/*#lib-results .test-functional .pmd,*/
+/*#lib-results .test-functional .spotbugs,*/
+/*#lib-results .test-functional .dynamic-analysis,*/
+/*#lib-results .test-functional .unit-test,*/
+/*#lib-results .test-functional .unit-test .junit,*/
+/*#lib-results .test-functional .unit-test .coverage,*/
+/*#lib-results .test-functional .test-mutation,*/
+/*#lib-results .test-functional .test-mutation .pitest,*/
+/*#lib-results .test-functional .documentation,*/
+/*#lib-results .test-functional .documentation .diagrams,*/
+/*#lib-results .test-functional .documentation .diagrams .architecture,*/
+/*#lib-results .test-functional .documentation .diagrams .uml,*/
+/*#lib-results .test-functional .documentation .javadoc,*/
+/*#lib-results .test-functional .documentation .database,*/
+
+/*#lib-results .test-bdd .static-analysis,*/
+/*#lib-results .test-bdd .static-style,*/
+/*#lib-results .test-bdd .static-style .checkstyle,*/
+/*#lib-results .test-bdd .common-flaws,*/
+/*#lib-results .test-bdd .pmd,*/
+/*#lib-results .test-bdd .spotbugs,*/
+#lib-results .test-bdd .dynamic-analysis,
+/*#lib-results .test-bdd .unit-test,*/
+/*#lib-results .test-bdd .unit-test .junit,*/
+/*#lib-results .test-bdd .unit-test .coverage,*/
+/*#lib-results .test-bdd .test-mutation,*/
+/*#lib-results .test-bdd .test-mutation .pitest,*/
+/*#lib-results .test-bdd .documentation,*/
+/*#lib-results .test-bdd .documentation .diagrams,*/
+/*#lib-results .test-bdd .documentation .diagrams .architecture,*/
+/*#lib-results .test-bdd .documentation .diagrams .uml,*/
+/*#lib-results .test-bdd .documentation .javadoc,*/
+/*#lib-results .test-bdd .documentation .database,*/
+
+/*#lib-results .test-performance .static-analysis,*/
+/*#lib-results .test-performance .static-style,*/
+/*#lib-results .test-performance .static-style .checkstyle,*/
+/*#lib-results .test-performance .common-flaws,*/
+/*#lib-results .test-performance .pmd,*/
+/*#lib-results .test-performance .spotbugs,*/
+#lib-results .test-performance .dynamic-analysis,
+/*#lib-results .test-performance .unit-test,*/
+/*#lib-results .test-performance .unit-test .junit,*/
+/*#lib-results .test-performance .unit-test .coverage,*/
+/*#lib-results .test-performance .test-mutation,*/
+/*#lib-results .test-performance .test-mutation .pitest,*/
+/*#lib-results .test-performance .documentation,*/
+/*#lib-results .test-performance .documentation .diagrams,*/
+/*#lib-results .test-performance .documentation .diagrams .architecture,*/
+/*#lib-results .test-performance .documentation .diagrams .uml,*/
+/*#lib-results .test-performance .documentation .javadoc,*/
+/*#lib-results .test-performance .documentation .database,*/
+
+
+/*----- api*/
+/*#api-results,*/
+/*#api-results .main,*/
+/*#api-results .qa,*/
+#api-results .test-functional,
+#api-results .test-bdd,
+#api-results .test-performance,
+/*#api-results .main .static-analysis,*/
+/*#api-results .main .static-style,*/
+/*#api-results .main .static-style .checkstyle,*/
+/*#api-results .main .common-flaws,*/
+/*#api-results .main .pmd,*/
+/*#api-results .main .spotbugs,*/
+/*#api-results .main .dynamic-analysis,*/
+/*#api-results .main .unit-test,*/
+/*#api-results .main .unit-test .junit,*/
+/*#api-results .main .unit-test .coverage,*/
+/*#api-results .main .test-mutation,*/
+/*#api-results .main .test-mutation .pitest,*/
+/*#api-results .main .documentation,*/
+/*#api-results .main .documentation .swagger,*/
+#api-results .main .documentation .diagrams,
+/*#api-results .main .documentation .diagrams .architecture,*/
+/*#api-results .main .documentation .diagrams .uml,*/
+#api-results .main .documentation .javadoc,
+#api-results .main .documentation .database,
+
+/*#api-results .qa .static-analysis,*/
+/*#api-results .qa .static-style,*/
+/*#api-results .qa .static-style .checkstyle,*/
+/*#api-results .qa .common-flaws,*/
+/*#api-results .qa .pmd,*/
+/*#api-results .qa .spotbugs,*/
+#api-results .qa .dynamic-analysis,
+/*#api-results .qa .unit-test,*/
+/*#api-results .qa .unit-test .junit,*/
+/*#api-results .qa .unit-test .coverage,*/
+/*#api-results .qa .test-mutation,*/
+/*#api-results .qa .test-mutation .pitest,*/
+#api-results .qa .documentation,
+/*#api-results .qa .documentation .diagrams,*/
+/*#api-results .qa .documentation .diagrams .architecture,*/
+/*#api-results .qa .documentation .diagrams .uml,*/
+/*#api-results .qa .documentation .javadoc,*/
+/*#api-results .qa .documentation .database,*/
+
+/*#api-results .test-functional .static-analysis,*/
+/*#api-results .test-functional .static-style,*/
+/*#api-results .test-functional .static-style .checkstyle,*/
+/*#api-results .test-functional .common-flaws,*/
+/*#api-results .test-functional .pmd,*/
+/*#api-results .test-functional .spotbugs,*/
+/*#api-results .test-functional .dynamic-analysis,*/
+/*#api-results .test-functional .unit-test,*/
+/*#api-results .test-functional .unit-test .junit,*/
+/*#api-results .test-functional .unit-test .coverage,*/
+/*#api-results .test-functional .test-mutation,*/
+/*#api-results .test-functional .test-mutation .pitest,*/
+/*#api-results .test-functional .documentation,*/
+/*#api-results .test-functional .documentation .diagrams,*/
+/*#api-results .test-functional .documentation .diagrams .architecture,*/
+/*#api-results .test-functional .documentation .diagrams .uml,*/
+/*#api-results .test-functional .documentation .javadoc,*/
+/*#api-results .test-functional .documentation .database,*/
+
+/*#api-results .test-bdd .static-analysis,*/
+/*#api-results .test-bdd .static-style,*/
+/*#api-results .test-bdd .static-style .checkstyle,*/
+/*#api-results .test-bdd .common-flaws,*/
+/*#api-results .test-bdd .pmd,*/
+/*#api-results .test-bdd .spotbugs,*/
+#api-results .test-bdd .dynamic-analysis,
+/*#api-results .test-bdd .unit-test,*/
+/*#api-results .test-bdd .unit-test .junit,*/
+/*#api-results .test-bdd .unit-test .coverage,*/
+/*#api-results .test-bdd .test-mutation,*/
+/*#api-results .test-bdd .test-mutation .pitest,*/
+/*#api-results .test-bdd .documentation,*/
+/*#api-results .test-bdd .documentation .diagrams,*/
+/*#api-results .test-bdd .documentation .diagrams .architecture,*/
+/*#api-results .test-bdd .documentation .diagrams .uml,*/
+/*#api-results .test-bdd .documentation .javadoc,*/
+/*#api-results .test-bdd .documentation .database,*/
+
+/*#api-results .test-performance .static-analysis,*/
+/*#api-results .test-performance .static-style,*/
+/*#api-results .test-performance .static-style .checkstyle,*/
+/*#api-results .test-performance .common-flaws,*/
+/*#api-results .test-performance .pmd,*/
+/*#api-results .test-performance .spotbugs,*/
+#api-results .test-performance .dynamic-analysis,
+/*#api-results .test-performance .unit-test,*/
+/*#api-results .test-performance .unit-test .junit,*/
+/*#api-results .test-performance .unit-test .coverage,*/
+/*#api-results .test-performance .test-mutation,*/
+/*#api-results .test-performance .test-mutation .pitest,*/
+/*#api-results .test-performance .documentation,*/
+/*#api-results .test-performance .documentation .diagrams,*/
+/*#api-results .test-performance .documentation .diagrams .architecture,*/
+/*#api-results .test-performance .documentation .diagrams .uml,*/
+/*#api-results .test-performance .documentation .javadoc,*/
+/*#api-results .test-performance .documentation .database,*/
+
+
+
+
+/*----- template*/
+#template-results,
+/*#template-results .main,*/
+/*#template-results .qa,*/
+#template-results .test-functional,
+#template-results .test-bdd,
+#template-results .test-performance,
+/*#template-results .main .static-analysis,*/
+/*#template-results .main .static-style,*/
+/*#template-results .main .static-style .checkstyle,*/
+/*#template-results .main .common-flaws,*/
+/*#template-results .main .pmd,*/
+/*#template-results .main .spotbugs,*/
+/*#template-results .main .dynamic-analysis,*/
+/*#template-results .main .unit-test,*/
+/*#template-results .main .unit-test .junit,*/
+/*#template-results .main .unit-test .coverage,*/
+/*#template-results .main .test-mutation,*/
+/*#template-results .main .test-mutation .pitest,*/
+/*#template-results .main .documentation,*/
+/*#template-results .main .documentation .diagrams,*/
+/*#template-results .main .documentation .diagrams .architecture,*/
+/*#template-results .main .documentation .diagrams .uml,*/
+/*#template-results .main .documentation .javadoc,*/
+/*#template-results .main .documentation .database,*/
+
+/*#template-results .qa .static-analysis,*/
+/*#template-results .qa .static-style,*/
+/*#template-results .qa .static-style .checkstyle,*/
+/*#template-results .qa .common-flaws,*/
+/*#template-results .qa .pmd,*/
+/*#template-results .qa .spotbugs,*/
+#template-results .qa .dynamic-analysis,
+/*#template-results .qa .unit-test,*/
+/*#template-results .qa .unit-test .junit,*/
+/*#template-results .qa .unit-test .coverage,*/
+/*#template-results .qa .test-mutation,*/
+/*#template-results .qa .test-mutation .pitest,*/
+/*#template-results .qa .documentation,*/
+/*#template-results .qa .documentation .diagrams,*/
+/*#template-results .qa .documentation .diagrams .architecture,*/
+/*#template-results .qa .documentation .diagrams .uml,*/
+/*#template-results .qa .documentation .javadoc,*/
+/*#template-results .qa .documentation .database,*/
+
+/*#template-results .test-functional .static-analysis,*/
+/*#template-results .test-functional .static-style,*/
+/*#template-results .test-functional .static-style .checkstyle,*/
+/*#template-results .test-functional .common-flaws,*/
+/*#template-results .test-functional .pmd,*/
+/*#template-results .test-functional .spotbugs,*/
+/*#template-results .test-functional .dynamic-analysis,*/
+/*#template-results .test-functional .unit-test,*/
+/*#template-results .test-functional .unit-test .junit,*/
+/*#template-results .test-functional .unit-test .coverage,*/
+/*#template-results .test-functional .test-mutation,*/
+/*#template-results .test-functional .test-mutation .pitest,*/
+/*#template-results .test-functional .documentation,*/
+/*#template-results .test-functional .documentation .diagrams,*/
+/*#template-results .test-functional .documentation .diagrams .architecture,*/
+/*#template-results .test-functional .documentation .diagrams .uml,*/
+/*#template-results .test-functional .documentation .javadoc,*/
+/*#template-results .test-functional .documentation .database,*/
+
+/*#template-results .test-bdd .static-analysis,*/
+/*#template-results .test-bdd .static-style,*/
+/*#template-results .test-bdd .static-style .checkstyle,*/
+/*#template-results .test-bdd .common-flaws,*/
+/*#template-results .test-bdd .pmd,*/
+/*#template-results .test-bdd .spotbugs,*/
+#template-results .test-bdd .dynamic-analysis,
+/*#template-results .test-bdd .unit-test,*/
+/*#template-results .test-bdd .unit-test .junit,*/
+/*#template-results .test-bdd .unit-test .coverage,*/
+/*#template-results .test-bdd .test-mutation,*/
+/*#template-results .test-bdd .test-mutation .pitest,*/
+/*#template-results .test-bdd .documentation,*/
+/*#template-results .test-bdd .documentation .diagrams,*/
+/*#template-results .test-bdd .documentation .diagrams .architecture,*/
+/*#template-results .test-bdd .documentation .diagrams .uml,*/
+/*#template-results .test-bdd .documentation .javadoc,*/
+/*#template-results .test-bdd .documentation .database,*/
+
+/*#template-results .test-performance .static-analysis,*/
+/*#template-results .test-performance .static-style,*/
+/*#template-results .test-performance .static-style .checkstyle,*/
+/*#template-results .test-performance .common-flaws,*/
+/*#template-results .test-performance .pmd,*/
+/*#template-results .test-performance .spotbugs,*/
+#template-results .test-performance .dynamic-analysis,
+/*#template-results .test-performance .unit-test,*/
+/*#template-results .test-performance .unit-test .junit,*/
+/*#template-results .test-performance .unit-test .coverage,*/
+/*#template-results .test-performance .test-mutation,*/
+/*#template-results .test-performance .test-mutation .pitest,*/
+/*#template-results .test-performance .documentation,*/
+/*#template-results .test-performance .documentation .diagrams,*/
+/*#template-results .test-performance .documentation .diagrams .architecture,*/
+/*#template-results .test-performance .documentation .diagrams .uml,*/
+/*#template-results .test-performance .documentation .javadoc,*/
+/*#template-results .test-performance .documentation .database,*/
+#template-resultsX {
     display: none;
 }
 
@@ -73,6 +475,7 @@
     --clr-dark: 230 35% 7%;
     --clr-light: 231 77% 90%;
     --clr-white: 0 0% 100%;
+    --clr-foo: 71 410% 49.2%;
 
     /* Font sizes */
     --fs-900: 9.375rem;
@@ -276,6 +679,7 @@ select {
 
 .hidden {
     visibility: hidden;
+    display: none;
 }
 
 /* ------------------- */
@@ -330,6 +734,26 @@ select {
     margin-right: .5em;
 }
 
+.secondary-navigation {
+    --gap: 1rem;
+    --underline-gap: 2rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+
+.secondary-navigation a {
+    text-decoration: none;
+    color: hsl( var( --clr-foo ));
+}
+
+.secondary-navigation a > span {
+    font-weight: 700;
+    margin-right: .5em;
+}
+
+
 .underline-indicators > * {
     padding: var(--underline-gap, 1rem) 0;
     border-bottom: .2rem solid hsl( var(--clr-white) / .6 );
@@ -355,5 +779,107 @@ select {
 .card a {
     color:hsl( var( --clr-white )); /* .text-white */
     text-decoration-color: hsl( var( --clr-light) / .8);
+}
+
+
+.static-analysis {
+    /*border: solid 3px green;*/
+    border-radius: .6rem;
+    border-left: .1rem solid hsl( var( --clr-white) / .6 );
+    border-top: .1rem solid hsl( var( --clr-white) / .6 );
+    padding-left: .5rem;
+    padding-top: .2rem;
+    color: hsl( var( --clr-white) / .5 );
+    font-size: var(--fs-300);
+    font-weight: normal;
+    color: hsl( var( --clr-white) / .5 );
+}
+
+.static-analysis a {
+    /*font-size: var(--fs-400);*/
+    color: hsl( var( --clr-white) / .9 );
+    font-weight: bold;
+}
+
+.static-style {
+    /*border: solid 3px orange;*/
+}
+
+.common-flaws {
+    /*border: solid 3px purple;*/
+    /*font-size: var(--fs-300);*/
+}
+
+.pmd {
+    font-size: var(--fs-200);
+    /*border: solid 3px cyan;*/
+}
+
+.spotbugs {
+    font-size: var(--fs-200);
+    /*border: solid 3px lightblue;*/
+}
+
+.checkstyle {
+    /*border: solid 3px steelblue;*/
+    font-size: var(--fs-200);
+}
+
+.dynamic-analysis {
+    /*border: solid 3px darkgreen;*/
+    border-radius: .6rem;
+    border-left: .1rem solid hsl( var( --clr-white) / .6 );
+    border-top: .1rem solid hsl( var( --clr-white) / .6 );
+    padding-left: .5rem;
+    padding-top: .2rem;
+    color: hsl( var( --clr-white) / .5 );
+    font-size: var(--fs-300);
+    font-weight: normal;
+    color: hsl( var( --clr-white) / .5 );
+}
+
+.dynamic-analysis a {
+    /*font-size: var(--fs-400);*/
+    color: hsl( var( --clr-white) / .9 );
+    font-weight: bold;
+}
+
+
+.documentation {
+    /*border: solid 3px darkgreen;*/
+    border-radius: .6rem;
+    border-left: .1rem solid hsl( var( --clr-white) / .6 );
+    border-top: .1rem solid hsl( var( --clr-white) / .6 );
+    padding-left: .5rem;
+    padding-top: .2rem;
+    color: hsl( var( --clr-white) / .5 );
+    font-size: var(--fs-300);
+    font-weight: normal;
+    color: hsl( var( --clr-white) / .5 );
+}
+
+.documentation a {
+    /*font-size: var(--fs-400);*/
+    color: hsl( var( --clr-white) / .9 );
+    font-weight: bold;
+}
+
+.database {
+    /*border: solid 3px darkgreen;*/
+    border-radius: .6rem;
+    border-left: .1rem solid hsl( var( --clr-white) / .6 );
+    border-top: .1rem solid hsl( var( --clr-white) / .6 );
+    padding-left: .5rem;
+    padding-top: .2rem;
+    color: hsl( var( --clr-white) / .5 );
+    font-size: var(--fs-300);
+    font-weight: normal;
+    color: hsl( var( --clr-white) / .5 );
+}
+
+.database a {
+    /*font-size: var(--fs-400);*/
+    color: hsl( var( --clr-white) / .9 );
+    font-weight: bold;
 }
 
