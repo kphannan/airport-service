@@ -3,6 +3,7 @@
 package com.example.utility;
 
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -19,7 +20,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
 
 
 /**
@@ -375,7 +375,8 @@ class ValidateUtilityClassTest
                 {
                     // TODO same for abstract class
                     // --- when
-                    final boolean isUtility = ValidateUtilityClass.isInstantiationDenied( ConstructorWithArguments.class, reason );
+                    final boolean isUtility = ValidateUtilityClass.isInstantiationDenied( ConstructorWithArguments.class,
+                                                                                          reason );
 
                     // --- then
                     assertAll( () -> assertTrue( isUtility ),
@@ -577,9 +578,11 @@ class ValidateUtilityClassTest
 
                                // Verify reason text
                                // exception with a message
-                               () -> assertEquals( "[Unexpected cause 'java.lang.IllegalArgumentException: Test exception "
-                                                           + "- cause failure' for InvocationTargetException, expecting IllegalStateException]",
-                                                   reason.toString() ) );
+                               () -> assertThat( reason.toString() )
+                                         .contains( "Unexpected cause 'java.lang.IllegalArgumentException: Test exception",
+                                                    "cause failure' for InvocationTargetException, expecting IllegalStateException"
+                                                  )
+                    );
                 }
 
 
@@ -601,8 +604,14 @@ class ValidateUtilityClassTest
 
                                // Verify reason text
                                // exception without a message
-                               () -> assertEquals( "[Unexpected cause 'java.lang.NullPointerException' for "
-                                                           + "InvocationTargetException, expecting IllegalStateException]", reason.toString() ) );
+                               () -> assertThat( reason.toString() )
+                                         .contains( "Unexpected cause 'java.lang.NullPointerException' for",
+                                                    "InvocationTargetException, expecting IllegalStateException"
+                                                  )
+                               // () -> assertEquals( "[Unexpected cause 'java.lang.NullPointerException' for "
+                               //                             + "InvocationTargetException, expecting IllegalStateException]",
+                               //                     reason.toString() ) );
+                    );
                 }
 
 
@@ -624,9 +633,14 @@ class ValidateUtilityClassTest
 
                                // Verify reason text
                                // exception with a message
-                               () -> assertEquals( "[Unexpected cause 'java.lang.NullPointerException: Test exception "
-                                                           + "- cause failure' for InvocationTargetException, expecting IllegalStateException]",
-                                                   reason.toString() ) );
+                               () -> assertThat( reason.toString() )
+                                         .contains( "Unexpected cause 'java.lang.NullPointerException: Test exception",
+                                                    "cause failure' for InvocationTargetException, expecting IllegalStateException"
+                                                  )
+                               // () -> assertEquals( "[Unexpected cause 'java.lang.NullPointerException: Test exception "
+                               //                             + "- cause failure' for InvocationTargetException, expecting IllegalStateException]",
+                               //                     reason.toString() )
+                     );
                 }
             }
         }

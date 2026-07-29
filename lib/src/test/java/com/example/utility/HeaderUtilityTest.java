@@ -31,10 +31,10 @@ import org.springframework.test.http.HttpHeadersAssert;
 import org.springframework.web.context.request.WebRequest;
 
 /**
+ * Unit test suite for the HeaderUtility class.
  *
  * @author Kevin
  * @since 2026-03-15
- * <p>
  * Copyright (c) 2020-2026
  */
 class HeaderUtilityTest
@@ -95,7 +95,7 @@ class HeaderUtilityTest
                             .hasValue( "TRACESTATE", "traceState" )
                             .hasValue( "Content-Type", "application/json;charset=UTF-8" )
                             .doesNotContainHeader( "NoWay" )
-                 );
+        );
     }
 
 
@@ -125,7 +125,7 @@ class HeaderUtilityTest
                            .doesNotContainHeader( HttpHeaders.ACCEPT_ENCODING )
                            .doesNotContainHeader( HttpHeaders.ACCEPT_CHARSET )
                            .doesNotContainHeader( "NoWay" )
-                 );
+        );
     }
 
     @Test
@@ -135,7 +135,7 @@ class HeaderUtilityTest
         assertThat( HeaderUtility.usualHeaders() )
                 .contains( "Allow" )
                 .contains( "Content-Type" )
-//                .contains( "Accept-Encoding" )
+                // .contains( "Accept-Encoding" )
                 .contains( "TRACEPARENT" )
                 .contains( "TRACESTATE" );
     }
@@ -259,11 +259,11 @@ class HeaderUtilityTest
                 @Override
                 public String @Nullable [] getHeaderValues( String headerName )
                 {
-//                Map<String, String[]> foo = new HashMap<>();
-//                foo.put( "TRACEPARENT", Stream.of( "traceParent" ).toArray( String[]::new ) );
-//                foo.put( "TRACESTATE", Stream.of( "traceState" ).toArray( String[]::new ) );
-//
-//                return foo.get( headerName );
+                    // Map<String, String[]> foo = new HashMap<>();
+                    // foo.put( "TRACEPARENT", Stream.of( "traceParent" ).toArray( String[]::new ) );
+                    // foo.put( "TRACESTATE", Stream.of( "traceState" ).toArray( String[]::new ) );
+                    //
+                    // return foo.get( headerName );
                     return new String[0];
                 }
 
@@ -371,7 +371,7 @@ class HeaderUtilityTest
                                .hasValue( "TRACESTATE", "traceState" )
                                .hasValue( "Content-Type", "application/json;charset=UTF-8" )
                                .doesNotContainHeader( "NoWay" )
-                     );
+            );
         }
 
 

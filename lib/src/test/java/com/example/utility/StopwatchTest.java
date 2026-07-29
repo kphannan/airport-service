@@ -3,9 +3,8 @@
 package com.example.utility;
 
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import nl.altindag.log.LogCaptor;
 import org.junit.jupiter.api.AfterEach;
@@ -50,8 +49,8 @@ class StopwatchTest
     {
         final Stopwatch timer = new Stopwatch( "test", "ctor", "autostartFalse", false );
 
-        assertAll( () -> assertFalse( timer.isRunning() ), //
-                   () -> assertTrue( logCaptor.getLogs().isEmpty() ) );
+        assertAll( () -> assertThat( timer.isRunning() ).isFalse(),
+                   () -> assertThat( logCaptor.getLogs() ).isEmpty() );
     }
 
 
@@ -62,8 +61,8 @@ class StopwatchTest
     {
         final Stopwatch timer = new Stopwatch( "test", "mthd", "autostartTrue" );
 
-        assertAll( () -> assertTrue( timer.isRunning() ), //
-                   () -> assertTrue( logCaptor.getLogs().isEmpty() ) );
+        assertAll( () -> assertThat( timer.isRunning() ).isTrue(),
+                   () -> assertThat( logCaptor.getLogs() ).isEmpty() );
     }
 
 
@@ -74,10 +73,10 @@ class StopwatchTest
     {
         final Stopwatch timer = new Stopwatch( "time", "autostart", "autostartFalse", false );
 
-        assertFalse( timer.isRunning() );
+        assertThat( timer.isRunning() ).isFalse();
         timer.start();
-        assertAll( () -> assertTrue( timer.isRunning() ), //
-                   () -> assertTrue( logCaptor.getLogs().isEmpty() ) );
+        assertAll( () -> assertThat( timer.isRunning() ).isTrue(),
+                   () -> assertThat( logCaptor.getLogs() ).isEmpty() );
     }
 
 
@@ -88,10 +87,12 @@ class StopwatchTest
     {
         final Stopwatch timer = new Stopwatch( "time", "multipleStart", "start", false );
 
-        assertFalse( timer.isRunning() );
+        assertThat( timer.isRunning() ).isFalse();
+
         timer.start();
         timer.start();
-        assertTrue( timer.isRunning() );
+
+        assertThat( timer.isRunning() ).isTrue();
     }
 
 
@@ -102,13 +103,13 @@ class StopwatchTest
     {
         final Stopwatch timer = new Stopwatch( "svc", "stopOnce", "stop" );
 
-        assertTrue( timer.isRunning() );
+        assertThat( timer.isRunning() ).isTrue();
 
         // when
         timer.stop();
 
         // then
-        assertFalse( timer.isRunning() );
+        assertThat( timer.isRunning() ).isFalse();
 
         timer.close(); // supress warning
     }
@@ -122,7 +123,7 @@ class StopwatchTest
         // gigven
         final Stopwatch timer = new Stopwatch( "svc", "multipeStop", "stop" );
 
-        assertTrue( timer.isRunning() );
+        assertThat( timer.isRunning() ).isTrue();
 
         // when
         timer.stop();
@@ -130,7 +131,7 @@ class StopwatchTest
         timer.stop();
 
         // then
-        assertFalse( timer.isRunning() );
+        assertThat( timer.isRunning() ).isFalse();
 
         // timer.close(); // supress warning
     }
@@ -143,17 +144,20 @@ class StopwatchTest
     {
         final Stopwatch timer = new Stopwatch( "svc", "close", "ctx" );
 
-        assertTrue( timer.isRunning(), "Timer should immediately start running" );
+        assertThat( timer.isRunning() )
+            .as( "Timer should immediately start running" )
+            .isTrue();
+
         timer.close();
 
-        assertAll( () -> assertFalse( timer.isRunning(), "close() should stop the timer" ), //
-                   () -> assertFalse( logCaptor.getLogs().isEmpty(), "A log entry should have been written" ), //
-                   () -> assertTrue( StringUtility
-                                             .inAnyOf( logCaptor.getLogs(),
-                                                            "ctx, svc, close: '' - elapsed time: 0 ms" ),
-                                     "General content of the log message"
-                                   )
-                 );
+        assertAll( () -> assertThat( timer.isRunning() ).as( "close() should stop the timer" ).isFalse(),
+                   () -> assertThat( logCaptor.getLogs() )
+                             .isNotEmpty(),
+                   () -> assertThat( logCaptor.getLogs() )
+                             .contains( "ctx, svc, close: '' - elapsed: 0 ms" )
+                   // () -> assertThat( logCaptor.getLogs() )
+                   //           .anyMatch( s -> s."ctx, svc, close: '' - elapsed: [0-9]+ ms" )
+        );
     }
 
 
@@ -163,10 +167,12 @@ class StopwatchTest
     {
         try ( Stopwatch timer = new Stopwatch( "svc", "method", "autoclose" ) )
         {
-            assertTrue( timer.isRunning() );
+            assertThat( timer.isRunning() ).isTrue();
         }
 
-        assertTrue( StringUtility.inAnyOf( logCaptor.getLogs(), "autoclose, svc, method: '' - elapsed time: 0 ms" ) );
+
+        assertThat( logCaptor.getLogs() )
+            .contains( "autoclose, svc, method: '' - elapsed: 0 ms" );
     }
 
 
@@ -179,9 +185,8 @@ class StopwatchTest
 
         timer.logRunningTime( "Test, timer not started" );
 
-        assertTrue( StringUtility
-                .inAnyOf( logCaptor.getLogs(),
-                          "notRunning, svc, logRunning: 'Test, timer not started' - elapsed time: 0 ms" ) );
+        assertThat( logCaptor.getLogs() )
+            .contains( "notRunning, svc, logRunning: 'Test, timer not started' - elapsed: 0 ms" );
     }
 
 
@@ -195,9 +200,8 @@ class StopwatchTest
         timer.start();
         timer.logRunningTime( "Test, timer started" );
 
-        System.out.println( logCaptor.getLogs() );
-        assertTrue( StringUtility.inAnyOf( logCaptor.getLogs(),
-                                           "running, svc, logRunning: 'Test, timer started' - elapsed time: 0 ms" ) );
+        assertThat( logCaptor.getLogs() )
+            .contains( "running, svc, logRunning: 'Test, timer started' - elapsed: 0 ms" );
     }
 
 }

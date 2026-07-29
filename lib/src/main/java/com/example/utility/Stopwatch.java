@@ -12,8 +12,10 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class Stopwatch implements AutoCloseable
 {
-    private long startTime;
-    private long stopTime;
+    private static final long NOT_STARTED = -1L;
+
+    private long startNanos = NOT_STARTED;
+    private long stopNanos  = NOT_STARTED;
 
     private final String service;
     private final String method;
@@ -24,7 +26,7 @@ public class Stopwatch implements AutoCloseable
      *
      * @param service typically it is the name of the REST/SOAP service.
      * @param method  the method/function that is being timed.
-     * @param context a unique
+     * @param context a unique identifier for the execution context
      */
     public Stopwatch( final String service, final String method, final String context )
     {
@@ -37,13 +39,13 @@ public class Stopwatch implements AutoCloseable
      *
      * @param service   typically it is the name of the REST/SOAP service.
      * @param method    the method/function that is being timed.
-     * @param context   a unique
+     * @param context   a unique identifier for the execution context
      * @param autoStart true, it will start the timer on instantiation.
      */
     public Stopwatch( final String service, final String method, final String context, final boolean autoStart )
     {
-        startTime = -1;
-        stopTime  = -1;
+        startNanos = NOT_STARTED;
+        stopNanos  = NOT_STARTED;
 
         this.service = service;
         this.method  = method;
@@ -61,9 +63,9 @@ public class Stopwatch implements AutoCloseable
      */
     public final void start()
     {
-        if ( startTime == -1 )
+        if ( startNanos == NOT_STARTED )
         {
-            startTime = System.currentTimeMillis();
+            startNanos = System.nanoTime();
         }
     }
 
@@ -73,9 +75,9 @@ public class Stopwatch implements AutoCloseable
      */
     public final void stop()
     {
-        if ( stopTime == -1 )
+        if ( stopNanos == NOT_STARTED )
         {
-            stopTime = System.currentTimeMillis();
+            stopNanos = System.nanoTime();
         }
     }
 
@@ -84,7 +86,8 @@ public class Stopwatch implements AutoCloseable
     public void close()
     {
         stop();
-        debug();
+        // debug();
+        logElapsed(null);
     }
 
 
@@ -95,7 +98,7 @@ public class Stopwatch implements AutoCloseable
      */
     public boolean isRunning()
     {
-        return startTime != -1 && stopTime == -1;
+        return startNanos != NOT_STARTED && stopNanos == NOT_STARTED;
     }
 
 
@@ -104,30 +107,51 @@ public class Stopwatch implements AutoCloseable
      *
      * @param text the text to write to the log.
      */
-    public void logRunningTime( final String text )
+    // public void logElapsed( final String text )
+    // {
+    //     logX( System.nanoTime(), text );
+    // }
+
+    /** Log elapsed time with an optional message */
+    public void logRunningTime(String text)
     {
-        logX( System.currentTimeMillis(), text );
+        logElapsed(text);
     }
 
+    // private void debug()
+    // {
+    //     logX( stopNanos, null );
+    // }
 
-    private void debug()
+    private void logElapsed(String text)
     {
-        logX( stopTime, null );
+        if (startNanos == NOT_STARTED)
+        {
+            return; // Nothing to measure
+        }
+
+        long endNanos = (stopNanos == NOT_STARTED) ? System.nanoTime() : stopNanos;
+        long elapsedMs = (endNanos - startNanos) / 1_000_000;
+
+        log.error(() -> String.format("%s, %s, %s: '%s' - elapsed: %d ms",
+                                      context, service, method, text == null ? "" : text, elapsedMs));
     }
 
-
-    private void logX( final long endTime,
-                       final String text )
-    {
-        // log.error( "Kilroy was here" );
-        // System.out.println( String.format( "log: %s, %s, %s: '%s' - elapsed time: %d
-        // ms", context, service, method,
-        // text == null ? "" : text, endTime - startTime ) );
-        // log.debug( () -> String.format( "%s, %s, %s: '%s' - elapsed time: %d ms",
-        // context, service, method,
-        // text == null ? "" : text, endTime - startTime ) );
-        log.error( () -> String.format( "%s, %s, %s: '%s' - elapsed time: %d ms", context, service, method,
-                                        text == null ? "" : text, endTime - startTime ) );
-    }
+    // private void logX( final String text )
+    // {
+    //     if ( startNanos == NOT_STARTED )
+    //     {
+    //         return;     // nothing to measure
+    //     }
+    //     // log.error( "Kilroy was here" );
+    //     // System.out.println( String.format( "log: %s, %s, %s: '%s' - elapsed time: %d
+    //     // ms", context, service, method,
+    //     // text == null ? "" : text, endTime - startTime ) );
+    //     // log.debug( () -> String.format( "%s, %s, %s: '%s' - elapsed time: %d ms",
+    //     // context, service, method,
+    //     // text == null ? "" : text, endTime - startTime ) );
+    //     log.debug( () -> String.format( "%s, %s, %s: '%s' - elapsed time: %d ms", context, service, method,
+    //                                     text == null ? "" : text, endTime - startNanos ) );
+    // }
 
 }

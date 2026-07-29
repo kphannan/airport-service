@@ -103,17 +103,15 @@ public final class ValidateUtilityClass
 
     /*
      * A: 0101 0011 0010 0110 1111 bits B: 0001 0011 0010 0110 0111 expected C: 1011
-     * 1111 1111 1111 0111 : 0100 0000 0000 0000 1000
+     *    1111 1111 1111 0111 : 0100 0000 0000 0000 1000
      *
      *
      * bits 0101 0011 0010 0110 1111 = ~bits 1010 1100 1101 1001 0000 desired 0001
-     * 0011 0010 0110 0111 ~desired 1110 1100 1101 1001 1000
+     *      0011 0010 0110 0111 ~desired 1110 1100 1101 1001 1000
      * ------------------------------------------------------------- x = ~bits ^
      * desired 1011 1111 1111 1111 0111 = x ^ ~desired 0101 0011 0010 0110 1111
      *
      * 0100 0000 0000 0000 1000 0100 0000 0000 0000 1000
-     *
-     *
      *
      * 0101 bits 1111 0011 1010 = ~bits 0000 1100 0001 desired 0111 0011 1110
      * ~desired 1000 1100 x 1011 = ~bits ^ desired 0111 1111 0101 = x ^ ~desired
@@ -237,12 +235,12 @@ public final class ValidateUtilityClass
         {
             reason.add( String.format( "'%s': The no-argument constructor does not exist", clazz.getName() ) );
         }
-        catch ( IllegalAccessException ex )
-        {
-            reason.add( String.format( "%s with cause '%s'", ex.getClass().getName(),
-                                       null == ex.getCause() ? "" : ex.getCause().toString() ) );
-        }
-        catch ( InstantiationException ex )
+        // catch ( IllegalAccessException ex )
+        // {
+        //     reason.add( String.format( "%s with cause '%s'", ex.getClass().getName(),
+        //                                null == ex.getCause() ? "" : ex.getCause().toString() ) );
+        // }
+        catch ( InstantiationException | IllegalAccessException ex )
         {
             // Thrown when attempting to instantiate an abstract class.
             reason.add( String.format( "'%s': InstantiationException from a utility constructor", clazz.getName() ) );
