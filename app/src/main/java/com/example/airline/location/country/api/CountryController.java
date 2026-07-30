@@ -66,27 +66,32 @@ public class CountryController
 
     // ========== READ ==========
     // ===== GET =====
-
-    // ========== UPDATE ==========
-    // ===== PATCH =====
-    // ===== PUT =====
-
-    // ========== DELETE ==========
-    // ===== DELETE =====
-
-    // ========== Administrative ==========
-    // ===== HEAD =====
-    // ===== INFO =====
-    // ===== OPTION =====
-    // ===== TRACE =====
-
-
     /**
      * Find all Countries.
      *
      * @param pageable The pagination information.
      * @return A Page of CountryDTO objects.
      */
+    @Operation( method = "GET",
+                summary = "Find All Countries",
+                description = "Retrieve a paginated list of all countries",
+                requestBody = @RequestBody( required = false ),
+                responses = { @ApiResponse( description = "Success", responseCode = "200" ) },
+                parameters = {
+                    @Parameter( name = "Bearer", required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Authentication / Authorization token" ),
+                    @Parameter( name = HeaderUtility.TRACEID, required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Distributed tracing identifier" ),
+                    @Parameter( name = HeaderUtility.TRACESTATE, required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Vendor specific trace identification" )
+                }
+    )
     @GetMapping( "" )
     public Page<CountryDTO> restGetFindAll( final Pageable pageable )
     {
@@ -96,7 +101,6 @@ public class CountryController
     }
 
 
-
     /**
      * Find a Country by ID.
      *
@@ -104,39 +108,41 @@ public class CountryController
      * @return A ResponseEntity containing the found CountryDTO or no content if not found.
      */
     @Operation( method = "GET",
-            summary = "Find a Continent by Id",
-            description = "Find a Continent by Id",
-            requestBody = @RequestBody( required = false ),
-            responses = { @ApiResponse( description = "Success",
-                                        responseCode = "200",
-                                        content = {
-                                            @Content( mediaType = "application/json",
-                                                      schema = @Schema( implementation = CountryDTO.class ) ),
-                                            @Content( mediaType = "application/yaml",
-                                                      schema = @Schema( implementation = CountryDTO.class ) ),
-                                            @Content( mediaType = "application/xml",
-                                                      schema = @Schema( implementation = CountryDTO.class ) )
-                                        }
-                    )
-            },
-            parameters = {
-                @Parameter( name = "id",
-                            required = true,
-                            in = ParameterIn.PATH,
-                            description = "Primary Key" ),
-                @Parameter( name = "Bearer", required = false,
-                            schema = @Schema( implementation = String.class ),
-                            in = ParameterIn.HEADER,
-                            description = "Authentication / Authorization token" ),
-                @Parameter( name = HeaderUtility.TRACEID, required = false,
-                            schema = @Schema( implementation = String.class ),
-                            in = ParameterIn.HEADER,
-                            description = "Distributed tracing identifier" ),
-                @Parameter( name = HeaderUtility.TRACESTATE, required = false,
-                            schema = @Schema( implementation = String.class ),
-                            in = ParameterIn.HEADER,
-                            description = "Vendor specific trace identification" )
-            }
+                summary = "Find a Country by Id",
+                description = "Find a Country by Id",
+                requestBody = @RequestBody( required = false ),
+                responses = { @ApiResponse( description = "Success",
+                                            responseCode = "200",
+                                            content = {
+                                                @Content( mediaType = "application/json",
+                                                          schema = @Schema( implementation = CountryDTO.class ) ),
+                                                @Content( mediaType = "application/yaml",
+                                                          schema = @Schema( implementation = CountryDTO.class ) ),
+                                                @Content( mediaType = "application/xml",
+                                                          schema = @Schema( implementation = CountryDTO.class ) )
+                                            }
+                ),
+                              @ApiResponse( description = "Not Found", responseCode = "404" )
+
+                },
+                parameters = {
+                    @Parameter( name = "id",
+                                required = true,
+                                in = ParameterIn.PATH,
+                                description = "Primary Key" ),
+                    @Parameter( name = "Bearer", required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Authentication / Authorization token" ),
+                    @Parameter( name = HeaderUtility.TRACEID, required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Distributed tracing identifier" ),
+                    @Parameter( name = HeaderUtility.TRACESTATE, required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Vendor specific trace identification" )
+                }
     )
     @GetMapping( "/{id}" )
     @SuppressWarnings( "PMD.ShortVariable" )
@@ -162,6 +168,42 @@ public class CountryController
      * @param code The 2-character alpha code of the country to find.
      * @return A ResponseEntity containing the found CountryDTO or no content if not found.
      */
+    @Operation( method = "GET",
+                summary = "Find a Country by Code",
+                description = "Find a Country by its 2-character alpha code",
+                requestBody = @RequestBody( required = false ),
+                responses = { @ApiResponse( description = "Success",
+                                            responseCode = "200",
+                                            content = {
+                                                @Content( mediaType = "application/json",
+                                                          schema = @Schema( implementation = CountryDTO.class ) ),
+                                                @Content( mediaType = "application/yaml",
+                                                          schema = @Schema( implementation = CountryDTO.class ) ),
+                                                @Content( mediaType = "application/xml",
+                                                          schema = @Schema( implementation = CountryDTO.class ) )
+                                            }
+                ),
+                              @ApiResponse( description = "Not Found", responseCode = "404" )
+                },
+                parameters = {
+                    @Parameter( name = "code",
+                                required = true,
+                                in = ParameterIn.PATH,
+                                description = "Country Alpha Code" ),
+                    @Parameter( name = "Bearer", required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Authentication / Authorization token" ),
+                    @Parameter( name = HeaderUtility.TRACEID, required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Distributed tracing identifier" ),
+                    @Parameter( name = HeaderUtility.TRACESTATE, required = false,
+                                schema = @Schema( implementation = String.class ),
+                                in = ParameterIn.HEADER,
+                                description = "Vendor specific trace identification" )
+                }
+    )
     @GetMapping( "/code/{code}" )
     public ResponseEntity<CountryDTO> restGetFindCountryByCode( @PathVariable final String code )
     {
@@ -178,4 +220,19 @@ public class CountryController
         return ResponseEntity.noContent().build();
         // return ResponseEntity.noContent().location().build();
     }
+
+    // ========== UPDATE ==========
+    // ===== PATCH =====
+    // ===== PUT =====
+
+    // ========== DELETE ==========
+    // ===== DELETE =====
+
+    // ========== Administrative ==========
+    // ===== HEAD =====
+    // ===== INFO =====
+    // ===== OPTION =====
+    // ===== TRACE =====
+
+
 }

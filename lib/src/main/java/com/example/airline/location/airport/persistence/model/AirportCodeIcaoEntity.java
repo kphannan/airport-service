@@ -14,7 +14,7 @@ import org.jspecify.annotations.NonNull;
 
 
 /**
- * Definition of the IATA reference table.
+ * Definition of the ICAO reference table.
  */
 @Entity
 @Table( name = "icao_airportcode" )

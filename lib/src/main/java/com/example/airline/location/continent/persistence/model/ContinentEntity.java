@@ -15,8 +15,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -24,10 +27,13 @@ import org.jspecify.annotations.Nullable;
 /**
  * Persistence object representing a single Continent.
  */
+@Builder
 @Entity
-@Table( name = "continents" )
+@Table( name = "continents")
 @Data
-@NoArgsConstructor // required by JPA
+@NoArgsConstructor
+@Getter
+@Setter // required by JPA
 @AllArgsConstructor
 public class ContinentEntity
 {
