@@ -3,6 +3,7 @@
 package com.example.utility;
 
 
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -14,12 +15,9 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.ArgumentsProvider;
-import org.junit.jupiter.params.provider.ArgumentsSource;
-
+import org.junit.jupiter.params.provider.MethodSource;
 
 
 /**
@@ -61,10 +59,10 @@ class NumberFormatTest
         @DisplayName( "number of bits to display is negative" )
         void binaryString_shortWithNegativeBits_throwsIllegalArgumentException()
         {
-            final Throwable thrown = assertThrows( IllegalArgumentException.class,
-                                                   () -> NumberFormat.toBinaryString( (short)0xDEAF, 4, -1 ) );
+            assertThatExceptionOfType( IllegalArgumentException.class )
+                .isThrownBy( () -> NumberFormat.toBinaryString( 0xDEAF, 4, -1 ) )
+                .withMessage( "-1 bits is illegal for a binary representation" );
 
-            assertEquals( "-1 bits exceeds the length (64) of a long primitive", thrown.getMessage() );
         }
 
 
@@ -104,13 +102,12 @@ class NumberFormatTest
 
     /** A bit size of zero (0) is a trivial case that produces and empty string. */
     @Test
-    @DisplayName( "Zero bits is an empty string" )
-    void binaryString_zeroBits_returnsEmptyString()
+    @DisplayName( "Zero bits is illegal for a binary representation" )
+    void binaryString_zeroBits_throwsIllegalArgumentException()
     {
-        final String value = NumberFormat.toBinaryString( 0xDEAF, 4, 0 );
-
-        // D E A F
-        assertEquals( "", value );
+        assertThatExceptionOfType( IllegalArgumentException.class )
+            .isThrownBy( () -> NumberFormat.toBinaryString( 0xDEAF, 4, 0 ) )
+            .withMessage( "0 bits is illegal for a binary representation" );
     }
 
 
@@ -150,29 +147,24 @@ class NumberFormatTest
         assertEquals( "1011 1110 1010 1101 1100 1010 1111 1110 1111 1010 1100 1110 1111 1010 1101 1110", value );
     }
 
-    /** Parameterized test input for {@code toBinaryString()}. */
-    private static final class SimpleFormatProvider implements ArgumentsProvider
+    static Stream<Arguments> simpleFormatProvider()
     {
-        @Override
-        public Stream<? extends Arguments> provideArguments( ExtensionContext context ) throws Exception
-        {
-            return Stream.of( Arguments.of( 0, 0, 0, "" ), //
-                              Arguments.of( 0, 1, 1, "0" ), //
-                              Arguments.of( 1, 1, 1, "1" ), //
-                              Arguments.of( 0, 4, 4, "0000" ), //
-                              Arguments.of( 12, 4, 4, "1100" ), //
-                              Arguments.of( 0b01011010, 4, 8, "0101 1010" ),
-                              Arguments.of( 0xFFFF, 16, 16, "1111111111111111" ),
-                              Arguments
-                                      .of( 0xBEADCAFEFACEFADEL, 4, 64,
-                                           "1011 1110 1010 1101 1100 1010 1111 1110 1111 1010 1100 1110 1111 1010 1101 1110" )
-                            );
-        }
+        //                                      number,              group, bits, result
+        return Stream.of( Arguments.of( 10,                   2,    4, "10 10" ), //
+                          Arguments.of(  0,                   1,    1, "0" ), //
+                          Arguments.of(  1,                   1,    1, "1" ), //
+                          Arguments.of(  0,                   4,    4, "0000" ), //
+                          Arguments.of( 12,                   4,    4, "1100" ), //
+                          Arguments.of( 0b01011010,           4,    8, "0101 1010" ),
+                          Arguments.of( 0xFFFF,              16,   16, "1111111111111111" ),
+                          Arguments.of( 0xBEADCAFEFACEFADEL,  4,   64,
+                                       "1011 1110 1010 1101 1100 1010 1111 1110 1111 1010 1100 1110 1111 1010 1101 1110" )
+                        );
     }
 
     @DisplayName( "format various length integers" )
     @ParameterizedTest( name = "{2} bits with grouping {1} is ({3})" )
-    @ArgumentsSource( SimpleFormatProvider.class )
+    @MethodSource( "simpleFormatProvider" )
     void binaryString_validInput_returnCorrectString( final long number,
                                                       final int groupSize,
                                                       final int bits,

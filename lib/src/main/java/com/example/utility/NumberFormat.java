@@ -57,10 +57,10 @@ public final class NumberFormat
                                          final int groupSize,
                                          final int bits )
     {
-        if ( bits > 16 )
+        if ( bits > Short.SIZE )
         {
             throw new IllegalArgumentException(
-                    String.format( "%d bits exceeds the length (16) of a short primitive", bits ) );
+                    String.format( "%d bits exceeds the length (%d) of a short primitive", bits, Short.SIZE ) );
         }
 
         return toBinaryString( (long)number, groupSize, bits );
@@ -80,10 +80,10 @@ public final class NumberFormat
                                          final int groupSize,
                                          final int bits )
     {
-        if ( bits > 32 )
+        if ( bits > Integer.SIZE )
         {
             throw new IllegalArgumentException(
-                    String.format( "%d bits exceeds the length (32) of a int primitive", bits ) );
+                    String.format( "%d bits exceeds the length (%d) of a int primitive", bits, Integer.SIZE ) );
         }
 
         return toBinaryString( (long)number, groupSize, bits );
@@ -103,10 +103,21 @@ public final class NumberFormat
                                          final int groupSize,
                                          final int bits )
     {
-        if ( bits < 0 || bits > 64 )
+        if ( bits <= 0 )
+        {
+            throw new IllegalArgumentException( String.format( "%d bits is illegal for a binary representation", bits ) );
+        }
+
+        if ( bits > Long.SIZE )
         {
             throw new IllegalArgumentException(
-                    String.format( "%d bits exceeds the length (64) of a long primitive", bits ) );
+                    String.format( "%d bits exceeds the length (%d) of a long primitive", bits, Long.SIZE ) );
+        }
+
+        if ( groupSize > bits )
+        {
+            throw new IllegalArgumentException(
+                String.format( "Grouping of %d bits exceeds the bit length (%d) requested", groupSize, bits ) );
         }
 
         final StringBuilder result = new StringBuilder();
