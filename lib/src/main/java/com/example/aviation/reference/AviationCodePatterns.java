@@ -13,11 +13,6 @@ import java.util.regex.Pattern;
  */
 public final class AviationCodePatterns
 {
-    private AviationCodePatterns()
-    {
-        throw new IllegalStateException( "Instantiation of utility class is not allowed." );
-    }
-
     // ========== Airport Codes ==========
 
     /**
@@ -101,6 +96,14 @@ public final class AviationCodePatterns
      */
     public static final String  AIRLINE_DESIGNATOR_ICAO         = "^[A-Z]{3}$";
     public static final Pattern AIRLINE_DESIGNATOR_ICAO_PATTERN = Pattern.compile( AIRLINE_DESIGNATOR_ICAO );
+
+
+    private AviationCodePatterns()
+    {
+        throw new IllegalStateException( "Instantiation of utility class is not allowed." );
+    }
+
+
 
     // ========== Validation Methods ==========
 
