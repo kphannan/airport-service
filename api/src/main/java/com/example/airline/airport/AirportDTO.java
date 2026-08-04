@@ -6,6 +6,7 @@ package com.example.airline.airport;
 import java.math.BigDecimal;
 import java.net.URI;
 
+import com.example.airline.location.GISPatterns;
 import com.example.airline.location.LocationCodePatterns;
 import com.example.aviation.reference.AviationCodePatterns;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -110,7 +111,7 @@ public class AirportDTO
      */
     @Schema( description = "he airport longitude in decimal degrees (positive for north)",
              requiredMode = Schema.RequiredMode.REQUIRED,
-             pattern = LocationCodePatterns.LAT_LONG_DD, //"^[+-]?(?:0|[1-9]{1,6})\\.(?:[0-9]{1,14})?$",
+             pattern = GISPatterns.DD_LATITUDE, //"^[+-]?(?:0|[1-9]{1,6})\\.(?:[0-9]{1,14})?$",
              example = "33.6367"
              )
     @NonNull private BigDecimal latitude;
@@ -120,7 +121,7 @@ public class AirportDTO
      */
     @Schema( description = "The airport longitude in decimal degrees (positive for east)",
              requiredMode = Schema.RequiredMode.REQUIRED,
-             pattern = LocationCodePatterns.LAT_LONG_DD, //"^[+-]?(?:0|[1-9]{1,6})\\.(?:[0-9]{1,14})?$",
+             pattern = GISPatterns.DD_LONGITUDE, //"^[+-]?(?:0|[1-9]{1,6})\\.(?:[0-9]{1,14})?$",
              example = "-84.428101"
     )
     @NonNull

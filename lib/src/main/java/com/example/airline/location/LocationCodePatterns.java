@@ -11,11 +11,6 @@ import java.util.regex.Pattern;
  */
 public final class LocationCodePatterns
 {
-    private LocationCodePatterns()
-    {
-        throw new IllegalStateException( "Instantiation of utility class is not allowed." );
-    }
-
     // ---------- Location Codes ----------
     // ----- Continent -----
     /**
@@ -54,6 +49,11 @@ public final class LocationCodePatterns
     public static final String ISO_REGION_SUB_CODE = "^((?:U-A)|(?:[A-Z0-9]{1,3}))$";
     public static final Pattern ISO_REGION_SUB_CODE_PATTERN = Pattern.compile( ISO_REGION_SUB_CODE );
 
+
+    private LocationCodePatterns()
+    {
+        throw new IllegalStateException( "Instantiation of utility class is not allowed." );
+    }
 
 
 
