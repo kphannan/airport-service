@@ -1,4 +1,4 @@
-package com.example.airline.location;
+package com.example.aviation.location;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
