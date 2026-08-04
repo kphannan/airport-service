@@ -87,7 +87,7 @@ public class Stopwatch implements AutoCloseable
     {
         stop();
         // debug();
-        logElapsed(null);
+        logElapsed( null );
     }
 
 
@@ -112,29 +112,25 @@ public class Stopwatch implements AutoCloseable
     //     logX( System.nanoTime(), text );
     // }
 
-    /** Log elapsed time with an optional message */
-    public void logRunningTime(String text)
+    /** Log elapsed time with an optional message. */
+    public void logRunningTime( final String text )
     {
-        logElapsed(text);
+        logElapsed( text );
     }
 
-    // private void debug()
-    // {
-    //     logX( stopNanos, null );
-    // }
 
-    private void logElapsed(String text)
+    private void logElapsed( final String text )
     {
-        if (startNanos == NOT_STARTED)
+        if ( startNanos == NOT_STARTED )
         {
             return; // Nothing to measure
         }
 
-        long endNanos = (stopNanos == NOT_STARTED) ? System.nanoTime() : stopNanos;
-        long elapsedMs = (endNanos - startNanos) / 1_000_000;
+        final long endNanos = (stopNanos == NOT_STARTED) ? System.nanoTime() : stopNanos;
+        final long elapsedMs = (endNanos - startNanos) / 1_000_000;
 
-        log.error(() -> String.format("%s, %s, %s: '%s' - elapsed: %d ms",
-                                      context, service, method, text == null ? "" : text, elapsedMs));
+        log.error(() -> String.format( "%s, %s, %s: '%s' - elapsed: %d ms",
+                                      context, service, method, text == null ? "" : text, elapsedMs ) );
     }
 
     // private void logX( final String text )
