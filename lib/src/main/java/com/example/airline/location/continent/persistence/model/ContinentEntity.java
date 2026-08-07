@@ -29,7 +29,7 @@ import org.jspecify.annotations.Nullable;
  */
 @Builder
 @Entity
-@Table( name = "continents")
+@Table( name = "continents" )
 @Data
 @NoArgsConstructor
 @Getter
