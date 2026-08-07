@@ -12,6 +12,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -25,8 +26,8 @@ import org.jspecify.annotations.NonNull;
 @Entity
 @Table( name = "iata_airportcode" )
 @Getter
-@Setter
-@ToString
+// @Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class AirportCodeIataEntity
 {
     private static final Pattern REGEX = Pattern.compile( AviationCodePatterns.AIRPORT_IATA );
@@ -36,6 +37,7 @@ public class AirportCodeIataEntity
     @jakarta.validation.constraints.Pattern( regexp = AviationCodePatterns.AIRPORT_IATA,
                                              message = "IATA code has three alphabetic characters" )
     @NonNull
+    @EqualsAndHashCode.Include
     private String iataCode;
 
 
@@ -54,7 +56,7 @@ public class AirportCodeIataEntity
      */
     public AirportCodeIataEntity( @NonNull final String value )
     {
-        if ( isValidIataCode( value ) )
+        if ( value != null && isValidIataCode( value ) )
         {
             iataCode = value;
         }
@@ -80,37 +82,11 @@ public class AirportCodeIataEntity
         return matcher.matches();
     }
 
-    @Override
-    public final boolean equals( final Object object )
-    {
-        if ( null == object || this == object )
-        {
-            return true;
-        }
-
-        final Class<?> oEffectiveClass =
-            object instanceof HibernateProxy ? ( (HibernateProxy)object )
-                                              .getHibernateLazyInitializer().getPersistentClass()
-                                        : object.getClass();
-        final Class<?> thisEffectiveClass =
-            this instanceof HibernateProxy ? ( (HibernateProxy)this )
-                                                 .getHibernateLazyInitializer().getPersistentClass()
-                                           : this.getClass();
-        if ( thisEffectiveClass != oEffectiveClass )
-        {
-            return false;
-        }
-
-        final AirportCodeIataEntity that = (AirportCodeIataEntity)object;
-
-        return Objects.equals( getIataCode(), that.getIataCode() );
-    }
-
-    @Override
-    public final int hashCode()
-    {
-        return this instanceof HibernateProxy ? ( (HibernateProxy)this ).getHibernateLazyInitializer()
-                                                                      .getPersistentClass()
-                                                                      .hashCode() : getClass().hashCode();
-    }
+    // @Override
+    // public String toString()
+    // {
+    //     return "AirportCodeIataEntity{" +
+    //                "iataCode='" + iataCode + '\'' +
+    //                '}';
+    // }
 }
