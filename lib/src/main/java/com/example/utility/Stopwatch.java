@@ -86,7 +86,6 @@ public class Stopwatch implements AutoCloseable
     public void close()
     {
         stop();
-        // debug();
         logElapsed( null );
     }
 
@@ -102,23 +101,21 @@ public class Stopwatch implements AutoCloseable
     }
 
 
-    /**
-     * Enter a log message with the elapsed time of the timer.
+    /** Log elapsed time with an optional message.
      *
      * @param text the text to write to the log.
      */
-    // public void logElapsed( final String text )
-    // {
-    //     logX( System.nanoTime(), text );
-    // }
-
-    /** Log elapsed time with an optional message. */
     public void logRunningTime( final String text )
     {
         logElapsed( text );
     }
 
 
+    /**
+     * Enter a log message with the elapsed time of the timer.
+     *
+     * @param text the text to write to the log.
+     */
     private void logElapsed( final String text )
     {
         if ( startNanos == NOT_STARTED )
@@ -132,22 +129,4 @@ public class Stopwatch implements AutoCloseable
         log.error(() -> String.format( "%s, %s, %s: '%s' - elapsed: %d ms",
                                       context, service, method, text == null ? "" : text, elapsedMs ) );
     }
-
-    // private void logX( final String text )
-    // {
-    //     if ( startNanos == NOT_STARTED )
-    //     {
-    //         return;     // nothing to measure
-    //     }
-    //     // log.error( "Kilroy was here" );
-    //     // System.out.println( String.format( "log: %s, %s, %s: '%s' - elapsed time: %d
-    //     // ms", context, service, method,
-    //     // text == null ? "" : text, endTime - startTime ) );
-    //     // log.debug( () -> String.format( "%s, %s, %s: '%s' - elapsed time: %d ms",
-    //     // context, service, method,
-    //     // text == null ? "" : text, endTime - startTime ) );
-    //     log.debug( () -> String.format( "%s, %s, %s: '%s' - elapsed time: %d ms", context, service, method,
-    //                                     text == null ? "" : text, endTime - startNanos ) );
-    // }
-
 }

@@ -6,9 +6,14 @@ package com.example.utility;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
+
 import nl.altindag.log.LogCaptor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 
@@ -42,42 +47,61 @@ class StopwatchTest
 
 
 
-
-    @Test
-    @SuppressWarnings( "PMD.CloseResource" )
-    void constructor_AutoStartFalse_DoesNotCrash()
+    @Nested
+    @DisplayName( "Constructor" )
+    class Constructor
     {
-        final Stopwatch timer = new Stopwatch( "test", "ctor", "autostartFalse", false );
 
-        assertAll( () -> assertThat( timer.isRunning() ).isFalse(),
-                   () -> assertThat( logCaptor.getLogs() ).isEmpty() );
+        @Test
+        @SuppressWarnings( "PMD.CloseResource")
+        void constructor_AutoStartFalse_DoesNotCrash()
+        {
+            final Stopwatch timer = new Stopwatch( "test", "ctor", "autostartFalse", false );
+
+            assertAll( () -> assertThat( timer.isRunning() ).isFalse(),
+                       () -> assertThat( logCaptor.getLogs() ).isEmpty() );
+        }
+
+
+        @Test
+        @SuppressWarnings( "PMD.CloseResource")
+        void constructor_AutoStartTrue_DoesNotCrash()
+        {
+            final Stopwatch timer = new Stopwatch( "test", "mthd", "autostartTrue" );
+
+            assertAll( () -> assertThat( timer.isRunning() ).isTrue(),
+                       () -> assertThat( logCaptor.getLogs() ).isEmpty() );
+        }
+
+
+        @Test
+        @SuppressWarnings( "PMD.CloseResource")
+        void runningTime_Start_ActuallyStartsTime()
+        {
+            final Stopwatch timer = new Stopwatch( "time", "autostart", "autostartFalse", false );
+
+            assertThat( timer.isRunning() ).isFalse();
+            timer.start();
+            assertAll( () -> assertThat( timer.isRunning() ).isTrue(),
+                       () -> assertThat( logCaptor.getLogs() ).isEmpty() );
+        }
     }
 
 
-
     @Test
-    @SuppressWarnings( "PMD.CloseResource" )
-    void constructor_AutoStartTrue_DoesNotCrash()
+    void logRunningTime_notStarted_logsNothing()
     {
-        final Stopwatch timer = new Stopwatch( "test", "mthd", "autostartTrue" );
-
-        assertAll( () -> assertThat( timer.isRunning() ).isTrue(),
-                   () -> assertThat( logCaptor.getLogs() ).isEmpty() );
+        try ( Stopwatch timer = new Stopwatch( "svc", "method", "logNothing", false ) )
+        {
+            timer.logRunningTime( "Does not log" );
+            // assertThat( timer.isRunning() ).isTrue();
+            assertAll( () -> assertThat( timer.isRunning() ).isFalse(),
+                       () -> assertThat( logCaptor.getLogs() )
+                                 .hasSize( 0 )
+            );
+        }
     }
 
-
-
-    @Test
-    @SuppressWarnings( "PMD.CloseResource" )
-    void runningTime_Start_ActuallyStartsTime()
-    {
-        final Stopwatch timer = new Stopwatch( "time", "autostart", "autostartFalse", false );
-
-        assertThat( timer.isRunning() ).isFalse();
-        timer.start();
-        assertAll( () -> assertThat( timer.isRunning() ).isTrue(),
-                   () -> assertThat( logCaptor.getLogs() ).isEmpty() );
-    }
 
 
 
@@ -170,9 +194,10 @@ class StopwatchTest
             assertThat( timer.isRunning() ).isTrue();
         }
 
-
-        assertThat( logCaptor.getLogs() )
-            .contains( "autoclose, svc, method: '' - elapsed: 0 ms" );
+        Pattern pattern = Pattern.compile( "autoclose.*svc.*method.*elapsed:\\s\\d+\\sms" );
+        var zzz = logCaptor.getLogs();
+        assertThat( zzz ) //logCaptor.getLogs() )
+            .anyMatch( s -> pattern.matcher( s ).matches() );
     }
 
 
