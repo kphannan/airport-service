@@ -1,0 +1,73 @@
+
+          <svg xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" version="1.1" width="1193.640625" height="183">
+            <defs>
+              <style type="text/css">svg {
+          background-color: #fff; }
+        
+        .root text,
+        .root tspan {
+          font: 12px Arial; }
+        
+        .root path {
+          fill-opacity: 0;
+          stroke-width: 2px;
+          stroke: #000; }
+        
+        .root circle {
+          fill: #6b6659;
+          stroke-width: 2px;
+          stroke: #000; }
+        
+        .anchor text, .any-character text {
+          fill: #fff; }
+        
+        .anchor rect, .any-character rect {
+          fill: #6b6659; }
+        
+        .escape text, .charset-escape text, .literal text {
+          fill: #000; }
+        
+        .escape rect, .charset-escape rect {
+          fill: #bada55; }
+        
+        .literal rect {
+          fill: #dae9e5; }
+        
+        .charset .charset-box {
+          fill: #cbcbba; }
+        
+        .subexp .subexp-label tspan,
+        .charset .charset-label tspan,
+        .match-fragment .repeat-label tspan {
+          font-size: 10px; }
+        
+        .repeat-label {
+          cursor: help; }
+        
+        .subexp .subexp-label tspan,
+        .charset .charset-label tspan {
+          dominant-baseline: text-after-edge; }
+        
+        .subexp .subexp-box {
+          stroke: #908c83;
+          stroke-dasharray: 6,2;
+          stroke-width: 2px;
+          fill-opacity: 0; }
+        
+        .quote {
+          fill: #908c83; }
+        </style>
+            </defs>
+            <metadata>
+              <rdf:rdf>
+                <cc:license rdf:about="http://creativecommons.org/licenses/by/3.0/">
+                  <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction"></cc:permits>
+                  <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution"></cc:permits>
+                  <cc:requires rdf:resource="http://creativecommons.org/ns#Notice"></cc:requires>
+                  <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution"></cc:requires>
+                  <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks"></cc:permits>
+                </cc:license>
+              </rdf:rdf>
+            </metadata>
+          <desc>Created with Snap</desc><g class="root" transform="matrix(1,0,0,1,15,9.8955)"><g class="regexp match" transform="matrix(1,0,0,1,10,0)"><path d="M88.375,92.6045H123.375M334.015625,92.6045H354.0156M376.8281,92.6045H401.8281M475.2031,92.6045H525.2031M753.953125,92.6045H814.75M847.5625,92.6045H872.5625M945.9375,92.6045H980.9375M1020.265625,92.6045H1055.2656"></path><g class="match-fragment" transform="matrix(1,0,0,1,0,70.6045)"><path d="M0,22q10,0 10,-10v-2q0,-10 10,-10h63.375q10,0 10,10v2q0,10 10,10M15,22q-10,0 -10,10v2q0,10 10,10h73.375q10,0 10,-10v-2q0,-10 -10,-10M98.375,37l5,-5m-5,5l-5,-5"></path><g class="escape" transform="matrix(1,0,0,1,15,10)"><g class="label"><rect width="73.375" height="24" rx="3" ry="3"></rect><text x="0" y="0" transform="matrix(1,0,0,1,5,17)"><tspan>white space</tspan></text></g></g></g><g class="match-fragment subexp" transform="matrix(1,0,0,1,113.375,20.5)"><rect rx="3" ry="3" class="subexp-box" transform="matrix(1,0,0,1,0,11.1045)" width="230.640625" height="122"></rect><text x="0" y="0" class="subexp-label" transform="matrix(1,0,0,1,0,11.1045)"><tspan>group #1</tspan></text><g class="regexp" transform="matrix(1,0,0,1,10,21.1045)"><path d="M0,51c10,0 10,-13 20,-13M210.640625,51c-10,0 -10,-13 -20,-13M10,80q0,10 10,10M200.640625,80q0,10 -10,10M0,51q10,0 10,10V80M210.640625,51q-10,0 -10,10V80"></path><g transform="matrix(1,0,0,1,20,0)" class="regexp-matches"><path d="M0,38h15M155.390625,38H170.640625M0,90h66.3047M104.33595,90H170.640625"></path><g class="match" transform="matrix(1,0,0,1,0,0)"><path d="M88.375,38H123.375"></path><g class="match-fragment" transform="matrix(1,0,0,1,0,0)"><path d="M0,38q10,0 10,-10v-18q0,-10 10,-10h63.375q10,0 10,10v18q0,10 10,10"></path><g class="charset" transform="matrix(1,0,0,1,15,10)"><rect rx="3" ry="3" class="charset-box" transform="matrix(1,0,0,1,0,11)" width="73.375" height="34"></rect><text x="0" y="0" class="charset-label" transform="matrix(1,0,0,1,0,11)"><tspan>One of:</tspan></text><g transform="matrix(1,0,0,1,5,16)"><g class="charset-range" transform="matrix(1,0,0,1,0,0)"><text x="0" y="0" transform="matrix(1,0,0,1,29.6875,16)">-</text><g class="literal" transform="matrix(1,0,0,1,0,0)"><g class="label"><rect width="24.6875" height="24" rx="3" ry="3"></rect><text x="0" y="0" transform="matrix(1,0,0,1,5,17)"><tspan class="quote">“</tspan><tspan>1</tspan><tspan class="quote">”</tspan></text></g></g><g class="literal" transform="matrix(1,0,0,1,38.6875,0)"><g class="label"><rect width="24.6875" height="24" rx="3" ry="3"></rect><text x="0" y="0" transform="matrix(1,0,0,1,5,17)"><tspan class="quote">“</tspan><tspan>7</tspan><tspan class="quote">”</tspan></text></g></g></g></g></g></g><g class="match-fragment" transform="matrix(1,0,0,1,113.375,26)"><path d="M10,12q-10,0 -10,10v2q0,10 10,10h32.015625q10,0 10,-10v-2q0,-10 -10,-10M52.015625,27l5,-5m-5,5l-5,-5"></path><g class="escape" transform="matrix(1,0,0,1,10,0)"><g class="label"><rect width="32.015625" height="24" rx="3" ry="3"></rect><text x="0" y="0" transform="matrix(1,0,0,1,5,17)"><tspan>digit</tspan></text></g></g><text x="0" y="0" class="repeat-label" transform="matrix(1,0,0,1,0,45)"><tspan>at most once</tspan><title><text x="0" y="0">repeats at most 2 times in total</text></title></text></g></g><g class="match match-fragment literal" transform="matrix(1,0,0,1,66.3047,78)"><g class="label"><rect width="38.03125" height="24" rx="3" ry="3"></rect><text x="0" y="0" transform="matrix(1,0,0,1,5,17)"><tspan class="quote">“</tspan><tspan>180</tspan><tspan class="quote">”</tspan></text></g></g></g></g></g><g class="match-fragment literal" transform="matrix(1,0,0,1,354.0156,80.6045)"><g class="label"><rect width="22.8125" height="24" rx="3" ry="3"></rect><text x="0" y="0" transform="matrix(1,0,0,1,5,17)"><tspan class="quote">“</tspan><tspan>°</tspan><tspan class="quote">”</tspan></text></g></g><g class="match-fragment" transform="matrix(1,0,0,1,386.8281,70.6045)"><path d="M0,22q10,0 10,-10v-2q0,-10 10,-10h63.375q10,0 10,10v2q0,10 10,10M15,22q-10,0 -10,10v2q0,10 10,10h73.375q10,0 10,-10v-2q0,-10 -10,-10M98.375,37l5,-5m-5,5l-5,-5"></path><g class="escape" transform="matrix(1,0,0,1,15,10)"><g class="label"><rect width="73.375" height="24" rx="3" ry="3"></rect><text x="0" y="0" transform="matrix(1,0,0,1,5,17)"><tspan>white space</tspan></text></g></g></g><g class="match-fragment subexp" transform="matrix(1,0,0,1,500.2031,33.5)"><rect rx="3" ry="3" class="subexp-box" transform="matrix(1,0,0,1,0,11.1045)" width="304.546875" height="93"></rect><text x="0" y="0" class="subexp-label" transform="matrix(1,0,0,1,0,11.1045)"><tspan>group #2</tspan></text><g class="regexp match" transform="matrix(1,0,0,1,10,21.1045)"><path d="M88.375,38H113.375M145.390625,38H170.3906"></path><g class="match-fragment" transform="matrix(1,0,0,1,0,0)"><path d="M0,38q10,0 10,-10v-18q0,-10 10,-10h63.375q10,0 10,10v18q0,10 10,10"></path><g class="charset" transform="matrix(1,0,0,1,15,10)"><rect rx="3" ry="3" class="charset-box" transform="matrix(1,0,0,1,0,11)" width="73.375" height="34"></rect><text x="0" y="0" class="charset-label" transform="matrix(1,0,0,1,0,11)"><tspan>One of:</tspan></text><g transform="matrix(1,0,0,1,5,16)"><g class="charset-range" transform="matrix(1,0,0,1,0,0)"><text x="0" y="0" transform="matrix(1,0,0,1,29.6875,16)">-</text><g class="literal" transform="matrix(1,0,0,1,0,0)"><g class="label"><rect width="24.6875" height="24" rx="3" ry="3"></rect><text x="0" y="0" transform="matrix(1,0,0,1,5,17)"><tspan class="quote">“</tspan><tspan>1</tspan><tspan class="quote">”</tspan></text></g></g><g class="literal" transform="matrix(1,0,0,1,38.6875,0)"><g class="label"><rect width="24.6875" height="24" rx="3" ry="3"></rect><text x="0" y="0" transform="matrix(1,0,0,1,5,17)"><tspan class="quote">“</tspan><tspan>5</tspan><tspan class="quote">”</tspan></text></g></g></g></g></g></g><g class="match-fragment escape" transform="matrix(1,0,0,1,113.375,26)"><g class="label"><rect width="32.015625" height="24" rx="3" ry="3"></rect><text x="0" y="0" transform="matrix(1,0,0,1,5,17)"><tspan>digit</tspan></text></g></g><g class="match-fragment" transform="matrix(1,0,0,1,155.3906,16)"><path d="M0,22q10,0 10,-10v-2q0,-10 10,-10h89.15629577636719q10,0 10,10v2q0,10 10,10"></path><g class="subexp regexp match" transform="matrix(1,0,0,1,15,10)"><path d="M21.34375,12H41.3438"></path><g class="match-fragment literal" transform="matrix(1,0,0,1,0,0)"><g class="label"><rect width="21.34375" height="24" rx="3" ry="3"></rect><text x="0" y="0" transform="matrix(1,0,0,1,5,17)"><tspan class="quote">“</tspan><tspan>.</tspan><tspan class="quote">”</tspan></text></g></g><g class="match-fragment" transform="matrix(1,0,0,1,31.3438,0)"><path d="M10,12q-10,0 -10,10v2q0,10 10,10h32.015625q10,0 10,-10v-2q0,-10 -10,-10M52.015625,27l5,-5m-5,5l-5,-5"></path><g class="escape" transform="matrix(1,0,0,1,10,0)"><g class="label"><rect width="32.015625" height="24" rx="3" ry="3"></rect><text x="0" y="0" transform="matrix(1,0,0,1,5,17)"><tspan>digit</tspan></text></g></g><text x="0" y="0" class="repeat-label" transform="matrix(1,0,0,1,0,45)"><tspan>at most 2 times</tspan><title><text x="0" y="0">repeats at most 3 times in total</text></title></text></g></g></g></g></g><g class="match-fragment charset" transform="matrix(1,0,0,1,814.75,50.1045)"><rect rx="3" ry="3" class="charset-box" transform="matrix(1,0,0,1,0,11)" width="32.8125" height="63"></rect><text x="0" y="0" class="charset-label" transform="matrix(1,0,0,1,0,11)"><tspan>One of:</tspan></text><g transform="matrix(1,0,0,1,6.2578,16)"><g class="literal" transform="matrix(1,0,0,1,0,0)"><g class="label"><rect width="20.296875" height="24" rx="3" ry="3"></rect><text x="0" y="0" transform="matrix(1,0,0,1,5,17)"><tspan class="quote">“</tspan><tspan>'</tspan><tspan class="quote">”</tspan></text></g></g><g class="literal" transform="matrix(1,0,0,1,0.0234,29)"><g class="label"><rect width="20.25" height="24" rx="3" ry="3"></rect><text x="0" y="0" transform="matrix(1,0,0,1,5,17)"><tspan class="quote">“</tspan><tspan>′</tspan><tspan class="quote">”</tspan></text></g></g></g></g><g class="match-fragment" transform="matrix(1,0,0,1,857.5625,70.6045)"><path d="M0,22q10,0 10,-10v-2q0,-10 10,-10h63.375q10,0 10,10v2q0,10 10,10M15,22q-10,0 -10,10v2q0,10 10,10h73.375q10,0 10,-10v-2q0,-10 -10,-10M98.375,37l5,-5m-5,5l-5,-5"></path><g class="escape" transform="matrix(1,0,0,1,15,10)"><g class="label"><rect width="73.375" height="24" rx="3" ry="3"></rect><text x="0" y="0" transform="matrix(1,0,0,1,5,17)"><tspan>white space</tspan></text></g></g></g><g class="match-fragment subexp" transform="matrix(1,0,0,1,970.9375,0)"><rect rx="3" ry="3" class="subexp-box" transform="matrix(1,0,0,1,0,11.1045)" width="59.328125" height="152"></rect><text x="0" y="0" class="subexp-label" transform="matrix(1,0,0,1,0,11.1045)"><tspan>group #3</tspan></text><g class="regexp match match-fragment charset" transform="matrix(1,0,0,1,10,21.1045)"><rect rx="3" ry="3" class="charset-box" transform="matrix(1,0,0,1,0,11)" width="39.328125" height="121"></rect><text x="0" y="0" class="charset-label" transform="matrix(1,0,0,1,0,11)"><tspan>One of:</tspan></text><g transform="matrix(1,0,0,1,5,16)"><g class="literal" transform="matrix(1,0,0,1,1.6563,0)"><g class="label"><rect width="26.015625" height="24" rx="3" ry="3"></rect><text x="0" y="0" transform="matrix(1,0,0,1,5,17)"><tspan class="quote">“</tspan><tspan>E</tspan><tspan class="quote">”</tspan></text></g></g><g class="literal" transform="matrix(1,0,0,1,0,29)"><g class="label"><rect width="29.328125" height="24" rx="3" ry="3"></rect><text x="0" y="0" transform="matrix(1,0,0,1,5,17)"><tspan class="quote">“</tspan><tspan>W</tspan><tspan class="quote">”</tspan></text></g></g><g class="literal" transform="matrix(1,0,0,1,2.3203,58)"><g class="label"><rect width="24.6875" height="24" rx="3" ry="3"></rect><text x="0" y="0" transform="matrix(1,0,0,1,5,17)"><tspan class="quote">“</tspan><tspan>e</tspan><tspan class="quote">”</tspan></text></g></g><g class="literal" transform="matrix(1,0,0,1,1.3281,87)"><g class="label"><rect width="26.671875" height="24" rx="3" ry="3"></rect><text x="0" y="0" transform="matrix(1,0,0,1,5,17)"><tspan class="quote">“</tspan><tspan>w</tspan><tspan class="quote">”</tspan></text></g></g></g></g></g><g class="match-fragment" transform="matrix(1,0,0,1,1040.2656,70.6045)"><path d="M0,22q10,0 10,-10v-2q0,-10 10,-10h63.375q10,0 10,10v2q0,10 10,10M15,22q-10,0 -10,10v2q0,10 10,10h73.375q10,0 10,-10v-2q0,-10 -10,-10M98.375,37l5,-5m-5,5l-5,-5"></path><g class="escape" transform="matrix(1,0,0,1,15,10)"><g class="label"><rect width="73.375" height="24" rx="3" ry="3"></rect><text x="0" y="0" transform="matrix(1,0,0,1,5,17)"><tspan>white space</tspan></text></g></g></g></g><path d="M25,92.6045H0M1138.6406,92.6045H1163.640625"></path><circle cx="0" cy="92.6045" r="5"></circle><circle cx="1163.640625" cy="92.6045" r="5"></circle></g></svg>
+        
