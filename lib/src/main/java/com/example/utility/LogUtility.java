@@ -23,7 +23,10 @@ public final class LogUtility
     static <T> void printList( final String msg, final Collection<T> collection )
     {
         log.error( "Display collection {}", msg );
-        collection.forEach( log::error );
+        if ( null != collection )
+        {
+            collection.forEach( log::error );
+        }
     }
 
 }
