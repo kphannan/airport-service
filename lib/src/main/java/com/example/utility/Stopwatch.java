@@ -14,8 +14,9 @@ public class Stopwatch implements AutoCloseable
 {
     private static final long NOT_STARTED = -1L;
 
-    private long startNanos = NOT_STARTED;
-    private long stopNanos  = NOT_STARTED;
+    // TODO mutation tests needed
+    private long startNanos;
+    private long stopNanos;
 
     private final String service;
     private final String method;
@@ -44,6 +45,7 @@ public class Stopwatch implements AutoCloseable
      */
     public Stopwatch( final String service, final String method, final String context, final boolean autoStart )
     {
+        // TODO mutation tests needed
         startNanos = NOT_STARTED;
         stopNanos  = NOT_STARTED;
 
@@ -63,6 +65,7 @@ public class Stopwatch implements AutoCloseable
      */
     public final void start()
     {
+        // TODO mutation tests needed
         if ( startNanos == NOT_STARTED )
         {
             startNanos = System.nanoTime();
@@ -75,6 +78,7 @@ public class Stopwatch implements AutoCloseable
      */
     public final void stop()
     {
+        // TODO mutation tests needed
         if ( stopNanos == NOT_STARTED )
         {
             stopNanos = System.nanoTime();
@@ -123,6 +127,7 @@ public class Stopwatch implements AutoCloseable
             return; // Nothing to measure
         }
 
+        // TODO mutation tests needed
         final long endNanos = (stopNanos == NOT_STARTED) ? System.nanoTime() : stopNanos;
         final long elapsedMs = (endNanos - startNanos) / 1_000_000;
 
