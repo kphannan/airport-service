@@ -49,6 +49,37 @@ import java.util.regex.Pattern;
  *   D & M must be integers, S may be an integer or float.
  *   DMS.latitude  - /^[\+-]?(([1-8]?\d)\D+([1-5]?\d|60)\D+([1-5]?\d|60)(\.\d+)?|90\D+0\D+0)\D+[NSns]?$/
  *   DMS.longitude - /^[\+-]?([1-7]?\d{1,2}\D+([1-5]?\d|60)\D+([1-5]?\d|60)(\.\d+)?|180\D+0\D+0)\D+[EWew]?$/
+ *
+ * <p>The DMS (Degrees, Minutes, Seconds) format is a traditional method for expressing geographic coordinates,
+ * breaking each position into three base-60 components: degrees, minutes, and seconds.
+ * It is primarily used in traditional navigation, marine charts, aviation, surveying, and topographic maps
+ * where maximum precision and human readability are prioritized over computational simplicity.
+ *
+ * <p>A DMS coordinate consists of:
+ * Degrees (°): Whole numbers ranging from 0 to 90 for latitude and 0 to 180 for longitude.
+ * Minutes ('): Whole numbers from 0 to 59.
+ * Seconds ("): Decimal numbers from 0 to 59.999.
+ * Direction: Cardinal indicators (N/S for latitude, E/W for longitude) replace negative signs.
+ * <p>Example: The coordinates for New York City in DMS are 40° 41′ 21″ N, 74° 2′ 40″ W.
+ *
+ * <p>Comparison with Other Formats:
+ * <pre>
+ * Format	Example	                      Best Use Case
+ * DMS	    40° 41′ 21″ N, 74° 2′ 40″ W	  Traditional maps, surveying, professional navigation
+ * DDM	    40° 41.35′ N, 74° 2.667′ W	  Garmin GPS devices, aviation, nautical charts
+ * DD	    40.689167, -74.044444	      Digital maps (Google Maps), software, databases
+ * </pre>
+ * To convert DMS to Decimal Degrees (DD), use the formula: DD=Degrees+
+ * 60
+ * Minutes
+ * ​
+ *  +
+ * 3600
+ * Seconds
+ * ​
+ *   (Note: Apply a negative sign for South or West directions in DD format.)
+ *
+ * https://regexper.com/
  */
 public final class GISPatterns
 {
@@ -58,12 +89,12 @@ public final class GISPatterns
     //  -90 <= latitude  <=  90
     // -180 <= longitude <= 180
     // Capture Group 1: The numeric value
-    public static final String DD_LATITUDE = "([+-]?(?:[1-8]?\\d(?:\\.\\d{1,6})?|90(?:\\.0{1,6})?))°?\\s*[NSns]?";
-    public static final String DD_LONGITUDE = "([+-]?(?:1[0-7]\\d(?:\\.\\d{1,6})?|180(?:\\.0{1,6})?|\\d{1,2}(?:\\.\\d{1,6})?))°?\\s*[EWew]?";
+    public static final String DD_LATITUDE  = "(([+-]?)(?:[1-8]?\\d(?:\\.\\d{1,6})?|90(?:\\.0{1,6})?))°?\\s*([NSns]?)";
+    public static final String DD_LONGITUDE = "(([+-]?)(?:1[0-7]\\d(?:\\.\\d{1,6})?|180(?:\\.0{1,6})?|\\d{1,2}(?:\\.\\d{1,6})?))°?\\s*([EWew]?)";
 
 
-    public static final Pattern DD_LAT_PATTERN = Pattern.compile( "^" + DD_LATITUDE + "$" );
-    public static final Pattern DD_LONG_PATTERN = Pattern.compile( "^" + DD_LONGITUDE + "$" );
+    public static final Pattern DD_LAT_PATTERN      = Pattern.compile( "^" + DD_LATITUDE + "$" );
+    public static final Pattern DD_LONG_PATTERN     = Pattern.compile( "^" + DD_LONGITUDE + "$" );
     public static final Pattern DD_LAT_LONG_PATTERN = Pattern.compile( "^" + DD_LATITUDE + ",\\s*" + DD_LONGITUDE + "$" );
 
 
@@ -71,16 +102,12 @@ public final class GISPatterns
     // Format: DD° MM.M' N/S, DDD° MM.M' E/W
     //  0 <= latitude  <=  90
     //  0 <= longitude <= 180
-    // private static final String DDM_LAT_CORE = "\\s*(?:[1-8]?\\d|90)°\\s*(?:[1-5]?\\d|0)(?:\\.\\d+)?['′]\\s*[NSns]\\s*";
-    // private static final String DDM_LONG_CORE = "\\s*(?:1[0-7]\\d|180|[1-9]?\\d)°\\s*(?:[1-5]?\\d|0)(?:\\.\\d{1,3})?['′]\\s*[EWew]\\s*";
     // Group 1: Degrees, Group 2: Minutes, Group 3: Direction
-    private static final String DDM_LAT_CORE = "\\s*([1-8]?\\d|90)°\\s*([1-5]?\\d|0)(?:\\.\\d+)?['′]\\s*([NSns])\\s*";
-    private static final String DDM_LONG_CORE = "\\s*([1-7]?\\d{1,2}|180)°\\s*([1-5]?\\d|0)(?:\\.\\d{1,3})?['′]\\s*([EWew])\\s*";
-    // Correction: DDM_LONG_CORE needs the degree capture group as well
-    // private static final String DDM_LONG_FIXED = "\\s*([1-7]?\\d{1,2}|180)°\\s*([1-5]?\\d|0)(?:\\.\\d{1,3})?['′]\\s*([EWew])\\s*";
+    private static final String DDM_LAT_CORE  = "([1-8]?\\d|90)°\\s*([1-5]?\\d(?:\\.\\d+)?)['′]\\s*([NSns])";
+    private static final String DDM_LONG_CORE = "([1-7]?\\d{1,2}|180)°\\s*([1-5]?\\d(?:\\.\\d{1,3})?)['′]\\s*([EWew])";
 
-    public static final Pattern DDM_LAT_PATTERN = Pattern.compile( "^" + DDM_LAT_CORE + "$" );
-    public static final Pattern DDM_LONG_PATTERN = Pattern.compile( "^" + DDM_LONG_CORE + "$" );
+    public static final Pattern DDM_LAT_PATTERN      = Pattern.compile( "^" + DDM_LAT_CORE + "$" );
+    public static final Pattern DDM_LONG_PATTERN     = Pattern.compile( "^" + DDM_LONG_CORE + "$" );
     public static final Pattern DDM_LAT_LONG_PATTERN = Pattern.compile( "^" + DDM_LAT_CORE + ",\\s*" + DDM_LONG_CORE + "$" );
 
 
@@ -90,12 +117,11 @@ public final class GISPatterns
     //  0 <= latitude  <=  90
     //  0 <= longitude <= 180
     // Group 1: Deg, Group 2: Min, Group 3: Sec, Group 4: Direction
-    private static final String DMS_LAT_CORE = "\\s*([1-8]?\\d|90)°\\s*([1-5]?\\d|0)['′]\\s*([1-5]?\\d|0)(?:\\.\\d+)?[\"″]?\\s*([NSns])\\s*";
-    private static final String DMS_LONG_CORE = "\\s*([1-7]?\\d{1,2}|180)°\\s*([1-5]?\\d|0)['′]\\s*([1-5]?\\d|0)(?:\\.\\d+)?[\"″]?\\s*([EWew])\\s*";
-    // private static final String DMS_LAT_CORE = "\\s*(?:[1-8]?\\d|90)°\\s*(?:[1-5]?\\d|0)['′]\\s*(?:[1-5]?\\d|0)(?:\\.\\d+)?[\"″]?\\s*[NSns]\\s*";
-    // private static final String DMS_LONG_CORE = "\\s*(?:1[0-7]\\d|180|[1-9]?\\d)°\\s*(?:[1-5]?\\d|0)['′]\\s*(?:[1-5]?\\d|0)(?:\\.\\d+)?[\"″]?\\s*[EWew]\\s*";
-    public static final Pattern DMS_LAT_PATTERN = Pattern.compile( "^" + DMS_LAT_CORE + "$" );
-    public static final Pattern DMS_LONG_PATTERN = Pattern.compile( "^" + DMS_LONG_CORE + "$" );
+    private static final String DMS_LAT_CORE  = "([1-8]?\\d|90)°\\s*([1-5]?\\d|0)['′]\\s*([1-5]?\\d|0)(?:\\.\\d+)?[\"″]?\\s*([NSns])";
+    private static final String DMS_LONG_CORE = "([1-7]?\\d{1,2}|180)°\\s*([1-5]?\\d|0)['′]\\s*([1-5]?\\d|0)(?:\\.\\d+)?[\"″]?\\s*([EWew])";
+
+    public static final Pattern DMS_LAT_PATTERN      = Pattern.compile( "^" + DMS_LAT_CORE + "$" );
+    public static final Pattern DMS_LONG_PATTERN     = Pattern.compile( "^" + DMS_LONG_CORE + "$" );
     public static final Pattern DMS_LAT_LONG_PATTERN = Pattern.compile( "^" + DMS_LAT_CORE + ",\\s*" + DMS_LONG_CORE + "$" );
 
 
