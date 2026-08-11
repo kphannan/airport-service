@@ -10,7 +10,7 @@ import lombok.extern.log4j.Log4j2;
  * A simple way to capture elapsed time.
  */
 @Log4j2
-public class Stopwatch implements AutoCloseable
+public final class Stopwatch implements AutoCloseable
 {
     private static final long NOT_STARTED = -1L;
 
@@ -131,7 +131,7 @@ public class Stopwatch implements AutoCloseable
         final long endNanos = (stopNanos == NOT_STARTED) ? System.nanoTime() : stopNanos;
         final long elapsedMs = (endNanos - startNanos) / 1_000_000;
 
-        log.error(() -> String.format( "%s, %s, %s: '%s' - elapsed: %d ms",
+        log.info(() -> String.format( "%s, %s, %s: '%s' - elapsed: %d ms",
                                       context, service, method, text == null ? "" : text, elapsedMs ) );
     }
 }

@@ -65,7 +65,7 @@ public record AirportSummaryEntity(
     String continentName,
 
     @NotBlank( message = "An ISO 3166-1:alpha2 country code is required" )
-    @Pattern( regexp = LocationCodePatterns.CONTINENT_CODE, message = "Country code must be a valid ISO 3166-1:alpha2" )
+    @Pattern( regexp = LocationCodePatterns.ISO_COUNTRY_CODE, message = "Country code must be a valid ISO 3166-1:alpha2" )
     String countryCode,
 
     @NotBlank

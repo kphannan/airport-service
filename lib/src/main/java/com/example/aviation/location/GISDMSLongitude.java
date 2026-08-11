@@ -67,10 +67,8 @@ public class GISDMSLongitude extends GISLongitude
         }
         else
         {
-            throw new IllegalArgumentException( String.format( "Invalid DMS Longitude: '%s' is out of range [ %s, %s ]",
-                                                               input,
-                                                               range.getMin(),
-                                                               range.getMax()
+            throw new IllegalArgumentException( String.format( "Invalid DMS Longitude: '%s'",
+                                                               input
                                                              ) );
         }
 

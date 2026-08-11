@@ -54,7 +54,7 @@ public final class StringUtility
     {
         if ( null != messages && !messages.isEmpty() )
         {
-            return null != criteria && messages.stream().anyMatch( e -> 0 <= e.indexOf( criteria ) );
+            return null != criteria && messages.stream().anyMatch( e -> e.contains( criteria ) );
         }
 
         return false;

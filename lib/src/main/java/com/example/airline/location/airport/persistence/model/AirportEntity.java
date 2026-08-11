@@ -439,7 +439,7 @@ public class AirportEntity // extends Auditable<String>
      * whenever possible, preferring higher administrative levels, but also
      * includes some custom codes. See the documentation for regions.csv.'
      */
-    @Column( name = "iso_region", length = 7, nullable = false, columnDefinition = "char(2)" )
+    @Column( name = "iso_region", length = 7, nullable = false, columnDefinition = "char(7)" )
     @NonNull private String isoRegion;
 
     /**

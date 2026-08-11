@@ -139,7 +139,7 @@ public final class GISPatterns
      */
     public static boolean isDDValidLatLong( final String coordinate )
     {
-        // TODO -90 <= latitude  <=  90
+        // -90 <= latitude  <=  90
         // TODO -180 <= longitude <= 180
         return coordinate != null && DD_LAT_LONG_PATTERN.matcher( coordinate ).matches();
     }
@@ -149,7 +149,7 @@ public final class GISPatterns
      */
     public static boolean isDDValidLatitude( final String latitude )
     {
-        // TODO -90 <= latitude  <=  90
+        // -90 <= latitude  <=  90
         return latitude != null && DD_LAT_PATTERN.matcher( latitude ).matches();
     }
 
@@ -168,20 +168,20 @@ public final class GISPatterns
      */
     public static boolean isDDMValidLatLong( final String coordinate )
     {
-        // TODO  0 <= latitude  <=  90
+        //  0 <= latitude  <=  90
         // TODO  0 <= longitude <= 180
         return coordinate != null && DDM_LAT_LONG_PATTERN.matcher( coordinate ).matches();
     }
 
     public static boolean isDDMValidLat( final String coordinate )
     {
-        // TODO  0 <= latitude  <=  90
+        //  0 <= latitude  <=  90
         return coordinate != null && DDM_LAT_PATTERN.matcher( coordinate ).matches();
     }
 
     public static boolean isDDMValidLong( final String coordinate )
     {
-        // TODO  0 <= latitude  <=  90
+        //  0 <= latitude  <=  90
         // TODO  0 <= longitude <= 180
         return coordinate != null && DDM_LONG_PATTERN.matcher( coordinate ).matches();
     }
@@ -192,14 +192,14 @@ public final class GISPatterns
      */
     public static boolean isDMSValidLatLong( final String coordinate )
     {
-        // TODO  0 <= latitude  <=  90
+        //  0 <= latitude  <=  90
         // TODO  0 <= longitude <= 180
         return coordinate != null && DMS_LAT_LONG_PATTERN.matcher( coordinate ).matches();
     }
 
     public static boolean isDMSValidLat( final String coordinate )
     {
-        // TODO  0 <= latitude  <=  90
+        //  0 <= latitude  <=  90
         return coordinate != null && DMS_LAT_PATTERN.matcher( coordinate ).matches();
     }
 

@@ -29,4 +29,15 @@ public abstract class GISCoordinate
         this.latitude  = latitude;
         this.longitude = longitude;
     }
+
+
+    public @NonNull GISLatitude getLatitude()
+    {
+        return latitude;
+    }
+
+    public @NonNull GISLongitude getLongitude()
+    {
+        return longitude;
+    }
 }

@@ -66,7 +66,6 @@ public final class AviationCodePatterns
      * National aircraft registration pattern.
      * Supports formats like: G-ABCD, F-ABC, N12345A
      */
-    // public static final String  AIRCRAFT_REGISTRATION = "[A-Z]-[A-Z]{4}|[A-Z]{2}-[A-Z]{3}|N[0-9]{1,5}[A-Z]{0,2}|N[1-9][0-9]{0,2}[]A-Z]";
     public static final String  AIRCRAFT_REGISTRATION = "^(?:[A-Z]-[A-Z]{4}|[A-Z]{2}-[A-Z]{3}|N[1-9](([0-9]{0,4})|([0-9]{0,3}[A-HJ-NP-Z])|([0-9]{0,2}[A-HJ-NP-Z]{2})))$";
     public static final Pattern AIRCRAFT_REGISTRATION_PATTERN = Pattern.compile( AIRCRAFT_REGISTRATION );
 

@@ -59,7 +59,7 @@ public class RegionEntity
      * region (or perhaps can't be, as in the case of a deep-sea oil platform).
      */
     @Column( name = "local_code", length = 4, nullable = false )
-    @Pattern( regexp = "([A-Z]{2}-[A-Z\\-]{1,4}|U-A)",
+    @Pattern( regexp = LocationCodePatterns.ISO_REGION_SUB_CODE,
               message = "Code must be a valid ISO 3166-1:alpha2 followed by '-' and a local code" )
     @NonNull private String localCode;
 
