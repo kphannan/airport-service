@@ -147,7 +147,7 @@ jobs:
             unit-test,
             mutation-test,
             static-analysis-pmd,
-            static-analysis-checkstyel,
+            static-analysis-checkstyle,
           ]
       - task: pmd
         image: java-env
