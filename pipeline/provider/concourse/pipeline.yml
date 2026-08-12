@@ -91,6 +91,7 @@ jobs:
   - name: unit-test
     plan:
       - get: java-env
+      - get: pipeline-tasks
       - get: source-code
         trigger: true
         passed: [compile]
@@ -102,6 +103,7 @@ jobs:
   - name: mutation-test
     plan:
       - get: java-env
+      - get: pipeline-tasks
       - get: source-code
         trigger: true
         passed: [compile]
@@ -113,6 +115,7 @@ jobs:
   - name: static-analysis-checkstyle
     plan:
       - get: java-env
+      - get: pipeline-tasks
       - get: source-code
         trigger: true
         passed: [compile]
@@ -124,6 +127,7 @@ jobs:
   - name: static-analysis-pmd
     plan:
       - get: java-env
+      - get: pipeline-tasks
       - get: source-code
         trigger: true
         passed: [compile]

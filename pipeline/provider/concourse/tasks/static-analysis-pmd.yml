@@ -6,8 +6,8 @@ run:
 dir: source-code
 path: sh
 args:
-    - -cx
-    - |
+  - -cx
+  - |
     echo "Step 3b: Static Analysis - PMD"
     java -version
 

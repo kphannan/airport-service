@@ -9,8 +9,8 @@ run:
 dir: source-code
 path: sh
 args:
-    - -cx
-    - |
+  - -cx
+  - |
     echo "Step 2b: Mutation Test"
     java -version
 
