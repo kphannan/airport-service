@@ -6,25 +6,25 @@ inputs:
   - name: source-code
 
 run:
-dir: source-code
-path: sh
-args:
-  - -cx
-  - |
-    echo "Step 2a: Unit Tests & Coverage"
-    java -version
+  dir: source-code
+  path: sh
+  args:
+    - -cx
+    - |
+      echo "Step 2a: Unit Tests & Coverage"
+      java -version
 
-    pwd
-    # cd source-code
-    # pwd
-    ls -lah
+      pwd
+      # cd source-code
+      # pwd
+      ls -lah
 
-    # Detect build tool and run lifecycle
-    if [ -f "pom.xml" ]; then
-      targetCommand="mvn verify coverage:report"
-    elif [ -f "build.gradle" ]; then
-      targetCommand="./gradlew check jacocoTestReport"
-    fi
+      # Detect build tool and run lifecycle
+      if [ -f "pom.xml" ]; then
+        targetCommand="mvn verify coverage:report"
+      elif [ -f "build.gradle" ]; then
+        targetCommand="./gradlew check jacocoTestReport"
+      fi
 
-    echo $targetCommand
-    # eval "$targetCommand"
+      echo $targetCommand
+      # eval "$targetCommand"
