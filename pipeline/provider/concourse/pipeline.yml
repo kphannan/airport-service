@@ -149,7 +149,7 @@ jobs:
             static-analysis-pmd,
             static-analysis-checkstyle,
           ]
-      - task: pmd
+      - task: assemble
         image: java-env
         timeout: 5m
         file: pipeline-tasks/pipeline/provider/concourse/tasks/assemble.yml
