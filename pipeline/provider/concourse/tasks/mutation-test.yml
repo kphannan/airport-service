@@ -1,0 +1,30 @@
+platform: linux
+
+# image_resource: *compile_image
+
+inputs:
+  - name: source-code
+
+run:
+dir: source-code
+path: sh
+args:
+    - -cx
+    - |
+    echo "Step 2b: Mutation Test"
+    java -version
+
+    # pwd
+    # cd source-code
+    pwd
+    ls -lah
+
+    # Detect build tool and run lifecycle
+    if [ -f "pom.xml" ]; then
+      targetCommand="mvn mutation-test:run"
+    elif [ -f "build.gradle" ]; then
+      targetCommand="./gradlew  pitest"
+    fi
+
+    echo $targetCommand
+    # eval "$targetCommand"

@@ -1,0 +1,133 @@
+# Concourse CI Pipeline Definition
+# Refactored to use configuration variables for sensitive data and environment-specific URIs.
+
+# the following vars must be specified:
+#
+#   ((git_uri))                 URI of the git repository
+#   ((git_repository))          The name of the git repository, owned by git_owner
+#   ((git_owner))               git account name
+#   ((git_username))            username of the git repository
+#   ((git_password))            password for the git repository
+#   ((github_access_token))     fine-grained git access token
+
+resources:
+  - name: source-code
+    type: git
+    icon: github
+    source:
+      uri: ((git_uri))
+      username: ((git_username))
+      password: ((git_password))
+      branch: ((git_branch))
+
+  - name: java-env
+    type: registry-image
+    icon: language-java
+    source:
+      repository: gradle
+      tag: jdk26-ubi
+      # username: ((docker.user))
+      # password: ((docker.password))
+
+  # TODO Create a repository for the standard pipeline tasks
+  - name: pipeline-tasks
+    type: git
+    icon: github
+    source:
+      uri: ((pipeline_uri))
+      username: ((pipeline_username))
+      password: ((pipeline_password))
+      branch: ((pipeline_branch))
+
+jobs:
+  - name: compile
+    plan:
+      - get: java-env
+      - get: pipeline-tasks
+      - get: source-code
+        trigger: true
+      - task: compile
+        image: java-env
+        timeout: 5m
+        config:
+          platform: linux
+          # image_resource: &compile_image
+          #   type: registry-image
+          #   source:
+          #     repository: gradle
+          #     tag: jdk26-ubi
+          inputs:
+            - name: source-code
+          run:
+            dir: source-code
+            path: sh
+            args:
+              - -cx
+              - |
+                echo "Step 1: Compilation (Blocking)"
+                pwd
+                ls -lah
+                # ls --help
+                # ls -lR source-code/pipeline/provider
+                ls -lR
+                # cd source-code
+                # ls -lah
+                chmod +x ./gradlew
+
+                java -version
+
+
+                # Detect build tool and run lifecycle
+                if [ -f "pom.xml" ]; then
+                  buildCommand="mvn clean compile test-compile"
+                elif [ -f "build.gradle" ]; then
+                  buildCommand="./gradlew clean classes testClasses"
+                fi
+
+                echo $buildCommand
+                # eval "$buildCommand"
+
+  ####
+  - name: unit-test
+    plan:
+      - get: java-env
+      - get: source-code
+        trigger: true
+        passed: [compile]
+      - task: unit-test
+        file: pipeline-tasks/pipeline/provider/concourse/tasks/unit-test.yml
+        image: java-env
+        timeout: 5m
+
+  - name: mutation-test
+    plan:
+      - get: java-env
+      - get: source-code
+        trigger: true
+        passed: [compile]
+      - task: mutation-test
+        image: java-env
+        timeout: 5m
+        file: pipeline-tasks/pipeline/provider/concourse/tasks/mutation-test.yml
+
+  - name: static-analysis-checkstyle
+    plan:
+      - get: java-env
+      - get: source-code
+        trigger: true
+        passed: [compile]
+      - task: checkstyle
+        image: java-env
+        timeout: 5m
+        file: pipeline-tasks/pipeline/provider/concourse/tasks/static-analysis-checkstyle.yml
+
+  - name: static-analysis-pmd
+    plan:
+      - get: java-env
+      - get: source-code
+        trigger: true
+        passed: [compile]
+      - task: pmd
+        image: java-env
+        timeout: 5m
+        file: pipeline-tasks/pipeline/provider/concourse/tasks/static-analysis-pmd.yml

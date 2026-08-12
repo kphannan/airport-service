@@ -1,0 +1,27 @@
+platform: linux
+
+# image_resource: *compile_image
+
+run:
+dir: source-code
+path: sh
+args:
+    - -cx
+    - |
+    echo "Step 3a: Static Analysis - Checkstyle"
+    java -version
+
+    # pwd
+    # cd source-code
+    pwd
+    ls -lah
+
+    # Detect build tool and run lifecycle
+    if [ -f "pom.xml" ]; then
+      targetCommand="mvn checkstyle:check"
+    elif [ -f "build.gradle" ]; then
+      targetCommand="./gradlew checkstyleMain checkstyleTest"
+    fi
+
+    echo $targetCommand
+    # eval "$targetCommand"
