@@ -3,25 +3,25 @@ platform: linux
 # image_resource: *compile_image
 
 run:
-dir: source-code
-path: sh
-args:
-  - -cx
-  - |
-    echo "Step 3b: Static Analysis - PMD"
-    java -version
+  dir: source-code
+  path: sh
+  args:
+    - -cx
+    - |
+      echo "Step 3b: Static Analysis - PMD"
+      java -version
 
-    pwd
-    # cd source-code
-    # pwd
-    ls -lah
+      pwd
+      # cd source-code
+      # pwd
+      ls -lah
 
-    # Detect build tool and run lifecycle
-    if [ -f "pom.xml" ]; then
-      targetCommand="mvn pmd:check"
-    elif [ -f "build.gradle" ]; then
-      targetCommand="./gradlew pmdMain pmdTest"
-    fi
+      # Detect build tool and run lifecycle
+      if [ -f "pom.xml" ]; then
+        targetCommand="mvn pmd:check"
+      elif [ -f "build.gradle" ]; then
+        targetCommand="./gradlew pmdMain pmdTest"
+      fi
 
-    echo $targetCommand
-    # eval "$targetCommand"
+      echo $targetCommand
+      # eval "$targetCommand"
