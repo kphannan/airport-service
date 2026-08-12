@@ -1,0 +1,22 @@
+platform: linux
+
+inputs:
+  - name: source-code
+
+run:
+  dir: source-code
+  path: sh
+  args:
+    - -cx
+    - |
+      echo "Step d: Publish Artifacts"
+
+      # Detect build tool and run lifecycle
+      if [ -f "pom.xml" ]; then
+        targetCommand="mvn package:jar"
+      elif [ -f "build.gradle" ]; then
+        targetCommand="./gradlew assemble"
+      fi
+
+      echo $targetCommand
+      # eval "$targetCommand"

@@ -40,6 +40,7 @@ resources:
       branch: ((pipeline_branch))
 
 jobs:
+  ## Compile and Test
   - name: compile
     plan:
       - get: java-env
@@ -88,6 +89,7 @@ jobs:
                 # eval "$buildCommand"
 
   ####
+  ## Dynamic analysis
   - name: unit-test
     plan:
       - get: java-env
@@ -111,6 +113,8 @@ jobs:
         image: java-env
         timeout: 5m
         file: pipeline-tasks/pipeline/provider/concourse/tasks/mutation-test.yml
+
+  ## Static analysis
 
   - name: static-analysis-checkstyle
     plan:
@@ -136,6 +140,8 @@ jobs:
         timeout: 5m
         file: pipeline-tasks/pipeline/provider/concourse/tasks/static-analysis-pmd.yml
 
+  ## Assemble and publish
+  ## TODO calculate the new semver
   - name: assemble
     plan:
       - get: java-env
@@ -153,3 +159,33 @@ jobs:
         image: java-env
         timeout: 5m
         file: pipeline-tasks/pipeline/provider/concourse/tasks/assemble.yml
+
+  ## TODO vulnerability scan with Trivy
+
+  ## publish
+
+  - name: create-docker-image
+    plan:
+      - get: java-env
+      - get: pipeline-tasks
+      - get: source-code
+        trigger: true
+        passed: [assemble]
+      - task: docker-image
+        image: java-env
+        timeout: 5m
+        file: pipeline-tasks/pipeline/provider/concourse/tasks/create-docker-image.yml
+
+  ## TODO vulnerability scan with Trivy
+
+  - name: publish
+    plan:
+      - get: java-env
+      - get: pipeline-tasks
+      - get: source-code
+        trigger: true
+        passed: [assemble, create-docker-image]
+      - task: publish
+        image: java-env
+        timeout: 5m
+        file: pipeline-tasks/pipeline/provider/concourse/tasks/publish.yml
