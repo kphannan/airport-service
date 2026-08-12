@@ -2,6 +2,9 @@ platform: linux
 
 # image_resource: *compile_image
 
+inputs:
+  - name: source-code
+
 run:
   dir: source-code
   path: sh
