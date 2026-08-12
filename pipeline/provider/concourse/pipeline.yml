@@ -104,11 +104,12 @@ jobs:
 
   - name: mutation-test
     plan:
-      - get: java-env
-      - get: pipeline-tasks
-      - get: source-code
-        trigger: true
-        passed: [compile]
+      - in_parallel:
+          - get: java-env
+          - get: pipeline-tasks
+          - get: source-code
+            trigger: true
+            passed: [compile]
       - task: mutation-test
         image: java-env
         timeout: 5m
@@ -130,11 +131,12 @@ jobs:
 
   - name: static-analysis-pmd
     plan:
-      - get: java-env
-      - get: pipeline-tasks
-      - get: source-code
-        trigger: true
-        passed: [compile]
+      - in_parallel:
+          - get: java-env
+          - get: pipeline-tasks
+          - get: source-code
+            trigger: true
+            passed: [compile]
       - task: pmd
         image: java-env
         timeout: 5m
@@ -155,6 +157,7 @@ jobs:
             static-analysis-pmd,
             static-analysis-checkstyle,
           ]
+      ## TODO output all the libraries (jar files)
       - task: assemble
         image: java-env
         timeout: 5m
@@ -171,10 +174,16 @@ jobs:
       - get: source-code
         trigger: true
         passed: [assemble]
+      ## TODO output is the docker file
       - task: docker-image
         image: java-env
         timeout: 5m
         file: pipeline-tasks/pipeline/provider/concourse/tasks/create-docker-image.yml
+
+      - task: vulnerability-scan
+        image: java-env
+        timeout: 5m
+        file: pipeline-tasks/pipeline/provider/concourse/tasks/vulnerability-scan.yml
 
   ## TODO vulnerability scan with Trivy
 
@@ -185,6 +194,7 @@ jobs:
       - get: source-code
         trigger: true
         passed: [assemble, create-docker-image]
+      ## TODO Input are the jars and docker file.
       - task: publish
         image: java-env
         timeout: 5m
