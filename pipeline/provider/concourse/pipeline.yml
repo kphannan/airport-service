@@ -135,3 +135,21 @@ jobs:
         image: java-env
         timeout: 5m
         file: pipeline-tasks/pipeline/provider/concourse/tasks/static-analysis-pmd.yml
+
+  - name: assemble
+    plan:
+      - get: java-env
+      - get: pipeline-tasks
+      - get: source-code
+        trigger: true
+        passed:
+          [
+            unit-test,
+            mutation-test,
+            static-analysis-pmd,
+            static-analysis-checkstyel,
+          ]
+      - task: pmd
+        image: java-env
+        timeout: 5m
+        file: pipeline-tasks/pipeline/provider/concourse/tasks/assemble.yml

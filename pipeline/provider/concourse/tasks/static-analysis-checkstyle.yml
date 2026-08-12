@@ -1,7 +1,5 @@
 platform: linux
 
-# image_resource: *compile_image
-
 inputs:
   - name: source-code
 
@@ -12,12 +10,6 @@ run:
     - -cx
     - |
       echo "Step 3a: Static Analysis - Checkstyle"
-      java -version
-
-      # pwd
-      # cd source-code
-      pwd
-      ls -lah
 
       # Detect build tool and run lifecycle
       if [ -f "pom.xml" ]; then

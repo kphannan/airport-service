@@ -9,13 +9,13 @@ run:
   args:
     - -cx
     - |
-      echo "Step 3b: Static Analysis - PMD"
+      echo "Step d: Assemble libraries"
 
       # Detect build tool and run lifecycle
       if [ -f "pom.xml" ]; then
-        targetCommand="mvn pmd:check"
+        targetCommand="mvn package:jar"
       elif [ -f "build.gradle" ]; then
-        targetCommand="./gradlew pmdMain pmdTest"
+        targetCommand="./gradlew assemble"
       fi
 
       echo $targetCommand
