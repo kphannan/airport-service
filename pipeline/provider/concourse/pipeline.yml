@@ -10,19 +10,24 @@
 #   ((git_password))            password for the git repository
 #   ((github_access_token))     fine-grained git access token
 
+meta:
+  icons:
+    - &java-icon language-java
+    - &git-icon github
+
 resources:
   - name: source-code
     type: git
-    icon: github
+    icon: *git-icon
     source:
       uri: ((git_uri))
       username: ((git_username))
       password: ((git_password))
       branch: ((git_branch))
 
-  - name: java-env
+  - name: java-builder-image
     type: registry-image
-    icon: language-java
+    icon: *java-icon
     source:
       repository: gradle
       tag: jdk26-ubi
@@ -32,25 +37,61 @@ resources:
   # TODO Create a repository for the standard pipeline tasks
   - name: pipeline-tasks
     type: git
-    icon: github
+    icon: *git-icon
     source:
       uri: ((pipeline_uri))
       username: ((pipeline_username))
       password: ((pipeline_password))
       branch: ((pipeline_branch))
 
+groups:
+  - name: all
+    jobs:
+      - "*"
+  - name: build
+    jobs:
+      - compile
+  - name: static-analysis
+    jobs:
+      - static-*
+  - name: dynamic-analysis
+    jobs:
+      - unit-test
+      - mutation-test
+  - name: package
+    jobs:
+      - assemble
+      - create-docker-image
+  - name: publish
+    jobs:
+      - publish
+
+  # TODO Dummy groups for the moment
+  - name: deploy-dev
+    jobs:
+      - publish
+  - name: deploy-qa
+    jobs:
+      - publish
+  - name: deploy-staging
+    jobs:
+      - publish
+  - name: deploy-prod
+    jobs:
+      - publish
+
 jobs:
   ## Compile and Test
   - name: compile
     plan:
       - in_parallel:
-          - get: java-env
+          - get: java-builder-image
           - get: pipeline-tasks
           - get: source-code
             trigger: true
       - task: compile
-        image: java-env
-        timeout: 10m
+        image: java-builder-image
+        timeout: 15m
         config:
           platform: linux
           # image_resource: &compile_image
@@ -61,7 +102,7 @@ jobs:
           inputs:
             - name: source-code
           outputs:
-            - name: build-logic
+            - name: build-compiled
               path: build-logic/build
             - name: build
             - name: api-build
@@ -118,35 +159,51 @@ jobs:
                 echo $buildCommand
                 eval "$buildCommand"
 
+                touch build/readme
+                touch build-compiled/readme
+                touch api-build/readme
+                touch app-build/readme
+                touch lib-build/readme
 
+                cp -R /build build
+                cp -R /build-logic/build build-compiled
+                cp -R api/build api-build
+                cp -R app/build app-build
+                cp -R lib/build lib-build
 
                 ls -lah $M2_HOME
                 ls -lah $GRADLE_USER_HOME
+
+                ls -lahR build-compiled
+                ls -lahR build
+                ls -lahR api-build
+                ls -lahR app-build
+                ls -lahR lib-build
 
   ####
   ## Dynamic analysis
   - name: unit-test
     plan:
-      - get: java-env
+      - get: java-builder-image
       - get: pipeline-tasks
       - get: source-code
         trigger: true
         passed: [compile]
       - task: unit-test
         file: pipeline-tasks/pipeline/provider/concourse/tasks/unit-test.yml
-        image: java-env
+        image: java-builder-image
         timeout: 5m
 
   - name: mutation-test
     plan:
       - in_parallel:
-          - get: java-env
+          - get: java-builder-image
           - get: pipeline-tasks
           - get: source-code
             trigger: true
             passed: [compile]
       - task: mutation-test
-        image: java-env
+        image: java-builder-image
         timeout: 5m
         file: pipeline-tasks/pipeline/provider/concourse/tasks/mutation-test.yml
 
@@ -154,26 +211,26 @@ jobs:
 
   - name: static-analysis-checkstyle
     plan:
-      - get: java-env
+      - get: java-builder-image
       - get: pipeline-tasks
       - get: source-code
         trigger: true
         passed: [compile]
       - task: checkstyle
-        image: java-env
+        image: java-builder-image
         timeout: 10m
         file: pipeline-tasks/pipeline/provider/concourse/tasks/static-analysis-checkstyle.yml
 
   - name: static-analysis-pmd
     plan:
       - in_parallel:
-          - get: java-env
+          - get: java-builder-image
           - get: pipeline-tasks
           - get: source-code
             trigger: true
             passed: [compile]
       - task: pmd
-        image: java-env
+        image: java-builder-image
         timeout: 10m
         file: pipeline-tasks/pipeline/provider/concourse/tasks/static-analysis-pmd.yml
 
@@ -182,7 +239,7 @@ jobs:
   - name: assemble
     plan:
       - in_parallel:
-          - get: java-env
+          - get: java-builder-image
           - get: pipeline-tasks
           - get: source-code
             trigger: true
@@ -195,7 +252,7 @@ jobs:
               ]
       ## TODO output all the libraries (jar files)
       - task: assemble
-        image: java-env
+        image: java-builder-image
         timeout: 5m
         file: pipeline-tasks/pipeline/provider/concourse/tasks/assemble.yml
 
@@ -206,19 +263,19 @@ jobs:
   - name: create-docker-image
     plan:
       - in_parallel:
-          - get: java-env
+          - get: java-builder-image
           - get: pipeline-tasks
           - get: source-code
             trigger: true
             passed: [assemble]
       ## TODO output is the docker file
       - task: docker-image
-        image: java-env
+        image: java-builder-image
         timeout: 5m
         file: pipeline-tasks/pipeline/provider/concourse/tasks/create-docker-image.yml
 
       - task: vulnerability-scan
-        image: java-env
+        image: java-builder-image
         timeout: 5m
         file: pipeline-tasks/pipeline/provider/concourse/tasks/vulnerability-scan.yml
 
@@ -227,13 +284,13 @@ jobs:
   - name: publish
     plan:
       - in_parallel:
-          - get: java-env
+          - get: java-builder-image
           - get: pipeline-tasks
           - get: source-code
             trigger: true
             passed: [assemble, create-docker-image]
       ## TODO Input are the jars and docker file.
       - task: publish
-        image: java-env
+        image: java-builder-image
         timeout: 5m
         file: pipeline-tasks/pipeline/provider/concourse/tasks/publish.yml

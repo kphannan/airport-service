@@ -4,7 +4,7 @@ inputs:
   - name: source-code
 
   # From compile
-  - name: build-logic
+  - name: build-compiled
     path: build-logic/build
   - name: build
   - name: api-build
@@ -15,7 +15,7 @@ inputs:
     path: lib/build
 
 outputs:
-  - name: build-logic
+  - name: build-compiled
     path: build-logic/build
   - name: build
   - name: api-build
@@ -39,7 +39,7 @@ run:
       echo "Step 3a: Static Analysis - Checkstyle"
 
       ls -lah
-      ls -lR
+      ls -lahR
 
       # Detect build tool and run lifecycle
       if [ -f "pom.xml" ]; then

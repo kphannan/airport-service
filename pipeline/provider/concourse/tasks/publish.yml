@@ -3,6 +3,16 @@ platform: linux
 inputs:
   - name: source-code
 
+  - name: build-compiled
+    path: build-logic/build
+  - name: build
+  - name: api-build
+    path: api/build
+  - name: app-build
+    path: app/build
+  - name: lib-build
+    path: lib/build
+
 run:
   dir: source-code
   path: sh
@@ -10,6 +20,12 @@ run:
     - -cx
     - |
       echo "Step d: Publish Artifacts"
+
+      ls -lahR build-compiled
+      ls -lahR build
+      ls -lahR api-build
+      ls -lahR app-build
+      ls -lahR lib-build
 
       # Detect build tool and run lifecycle
       if [ -f "pom.xml" ]; then
