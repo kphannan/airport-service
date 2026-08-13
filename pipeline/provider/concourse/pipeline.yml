@@ -43,10 +43,11 @@ jobs:
   ## Compile and Test
   - name: compile
     plan:
-      - get: java-env
-      - get: pipeline-tasks
-      - get: source-code
-        trigger: true
+      - in_parallel:
+          - get: java-env
+          - get: pipeline-tasks
+          - get: source-code
+            trigger: true
       - task: compile
         image: java-env
         timeout: 5m
@@ -86,7 +87,7 @@ jobs:
                 fi
 
                 echo $buildCommand
-                # eval "$buildCommand"
+                eval "$buildCommand"
 
   ####
   ## Dynamic analysis
