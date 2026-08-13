@@ -50,7 +50,7 @@ jobs:
             trigger: true
       - task: compile
         image: java-env
-        timeout: 5m
+        timeout: 10m
         config:
           platform: linux
           # image_resource: &compile_image
@@ -68,16 +68,16 @@ jobs:
               - |
                 echo "Step 1: Compilation (Blocking)"
                 pwd
-                ls -lah
+                #ls -lah
                 # ls --help
                 # ls -lR source-code/pipeline/provider
-                ls -lR
+                #ls -lR
                 # cd source-code
                 # ls -lah
+
                 chmod +x ./gradlew
 
                 java -version
-
 
                 # Detect build tool and run lifecycle
                 if [ -f "pom.xml" ]; then
