@@ -13,6 +13,22 @@ inputs:
   - name: lib-build
     path: lib/build
 
+outputs:
+  - name: build-compiled
+    path: build-logic/build
+  - name: build
+  - name: api-build
+    path: api/build
+  - name: app-build
+    path: app/build
+  - name: lib-build
+    path: lib/build
+
+caches:
+  - path: ./gradle/
+  - path: ./m2/
+  - path: build-logic/build
+
 run:
   dir: source-code
   path: sh
