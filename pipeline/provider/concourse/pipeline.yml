@@ -146,17 +146,18 @@ jobs:
   ## TODO calculate the new semver
   - name: assemble
     plan:
-      - get: java-env
-      - get: pipeline-tasks
-      - get: source-code
-        trigger: true
-        passed:
-          [
-            unit-test,
-            mutation-test,
-            static-analysis-pmd,
-            static-analysis-checkstyle,
-          ]
+      - in_parallel:
+          - get: java-env
+          - get: pipeline-tasks
+          - get: source-code
+            trigger: true
+            passed:
+              [
+                unit-test,
+                mutation-test,
+                static-analysis-pmd,
+                static-analysis-checkstyle,
+              ]
       ## TODO output all the libraries (jar files)
       - task: assemble
         image: java-env
@@ -169,11 +170,12 @@ jobs:
 
   - name: create-docker-image
     plan:
-      - get: java-env
-      - get: pipeline-tasks
-      - get: source-code
-        trigger: true
-        passed: [assemble]
+      - in_parallel:
+          - get: java-env
+          - get: pipeline-tasks
+          - get: source-code
+            trigger: true
+            passed: [assemble]
       ## TODO output is the docker file
       - task: docker-image
         image: java-env
@@ -189,11 +191,12 @@ jobs:
 
   - name: publish
     plan:
-      - get: java-env
-      - get: pipeline-tasks
-      - get: source-code
-        trigger: true
-        passed: [assemble, create-docker-image]
+      - in_parallel:
+          - get: java-env
+          - get: pipeline-tasks
+          - get: source-code
+            trigger: true
+            passed: [assemble, create-docker-image]
       ## TODO Input are the jars and docker file.
       - task: publish
         image: java-env

@@ -4,7 +4,7 @@ package com.example.aviation.location;
 import java.math.BigDecimal;
 import java.util.regex.Matcher;
 
-import com.example.utility.DoNotMutate;
+// import com.example.utility.DoNotMutate;
 import com.example.utility.Range;
 import org.jspecify.annotations.NonNull;
 
@@ -13,7 +13,7 @@ import org.jspecify.annotations.NonNull;
  */
 public class GISDDLatitude extends GISLatitude
 {
-    private static final Range<BigDecimal> range = new Range<>( BigDecimal.valueOf( -90 ),
+    private static final Range<BigDecimal> RANGE = new Range<>( BigDecimal.valueOf( -90 ),
                                                        BigDecimal.valueOf(  90 ) );
 
     public GISDDLatitude( @NonNull final String input )
@@ -28,12 +28,12 @@ public class GISDDLatitude extends GISLatitude
     {
         super( decimalDegrees );
 
-        if ( !range.isInRange( decimalDegrees ) )
+        if ( !RANGE.isInRange( decimalDegrees ) )
         {
             throw new IllegalArgumentException( String.format( "Invalid DD Latitude: '%s' is out of range [ %s, %s ]",
                                                                getDecimalDegrees(),
-                                                               range.getMin(),
-                                                               range.getMax() ) );
+                                                               RANGE.getMin(),
+                                                               RANGE.getMax() ) );
         }
     }
 
