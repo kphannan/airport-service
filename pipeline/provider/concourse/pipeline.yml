@@ -60,6 +60,12 @@ jobs:
           #     tag: jdk26-ubi
           inputs:
             - name: source-code
+          outputs:
+            - name: build
+            - name: lib
+          caches:
+            - path: ./gradle/
+            - path: ./m2/
           run:
             dir: source-code
             path: sh
@@ -79,6 +85,20 @@ jobs:
 
                 java -version
 
+                export ROOT_FOLDER=$( pwd )
+                export GRADLE_USER_HOME="${ROOT_FOLDER}/.gradle"
+                export M2_HOME=$(ROOT_FOLDER)/.m2
+                export M2_LOCAL_REPO="$(ROOT_FOLDER)/.m2"
+
+                echo "HOME set to " ${HOME}
+
+                echo "GRADLE_USER_HOME set to  " ${GRADLE_USER_HOME}
+                # mkdir -p ${GRADLE_USER_HOME}
+
+                echo "M2_HOME set to  " ${M2_HOME}
+                # mkdir -p ${GRADLE_USER_HOME}
+
+
                 # Detect build tool and run lifecycle
                 if [ -f "pom.xml" ]; then
                   buildCommand="mvn clean compile test-compile"
@@ -87,7 +107,12 @@ jobs:
                 fi
 
                 echo $buildCommand
-                eval "$buildCommand"
+                # eval "$buildCommand"
+
+
+
+                ls -lah $M2_HOME
+                ls -lah $GRADLE_USER_HOME
 
   ####
   ## Dynamic analysis

@@ -19,4 +19,4 @@ run:
       fi
 
       echo $targetCommand
-      eval "$targetCommand"
+      # eval "$targetCommand"
