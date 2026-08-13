@@ -3,6 +3,33 @@ platform: linux
 inputs:
   - name: source-code
 
+  # From compile
+  - name: build-logic
+    path: build-logic/build
+  - name: build
+  - name: api-build
+    path: api/build
+  - name: app-build
+    path: app/build
+  - name: lib-build
+    path: lib/build
+
+outputs:
+  - name: build-logic
+    path: build-logic/build
+  - name: build
+  - name: api-build
+    path: api/build
+  - name: app-build
+    path: app/build
+  - name: lib-build
+    path: lib/build
+
+caches:
+  - path: ./gradle/
+  - path: ./m2/
+  - path: build-logic/build
+
 run:
   dir: source-code
   path: sh
@@ -10,6 +37,9 @@ run:
     - -cx
     - |
       echo "Step 3a: Static Analysis - Checkstyle"
+
+      ls -lah
+      ls -lR
 
       # Detect build tool and run lifecycle
       if [ -f "pom.xml" ]; then
@@ -19,4 +49,4 @@ run:
       fi
 
       echo $targetCommand
-      # eval "$targetCommand"
+      eval "$targetCommand"
