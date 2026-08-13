@@ -127,7 +127,7 @@ jobs:
         passed: [compile]
       - task: checkstyle
         image: java-env
-        timeout: 5m
+        timeout: 10m
         file: pipeline-tasks/pipeline/provider/concourse/tasks/static-analysis-checkstyle.yml
 
   - name: static-analysis-pmd
@@ -140,7 +140,7 @@ jobs:
             passed: [compile]
       - task: pmd
         image: java-env
-        timeout: 5m
+        timeout: 10m
         file: pipeline-tasks/pipeline/provider/concourse/tasks/static-analysis-pmd.yml
 
   ## Assemble and publish
