@@ -4,26 +4,27 @@ inputs:
   - name: source-code
 
   # From compile
-  - name: build-compiled
-    path: build-logic/build
-  - name: build-output
-  - name: api-build
-    path: api/build
-  - name: app-build
-    path: app/build
-  - name: lib-build
-    path: lib/build
+  # - name: build-compiled
+  #   path: build-logic/build
+  # - name: build-output
+  # - name: api-build
+  #   path: api/build
+  # - name: app-build
+  #   path: app/build
+  # - name: lib-build
+  #   path: lib/build
 
 outputs:
-  - name: build-compiled
-    path: build-logic/build
-  - name: build-output
-  - name: api-build
-    path: api/build
-  - name: app-build
-    path: app/build
-  - name: lib-build
-    path: lib/build
+  - name: source-code
+  # - name: build-compiled
+  #   path: build-logic/build
+  # - name: build-output
+  # - name: api-build
+  #   path: api/build
+  # - name: app-build
+  #   path: app/build
+  # - name: lib-build
+  #   path: lib/build
 
 caches:
   - path: ./gradle/
