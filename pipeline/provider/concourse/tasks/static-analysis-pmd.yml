@@ -4,26 +4,27 @@ inputs:
   - name: source-code
 
   # From compile
-  - name: build-compiled
-    path: build-logic/build
-  - name: build-output
-  - name: api-build
-    path: api/build
-  - name: app-build
-    path: app/build
-  - name: lib-build
-    path: lib/build
+  # - name: build-compiled
+  #   path: build-logic/build
+  # - name: build-output
+  # - name: api-build
+  #   path: api/build
+  # - name: app-build
+  #   path: app/build
+  # - name: lib-build
+  #   path: lib/build
 
 outputs:
-  - name: build-compiled
-    path: build-logic/build
-  - name: build-output
-  - name: api-build
-    path: api/build
-  - name: app-build
-    path: app/build
-  - name: lib-build
-    path: lib/build
+  - name: source-code
+  # - name: build-compiled
+  #   path: build-logic/build
+  # - name: build-output
+  # - name: api-build
+  #   path: api/build
+  # - name: app-build
+  #   path: app/build
+  # - name: lib-build
+  #   path: lib/build
 
 caches:
   - path: ./gradle/
@@ -38,11 +39,12 @@ run:
     - |
       echo "Step 3b: Static Analysis - PMD"
 
-      ls -lahR build-compiled
-      ls -lahR build-output
-      ls -lahR api-build
-      ls -lahR app-build
-      ls -lahR lib-build
+      ls -lah {.,build-logic,api,app,lib}/{.,build}
+      # ls -lahR build-compiled
+      # ls -lahR build-output
+      # ls -lahR api-build
+      # ls -lahR app-build
+      # ls -lahR lib-build
 
       # Detect build tool and run lifecycle
       if [ -f "pom.xml" ]; then
@@ -55,15 +57,19 @@ run:
       # eval "$targetCommand"
 
       echo "--------------------------------------------------------------"
-      touch build-output/pmd.md
-      touch build-compiled/pmd.md
-      touch api-build/pmd.md
-      touch app-build/pmd.md
-      touch lib-build/pmd.md
+      touch {.,build-logic,api,app,lib}/build/pmd.md
+
+      # touch build-output/pmd.md
+      # touch build-compiled/pmd.md
+      # touch api-build/pmd.md
+      # touch app-build/pmd.md
+      # touch lib-build/pmd.md
 
       echo "--------------------------------------------------------------"
-      ls -lahR build-compiled
-      ls -lahR build-output
-      ls -lahR api-build
-      ls -lahR app-build
-      ls -lahR lib-build
+      # ls -lahR build-compiled
+      # ls -lahR build-output
+      # ls -lahR api-build
+      # ls -lahR app-build
+      # ls -lahR lib-build
+
+      find . -name '*.md'

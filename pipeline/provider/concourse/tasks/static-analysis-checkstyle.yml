@@ -38,13 +38,15 @@ run:
     - |
       echo "Step 3a: Static Analysis - Checkstyle"
 
-      ls -lah
+      ls -lah {.,build-logic,api,app,lib}/{.,build}
+
+      # ls -lah
       # ls -lahR
-      ls -lah build-compiled
-      ls -lah build-output
-      ls -lah api-build
-      ls -lah app-build
-      ls -lah lib-build
+      # ls -lah build-compiled
+      # ls -lah build-output
+      # ls -lah api-build
+      # ls -lah app-build
+      # ls -lah lib-build
 
       # Detect build tool and run lifecycle
       if [ -f "pom.xml" ]; then
@@ -57,15 +59,18 @@ run:
       # eval "$targetCommand"
 
       echo "--------------------------------------------------------------"
-      touch build-output/checkstyle.md
-      touch build-compiled/checkstyle.md
-      touch api-build/checkstyle.md
-      touch app-build/checkstyle.md
-      touch lib-build/checkstyle.md
+      touch {.,build-logic,api,app,lib}/build/pmd.md
+      # touch build-output/checkstyle.md
+      # touch build-compiled/checkstyle.md
+      # touch api-build/checkstyle.md
+      # touch app-build/checkstyle.md
+      # touch lib-build/checkstyle.md
 
-      echo "--------------------------------------------------------------"
-      ls -lahR build-compiled
-      ls -lahR build-output
-      ls -lahR api-build
-      ls -lahR app-build
-      ls -lahR lib-build
+      # echo "--------------------------------------------------------------"
+      # ls -lahR build-compiled
+      # ls -lahR build-output
+      # ls -lahR api-build
+      # ls -lahR app-build
+      # ls -lahR lib-build
+
+      find . -name '*.md'
