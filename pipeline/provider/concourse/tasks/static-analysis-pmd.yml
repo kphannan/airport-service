@@ -2,33 +2,17 @@ platform: linux
 
 inputs:
   - name: source-code
-
-  # From compile
-  # - name: build-compiled
-  #   path: build-logic/build
-  # - name: build-output
-  # - name: api-build
-  #   path: api/build
-  # - name: app-build
-  #   path: app/build
-  # - name: lib-build
-  #   path: lib/build
+  - name: .gradle
+  - name: .m2
 
 outputs:
   - name: source-code
-  # - name: build-compiled
-  #   path: build-logic/build
-  # - name: build-output
-  # - name: api-build
-  #   path: api/build
-  # - name: app-build
-  #   path: app/build
-  # - name: lib-build
-  #   path: lib/build
+  - name: .gradle
+  - name: .m2
 
 caches:
-  - path: ./gradle/
-  - path: ./m2/
+  - path: .gradle/
+  - path: .m2/
   - path: build-logic/build
 
 run:

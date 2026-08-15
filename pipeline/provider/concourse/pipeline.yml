@@ -102,21 +102,12 @@ jobs:
 
           outputs:
             - name: source-code
-          # outputs:
-          #   - name: build-compiled
-          #     path: source-code/build-logic/build
-          #   - name: build-output
-          #     path: source-code/build
-          #   - name: api-build
-          #     path: source-code/api/build
-          #   - name: app-build
-          #     path: source-code/app/build
-          #   - name: lib-build
-          #     path: source-code/lib/build
+            - name: .gradle
+            - name: .m2
 
           caches:
-            - path: ./gradle/
-            - path: ./m2/
+            - path: .gradle/
+            - path: .m2/
             - path: source-code/build-logic/build
 
           run:
@@ -132,31 +123,10 @@ jobs:
                 echo "--- pre --------------------------------------------------------------"
                 ls -lah {.,build-logic,api,app,lib}/{.,build}
 
-                # echo "--- pre (outputs) --------------------------------------------------------------"
-                # ls -lah build-compiled
-                # ls -lah build-output
-                # ls -lah api-build
-                # ls -lah app-build
-                # ls -lah lib-build
-
                 mkdir -p {.,build-logic,api,app,lib}/build
 
                 echo "--- post mkdir --------------------------------------------------------------"
                 ls -lah {.,build-logic,api,app,lib}/{.,build}
-
-                # echo "--- post mkdir (outputs) --------------------------------------------------------------"
-                # ls -lah build-compiled
-                # ls -lah build-output
-                # ls -lah api-build
-                # ls -lah app-build
-                # ls -lah lib-build
-
-
-                # ls --help
-                # ls -lR source-code/pipeline/provider
-                # cd source-code
-                # ls -lah
-                # ls -lahR
 
                 chmod +x ./gradlew
 
@@ -164,7 +134,7 @@ jobs:
 
 
 
-                export ROOT_FOLDER=$( pwd )
+                export ROOT_FOLDER=$(pwd)
                 export GRADLE_USER_HOME="${ROOT_FOLDER}/.gradle"
                 export M2_HOME=${ROOT_FOLDER}/.m2
                 export M2_LOCAL_REPO="${ROOT_FOLDER}/.m2"
@@ -176,6 +146,12 @@ jobs:
 
                 echo "M2_HOME set to  " ${M2_HOME}
                 mkdir -p ${M2_HOME}
+
+                echo "--- Gradle / m2 home --------------------------------------------------------------"
+                ls -lah ${GRADLE_USER_HOME}
+                ls -lah ${M2_HOME}
+
+
 
                 echo "--- current dir --------------------------------------------------------------"
                 ls -lah
@@ -192,6 +168,10 @@ jobs:
 
                 echo $buildCommand
                 # eval "$buildCommand"
+
+                echo "--- post build Gradle / m2 home --------------------------------------------------------------"
+                ls -lah GRADLE_USER_HOME
+
 
                 echo "--------------------------------------------------------------"
                 touch {.,build-logic,api,app,lib}/build/readme.md
@@ -239,6 +219,13 @@ jobs:
         image: java-builder-image
         timeout: 5m
         file: pipeline-tasks/pipeline/provider/concourse/tasks/mutation-test.yml
+      ## Assemble and publish
+      ## TODO calculate the new semver
+      ## TODO output all the libraries (jar files)
+      - task: assemble
+        image: java-builder-image
+        timeout: 5m
+        file: pipeline-tasks/pipeline/provider/concourse/tasks/assemble.yml
 
   ####
   ## Dynamic analysis
