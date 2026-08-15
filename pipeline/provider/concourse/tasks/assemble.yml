@@ -1,3 +1,4 @@
+# TODO move assemble step to main compile job
 platform: linux
 
 inputs:
@@ -31,8 +32,11 @@ run:
       echo $targetCommand
       # eval "$targetCommand"
 
+      # TODO consolidate jars to a single output
+      # TODO push jar files to artifact repository
+
       echo "--------------------------------------------------------------"
-      touch {shared-jar,application-jar,api-jar}/assemble.jar
+      touch ../{shared-jar,application-jar,api-jar}/assemble.jar
 
 
       echo "--------------------------------------------------------------"
