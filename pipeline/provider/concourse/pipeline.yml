@@ -120,18 +120,17 @@ jobs:
                 echo "Step 1: Compilation (Blocking)"
                 pwd
                 ls -lah
-                echo "--- pre --------------------------------------------------------------"
-                ls -lah {.,build-logic,api,app,lib}/{.,build}
+                # echo "--- pre --------------------------------------------------------------"
+                # ls -lah {.,build-logic,api,app,lib}/{.,build}
 
                 mkdir -p {.,build-logic,api,app,lib}/build
 
-                echo "--- post mkdir --------------------------------------------------------------"
-                ls -lah {.,build-logic,api,app,lib}/{.,build}
+                # echo "--- post mkdir --------------------------------------------------------------"
+                # ls -lah {.,build-logic,api,app,lib}/{.,build}
 
                 chmod +x ./gradlew
 
                 java -version
-
 
 
                 export ROOT_FOLDER=$(pwd)
@@ -152,7 +151,6 @@ jobs:
                 ls -lah ${M2_HOME}
 
 
-
                 echo "--- current dir --------------------------------------------------------------"
                 ls -lah
 
@@ -167,33 +165,16 @@ jobs:
                 fi
 
                 echo $buildCommand
-                # eval "$buildCommand"
+                eval "$buildCommand"
 
                 echo "--- post build Gradle / m2 home --------------------------------------------------------------"
-                ls -lah GRADLE_USER_HOME
+                ls -lah ${GRADLE_USER_HOME}
+                ls -lah ${M2_HOME}
 
 
                 echo "--------------------------------------------------------------"
                 touch {.,build-logic,api,app,lib}/build/readme.md
                 touch {.,build-logic,api,app,lib}/build/compile.md
-
-                # echo "--------------------------------------------------------------"
-                # cp -R ./build/* build-output/.
-                # cp -R ./build-logic/build/* build-compiled/.
-                # cp -R ./api/build/* api-build/.
-                # cp -R ./app/build/* app-build/.
-                # cp -R ./lib/build/* lib-build/.
-
-                echo "--------------------------------------------------------------"
-                ls -lah $M2_HOME
-                ls -lah $GRADLE_USER_HOME
-
-                # echo "--------------------------------------------------------------"
-                # ls -lahR ./build-compiled
-                # ls -lahR ./build-output
-                # ls -lahR ./api-build
-                # ls -lahR ./app-build
-                # ls -lahR ./lib-build
 
                 echo "--- end --------------------------------------------------------------"
                 ls -lah {.,build-logic,api,app,lib}/{.,build}

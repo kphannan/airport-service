@@ -33,7 +33,7 @@ run:
       fi
 
       echo $targetCommand
-      # eval "$targetCommand"
+      eval "$targetCommand"
 
       echo "--------------------------------------------------------------"
       touch {.,build-logic,api,app,lib}/build/checkstyle.md
