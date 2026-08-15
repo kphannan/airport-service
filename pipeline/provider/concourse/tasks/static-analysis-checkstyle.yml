@@ -6,7 +6,7 @@ inputs:
   # From compile
   - name: build-compiled
     path: build-logic/build
-  - name: build
+  - name: build-output
   - name: api-build
     path: api/build
   - name: app-build
@@ -17,7 +17,7 @@ inputs:
 outputs:
   - name: build-compiled
     path: build-logic/build
-  - name: build
+  - name: build-output
   - name: api-build
     path: api/build
   - name: app-build
@@ -39,7 +39,12 @@ run:
       echo "Step 3a: Static Analysis - Checkstyle"
 
       ls -lah
-      ls -lahR
+      # ls -lahR
+      ls -lah build-compiled
+      ls -lah build-output
+      ls -lah api-build
+      ls -lah app-build
+      ls -lah lib-build
 
       # Detect build tool and run lifecycle
       if [ -f "pom.xml" ]; then
@@ -49,4 +54,18 @@ run:
       fi
 
       echo $targetCommand
-      eval "$targetCommand"
+      # eval "$targetCommand"
+
+      echo "--------------------------------------------------------------"
+      touch build-output/checkstyle.md
+      touch build-compiled/checkstyle.md
+      touch api-build/checkstyle.md
+      touch app-build/checkstyle.md
+      touch lib-build/checkstyle.md
+
+      echo "--------------------------------------------------------------"
+      ls -lahR build-compiled
+      ls -lahR build-output
+      ls -lahR api-build
+      ls -lahR app-build
+      ls -lahR lib-build

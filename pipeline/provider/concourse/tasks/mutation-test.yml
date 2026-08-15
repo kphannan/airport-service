@@ -3,6 +3,7 @@ platform: linux
 inputs:
   - name: source-code
 
+  # From compile
   - name: build-compiled
     path: build-logic/build
   - name: build
@@ -13,6 +14,22 @@ inputs:
   - name: lib-build
     path: lib/build
 
+outputs:
+  - name: build-compiled
+    path: build-logic/build
+  - name: build
+  - name: api-build
+    path: api/build
+  - name: app-build
+    path: app/build
+  - name: lib-build
+    path: lib/build
+
+caches:
+  - path: ./gradle/
+  - path: ./m2/
+  - path: build-logic/build
+
 run:
   dir: source-code
   path: sh
@@ -21,11 +38,11 @@ run:
     - |
       echo "Step 2b: Mutation Test"
 
-      ls -lahR build-compiled
-      ls -lahR build
-      ls -lahR api-build
-      ls -lahR app-build
-      ls -lahR lib-build
+      ls -lah build-compiled
+      ls -lah build
+      ls -lah api-build
+      ls -lah app-build
+      ls -lah lib-build
 
       # Detect build tool and run lifecycle
       if [ -f "pom.xml" ]; then
@@ -36,3 +53,17 @@ run:
 
       echo $targetCommand
       # eval "$targetCommand"
+
+      echo "--------------------------------------------------------------"
+      touch build-output/pitest.md.md
+      touch build-compiled/pitest.md.md
+      touch api-build/pitest.md.md
+      touch app-build/pitest.md.md
+      touch lib-build/pitest.md.md
+
+      echo "--------------------------------------------------------------"
+      ls -lahR build-compiled
+      ls -lahR build-output
+      ls -lahR api-build
+      ls -lahR app-build
+      ls -lahR lib-build

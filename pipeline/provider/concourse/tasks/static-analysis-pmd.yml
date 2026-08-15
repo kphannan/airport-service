@@ -3,9 +3,10 @@ platform: linux
 inputs:
   - name: source-code
 
+  # From compile
   - name: build-compiled
     path: build-logic/build
-  - name: build
+  - name: build-output
   - name: api-build
     path: api/build
   - name: app-build
@@ -16,7 +17,7 @@ inputs:
 outputs:
   - name: build-compiled
     path: build-logic/build
-  - name: build
+  - name: build-output
   - name: api-build
     path: api/build
   - name: app-build
@@ -38,7 +39,7 @@ run:
       echo "Step 3b: Static Analysis - PMD"
 
       ls -lahR build-compiled
-      ls -lahR build
+      ls -lahR build-output
       ls -lahR api-build
       ls -lahR app-build
       ls -lahR lib-build
@@ -52,3 +53,17 @@ run:
 
       echo $targetCommand
       # eval "$targetCommand"
+
+      echo "--------------------------------------------------------------"
+      touch build-output/pmd.md
+      touch build-compiled/pmd.md
+      touch api-build/pmd.md
+      touch app-build/pmd.md
+      touch lib-build/pmd.md
+
+      echo "--------------------------------------------------------------"
+      ls -lahR build-compiled
+      ls -lahR build-output
+      ls -lahR api-build
+      ls -lahR app-build
+      ls -lahR lib-build

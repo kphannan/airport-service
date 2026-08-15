@@ -36,3 +36,17 @@ run:
 
       echo $targetCommand
       # eval "$targetCommand"
+
+      echo "--------------------------------------------------------------"
+      touch build-output/assemble.md.md
+      touch build-compiled/assemble.md.md
+      touch api-build/assemble.md.md
+      touch app-build/assemble.md.md
+      touch lib-build/assemble.md.md
+
+      echo "--------------------------------------------------------------"
+      ls -lahR build-compiled
+      ls -lahR build-output
+      ls -lahR api-build
+      ls -lahR app-build
+      ls -lahR lib-build

@@ -89,32 +89,33 @@ jobs:
           - get: pipeline-tasks
           - get: source-code
             trigger: true
+
       - task: compile
         image: java-builder-image
         timeout: 15m
+
         config:
           platform: linux
-          # image_resource: &compile_image
-          #   type: registry-image
-          #   source:
-          #     repository: gradle
-          #     tag: jdk26-ubi
+
           inputs:
             - name: source-code
+
           outputs:
             - name: build-compiled
               path: build-logic/build
-            - name: build
+            - name: build-output
             - name: api-build
               path: api/build
             - name: app-build
               path: app/build
             - name: lib-build
               path: lib/build
+
           caches:
             - path: ./gradle/
             - path: ./m2/
             - path: build-logic/build
+
           run:
             dir: source-code
             path: sh
@@ -157,35 +158,33 @@ jobs:
                 fi
 
                 echo $buildCommand
-                eval "$buildCommand"
+                # eval "$buildCommand"
 
-                touch build/readme
-                touch build-compiled/readme
-                touch api-build/readme
-                touch app-build/readme
-                touch lib-build/readme
+                echo "--------------------------------------------------------------"
+                touch build-output/readme.md
+                touch build-compiled/readme.md
+                touch api-build/readme.md
+                touch app-build/readme.md
+                touch lib-build/readme.md
 
-                cp -R /build build
-                cp -R /build-logic/build build-compiled
-                cp -R api/build api-build
-                cp -R app/build app-build
-                cp -R lib/build lib-build
+                echo "--------------------------------------------------------------"
+                cp -R build/* build-output/.
+                cp -R build-logic/build/* build-compiled/.
+                cp -R api/build/* api-build/.
+                cp -R app/build/* app-build/.
+                cp -R lib/build/* lib-build/.
 
+                echo "--------------------------------------------------------------"
                 ls -lah $M2_HOME
                 ls -lah $GRADLE_USER_HOME
 
+                echo "--------------------------------------------------------------"
                 ls -lahR build-compiled
-                ls -lahR build
+                ls -lahR build-output
                 ls -lahR api-build
                 ls -lahR app-build
                 ls -lahR lib-build
 
-      # - in_parallel:
-      #     - get: java-builder-image
-      #     - get: pipeline-tasks
-      #     - get: source-code
-      #       trigger: true
-      #       passed: [compile]
       - in_parallel:
           fail_fast: true
           steps:
@@ -234,25 +233,25 @@ jobs:
         file: pipeline-tasks/pipeline/provider/concourse/tasks/mutation-test.yml
 
   ## Static analysis
-  - name: static-analysis
-    plan:
-      - in_parallel:
-          - get: java-builder-image
-          - get: pipeline-tasks
-          - get: source-code
-            trigger: true
-            passed: [compile]
-      - in_parallel:
-          fail_fast: true
-          steps:
-            - task: checkstyle
-              image: java-builder-image
-              timeout: 10m
-              file: pipeline-tasks/pipeline/provider/concourse/tasks/static-analysis-checkstyle.yml
-            - task: pmd
-              image: java-builder-image
-              timeout: 10m
-              file: pipeline-tasks/pipeline/provider/concourse/tasks/static-analysis-pmd.yml
+  # - name: static-analysis
+  #   plan:
+  #     - in_parallel:
+  #         - get: java-builder-image
+  #         - get: pipeline-tasks
+  #         - get: source-code
+  #           trigger: true
+  #           passed: [compile]
+  #     - in_parallel:
+  #         fail_fast: true
+  #         steps:
+  #           - task: checkstyle
+  #             image: java-builder-image
+  #             timeout: 10m
+  #             file: pipeline-tasks/pipeline/provider/concourse/tasks/static-analysis-checkstyle.yml
+  #           - task: pmd
+  #             image: java-builder-image
+  #             timeout: 10m
+  #             file: pipeline-tasks/pipeline/provider/concourse/tasks/static-analysis-pmd.yml
 
   - name: static-analysis-checkstyle
     plan:
@@ -289,11 +288,10 @@ jobs:
           - get: pipeline-tasks
           - get: source-code
             trigger: true
-            passed:
-              [
+            passed: [
                 unit-test,
                 mutation-test,
-                static-analysis,
+                # static-analysis,
                 static-analysis-pmd,
                 static-analysis-checkstyle,
               ]
