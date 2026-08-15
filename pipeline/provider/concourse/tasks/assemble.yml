@@ -39,5 +39,5 @@ run:
       touch {.,build-logic,api,app,lib}/build/assemble.md
 
       echo "--------------------------------------------------------------"
-      find . -name '*.md'
-      find . -name '*.jar'
+      find .. -name '*.md'
+      find .. -name '*.jar'
