@@ -200,7 +200,10 @@ jobs:
         timeout: 5m
         file: pipeline-tasks/pipeline/provider/concourse/tasks/publish.yml
 
-  ## TODO vulnerability scan with Trivy
+      ## TODO vulnerability scan with Trivy
+      - task: trivy-scan
+        timeout: 5m
+        file: pipeline-tasks/pipeline/provider/concourse/tasks/trivy-scan.yml
 
   ## publish
 

@@ -1,0 +1,66 @@
+# TODO move assemble step to main compile job
+platform: linux
+
+image_resource:
+  type: registry-image
+  source:
+    repository: aquasec/trivy
+    tag: latest
+
+inputs:
+  # TODO get libraries from artifact repository
+  - name: source-code
+  - name: .gradle
+  - name: .m2
+
+# outputs:
+#   - name: shared-jar
+#   - name: .gradle
+#   - name: .m2
+#   - name: application-jar
+#   - name: api-jar
+
+run:
+  dir: source-code
+  path: trivy
+  args:
+    - fs
+    - --severity
+    - HIGH,CRITICAL
+    - --exit-code
+    - "1"
+    - source-code
+
+  # path: sh
+  # args:
+  #   - -cx
+  #   - |
+  #     echo "Step d: Assemble libraries"
+
+  #     # TODO get libraries from artifact repository
+
+  #     # ls -lah {..,.}
+
+  #     # Detect build tool and run lifecycle
+  #     if [ -f "pom.xml" ]; then
+  #       targetCommand="mvn package:jar"
+  #     elif [ -f "build.gradle" ]; then
+  #       targetCommand="./gradlew assemble"
+  #     fi
+
+  #     echo $targetCommand
+  #     eval "$targetCommand"
+
+  #     # TODO consolidate jars to a single output
+  #     # TODO push jar files to artifact repository
+
+  #     # echo "--------------------------------------------------------------"
+  #     # touch ../{shared-jar,application-jar,api-jar}/assemble.jar
+
+  #     # echo "--------------------------------------------------------------"
+  #     # touch {.,build-logic,api,app,lib}/build/assemble.md
+
+  #     # echo "--------------------------------------------------------------"
+  #     find . -name '*.lib'
+  #     # find .. -name '*.md'
+  #     # find .. -name '*.jar'
