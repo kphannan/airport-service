@@ -50,39 +50,26 @@ groups:
       - "*"
   - name: build
     jobs:
-      - compile
-  - name: static-analysis
-    jobs:
-      - static-*
-  - name: dynamic-analysis
-    jobs:
-      - unit-test
-      - mutation-test
-  - name: package
-    jobs:
-      - assemble
-      - create-docker-image
-  - name: publish
-    jobs:
-      - publish
+      - compile-*
 
   # TODO Dummy groups for the moment
   - name: deploy-dev
     jobs:
-      - publish
+      - create-docker-image
   - name: deploy-qa
     jobs:
-      - publish
+      - create-docker-image
   - name: deploy-staging
     jobs:
-      - publish
+      - create-docker-image
   - name: deploy-prod
     jobs:
-      - publish
+      - create-docker-image
 
+## ----- Jobs -----
 jobs:
   ## Compile and Test
-  - name: compile
+  - name: compile-test-publish
     plan:
       - in_parallel:
           - get: java-builder-image
@@ -182,7 +169,7 @@ jobs:
 
                 find . -name 'compile.md'
 
-      - in_parallel:
+      - in_parallel: # Checkstyle, PMD
           fail_fast: true
           steps:
             - task: checkstyle
@@ -199,7 +186,7 @@ jobs:
         timeout: 5m
       - task: mutation-test
         image: java-builder-image
-        timeout: 5m
+        timeout: 15m
         file: pipeline-tasks/pipeline/provider/concourse/tasks/mutation-test.yml
       ## Assemble and publish
       ## TODO calculate the new semver
@@ -208,102 +195,10 @@ jobs:
         image: java-builder-image
         timeout: 5m
         file: pipeline-tasks/pipeline/provider/concourse/tasks/assemble.yml
-
-  ####
-  ## Dynamic analysis
-  - name: unit-test
-    plan:
-      - get: java-builder-image
-      - get: pipeline-tasks
-      - get: source-code
-        trigger: true
-        passed: [compile]
-      - task: unit-test
-        file: pipeline-tasks/pipeline/provider/concourse/tasks/unit-test.yml
+      - task: publish-dev
         image: java-builder-image
         timeout: 5m
-
-  - name: mutation-test
-    plan:
-      - in_parallel:
-          - get: java-builder-image
-          - get: pipeline-tasks
-          - get: source-code
-            trigger: true
-            passed: [compile]
-      - task: mutation-test
-        image: java-builder-image
-        timeout: 15m
-        file: pipeline-tasks/pipeline/provider/concourse/tasks/mutation-test.yml
-
-  ## Static analysis
-  # - name: static-analysis
-  #   plan:
-  #     - in_parallel:
-  #         - get: java-builder-image
-  #         - get: pipeline-tasks
-  #         - get: source-code
-  #           trigger: true
-  #           passed: [compile]
-  #     - in_parallel:
-  #         fail_fast: true
-  #         steps:
-  #           - task: checkstyle
-  #             image: java-builder-image
-  #             timeout: 10m
-  #             file: pipeline-tasks/pipeline/provider/concourse/tasks/static-analysis-checkstyle.yml
-  #           - task: pmd
-  #             image: java-builder-image
-  #             timeout: 10m
-  #             file: pipeline-tasks/pipeline/provider/concourse/tasks/static-analysis-pmd.yml
-
-  - name: static-analysis-checkstyle
-    plan:
-      - in_parallel:
-          - get: java-builder-image
-          - get: pipeline-tasks
-          - get: source-code
-            trigger: true
-            passed: [compile]
-      - task: checkstyle
-        image: java-builder-image
-        timeout: 10m
-        file: pipeline-tasks/pipeline/provider/concourse/tasks/static-analysis-checkstyle.yml
-
-  - name: static-analysis-pmd
-    plan:
-      - in_parallel:
-          - get: java-builder-image
-          - get: pipeline-tasks
-          - get: source-code
-            trigger: true
-            passed: [compile]
-      - task: pmd
-        image: java-builder-image
-        timeout: 10m
-        file: pipeline-tasks/pipeline/provider/concourse/tasks/static-analysis-pmd.yml
-
-  ## Assemble and publish
-  ## TODO calculate the new semver
-  - name: assemble
-    plan:
-      - in_parallel:
-          - get: java-builder-image
-          - get: pipeline-tasks
-          - get: source-code
-            trigger: true
-            passed: [
-                unit-test,
-                mutation-test,
-                # static-analysis,
-                static-analysis-pmd,
-                static-analysis-checkstyle,
-              ]
-      ## TODO output all the libraries (jar files)
-      - task: assemble
-        image: java-builder-image
-        timeout: 5m
-        file: pipeline-tasks/pipeline/provider/concourse/tasks/assemble.yml
+        file: pipeline-tasks/pipeline/provider/concourse/tasks/publish.yml
 
   ## TODO vulnerability scan with Trivy
 
@@ -316,7 +211,7 @@ jobs:
           - get: pipeline-tasks
           - get: source-code
             trigger: true
-            passed: [assemble]
+            passed: [compile-test-publish] # TODO vulnerability scan
       ## TODO output is the docker file
       - task: docker-image
         image: java-builder-image
@@ -329,17 +224,3 @@ jobs:
         file: pipeline-tasks/pipeline/provider/concourse/tasks/vulnerability-scan.yml
 
   ## TODO vulnerability scan with Trivy
-
-  - name: publish
-    plan:
-      - in_parallel:
-          - get: java-builder-image
-          - get: pipeline-tasks
-          - get: source-code
-            trigger: true
-            passed: [assemble, create-docker-image]
-      ## TODO Input are the jars and docker file.
-      - task: publish
-        image: java-builder-image
-        timeout: 5m
-        file: pipeline-tasks/pipeline/provider/concourse/tasks/publish.yml

@@ -2,16 +2,18 @@ platform: linux
 
 inputs:
   - name: source-code
+  - name: .gradle
+  - name: .m2
 
-  - name: build-compiled
-    path: build-logic/build
-  - name: build
-  - name: api-build
-    path: api/build
-  - name: app-build
-    path: app/build
-  - name: lib-build
-    path: lib/build
+outputs:
+  - name: source-code
+  - name: .gradle
+  - name: .m2
+
+caches:
+  - path: ./gradle/
+  - path: ./m2/
+  - path: build-logic/build
 
 run:
   dir: source-code
@@ -21,32 +23,26 @@ run:
     - |
       echo "Step d: Publish Artifacts"
 
-      ls -lahR build-compiled
-      ls -lahR build
-      ls -lahR api-build
-      ls -lahR app-build
-      ls -lahR lib-build
+      export ROOT_FOLDER=$(pwd)/..
+      export GRADLE_USER_HOME="${ROOT_FOLDER}/.gradle"
+      export M2_HOME=${ROOT_FOLDER}/.m2
+      export M2_LOCAL_REPO="${ROOT_FOLDER}/.m2"
+
+      echo "HOME set to " ${HOME}
+
+      echo "GRADLE_USER_HOME set to  " ${GRADLE_USER_HOME}
+      # mkdir -p ${GRADLE_USER_HOME}
+
+      echo "M2_HOME set to  " ${M2_HOME}
+      # mkdir -p ${M2_HOME}
+
 
       # Detect build tool and run lifecycle
       if [ -f "pom.xml" ]; then
         targetCommand="mvn package:jar"
       elif [ -f "build.gradle" ]; then
-        targetCommand="./gradlew assemble"
+        targetCommand="./gradlew publish"
       fi
 
       echo $targetCommand
-      # eval "$targetCommand"
-
-      echo "--------------------------------------------------------------"
-      touch build-output/publish.md.md
-      touch build-compiled/publish.md.md
-      touch api-build/publish.md.md
-      touch app-build/publish.md.md
-      touch lib-build/publish.md.md
-
-      echo "--------------------------------------------------------------"
-      ls -lahR build-compiled
-      ls -lahR build-output
-      ls -lahR api-build
-      ls -lahR app-build
-      ls -lahR lib-build
+      eval "$targetCommand"
