@@ -168,8 +168,9 @@ jobs:
                 eval "$buildCommand"
 
                 echo "--- post build Gradle / m2 home --------------------------------------------------------------"
-                ls -lah ${GRADLE_USER_HOME}
+                ls -lahR ${GRADLE_USER_HOME}
                 ls -lah ${M2_HOME}
+                ls -lah ${GRADLE_USER_HOME}{/wrapper/dists,caches}
 
 
                 echo "--------------------------------------------------------------"

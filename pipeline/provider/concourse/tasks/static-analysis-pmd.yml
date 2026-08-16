@@ -23,12 +23,7 @@ run:
     - |
       echo "Step 3b: Static Analysis - PMD"
 
-      ls -lah {.,build-logic,api,app,lib}/{.,build}
-      # ls -lahR build-compiled
-      # ls -lahR build-output
-      # ls -lahR api-build
-      # ls -lahR app-build
-      # ls -lahR lib-build
+      # ls -lah {.,build-logic,api,app,lib}/{.,build}
 
       # Detect build tool and run lifecycle
       if [ -f "pom.xml" ]; then
@@ -38,7 +33,12 @@ run:
       fi
 
       echo $targetCommand
-      # eval "$targetCommand"
+      eval "$targetCommand"
+
+      echo "--- post build Gradle / m2 home --------------------------------------------------------------"
+      ls -lah ${GRADLE_USER_HOME}
+      ls -lah ${M2_HOME}
+      ls -lah ${GRADLE_USER_HOME}{/wrapper/dists,caches}
 
       echo "--------------------------------------------------------------"
       touch {.,build-logic,api,app,lib}/build/pmd.md
