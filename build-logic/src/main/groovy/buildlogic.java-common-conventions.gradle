@@ -9,7 +9,6 @@ plugins {
     // Apply the java Plugin to add support for Java.
     id 'java'
 
-    // TODO move lombok plugin to java convention
     id 'io.freefair.lombok'
 //	alias( libs.plugins.lombok )
     // --- Source format

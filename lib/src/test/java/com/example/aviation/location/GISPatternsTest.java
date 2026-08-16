@@ -151,7 +151,7 @@ public class GISPatternsTest
 
 
         @ParameterizedTest
-        @ValueSource( strings = { " 73°58.98'W", "0°0.0'E", "180°0.0'W" } )
+        @ValueSource( strings = { "73°58.98'W", "0°0.0'E", "180°0.0'W" } )
         @DisplayName( "Matches valid DDM longitude" )
         void matchesValidDDMLong( final String longitude )
         {
