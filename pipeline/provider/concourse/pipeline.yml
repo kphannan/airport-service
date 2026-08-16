@@ -133,7 +133,7 @@ jobs:
                 java -version
 
 
-                export ROOT_FOLDER=$(pwd)
+                export ROOT_FOLDER=$(pwd)/..
                 export GRADLE_USER_HOME="${ROOT_FOLDER}/.gradle"
                 export M2_HOME=${ROOT_FOLDER}/.m2
                 export M2_LOCAL_REPO="${ROOT_FOLDER}/.m2"
@@ -168,7 +168,7 @@ jobs:
                 eval "$buildCommand"
 
                 echo "--- post build Gradle / m2 home --------------------------------------------------------------"
-                ls -lahR ${GRADLE_USER_HOME}
+                ls -lah ${GRADLE_USER_HOME}
                 ls -lah ${M2_HOME}
                 ls -lah ${GRADLE_USER_HOME}{/wrapper/dists,caches}
 

@@ -24,6 +24,19 @@ run:
       echo "Step 3b: Static Analysis - PMD"
 
       # ls -lah {.,build-logic,api,app,lib}/{.,build}
+      export ROOT_FOLDER=$(pwd)/..
+      export GRADLE_USER_HOME="${ROOT_FOLDER}/.gradle"
+      export M2_HOME=${ROOT_FOLDER}/.m2
+      export M2_LOCAL_REPO="${ROOT_FOLDER}/.m2"
+
+      echo "HOME set to " ${HOME}
+
+      echo "GRADLE_USER_HOME set to  " ${GRADLE_USER_HOME}
+      mkdir -p ${GRADLE_USER_HOME}
+
+      echo "M2_HOME set to  " ${M2_HOME}
+      mkdir -p ${M2_HOME}
+
 
       # Detect build tool and run lifecycle
       if [ -f "pom.xml" ]; then
@@ -43,17 +56,5 @@ run:
       echo "--------------------------------------------------------------"
       touch {.,build-logic,api,app,lib}/build/pmd.md
 
-      # touch build-output/pmd.md
-      # touch build-compiled/pmd.md
-      # touch api-build/pmd.md
-      # touch app-build/pmd.md
-      # touch lib-build/pmd.md
-
       echo "--------------------------------------------------------------"
-      # ls -lahR build-compiled
-      # ls -lahR build-output
-      # ls -lahR api-build
-      # ls -lahR app-build
-      # ls -lahR lib-build
-
       find . -name '*.md'
