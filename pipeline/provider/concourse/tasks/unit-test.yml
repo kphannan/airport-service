@@ -23,12 +23,26 @@ run:
     - |
       echo "Step 2a: Unit Tests & Coverage"
 
-      ls -lah {.,build-logic,api,app,lib}/{.,build}
+      # ls -lah {.,build-logic,api,app,lib}/{.,build}
 
-      java -version
+      # java -version
 
-      pwd
+      # pwd
       # ls -lah
+
+      export ROOT_FOLDER=$(pwd)/..
+      export GRADLE_USER_HOME="${ROOT_FOLDER}/.gradle"
+      export M2_HOME=${ROOT_FOLDER}/.m2
+      export M2_LOCAL_REPO="${ROOT_FOLDER}/.m2"
+
+      echo "HOME set to " ${HOME}
+
+      echo "GRADLE_USER_HOME set to  " ${GRADLE_USER_HOME}
+      # mkdir -p ${GRADLE_USER_HOME}
+
+      echo "M2_HOME set to  " ${M2_HOME}
+      # mkdir -p ${M2_HOME}
+
 
       # Detect build tool and run lifecycle
       if [ -f "pom.xml" ]; then
@@ -37,11 +51,11 @@ run:
         targetCommand="./gradlew check jacocoTestReport"
       fi
 
-      echo $targetCommand
-      # eval "$targetCommand"
+      # echo $targetCommand
+      eval "$targetCommand"
 
-      echo "--------------------------------------------------------------"
-      touch {.,build-logic,api,app,lib}/build/unit-test.md
+      # echo "--------------------------------------------------------------"
+      # touch {.,build-logic,api,app,lib}/build/unit-test.md
 
-      echo "--------------------------------------------------------------"
-      find . -name '*.md'
+      # echo "--------------------------------------------------------------"
+      # find . -name '*.md'

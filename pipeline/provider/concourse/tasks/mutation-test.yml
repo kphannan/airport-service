@@ -2,9 +2,13 @@ platform: linux
 
 inputs:
   - name: source-code
+  - name: .gradle
+  - name: .m2
 
 outputs:
   - name: source-code
+  - name: .gradle
+  - name: .m2
 
 caches:
   - path: ./gradle/
@@ -27,10 +31,10 @@ run:
       fi
 
       echo $targetCommand
-      # eval "$targetCommand"
+      eval "$targetCommand"
 
-      echo "--------------------------------------------------------------"
-      touch {.,build-logic,api,app,lib}/build/pitest.md
+      # echo "--------------------------------------------------------------"
+      # touch {.,build-logic,api,app,lib}/build/pitest.md
 
-      echo "--------------------------------------------------------------"
-      find . -name '*.md'
+      # echo "--------------------------------------------------------------"
+      # find . -name '*.md'

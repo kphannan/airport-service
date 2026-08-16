@@ -4,9 +4,13 @@ platform: linux
 inputs:
   # TODO get libraries from artifact repository
   - name: source-code
+  - name: .gradle
+  - name: .m2
 
 outputs:
   - name: shared-jar
+  - name: .gradle
+  - name: .m2
   - name: application-jar
   - name: api-jar
 
@@ -20,7 +24,7 @@ run:
 
       # TODO get libraries from artifact repository
 
-      ls -lah {..,.}
+      # ls -lah {..,.}
 
       # Detect build tool and run lifecycle
       if [ -f "pom.xml" ]; then
@@ -30,18 +34,19 @@ run:
       fi
 
       echo $targetCommand
-      # eval "$targetCommand"
+      eval "$targetCommand"
 
       # TODO consolidate jars to a single output
       # TODO push jar files to artifact repository
 
-      echo "--------------------------------------------------------------"
-      touch ../{shared-jar,application-jar,api-jar}/assemble.jar
+      # echo "--------------------------------------------------------------"
+      # touch ../{shared-jar,application-jar,api-jar}/assemble.jar
 
 
-      echo "--------------------------------------------------------------"
-      touch {.,build-logic,api,app,lib}/build/assemble.md
+      # echo "--------------------------------------------------------------"
+      # touch {.,build-logic,api,app,lib}/build/assemble.md
 
-      echo "--------------------------------------------------------------"
-      find .. -name '*.md'
-      find .. -name '*.jar'
+      # echo "--------------------------------------------------------------"
+      find . -name '*.lib'
+      # find .. -name '*.md'
+      # find .. -name '*.jar'

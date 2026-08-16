@@ -32,10 +32,10 @@ run:
       echo "HOME set to " ${HOME}
 
       echo "GRADLE_USER_HOME set to  " ${GRADLE_USER_HOME}
-      mkdir -p ${GRADLE_USER_HOME}
+      # mkdir -p ${GRADLE_USER_HOME}
 
       echo "M2_HOME set to  " ${M2_HOME}
-      mkdir -p ${M2_HOME}
+      # mkdir -p ${M2_HOME}
 
 
       # Detect build tool and run lifecycle
@@ -48,13 +48,13 @@ run:
       echo $targetCommand
       eval "$targetCommand"
 
-      echo "--- post build Gradle / m2 home --------------------------------------------------------------"
-      ls -lah ${GRADLE_USER_HOME}
-      ls -lah ${M2_HOME}
-      ls -lah ${GRADLE_USER_HOME}{/wrapper/dists,caches}
+      # echo "--- post build Gradle / m2 home --------------------------------------------------------------"
+      # ls -lah ${GRADLE_USER_HOME}
+      # ls -lah ${M2_HOME}
+      # ls -lah ${GRADLE_USER_HOME}{/wrapper/dists,caches}
 
-      echo "--------------------------------------------------------------"
-      touch {.,build-logic,api,app,lib}/build/pmd.md
+      # echo "--------------------------------------------------------------"
+      # touch {.,build-logic,api,app,lib}/build/pmd.md
 
-      echo "--------------------------------------------------------------"
-      find . -name '*.md'
+      # echo "--------------------------------------------------------------"
+      # find . -name '*.md'

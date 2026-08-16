@@ -23,7 +23,7 @@ run:
     - |
       echo "Step 3a: Static Analysis - Checkstyle"
 
-      ls -lah {.,build-logic,api,app,lib}/{.,build}
+      # ls -lah {.,build-logic,api,app,lib}/{.,build}
 
       export ROOT_FOLDER=$(pwd)/..
       export GRADLE_USER_HOME="${ROOT_FOLDER}/.gradle"
@@ -33,10 +33,10 @@ run:
       echo "HOME set to " ${HOME}
 
       echo "GRADLE_USER_HOME set to  " ${GRADLE_USER_HOME}
-      mkdir -p ${GRADLE_USER_HOME}
+      # mkdir -p ${GRADLE_USER_HOME}
 
       echo "M2_HOME set to  " ${M2_HOME}
-      mkdir -p ${M2_HOME}
+      # mkdir -p ${M2_HOME}
 
       # Detect build tool and run lifecycle
       if [ -f "pom.xml" ]; then
@@ -48,8 +48,8 @@ run:
       echo $targetCommand
       eval "$targetCommand"
 
-      echo "--------------------------------------------------------------"
-      touch {.,build-logic,api,app,lib}/build/checkstyle.md
+      # echo "--------------------------------------------------------------"
+      # touch {.,build-logic,api,app,lib}/build/checkstyle.md
 
-      echo "--------------------------------------------------------------"
-      find . -name '*.md'
+      # echo "--------------------------------------------------------------"
+      # find . -name '*.md'
