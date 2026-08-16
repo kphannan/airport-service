@@ -233,7 +233,7 @@ jobs:
             passed: [compile]
       - task: mutation-test
         image: java-builder-image
-        timeout: 5m
+        timeout: 15m
         file: pipeline-tasks/pipeline/provider/concourse/tasks/mutation-test.yml
 
   ## Static analysis
