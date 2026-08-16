@@ -1,4 +1,17 @@
 services:
+
+  artifact-repository:
+    image: dzikoysk/reposilite
+    ports:
+      - "127.0.0.1:8081:8080"
+    environment:
+      # REPOSOLITE_OPTS: --local-configuration=/app/configuration.cdn --token admin:secret
+      # REPOSILITE_OPTS: --port 8080 --token admin:secret
+      # REPOSILITE_OPTS: --port 8080
+      REPOSILITE_OPTS: --token admin:secret
+    volumes:
+      - reposilite-data:/app/data
+
   concourse-db:
     image: postgres
     environment:
@@ -23,13 +36,13 @@ services:
     depends_on:
       concourse-db:
         condition: service_healthy
-    ports: ["8080:8080"]
+    ports: ["8082:8080"]
     environment:
       CONCOURSE_POSTGRES_HOST: concourse-db
       CONCOURSE_POSTGRES_USER: concourse_user
       CONCOURSE_POSTGRES_PASSWORD: concourse_pass
       CONCOURSE_POSTGRES_DATABASE: concourse
-      CONCOURSE_EXTERNAL_URL: http://localhost:8080
+      CONCOURSE_EXTERNAL_URL: http://localhost:8082
       CONCOURSE_ADD_LOCAL_USER: test:test
       CONCOURSE_MAIN_TEAM_LOCAL_USER: test
       # instead of relying on the default "detect"
@@ -45,3 +58,5 @@ services:
 
 volumes:
   pg_data:
+  reposilite-data:
+

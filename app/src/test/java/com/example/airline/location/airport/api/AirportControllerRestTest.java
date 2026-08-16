@@ -739,7 +739,7 @@ class AirportControllerRestTest //extends RestControllerTestBase
                                      .countCountryAirportsByContinent( eq( "AS" ) ),
                            () -> verify( mapper, times( 1 ) )
                                      .domainToApiAirportsInCountry( anyList() )
-                         );
+                );
             }
 
             @Test
@@ -782,8 +782,8 @@ class AirportControllerRestTest //extends RestControllerTestBase
                                      .andExpect( jsonPath( "$.title" ).value( "Not Found" ) )
                                      .andExpect( jsonPath( "$.status" ).value( "404" ) )
                                      // .andExpect( jsonPath( "$.detail" ).value( 42 ) )
-                                     .andExpect( jsonPath("$.detail",
-                                                          containsString("No static resource location/airport/count/continent/CC for request '/location/airport/count/continent/CC'." ) ) )
+                                     .andExpect( jsonPath( "$.detail",
+                                                           containsString( "No static resource location/airport/count/continent/CC for request '/location/airport/count/continent/CC'." ) ) )
                                      .andExpect( jsonPath( "$.instance" )
                                                      .value( "location/airport/count/continent/CC" ) )
                                      // .andExpect( jsonPath( "$exception" ).value( "org.springframework.web.servlet.resource.NoResourceFoundException: No static resource location/airport/count/continent/CC for request '/location/airport/count/continent/CC'." ) )

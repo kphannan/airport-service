@@ -43,6 +43,8 @@ plugins {
     id 'org.openrewrite.rewrite'
 //    alias( libs.plugins.openRewrite )
 
+    // id 'io.qameta.allure'
+
     // ===== Configuration Management =====
     // --- Artifact Versioning
     // id 'net.nemerosa.versioning'
@@ -84,10 +86,6 @@ tasks.withType(JavaCompile) {
     options.compilerArgs += [ '-Xlint:unchecked', '-Xlint:deprecation' ]
 }
 
-//compileJava {
-//    options.compilerArgs << "-parameters" << "-Xlint:unchecked" << "-Xlint:deprecation" << "-Amapstruct.verbose=false"
-////    options.forkOptions.jvmArgs << "--enable-native-access=ALL-UNNAMED"
-//}
 
 test {
     testLogging {
@@ -106,7 +104,7 @@ testing {
         test {
             // Use JUnit Jupiter test framework
             useJUnitJupiter()
-//            useJUnitJupiter('5.12.2')
+            // jvmArgs = [ "-javaagent:${configurations.agent.singleFile}" ]
         }
 
         bddTest(JvmTestSuite) {
@@ -389,7 +387,6 @@ pitest {
 checkstyle {
     ignoreFailures = false
     showViolations = false
-//    toolVersion = "${checkstyleVersion}"
     toolVersion = libs.versions.checkstyleVersion.get()
 
     // checkstyle.xml copy from:
@@ -596,28 +593,60 @@ def replaceDotWithDash(String input) {
 }
 
 // --- Artifact Publishing
-// publishing {
-//     publications {
+publishing {
+    repositories {
+        maven {
+            name = 'reposiliteRepository'
+            url  = uri("http://localhost:8081/private")
+            // url = layout.projectDirectory.dir( "https://example.com" )
+            allowInsecureProtocol = true // Enables HTTP opt-in
+            credentials {
+                username = "admin"
+                password = "secret"
+            }
+        }
+    }
+
+    publications {
 //         maven( MavenPublication ) {
-// //         //     // groupId = "${basePackage}"
-// //         //     // groupId = replaceDotWithDash("${basePackage}" )
-// //         //     // artifactId = 'default-application'
-// //         //     // version = '0.0'
-//             // version = '1.9' //getVersion()
-//             version = versioning.info.full
-// //         //     from components.java
+// //         groupId = "${basePackage}"
+// //         groupId = replaceDotWithDash("${basePackage}" )
+// //         artifactId = 'default-application'
+//             version = '0.1.0'
+// // //                version = '1.9' //getVersion()
+// // //             //    version = versioning.info.full
+//             from components.java
 //         }
-// //         mavenJava( MavenPublication ) {
-// //             pom {
-// //                 name = 'My publication'
-// //                 description = 'Some soft of description that should be from the component'
-// //             }
-// //             // licenses {
-// //             //     license {
-// //             //         name = 'The Apache License, Version 2.0'
-// //             //         url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-// //             //     }
-// //             // }
-// //         }
-//     }
-// }
+        mavenJava( MavenPublication ) {
+            version = '0.1.1'
+            // groupId = "${basePackage}"
+            groupId = "aviation"
+            // groupId = replaceDotWithDash("${basePackage}" )
+            // artifactId = 'default-application'
+            from components.java
+
+            // pom {
+            //     name = 'My publication'
+            //     description = 'Some soft of description that should be from the component'
+            // }
+            // maven {
+            //     def releasesRepoUrl = layout.buildDirectory.dir('repos/releases')
+            //     def snapshotsRepoUrl = layout.buildDirectory.dir('repos/snapshots')
+            //     url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            // }
+            // licenses {
+            //     license {
+            //         name = 'The Apache License, Version 2.0'
+            //         url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            //     }
+            // }
+            // developers {
+            //     developer {
+            //         id = 'kphannan'
+            //         name = 'Kevin Hannan'
+            //         email = 'kphannan@gmail.com'
+            //     }
+            // }
+        }
+    }
+}

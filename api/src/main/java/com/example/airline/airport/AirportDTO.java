@@ -6,8 +6,8 @@ package com.example.airline.airport;
 import java.math.BigDecimal;
 import java.net.URI;
 
-import com.example.aviation.location.GISPatterns;
 import com.example.airline.location.LocationCodePatterns;
+import com.example.aviation.location.GISPatterns;
 import com.example.aviation.reference.AviationCodePatterns;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;

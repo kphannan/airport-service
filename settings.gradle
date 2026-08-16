@@ -16,14 +16,19 @@ plugins {
 
 dependencyResolutionManagement {
     repositoriesMode.set( RepositoriesMode.FAIL_ON_PROJECT_REPOS )
+    // repositoriesMode.set( RepositoriesMode.PREFER_PROJECT )
+    // repositoriesMode.set( RepositoriesMode.PREFER_SETTINGS )
     repositories {
         mavenLocal()
         mavenCentral()
+        maven {
+            name = "reposiliteRepository"
+            url = "http://127.0.0.1:8081/"
+        }
         // gradlePluginPortal()
     }
 }
 
 
 rootProject.name = 'airport-service'
-// include('app', 'api', 'lib' )
 include('lib', 'api', 'app' )

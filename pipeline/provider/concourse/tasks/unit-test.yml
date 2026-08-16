@@ -48,7 +48,7 @@ run:
       if [ -f "pom.xml" ]; then
         targetCommand="mvn verify coverage:report"
       elif [ -f "build.gradle" ]; then
-        targetCommand="./gradlew check jacocoTestReport"
+        targetCommand="./gradlew check jacocoTestReport jacocoTestCoverageVerification"
       fi
 
       # echo $targetCommand

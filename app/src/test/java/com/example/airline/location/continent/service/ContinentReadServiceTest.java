@@ -82,11 +82,11 @@ class ContinentReadServiceTest
                              .blankWikiLink()
                              .hasKeywords( "Key string" ),
                    () -> verify( repository, atMost( 1 ) ).findById( anyInt() )
-                 );
+        );
     }
 
     @Test
-    @DisplayName( "findByCode")
+    @DisplayName( "findByCode" )
     void read_findByCode()
     {
         // given
@@ -105,7 +105,6 @@ class ContinentReadServiceTest
                              .blankWikiLink()
                              .hasKeywords( "Key string" ),
                    () -> verify( repository, atMost( 1 ) ).findByCode( anyString() )
-                   // () -> verify( mapper ).entityToDomain( any( ContinentEntity.class ) )
         );
     }
 
