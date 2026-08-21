@@ -14,6 +14,11 @@ outputs:
   - name: application-jar
   - name: api-jar
 
+caches:
+  - path: ./gradle/
+  - path: ./m2/
+  - path: build-logic/build
+
 run:
   dir: source-code
   path: sh
@@ -21,10 +26,6 @@ run:
     - -cx
     - |
       echo "Step d: Assemble libraries"
-
-      # TODO get libraries from artifact repository
-
-      # ls -lah {..,.}
 
       # Detect build tool and run lifecycle
       if [ -f "pom.xml" ]; then
@@ -35,18 +36,3 @@ run:
 
       echo $targetCommand
       eval "$targetCommand"
-
-      # TODO consolidate jars to a single output
-      # TODO push jar files to artifact repository
-
-      # echo "--------------------------------------------------------------"
-      # touch ../{shared-jar,application-jar,api-jar}/assemble.jar
-
-
-      # echo "--------------------------------------------------------------"
-      # touch {.,build-logic,api,app,lib}/build/assemble.md
-
-      # echo "--------------------------------------------------------------"
-      find . -name '*.lib'
-      # find .. -name '*.md'
-      # find .. -name '*.jar'
